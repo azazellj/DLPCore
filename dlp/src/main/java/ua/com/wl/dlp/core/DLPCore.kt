@@ -8,6 +8,7 @@ import org.koin.android.ext.koin.androidContext
 
 import ua.com.wl.dlp.core.modules.apiModule
 import ua.com.wl.dlp.core.modules.interactorsModule
+import ua.com.wl.dlp.core.modules.preferencesModule
 
 /**
  * @author Denis Makovskyi
@@ -21,7 +22,7 @@ object DLPCore {
     fun initialize(app: Application) {
         koinApp = koinApplication {
             androidContext(app)
-            modules(listOf(apiModule, interactorsModule))
+            modules(listOf(preferencesModule, apiModule, interactorsModule))
         }
     }
 

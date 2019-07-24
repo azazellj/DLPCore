@@ -6,6 +6,10 @@ import ua.com.wl.dlp.data.api.errors.ErrorsMapper
 import ua.com.wl.dlp.domain.exeptions.ApiException
 import ua.com.wl.dlp.domain.exeptions.ApiRuntimeException
 
+/**
+ * @author Denis Makovskyi
+ */
+
 open class UseCase(private val errorsMapper: ErrorsMapper) {
 
     protected suspend fun <T : Any> callApi(

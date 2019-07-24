@@ -15,6 +15,10 @@ import ua.com.wl.dlp.data.api.responses.DataResponse
 import ua.com.wl.dlp.data.api.responses.auth.AuthTokenResponse
 import ua.com.wl.dlp.data.api.responses.auth.AuthenticationResponse
 
+/**
+ * @author Denis Makovskyi
+ */
+
 interface AuthApi {
 
     @Headers("${Constants.HEADER_UNAUTHORIZED}: ${Constants.VALUE_PERMIT}")

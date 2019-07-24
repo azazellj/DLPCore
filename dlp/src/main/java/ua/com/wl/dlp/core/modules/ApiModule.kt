@@ -39,7 +39,9 @@ val apiModule = module {
             .metaData?.get(Constants.META_APP_ID)?.toString() ?: throw IllegalStateException("Application id was not found")
     }
     factory {
-        AuthInterceptor(get(qualifier = named(Constants.KOIN_NAMED_APP_ID)))
+        AuthInterceptor(
+            appId = get(qualifier = named(Constants.KOIN_NAMED_APP_ID)),
+            authPreferences = get())
     }
     factory {
         HttpLoggingInterceptor().apply {

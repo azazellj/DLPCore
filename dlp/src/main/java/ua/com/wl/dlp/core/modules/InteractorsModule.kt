@@ -10,6 +10,9 @@ import ua.com.wl.dlp.domain.interactors.impl.AuthInteractorImpl
 
 val interactorsModule = module {
     single<AuthInteractor> {
-        AuthInteractorImpl(api = get(), errorsMapper = get())
+        AuthInteractorImpl(
+            authPreferences = get(),
+            api = get(),
+            errorsMapper = get())
     }
 }

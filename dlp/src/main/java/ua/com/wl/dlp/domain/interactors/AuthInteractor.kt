@@ -4,6 +4,10 @@ import ua.com.wl.dlp.data.api.responses.auth.AuthTokenResponse
 import ua.com.wl.dlp.data.api.responses.auth.AuthenticationResponse
 import ua.com.wl.dlp.domain.Result
 
+/**
+ * @author Denis Makovskyi
+ */
+
 interface AuthInteractor {
 
     suspend fun authenticate(phone: String, sendSms: Boolean = true): Result<AuthenticationResponse>

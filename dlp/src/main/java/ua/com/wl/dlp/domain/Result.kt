@@ -1,5 +1,9 @@
 package ua.com.wl.dlp.domain
 
+/**
+ * @author Denis Makovskyi
+ */
+
 sealed class Result<out T> {
 
     data class Success<out T>(val data: T? = null) : Result<T>()

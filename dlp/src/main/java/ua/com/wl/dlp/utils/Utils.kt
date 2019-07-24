@@ -7,6 +7,10 @@ import okhttp3.Request
 import ua.com.wl.dlp.R
 import ua.com.wl.dlp.domain.exeptions.ApiException
 
+/**
+ * @author Denis Makovskyi
+ */
+
 fun localizeError(context: Context, error: Throwable?): String =
     when (error) {
         is ApiException -> error.getLocalizedMessage(context)

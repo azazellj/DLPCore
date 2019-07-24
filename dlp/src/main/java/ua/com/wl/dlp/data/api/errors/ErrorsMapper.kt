@@ -6,6 +6,10 @@ import okhttp3.ResponseBody
 import ua.com.wl.dlp.domain.exeptions.ApiException
 import ua.com.wl.dlp.domain.exeptions.ApiRuntimeException
 
+/**
+ * @author Denis Makovskyi
+ */
+
 class ErrorsMapper(private val gson: Gson) {
 
     fun createApiExceptionFromErrorBody(errorBody: ResponseBody?, errorClass: Class<out ApiException>): Throwable =
