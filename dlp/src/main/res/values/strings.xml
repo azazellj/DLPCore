@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">dlp</string>
+
+    <string name="dlp_error_api_runtime">Runtime error. Please, try again later</string>
+</resources>
