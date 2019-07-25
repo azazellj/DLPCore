@@ -1,6 +1,7 @@
 package ua.com.wl.dlp.core.modules
 
 import org.koin.dsl.module
+
 import ua.com.wl.dlp.domain.interactors.AuthInteractor
 import ua.com.wl.dlp.domain.interactors.impl.AuthInteractorImpl
 
@@ -11,7 +12,7 @@ import ua.com.wl.dlp.domain.interactors.impl.AuthInteractorImpl
 val interactorsModule = module {
     single<AuthInteractor> {
         AuthInteractorImpl(
-            authPreferences = get(),
+            corePreferences = get(),
             api = get(),
             errorsMapper = get())
     }

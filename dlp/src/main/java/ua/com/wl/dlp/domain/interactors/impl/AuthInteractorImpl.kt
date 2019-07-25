@@ -12,7 +12,7 @@ import ua.com.wl.dlp.data.api.requests.auth.SignInRequest
 import ua.com.wl.dlp.data.api.requests.auth.SignUpRequest
 import ua.com.wl.dlp.data.api.responses.auth.AuthTokenResponse
 import ua.com.wl.dlp.data.api.responses.auth.AuthenticationResponse
-import ua.com.wl.dlp.data.prefereces.AuthPreferences
+import ua.com.wl.dlp.data.prefereces.CorePreferences
 import ua.com.wl.dlp.domain.Result
 import ua.com.wl.dlp.domain.UseCase
 import ua.com.wl.dlp.domain.exeptions.auth.AuthException
@@ -23,7 +23,7 @@ import ua.com.wl.dlp.domain.interactors.AuthInteractor
  */
 
 class AuthInteractorImpl(
-    private val authPreferences: AuthPreferences,
+    private val corePreferences: CorePreferences,
     private val api: AuthApi,
     errorsMapper: ErrorsMapper) : AuthInteractor, UseCase(errorsMapper) {
 
@@ -41,7 +41,7 @@ class AuthInteractorImpl(
             it?.payload
         }.also {
             if (it is Result.Success && it.data != null) {
-                withContext(Dispatchers.IO) { authPreferences.authToken(it.data.token) }
+                withContext(Dispatchers.IO) { corePreferences.saveAuthToken(it.data.token) }
             }
         }
 
@@ -53,7 +53,7 @@ class AuthInteractorImpl(
             it?.payload
         }.also {
             if (it is Result.Success && it.data != null) {
-                withContext(Dispatchers.IO) { authPreferences.authToken(it.data.token) }
+                withContext(Dispatchers.IO) { corePreferences.saveAuthToken(it.data.token) }
             }
         }
 
@@ -64,7 +64,7 @@ class AuthInteractorImpl(
         ).fMap {
             it?.type.equals(ResponseType.OK)
         }.also {
-            withContext(Dispatchers.IO) { authPreferences.removeAuthToken() }
+            withContext(Dispatchers.IO) { corePreferences.removeAuthToken() }
         }
 
     override suspend fun retrieveCode(phone: String): Result<Boolean> =

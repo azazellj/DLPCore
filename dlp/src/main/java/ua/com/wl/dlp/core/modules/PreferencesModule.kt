@@ -1,7 +1,8 @@
 package ua.com.wl.dlp.core.modules
 
 import org.koin.dsl.module
-import ua.com.wl.dlp.data.prefereces.AuthPreferences
+
+import ua.com.wl.dlp.data.prefereces.CorePreferences
 
 /**
  * @author Denis Makovskyi
@@ -9,6 +10,6 @@ import ua.com.wl.dlp.data.prefereces.AuthPreferences
 
 val preferencesModule = module {
     single {
-        AuthPreferences(context = get())
+        CorePreferences(context = get())
     }
 }

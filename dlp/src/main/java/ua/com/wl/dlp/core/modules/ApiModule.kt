@@ -41,7 +41,7 @@ val apiModule = module {
     factory {
         AuthInterceptor(
             appId = get(qualifier = named(Constants.KOIN_NAMED_APP_ID)),
-            authPreferences = get())
+            corePreferences = get())
     }
     factory {
         HttpLoggingInterceptor().apply {
