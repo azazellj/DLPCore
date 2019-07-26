@@ -10,8 +10,10 @@ import ua.com.wl.dlp.data.api.requests.auth.AuthenticationRequest
 import ua.com.wl.dlp.data.api.requests.auth.CodeRequest
 import ua.com.wl.dlp.data.api.requests.auth.SignInRequest
 import ua.com.wl.dlp.data.api.requests.auth.SignUpRequest
+import ua.com.wl.dlp.data.api.responses.PaginationResponse
 import ua.com.wl.dlp.data.api.responses.auth.AuthTokenResponse
 import ua.com.wl.dlp.data.api.responses.auth.AuthenticationResponse
+import ua.com.wl.dlp.data.api.responses.models.auth.City
 import ua.com.wl.dlp.data.prefereces.CorePreferences
 import ua.com.wl.dlp.domain.Result
 import ua.com.wl.dlp.domain.UseCase
@@ -26,6 +28,10 @@ class AuthInteractorImpl(
     private val corePreferences: CorePreferences,
     private val api: AuthApi,
     errorsMapper: ErrorsMapper) : AuthInteractor, UseCase(errorsMapper) {
+
+
+    override suspend fun cities(): Result<PaginationResponse<City>> =
+        callApi(call = { api.cities() }).fMap { it?.payload }
 
     override suspend fun authenticate(phone: String, sendSms: Boolean): Result<AuthenticationResponse> =
         callApi(

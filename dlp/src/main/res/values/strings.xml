@@ -2,4 +2,17 @@
     <string name="app_name">dlp</string>
 
     <string name="dlp_error_api_runtime">Runtime error. Please, try again later</string>
+
+    <string name="dlp_error_phone_invalid">Wrong phone number</string>
+    <string name="dlp_error_phone_required">Phone number is required</string>
+
+    <string name="dlp_error_sms_delivery_failure">Failed to send sms</string>
+    <string name="dlp_error_sms_retrieval_attempts_exceeded">Password retrieval attempts limit was exceeded</string>
+    <string name="dlp_error_sms_auth_not_supported_for_business">Sms authentication is not supported</string>
+
+    <string name="dlp_error_password_required">Password is required</string>
+
+    <string name="dlp_error_consumer_not_found">Consumer account not found</string>
+    <string name="dlp_error_consumer_account_disabled">Consumer account is disabled</string>
+    <string name="dlp_error_consumer_credential_invalid">Unable to log in with provided credentials</string>
 </resources>

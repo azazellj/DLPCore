@@ -3,6 +3,7 @@ package ua.com.wl.dlp.data.api
 import retrofit2.Response
 import retrofit2.http.POST
 import retrofit2.http.Body
+import retrofit2.http.GET
 import retrofit2.http.Headers
 import ua.com.wl.dlp.core.Constants
 
@@ -12,14 +13,20 @@ import ua.com.wl.dlp.data.api.requests.auth.SignInRequest
 import ua.com.wl.dlp.data.api.requests.auth.SignUpRequest
 import ua.com.wl.dlp.data.api.responses.BaseResponse
 import ua.com.wl.dlp.data.api.responses.DataResponse
+import ua.com.wl.dlp.data.api.responses.PaginationResponse
 import ua.com.wl.dlp.data.api.responses.auth.AuthTokenResponse
 import ua.com.wl.dlp.data.api.responses.auth.AuthenticationResponse
+import ua.com.wl.dlp.data.api.responses.models.auth.City
 
 /**
  * @author Denis Makovskyi
  */
 
 interface AuthApi {
+
+    @Headers("${Constants.HEADER_UNAUTHORIZED}: ${Constants.VALUE_PERMIT}")
+    @GET("api/v3/business/city/")
+    suspend fun cities(): Response<DataResponse<PaginationResponse<City>>>
 
     @Headers("${Constants.HEADER_UNAUTHORIZED}: ${Constants.VALUE_PERMIT}")
     @POST("api/v3/consumer/registration/check/")
@@ -36,6 +43,7 @@ interface AuthApi {
     @POST("api/v3/consumer/auth/log-out/")
     suspend fun signOut(): Response<BaseResponse>
 
+    @Headers("${Constants.HEADER_UNAUTHORIZED}: ${Constants.VALUE_PERMIT}")
     @POST("api/v3/consumer/auth/code/")
     suspend fun retrieveCode(@Body request: CodeRequest): Response<BaseResponse>
 }

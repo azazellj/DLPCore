@@ -1,7 +1,9 @@
 package ua.com.wl.dlp.domain.interactors
 
+import ua.com.wl.dlp.data.api.responses.PaginationResponse
 import ua.com.wl.dlp.data.api.responses.auth.AuthTokenResponse
 import ua.com.wl.dlp.data.api.responses.auth.AuthenticationResponse
+import ua.com.wl.dlp.data.api.responses.models.auth.City
 import ua.com.wl.dlp.domain.Result
 
 /**
@@ -9,6 +11,8 @@ import ua.com.wl.dlp.domain.Result
  */
 
 interface AuthInteractor {
+
+    suspend fun cities(): Result<PaginationResponse<City>>
 
     suspend fun authenticate(phone: String, sendSms: Boolean = true): Result<AuthenticationResponse>
 

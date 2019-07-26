@@ -8,6 +8,6 @@ import com.google.gson.annotations.SerializedName
 
 data class AuthenticationRequest(
     @SerializedName("send_sms")
-    val sendSms: Boolean,
+    val sendSms: Boolean = true,
     @SerializedName("mobile_phone")
     val mobilePhone: String)
