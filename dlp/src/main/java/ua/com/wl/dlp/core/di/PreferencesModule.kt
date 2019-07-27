@@ -10,6 +10,6 @@ import ua.com.wl.dlp.data.prefereces.CorePreferences
 
 val preferencesModule = module {
     single {
-        CorePreferences(context = get())
+        CorePreferences(context = get(), gson = get())
     }
 }

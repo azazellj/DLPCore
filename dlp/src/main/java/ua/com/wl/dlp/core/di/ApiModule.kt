@@ -4,8 +4,6 @@ import java.util.concurrent.TimeUnit
 
 import android.content.pm.PackageManager
 
-import com.google.gson.GsonBuilder
-
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 
@@ -50,9 +48,6 @@ val apiModule = module {
             else
                 HttpLoggingInterceptor.Level.NONE
         }
-    }
-    single {
-        GsonBuilder().create()
     }
     single {
         Retrofit.Builder()
