@@ -1,4 +1,4 @@
-package ua.com.wl.dlp.core.modules
+package ua.com.wl.dlp.core.di
 
 import java.util.concurrent.TimeUnit
 

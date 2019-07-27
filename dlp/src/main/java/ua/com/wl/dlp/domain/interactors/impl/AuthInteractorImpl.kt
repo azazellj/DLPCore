@@ -47,7 +47,9 @@ class AuthInteractorImpl(
             it?.payload
         }.also {
             if (it is Result.Success && it.data != null) {
-                withContext(Dispatchers.IO) { corePreferences.saveAuthToken(it.data.token) }
+                withContext(Dispatchers.IO) {
+                    corePreferences.corePrefs = corePreferences.corePrefs.copy(authToken = it.data.token)
+                }
             }
         }
 
@@ -59,7 +61,9 @@ class AuthInteractorImpl(
             it?.payload
         }.also {
             if (it is Result.Success && it.data != null) {
-                withContext(Dispatchers.IO) { corePreferences.saveAuthToken(it.data.token) }
+                withContext(Dispatchers.IO) {
+                    corePreferences.corePrefs = corePreferences.corePrefs.copy(authToken = it.data.token)
+                }
             }
         }
 
@@ -70,7 +74,12 @@ class AuthInteractorImpl(
         ).fMap {
             it?.type.equals(ResponseType.OK)
         }.also {
-            withContext(Dispatchers.IO) { corePreferences.removeAuthToken() }
+            withContext(Dispatchers.IO) {
+                withContext(Dispatchers.IO) {
+                    corePreferences.corePrefs = corePreferences.corePrefs.copy(authToken = null)
+                    corePreferences.removeCorePrefs()
+                }
+            }
         }
 
     override suspend fun retrieveCode(phone: String): Result<Boolean> =

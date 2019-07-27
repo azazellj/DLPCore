@@ -6,9 +6,9 @@ import org.koin.dsl.koinApplication
 import org.koin.core.KoinApplication
 import org.koin.android.ext.koin.androidContext
 
-import ua.com.wl.dlp.core.modules.apiModule
-import ua.com.wl.dlp.core.modules.interactorsModule
-import ua.com.wl.dlp.core.modules.preferencesModule
+import ua.com.wl.dlp.core.di.apiModule
+import ua.com.wl.dlp.core.di.interactorsModule
+import ua.com.wl.dlp.core.di.preferencesModule
 
 /**
  * @author Denis Makovskyi

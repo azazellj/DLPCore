@@ -23,7 +23,7 @@ class AuthInterceptor(
                     removeHeader(Constants.HEADER_UNAUTHORIZED)
 
                 } else {
-                    corePreferences.getAuthToken()?.let { token ->
+                    corePreferences.corePrefs.authToken?.let { token ->
                         addHeader(Constants.HEADER_AUTHORIZATION, "Token$token")
 
                     } ?: throw RuntimeException("Authorization token required in private api was not found")
