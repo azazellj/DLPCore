@@ -5,16 +5,13 @@ import retrofit2.http.POST
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Headers
-import ua.com.wl.dlp.core.Constants
 
-import ua.com.wl.dlp.data.api.requests.auth.AuthenticationRequest
-import ua.com.wl.dlp.data.api.requests.auth.CodeRequest
-import ua.com.wl.dlp.data.api.requests.auth.SignInRequest
-import ua.com.wl.dlp.data.api.requests.auth.SignUpRequest
+import ua.com.wl.dlp.core.Constants
+import ua.com.wl.dlp.data.api.requests.auth.*
 import ua.com.wl.dlp.data.api.responses.BaseResponse
 import ua.com.wl.dlp.data.api.responses.DataResponse
 import ua.com.wl.dlp.data.api.responses.PaginationResponse
-import ua.com.wl.dlp.data.api.responses.auth.AuthTokenResponse
+import ua.com.wl.dlp.data.api.responses.auth.TokenResponse
 import ua.com.wl.dlp.data.api.responses.auth.AuthenticationResponse
 import ua.com.wl.dlp.data.api.responses.models.auth.City
 
@@ -25,25 +22,33 @@ import ua.com.wl.dlp.data.api.responses.models.auth.City
 interface AuthApi {
 
     @Headers("${Constants.HEADER_UNAUTHORIZED}: ${Constants.VALUE_PERMIT}")
-    @GET("api/v3/business/city/")
-    suspend fun cities(): Response<DataResponse<PaginationResponse<City>>>
+    @POST("api/v3/consumer/auth/token/verify/")
+    suspend fun verification(@Body request: TokenRequest): Response<DataResponse<TokenResponse>>
+
+    @Headers("${Constants.HEADER_UNAUTHORIZED}: ${Constants.VALUE_PERMIT}")
+    @POST("api/v3/consumer/auth/token/refresh/")
+    suspend fun refreshToken(@Body request: TokenRequest): Response<DataResponse<TokenResponse>>
 
     @Headers("${Constants.HEADER_UNAUTHORIZED}: ${Constants.VALUE_PERMIT}")
     @POST("api/v3/consumer/registration/check/")
-    suspend fun authenticate(@Body request: AuthenticationRequest): Response<DataResponse<AuthenticationResponse>>
+    suspend fun authentication(@Body request: AuthenticationRequest): Response<DataResponse<AuthenticationResponse>>
 
     @Headers("${Constants.HEADER_UNAUTHORIZED}: ${Constants.VALUE_PERMIT}")
     @POST("api/v3/consumer/auth/token/")
-    suspend fun signIn(@Body request: SignInRequest): Response<DataResponse<AuthTokenResponse>>
+    suspend fun signIn(@Body request: SignInRequest): Response<DataResponse<TokenResponse>>
 
     @Headers("${Constants.HEADER_UNAUTHORIZED}: ${Constants.VALUE_PERMIT}")
     @POST("api/v3/consumer/registration/")
-    suspend fun signUp(@Body request: SignUpRequest): Response<DataResponse<AuthTokenResponse>>
+    suspend fun signUp(@Body request: SignUpRequest): Response<DataResponse<TokenResponse>>
 
     @POST("api/v3/consumer/auth/log-out/")
     suspend fun signOut(): Response<BaseResponse>
 
     @Headers("${Constants.HEADER_UNAUTHORIZED}: ${Constants.VALUE_PERMIT}")
     @POST("api/v3/consumer/auth/code/")
-    suspend fun retrieveCode(@Body request: CodeRequest): Response<BaseResponse>
+    suspend fun retrieveCode(@Body requestSms: SmsCodeRequest): Response<BaseResponse>
+
+    @Headers("${Constants.HEADER_UNAUTHORIZED}: ${Constants.VALUE_PERMIT}")
+    @GET("api/v3/business/city/")
+    suspend fun cities(): Response<DataResponse<PaginationResponse<City>>>
 }

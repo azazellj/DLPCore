@@ -13,8 +13,11 @@ import ua.com.wl.dlp.domain.exeptions.ApiRuntimeException
 class AuthException(message: String) : ApiRuntimeException(message) {
 
     override fun getLocalizedMessage(context: Context): String = when (message) {
-        ResponseType.MOBILE_PHONE_INVALID -> context.getString(R.string.dlp_error_phone_invalid)
+        ResponseType.TOKEN_REQUIRED -> context.getString(R.string.dlp_error_token_required)
+        ResponseType.TOKEN_INVALID -> context.getString(R.string.dlp_error_token_invalid)
+        ResponseType.TOKEN_EXPIRED -> context.getString(R.string.dlp_error_token_expired)
         ResponseType.MOBILE_PHONE_REQUIRED -> context.getString(R.string.dlp_error_phone_required)
+        ResponseType.MOBILE_PHONE_INVALID -> context.getString(R.string.dlp_error_phone_invalid)
         ResponseType.SMS_DELIVERY_FAILURE -> context.getString(R.string.dlp_error_sms_delivery_failure)
         ResponseType.SMS_RETRIEVAL_ATTEMPTS_EXCEEDED -> context.getString(R.string.dlp_error_sms_retrieval_attempts_exceeded)
         ResponseType.SMS_AUTH_NOT_SUPPORTED_FOR_BUSINESS -> context.getString(R.string.dlp_error_sms_auth_not_supported_for_business)

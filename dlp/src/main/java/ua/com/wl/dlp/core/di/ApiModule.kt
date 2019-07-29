@@ -18,6 +18,7 @@ import ua.com.wl.dlp.BuildConfig
 import ua.com.wl.dlp.core.network.AuthInterceptor
 import ua.com.wl.dlp.core.Constants
 import ua.com.wl.dlp.data.api.AuthApi
+import ua.com.wl.dlp.data.api.ConsumerApi
 import ua.com.wl.dlp.data.api.errors.ErrorsMapper
 
 /**
@@ -32,9 +33,10 @@ val apiModule = module {
             .metaData?.get(key)?.toString() ?: throw IllegalStateException("Server url was not found")
     }
     factory(qualifier = named(Constants.KOIN_NAMED_APP_ID)) {
+        val key = if (BuildConfig.DEBUG) Constants.META_STAGING_APP_ID else Constants.META_PRODUCTION_APP_ID
         androidContext()
             .packageManager.getApplicationInfo(androidContext().packageName, PackageManager.GET_META_DATA)
-            .metaData?.get(Constants.META_APP_ID)?.toString() ?: throw IllegalStateException("Application id was not found")
+            .metaData?.get(key)?.toString() ?: throw IllegalStateException("Application id was not found")
     }
     factory {
         AuthInterceptor(
@@ -69,5 +71,8 @@ val apiModule = module {
     }
     single {
         get<Retrofit>().create(AuthApi::class.java)
+    }
+    single {
+        get<Retrofit>().create(ConsumerApi::class.java)
     }
 }

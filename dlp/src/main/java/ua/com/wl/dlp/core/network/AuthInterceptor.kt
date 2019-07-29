@@ -24,7 +24,7 @@ class AuthInterceptor(
 
                 } else {
                     corePreferences.corePrefs.authToken?.let { token ->
-                        addHeader(Constants.HEADER_AUTHORIZATION, "Token$token")
+                        addHeader(Constants.HEADER_AUTHORIZATION, "JWT $token")
 
                     } ?: throw RuntimeException("Authorization token required in private api was not found")
                 }

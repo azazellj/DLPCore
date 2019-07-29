@@ -6,4 +6,4 @@ import com.google.gson.annotations.SerializedName
  * @author Denis Makovskyi
  */
 
-data class CodeRequest(@SerializedName("mobile_phone") val phone: String)
+data class TokenRequest(@SerializedName("token") val token: String?)

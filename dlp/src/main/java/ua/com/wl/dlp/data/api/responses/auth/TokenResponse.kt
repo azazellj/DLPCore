@@ -6,4 +6,4 @@ import com.google.gson.annotations.SerializedName
  * @author Denis Makovskyi
  */
 
-data class AuthTokenResponse(@SerializedName("authorization_token") val token: String)
+data class TokenResponse(@SerializedName("token") val token: String)

@@ -3,8 +3,12 @@
 
     <string name="dlp_error_api_runtime">Runtime error. Please, try again later</string>
 
-    <string name="dlp_error_phone_invalid">Wrong phone number</string>
+    <string name="dlp_error_token_required">Access token is required</string>
+    <string name="dlp_error_token_invalid">Access token is invalid</string>
+    <string name="dlp_error_token_expired">Access token has been expired</string>
+
     <string name="dlp_error_phone_required">Phone number is required</string>
+    <string name="dlp_error_phone_invalid">Phone number is invalid</string>
 
     <string name="dlp_error_sms_delivery_failure">Failed to send sms</string>
     <string name="dlp_error_sms_retrieval_attempts_exceeded">Password retrieval attempts limit was exceeded</string>
@@ -15,4 +19,10 @@
     <string name="dlp_error_consumer_not_found">Consumer account not found</string>
     <string name="dlp_error_consumer_account_disabled">Consumer account is disabled</string>
     <string name="dlp_error_consumer_credential_invalid">Unable to log in with provided credentials</string>
+
+    <string name="dlp_error_invite_code_required">Invite code is required</string>
+    <string name="dlp_error_invite_code_not_found">Invite code not found</string>
+    <string name="dlp_error_consumer_already_invited">Consumer already invited</string>
+    <string name="dlp_error_consumer_self_invited">Consumer try to invite himself</string>
+    <string name="dlp_error_consumer_can_not_be_invited">Consumer can not be invited</string>
 </resources>
