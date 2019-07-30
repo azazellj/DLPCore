@@ -14,9 +14,9 @@ import org.koin.android.ext.koin.androidContext
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-import ua.com.wl.dlp.BuildConfig
 import ua.com.wl.dlp.core.network.AuthInterceptor
 import ua.com.wl.dlp.core.Constants
+import ua.com.wl.dlp.core.DLPCore
 import ua.com.wl.dlp.data.api.AuthApi
 import ua.com.wl.dlp.data.api.ConsumerApi
 import ua.com.wl.dlp.data.api.errors.ErrorsMapper
@@ -27,13 +27,19 @@ import ua.com.wl.dlp.data.api.errors.ErrorsMapper
 
 val apiModule = module {
     factory(qualifier = named(Constants.KOIN_NAMED_URL)) {
-        val key = if (BuildConfig.DEBUG) Constants.META_STAGING_URL else Constants.META_PRODUCTION_URL
+        val key = when (DLPCore.mode) {
+            DLPCore.Mode.DEBUG -> Constants.META_STAGING_URL
+            DLPCore.Mode.PRODUCTION -> Constants.META_PRODUCTION_URL
+        }
         androidContext()
             .packageManager.getApplicationInfo(androidContext().packageName, PackageManager.GET_META_DATA)
             .metaData?.get(key)?.toString() ?: throw IllegalStateException("Server url was not found")
     }
     factory(qualifier = named(Constants.KOIN_NAMED_APP_ID)) {
-        val key = if (BuildConfig.DEBUG) Constants.META_STAGING_APP_ID else Constants.META_PRODUCTION_APP_ID
+        val key = when (DLPCore.mode) {
+            DLPCore.Mode.DEBUG -> Constants.META_STAGING_APP_ID
+            DLPCore.Mode.PRODUCTION -> Constants.META_PRODUCTION_APP_ID
+        }
         androidContext()
             .packageManager.getApplicationInfo(androidContext().packageName, PackageManager.GET_META_DATA)
             .metaData?.get(key)?.toString() ?: throw IllegalStateException("Application id was not found")
@@ -45,10 +51,10 @@ val apiModule = module {
     }
     factory {
         HttpLoggingInterceptor().apply {
-            level = if (BuildConfig.DEBUG)
-                HttpLoggingInterceptor.Level.BODY
-            else
-                HttpLoggingInterceptor.Level.NONE
+            level = when (DLPCore.mode) {
+                DLPCore.Mode.DEBUG -> HttpLoggingInterceptor.Level.BODY
+                DLPCore.Mode.PRODUCTION -> HttpLoggingInterceptor.Level.NONE
+            }
         }
     }
     single {

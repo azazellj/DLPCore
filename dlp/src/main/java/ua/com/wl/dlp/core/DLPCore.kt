@@ -17,6 +17,13 @@ import ua.com.wl.dlp.core.di.preferencesModule
 
 object DLPCore {
 
+    enum class Mode {
+        DEBUG,
+        PRODUCTION
+    }
+
+    var mode: Mode = Mode.DEBUG
+
     var koinApp: KoinApplication? = null
         private set
 
