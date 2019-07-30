@@ -10,6 +10,8 @@ import org.koin.dsl.module
 
 val appModule = module {
     single {
-        GsonBuilder().create()
+        GsonBuilder()
+            .setLenient()
+            .create()
     }
 }
