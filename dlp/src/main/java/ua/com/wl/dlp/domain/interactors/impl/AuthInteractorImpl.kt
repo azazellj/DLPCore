@@ -102,10 +102,8 @@ class AuthInteractorImpl(
             it?.type.equals(ResponseType.OK)
         }.also {
             withContext(Dispatchers.IO) {
-                withContext(Dispatchers.IO) {
-                    corePreferences.removeCorePrefs()
-                    consumerPreferences.removeProfilePrefs()
-                }
+                corePreferences.removeCorePrefs()
+                consumerPreferences.removeProfilePrefs()
             }
         }
 
