@@ -13,6 +13,7 @@ import ua.com.wl.dlp.data.api.responses.DataResponse
 import ua.com.wl.dlp.data.api.responses.PaginationResponse
 import ua.com.wl.dlp.data.api.responses.auth.TokenResponse
 import ua.com.wl.dlp.data.api.responses.auth.AuthenticationResponse
+import ua.com.wl.dlp.data.api.responses.auth.SignResponse
 import ua.com.wl.dlp.data.api.responses.models.auth.City
 
 /**
@@ -35,11 +36,11 @@ interface AuthApi {
 
     @Headers("${Constants.HEADER_UNAUTHORIZED}: ${Constants.VALUE_PERMIT}")
     @POST("api/v3/consumer/auth/token/")
-    suspend fun signIn(@Body request: SignInRequest): Response<DataResponse<TokenResponse>>
+    suspend fun signIn(@Body request: SignInRequest): Response<DataResponse<SignResponse>>
 
     @Headers("${Constants.HEADER_UNAUTHORIZED}: ${Constants.VALUE_PERMIT}")
     @POST("api/v3/consumer/registration/")
-    suspend fun signUp(@Body request: SignUpRequest): Response<DataResponse<TokenResponse>>
+    suspend fun signUp(@Body request: SignUpRequest): Response<DataResponse<SignResponse>>
 
     @POST("api/v3/consumer/auth/log-out/")
     suspend fun signOut(): Response<BaseResponse>

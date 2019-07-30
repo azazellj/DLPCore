@@ -6,6 +6,7 @@ import com.google.gson.Gson
 
 import ua.com.wl.archetype.core.android.preferences.BasePreferences
 import ua.com.wl.dlp.data.prefereces.models.ProfilePrefs
+import ua.com.wl.dlp.utils.isNonNullOrEmpty
 
 /**
  * @author Denis Makovskyi
@@ -27,7 +28,7 @@ class ConsumerPreferences(
         }
         get() {
             val raw = getString(KEY_PROFILE_PREFS)
-            return if (!raw.isNullOrEmpty()) {
+            return if (raw.isNonNullOrEmpty()) {
                 field = gson.fromJson(raw, ProfilePrefs::class.java)
                 field
 

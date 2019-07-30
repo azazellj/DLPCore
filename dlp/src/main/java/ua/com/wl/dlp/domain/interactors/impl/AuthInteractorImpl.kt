@@ -10,6 +10,7 @@ import ua.com.wl.dlp.data.api.requests.auth.*
 import ua.com.wl.dlp.data.api.responses.PaginationResponse
 import ua.com.wl.dlp.data.api.responses.auth.TokenResponse
 import ua.com.wl.dlp.data.api.responses.auth.AuthenticationResponse
+import ua.com.wl.dlp.data.api.responses.auth.SignResponse
 import ua.com.wl.dlp.data.api.responses.models.auth.City
 import ua.com.wl.dlp.data.prefereces.ConsumerPreferences
 import ua.com.wl.dlp.data.prefereces.CorePreferences
@@ -45,7 +46,7 @@ class AuthInteractorImpl(
 
     override suspend fun refreshToken(): Result<TokenResponse> =
         callApi(
-            call = { api.refreshToken(TokenRequest(corePreferences.corePrefs.authToken)) },
+            call = { api.refreshToken(TokenRequest(corePreferences.corePrefs.refreshToken)) },
             errorClass = AuthException::class.java
         ).fMap {
             it?.payload
@@ -63,7 +64,7 @@ class AuthInteractorImpl(
             errorClass = AuthException::class.java
         ).fMap { it?.payload }
 
-    override suspend fun signIn(phone: String, password: String): Result<TokenResponse> =
+    override suspend fun signIn(phone: String, password: String): Result<SignResponse> =
         callApi(
             call = { api.signIn(SignInRequest(phone, password)) },
             errorClass = AuthException::class.java
@@ -72,12 +73,13 @@ class AuthInteractorImpl(
         }.also {
             if (it is Result.Success && it.data != null) {
                 withContext(Dispatchers.IO) {
-                    corePreferences.corePrefs = corePreferences.corePrefs.copy(authToken = it.data.token)
+                    corePreferences.corePrefs = corePreferences.corePrefs.copy(
+                        authToken = it.data.token, refreshToken = it.data.refreshToken)
                 }
             }
         }
 
-    override suspend fun signUp(city: Int, phone: String, password: String, barcode: String?): Result<TokenResponse> =
+    override suspend fun signUp(city: Int, phone: String, password: String, barcode: String?): Result<SignResponse> =
         callApi(
             call = { api.signUp(SignUpRequest(city, phone, password, barcode)) },
             errorClass = AuthException::class.java
@@ -86,7 +88,8 @@ class AuthInteractorImpl(
         }.also {
             if (it is Result.Success && it.data != null) {
                 withContext(Dispatchers.IO) {
-                    corePreferences.corePrefs = corePreferences.corePrefs.copy(authToken = it.data.token)
+                    corePreferences.corePrefs = corePreferences.corePrefs.copy(
+                        authToken = it.data.token, refreshToken = it.data.refreshToken)
                 }
             }
         }

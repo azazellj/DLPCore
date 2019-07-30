@@ -2,6 +2,10 @@ package ua.com.wl.dlp.data.api.responses.models.consumer.history.types
 
 import com.google.gson.annotations.SerializedName
 
+/**
+ * @author Denis Makovskyi
+ */
+
 enum class TransactionType(val value: String) {
     @SerializedName("PAYMENT")
     PAYMENT("PAYMENT"),

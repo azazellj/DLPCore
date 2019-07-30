@@ -3,6 +3,7 @@ package ua.com.wl.dlp.domain.interactors
 import ua.com.wl.dlp.data.api.responses.PaginationResponse
 import ua.com.wl.dlp.data.api.responses.auth.TokenResponse
 import ua.com.wl.dlp.data.api.responses.auth.AuthenticationResponse
+import ua.com.wl.dlp.data.api.responses.auth.SignResponse
 import ua.com.wl.dlp.data.api.responses.models.auth.City
 import ua.com.wl.dlp.domain.Result
 
@@ -18,9 +19,9 @@ interface AuthInteractor {
 
     suspend fun authentication(phone: String, sendSms: Boolean = true): Result<AuthenticationResponse>
 
-    suspend fun signIn(phone: String, password: String): Result<TokenResponse>
+    suspend fun signIn(phone: String, password: String): Result<SignResponse>
 
-    suspend fun signUp(city: Int, phone: String, password: String, barcode: String? = null): Result<TokenResponse>
+    suspend fun signUp(city: Int, phone: String, password: String, barcode: String? = null): Result<SignResponse>
 
     suspend fun signOut(): Result<Boolean>
 

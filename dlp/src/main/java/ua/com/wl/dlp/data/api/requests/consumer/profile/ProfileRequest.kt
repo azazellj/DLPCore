@@ -4,6 +4,10 @@ import com.google.gson.annotations.SerializedName
 
 import ua.com.wl.dlp.data.api.responses.models.consumer.profile.Gender
 
+/**
+ * @author Denis Makovskyi
+ */
+
 data class ProfileRequest(
     @SerializedName("first_name") var firstName: String? = null,
     @SerializedName("patronymic") var patronymic: String? = null,
