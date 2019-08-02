@@ -11,6 +11,7 @@ import ua.com.wl.dlp.data.api.responses.PaginationResponse
 import ua.com.wl.dlp.data.api.responses.auth.TokenResponse
 import ua.com.wl.dlp.data.api.responses.auth.AuthenticationResponse
 import ua.com.wl.dlp.data.api.responses.auth.SignResponse
+import ua.com.wl.dlp.data.api.responses.models.auth.CardsStatus
 import ua.com.wl.dlp.data.api.responses.models.auth.City
 import ua.com.wl.dlp.data.prefereces.ConsumerPreferences
 import ua.com.wl.dlp.data.prefereces.CorePreferences
@@ -28,7 +29,6 @@ class AuthInteractorImpl(
     private val consumerPreferences: ConsumerPreferences,
     private val api: AuthApi,
     errorsMapper: ErrorsMapper) : AuthInteractor, UseCase(errorsMapper) {
-
 
     override suspend fun verification(): Result<TokenResponse> =
         callApi(
@@ -61,8 +61,7 @@ class AuthInteractorImpl(
     override suspend fun authentication(phone: String, sendSms: Boolean): Result<AuthenticationResponse> =
         callApi(
             call = { api.authentication(AuthenticationRequest(sendSms, phone)) },
-            errorClass = AuthException::class.java
-        ).fMap { it?.payload }
+            errorClass = AuthException::class.java).fMap { it?.payload }
 
     override suspend fun signIn(phone: String, password: String): Result<SignResponse> =
         callApi(
@@ -78,6 +77,11 @@ class AuthInteractorImpl(
                 }
             }
         }
+
+    override suspend fun cardsStatus(phone: String, password: String): Result<CardsStatus> =
+        callApi(
+            call = { api.cardsStatus(CardsStatusRequest(phone, password)) },
+            errorClass = AuthException::class.java).fMap { it?.payload?.cardsStatus }
 
     override suspend fun signUp(city: Int, phone: String, password: String, barcode: String?): Result<SignResponse> =
         callApi(
@@ -107,11 +111,10 @@ class AuthInteractorImpl(
             }
         }
 
-    override suspend fun retrieveCode(phone: String): Result<Boolean> =
+    override suspend fun requestSmsCode(phone: String): Result<Boolean> =
         callApi(
-            call = { api.retrieveCode(SmsCodeRequest(phone)) },
-            errorClass = AuthException::class.java
-        ).fMap { it?.type.equals(ResponseType.OK) }
+            call = { api.requestSmsCode(SmsCodeRequest(phone)) },
+            errorClass = AuthException::class.java).fMap { it?.type.equals(ResponseType.OK) }
 
     override suspend fun cities(): Result<PaginationResponse<City>> =
         callApi(call = { api.cities() }).fMap { it?.payload }

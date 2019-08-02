@@ -4,6 +4,7 @@ import ua.com.wl.dlp.data.api.responses.PaginationResponse
 import ua.com.wl.dlp.data.api.responses.auth.TokenResponse
 import ua.com.wl.dlp.data.api.responses.auth.AuthenticationResponse
 import ua.com.wl.dlp.data.api.responses.auth.SignResponse
+import ua.com.wl.dlp.data.api.responses.models.auth.CardsStatus
 import ua.com.wl.dlp.data.api.responses.models.auth.City
 import ua.com.wl.dlp.domain.Result
 
@@ -21,11 +22,13 @@ interface AuthInteractor {
 
     suspend fun signIn(phone: String, password: String): Result<SignResponse>
 
+    suspend fun cardsStatus(phone: String, password: String): Result<CardsStatus>
+
     suspend fun signUp(city: Int, phone: String, password: String, barcode: String? = null): Result<SignResponse>
 
     suspend fun signOut(): Result<Boolean>
 
-    suspend fun retrieveCode(phone: String): Result<Boolean>
+    suspend fun requestSmsCode(phone: String): Result<Boolean>
 
     suspend fun cities(): Result<PaginationResponse<City>>
 }
