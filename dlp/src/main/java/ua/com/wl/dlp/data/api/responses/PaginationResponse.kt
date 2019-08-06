@@ -19,5 +19,5 @@ data class PaginationResponse<T>(
     val nextPage: String?,
     @SerializedName("previous")
     val previousPage: String?,
-    @SerializedName("data")
+    @SerializedName(value = "data", alternate = ["results"])
     val data: List<T>?)
