@@ -22,7 +22,7 @@ val interactorsModule = module {
     single<ConsumerInteractor> {
         ConsumerInteractorImpl(
             consumerPreferences = get(),
-            api = get(),
+            apiV3 = get(),
             errorsMapper = get())
     }
 }

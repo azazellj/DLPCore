@@ -18,7 +18,7 @@ import ua.com.wl.dlp.data.api.responses.consumer.referral.ReferralActivationResp
  * @author Denis Makovskyi
  */
 
-interface ConsumerApi {
+interface ConsumerApiV3 {
 
     @GET("api/v3/consumer/profile/")
     suspend fun getProfile(): Response<DataResponse<ProfileResponse>>
