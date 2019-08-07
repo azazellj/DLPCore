@@ -4,7 +4,7 @@ import retrofit2.Response
 import retrofit2.http.GET
 
 import ua.com.wl.dlp.data.api.responses.PaginationResponse
-import ua.com.wl.dlp.data.api.responses.consumer.shop.ShopsResponse
+import ua.com.wl.dlp.data.api.responses.consumer.shop.CityShopsResponse
 
 /**
  * @author Denis Makovskyi
@@ -13,5 +13,5 @@ import ua.com.wl.dlp.data.api.responses.consumer.shop.ShopsResponse
 interface ConsumerApiV1 {
 
     @GET("api/v1/consumer/city-shops/")
-    suspend fun getCityShops(): Response<PaginationResponse<ShopsResponse>>
+    suspend fun getCityShops(): Response<PaginationResponse<CityShopsResponse>>
 }

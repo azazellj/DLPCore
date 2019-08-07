@@ -12,7 +12,7 @@ import ua.com.wl.dlp.data.api.responses.PaginationResponse
 import ua.com.wl.dlp.data.api.responses.consumer.history.TransactionResponse
 import ua.com.wl.dlp.data.api.responses.consumer.profile.ProfileResponse
 import ua.com.wl.dlp.data.api.responses.consumer.referral.ReferralActivationResponse
-import ua.com.wl.dlp.data.api.responses.consumer.shop.ShopsResponse
+import ua.com.wl.dlp.data.api.responses.consumer.shop.CityShopsResponse
 import ua.com.wl.dlp.data.events.EventsCreator
 import ua.com.wl.dlp.data.prefereces.ConsumerPreferences
 import ua.com.wl.dlp.domain.Result
@@ -64,7 +64,7 @@ class ConsumerInteractorImpl(
             }
         }
 
-    override suspend fun getCityShops(): Result<PaginationResponse<ShopsResponse>> =
+    override suspend fun getCityShops(): Result<PaginationResponse<CityShopsResponse>> =
         callApi(call = { apiV1.getCityShops() })
 
     override suspend fun loadTransactionsHistory(): Result<PaginationResponse<TransactionResponse>> =
