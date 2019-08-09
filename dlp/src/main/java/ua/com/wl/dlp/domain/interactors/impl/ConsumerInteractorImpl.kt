@@ -68,7 +68,13 @@ class ConsumerInteractorImpl(
         }
 
     override suspend fun getQrCode(): Result<QrCodeResponse> =
-        callApi(call = { apiV1.getQrCode() })
+        callApi(call = { apiV1.getQrCode() }).also {
+            if (it is Result.Success && it.data != null) {
+                withContext(Dispatchers.IO) {
+                    consumerPreferences.profilePrefs = consumerPreferences.profilePrefs.copy(qrCode = it.data.qrCode)
+                }
+            }
+        }
 
     override suspend fun loadTransactionsHistory(): Result<PaginationResponse<TransactionResponse>> =
         callApi(call = { apiV3.loadTransactionsHistory() }).fMap { it?.payload }
