@@ -1,4 +1,4 @@
-package ua.com.wl.dlp.data.api
+package ua.com.wl.dlp.data.api.responses
 
 /**
  * @author Denis Makovskyi

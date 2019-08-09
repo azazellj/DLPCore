@@ -6,7 +6,7 @@ apply plugin: 'kotlin-android-extensions'
 
 android {
     compileSdkVersion 29
-    buildToolsVersion "29.0.0"
+    buildToolsVersion "29.0.2"
 
     defaultConfig {
         minSdkVersion 17
@@ -63,5 +63,5 @@ dependencies {
     implementation "org.greenrobot:eventbus:$event_bus_version"
 
     // Architecture
-    implementation 'com.github.DenisMakovskyi:Archetype:bdc0f02bdc'
+    implementation 'com.github.DenisMakovskyi:Archetype:84c5b70a7c'
 }

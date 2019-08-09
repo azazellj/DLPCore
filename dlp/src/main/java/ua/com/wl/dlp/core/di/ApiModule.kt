@@ -20,6 +20,7 @@ import ua.com.wl.dlp.core.DLPCore
 import ua.com.wl.dlp.data.api.AuthApi
 import ua.com.wl.dlp.data.api.ConsumerApiV1
 import ua.com.wl.dlp.data.api.ConsumerApiV3
+import ua.com.wl.dlp.data.api.ShopApiV1
 import ua.com.wl.dlp.data.api.errors.ErrorsMapper
 
 /**
@@ -73,16 +74,9 @@ val apiModule = module {
             .addConverterFactory(GsonConverterFactory.create(get()))
             .build()
     }
-    single {
-        ErrorsMapper(gson = get())
-    }
-    single {
-        get<Retrofit>().create(AuthApi::class.java)
-    }
-    single {
-        get<Retrofit>().create(ConsumerApiV1::class.java)
-    }
-    single {
-        get<Retrofit>().create(ConsumerApiV3::class.java)
-    }
+    factory { ErrorsMapper(gson = get()) }
+    factory { get<Retrofit>().create(AuthApi::class.java) }
+    factory { get<Retrofit>().create(ConsumerApiV1::class.java) }
+    factory { get<Retrofit>().create(ConsumerApiV3::class.java) }
+    factory { get<Retrofit>().create(ShopApiV1::class.java) }
 }

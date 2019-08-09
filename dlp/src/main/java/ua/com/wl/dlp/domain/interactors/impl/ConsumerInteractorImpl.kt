@@ -6,17 +6,20 @@ import kotlinx.coroutines.withContext
 import ua.com.wl.dlp.data.api.ConsumerApiV1
 import ua.com.wl.dlp.data.api.ConsumerApiV3
 import ua.com.wl.dlp.data.api.errors.ErrorsMapper
+import ua.com.wl.dlp.data.api.requests.consumer.feedback.feedback
 import ua.com.wl.dlp.data.api.requests.consumer.profile.ProfileRequest
 import ua.com.wl.dlp.data.api.requests.consumer.referral.ReferralActivationRequest
 import ua.com.wl.dlp.data.api.responses.PaginationResponse
+import ua.com.wl.dlp.data.api.responses.consumer.feedback.FeedbackResponse
 import ua.com.wl.dlp.data.api.responses.consumer.history.TransactionResponse
 import ua.com.wl.dlp.data.api.responses.consumer.profile.ProfileResponse
+import ua.com.wl.dlp.data.api.responses.consumer.referral.QrCodeResponse
 import ua.com.wl.dlp.data.api.responses.consumer.referral.ReferralActivationResponse
-import ua.com.wl.dlp.data.api.responses.consumer.shop.CityShopsResponse
 import ua.com.wl.dlp.data.events.EventsCreator
 import ua.com.wl.dlp.data.prefereces.ConsumerPreferences
 import ua.com.wl.dlp.domain.Result
 import ua.com.wl.dlp.domain.UseCase
+import ua.com.wl.dlp.domain.exeptions.ApiException
 import ua.com.wl.dlp.domain.exeptions.consumer.referral.ReferralException
 import ua.com.wl.dlp.domain.interactors.ConsumerInteractor
 import ua.com.wl.dlp.utils.toPrefs
@@ -64,9 +67,24 @@ class ConsumerInteractorImpl(
             }
         }
 
-    override suspend fun getCityShops(): Result<PaginationResponse<CityShopsResponse>> =
-        callApi(call = { apiV1.getCityShops() })
+    override suspend fun getQrCode(): Result<QrCodeResponse> =
+        callApi(call = { apiV1.getQrCode() })
 
     override suspend fun loadTransactionsHistory(): Result<PaginationResponse<TransactionResponse>> =
         callApi(call = { apiV3.loadTransactionsHistory() }).fMap { it?.payload }
+
+    override suspend fun feedback(message: String, appVersion: String, callback: Boolean): Result<FeedbackResponse> {
+        val request = try {
+            feedback {
+                this.message = "$message\n\nI DON'T MIND CALLBACK: " + if (callback) "YES" else "NO"
+                this.appVersion = "Android_app_v$appVersion"
+                this.phone = consumerPreferences.profilePrefs.phone
+                this.email = consumerPreferences.profilePrefs.email
+            }
+
+        } catch (e: Exception) {
+            return Result.Failure(ApiException())
+        }
+        return callApi(call = { apiV1.feedback(request) })
+    }
 }

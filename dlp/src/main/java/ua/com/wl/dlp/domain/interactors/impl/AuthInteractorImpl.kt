@@ -4,7 +4,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 import ua.com.wl.dlp.data.api.AuthApi
-import ua.com.wl.dlp.data.api.ResponseType
+import ua.com.wl.dlp.data.api.responses.ResponseType
 import ua.com.wl.dlp.data.api.errors.ErrorsMapper
 import ua.com.wl.dlp.data.api.requests.auth.*
 import ua.com.wl.dlp.data.api.responses.PaginationResponse

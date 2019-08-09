@@ -1,6 +1,7 @@
-package ua.com.wl.dlp.data.api.responses.models.consumer.shop
+package ua.com.wl.dlp.data.api.responses.models.shop
 
 import com.google.gson.annotations.SerializedName
+import ua.com.wl.dlp.data.api.responses.models.shop.service.ShopService
 
 /**
  * @author Denis Makovskyi

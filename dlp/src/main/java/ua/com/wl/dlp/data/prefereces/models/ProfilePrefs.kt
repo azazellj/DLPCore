@@ -23,6 +23,7 @@ data class ProfilePrefs(
     @SerializedName("language") val language: String? = null,
     @SerializedName("timezone") val timezone: String? = null,
     @SerializedName("balance") val balance: Long? = null,
+    @SerializedName("qr_code") val qrCode: String? = null,
     @SerializedName("invite_code") val inviteCode: String? = null,
     @SerializedName("referral_code") val referralCode: String? = null,
     @SerializedName("comment") val comment: String? = null)

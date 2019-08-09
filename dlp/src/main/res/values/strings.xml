@@ -1,7 +1,10 @@
 <resources>
     <string name="app_name">dlp</string>
 
-    <string name="dlp_error_api_runtime">Runtime error. Please, try again later</string>
+    <string name="dlp_error_io">Network connection error</string>
+    <string name="dlp_error_ssl">Ssl certificate error</string>
+    <string name="dlp_error_json">Unexpected server response</string>
+    <string name="dlp_error_runtime">Runtime error. Please, try again later</string>
 
     <string name="dlp_error_token_required">Access token is required</string>
     <string name="dlp_error_token_invalid">Access token is invalid</string>

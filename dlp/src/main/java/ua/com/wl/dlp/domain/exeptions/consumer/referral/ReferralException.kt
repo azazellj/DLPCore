@@ -3,14 +3,14 @@ package ua.com.wl.dlp.domain.exeptions.consumer.referral
 import android.content.Context
 
 import ua.com.wl.dlp.R
-import ua.com.wl.dlp.data.api.ResponseType
-import ua.com.wl.dlp.domain.exeptions.ApiRuntimeException
+import ua.com.wl.dlp.data.api.responses.ResponseType
+import ua.com.wl.dlp.domain.exeptions.ApiException
 
 /**
  * @author Denis Makovskyi
  */
 
-class ReferralException(message: String) : ApiRuntimeException(message) {
+class ReferralException(message: String) : ApiException(message) {
 
     override fun getLocalizedMessage(context: Context): String = when (message) {
         ResponseType.INVITE_CODE_REQUIRED -> context.getString(R.string.dlp_error_invite_code_required)
