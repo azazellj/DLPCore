@@ -63,5 +63,5 @@ dependencies {
     implementation "org.greenrobot:eventbus:$event_bus_version"
 
     // Architecture
-    implementation 'com.github.DenisMakovskyi:Archetype:f9bd9ed335'
+    implementation 'com.github.DenisMakovskyi:Archetype:8f235d9cfd'
 }
