@@ -2,7 +2,7 @@ package ua.com.wl.dlp.utils
 
 import okhttp3.Request
 
-import ua.com.wl.dlp.data.api.responses.PaginationResponse
+import ua.com.wl.dlp.data.api.responses.PagedResponse
 import ua.com.wl.dlp.data.api.responses.consumer.profile.ProfileResponse
 import ua.com.wl.dlp.data.prefereces.models.ProfilePrefs
 
@@ -16,9 +16,9 @@ fun CharSequence?.isNonNullOrEmpty(): Boolean =
 fun Request.hasHeader(name: String, value: String): Boolean =
     header(name)?.let { it -> it.isNotEmpty() && it == value } ?: false
 
-fun PaginationResponse<*>.previousPage(): Int? = previousPage?.let { getQueryParam(it, "page") }?.toInt()
+fun PagedResponse<*>.previousPage(): Int? = previousPage?.let { getQueryParam(it, "page") }?.toInt()
 
-fun PaginationResponse<*>.nextPage(): Int? = nextPage?.let { getQueryParam(it, "page") }?.toInt()
+fun PagedResponse<*>.nextPage(): Int? = nextPage?.let { getQueryParam(it, "page") }?.toInt()
 
 fun ProfileResponse.toPrefs(): ProfilePrefs =
     ProfilePrefs(

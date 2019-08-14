@@ -9,7 +9,7 @@ import ua.com.wl.dlp.data.api.errors.ErrorsMapper
 import ua.com.wl.dlp.data.api.requests.consumer.feedback.feedback
 import ua.com.wl.dlp.data.api.requests.consumer.profile.ProfileRequest
 import ua.com.wl.dlp.data.api.requests.consumer.referral.ReferralActivationRequest
-import ua.com.wl.dlp.data.api.responses.PaginationResponse
+import ua.com.wl.dlp.data.api.responses.PagedResponse
 import ua.com.wl.dlp.data.api.responses.consumer.feedback.FeedbackResponse
 import ua.com.wl.dlp.data.api.responses.consumer.history.TransactionResponse
 import ua.com.wl.dlp.data.api.responses.consumer.profile.ProfileResponse
@@ -76,7 +76,7 @@ class ConsumerInteractorImpl(
             }
         }
 
-    override suspend fun loadTransactionsHistory(): Result<PaginationResponse<TransactionResponse>> =
+    override suspend fun loadTransactionsHistory(): Result<PagedResponse<TransactionResponse>> =
         callApi(call = { apiV3.loadTransactionsHistory() }).fMap { it?.payload }
 
     override suspend fun feedback(message: String, appVersion: String, callback: Boolean): Result<FeedbackResponse> {

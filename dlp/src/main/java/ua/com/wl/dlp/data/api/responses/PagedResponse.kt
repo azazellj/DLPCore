@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName
  * @author Denis Makovskyi
  */
 
-data class PaginationResponse<T>(
+data class PagedResponse<T>(
     @SerializedName("page_number")
     val page: Int,
     @SerializedName(value = "per_page", alternate = ["count"])
@@ -20,4 +20,4 @@ data class PaginationResponse<T>(
     @SerializedName("previous")
     val previousPage: String?,
     @SerializedName(value = "data", alternate = ["results"])
-    val data: List<T>?)
+    val items: List<T>?)

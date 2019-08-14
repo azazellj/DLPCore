@@ -1,7 +1,7 @@
 package ua.com.wl.dlp.domain.interactors
 
 import ua.com.wl.dlp.data.api.requests.consumer.profile.ProfileRequest
-import ua.com.wl.dlp.data.api.responses.PaginationResponse
+import ua.com.wl.dlp.data.api.responses.PagedResponse
 import ua.com.wl.dlp.data.api.responses.consumer.feedback.FeedbackResponse
 import ua.com.wl.dlp.data.api.responses.consumer.history.TransactionResponse
 import ua.com.wl.dlp.data.api.responses.consumer.profile.ProfileResponse
@@ -23,7 +23,7 @@ interface ConsumerInteractor {
 
     suspend fun getQrCode(): Result<QrCodeResponse>
 
-    suspend fun loadTransactionsHistory(): Result<PaginationResponse<TransactionResponse>>
+    suspend fun loadTransactionsHistory(): Result<PagedResponse<TransactionResponse>>
 
     suspend fun feedback(message: String, appVersion: String, callback: Boolean): Result<FeedbackResponse>
 }

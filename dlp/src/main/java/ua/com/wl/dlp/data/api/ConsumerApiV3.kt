@@ -9,7 +9,7 @@ import retrofit2.http.POST
 import ua.com.wl.dlp.data.api.requests.consumer.profile.ProfileRequest
 import ua.com.wl.dlp.data.api.requests.consumer.referral.ReferralActivationRequest
 import ua.com.wl.dlp.data.api.responses.DataResponse
-import ua.com.wl.dlp.data.api.responses.PaginationResponse
+import ua.com.wl.dlp.data.api.responses.PagedResponse
 import ua.com.wl.dlp.data.api.responses.consumer.history.TransactionResponse
 import ua.com.wl.dlp.data.api.responses.consumer.profile.ProfileResponse
 import ua.com.wl.dlp.data.api.responses.consumer.referral.ReferralActivationResponse
@@ -30,5 +30,5 @@ interface ConsumerApiV3 {
     suspend fun activateReferralCode(@Body request: ReferralActivationRequest): Response<DataResponse<ReferralActivationResponse>>
 
     @GET("api/v3/consumer/balance/history/")
-    suspend fun loadTransactionsHistory(): Response<DataResponse<PaginationResponse<TransactionResponse>>>
+    suspend fun loadTransactionsHistory(): Response<DataResponse<PagedResponse<TransactionResponse>>>
 }

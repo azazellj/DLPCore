@@ -1,6 +1,6 @@
 package ua.com.wl.dlp.domain.interactors
 
-import ua.com.wl.dlp.data.api.responses.PaginationResponse
+import ua.com.wl.dlp.data.api.responses.PagedResponse
 import ua.com.wl.dlp.data.api.responses.auth.TokenResponse
 import ua.com.wl.dlp.data.api.responses.auth.AuthenticationResponse
 import ua.com.wl.dlp.data.api.responses.auth.SignResponse
@@ -30,5 +30,5 @@ interface AuthInteractor {
 
     suspend fun requestSmsCode(phone: String): Result<Boolean>
 
-    suspend fun cities(): Result<PaginationResponse<City>>
+    suspend fun cities(): Result<PagedResponse<City>>
 }
