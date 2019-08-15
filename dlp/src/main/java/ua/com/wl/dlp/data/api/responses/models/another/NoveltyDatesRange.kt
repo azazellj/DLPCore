@@ -8,4 +8,4 @@ import com.google.gson.annotations.SerializedName
 
 data class NoveltyDatesRange(
     @SerializedName("lower") val lower: String?,
-    @SerializedName("lower") val upper: String?)
+    @SerializedName("upper") val upper: String?)

@@ -6,8 +6,8 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 import ua.com.wl.dlp.data.api.responses.PagedResponse
-import ua.com.wl.dlp.data.api.responses.models.shop.ShopNewsItem
-import ua.com.wl.dlp.data.api.responses.models.shop.ShopPromoOffer
+import ua.com.wl.dlp.data.api.responses.shop.ShopNewsItemResponse
+import ua.com.wl.dlp.data.api.responses.shop.ShopOfferResponse
 import ua.com.wl.dlp.data.api.responses.shop.CityShopsResponse
 
 /**
@@ -30,7 +30,7 @@ interface ShopApiV1 {
         @Query("page") page: Int? = null,
         @Query("per_page") count: Int? = null
 
-    ): Response<PagedResponse<ShopNewsItem>>
+    ): Response<PagedResponse<ShopNewsItemResponse>>
 
     @GET("api/v1/consumer/shops/{shop_id}/promo-offers/")
     suspend fun getShopPromoOffers(
@@ -38,5 +38,5 @@ interface ShopApiV1 {
         @Query("page") page: Int? = null,
         @Query("per_page") count: Int? = null
 
-    ): Response<PagedResponse<ShopPromoOffer>>
+    ): Response<PagedResponse<ShopOfferResponse>>
 }

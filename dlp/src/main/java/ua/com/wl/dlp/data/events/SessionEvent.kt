@@ -6,4 +6,4 @@ import ua.com.wl.archetype.core.android.bus.BusEvent
  * @author Denis Makovskyi
  */
 
-data class BalanceEvent(val balance: Long, val isSavedInPreferences: Boolean = true): BusEvent()
+data class SessionEvent(val isValid: Boolean, val httpCode: Int): BusEvent()

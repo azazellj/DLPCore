@@ -3,6 +3,9 @@ package ua.com.wl.dlp.domain.interactors.impl
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
+import android.app.Application
+
+import ua.com.wl.dlp.R
 import ua.com.wl.dlp.data.api.ConsumerApiV1
 import ua.com.wl.dlp.data.api.ConsumerApiV3
 import ua.com.wl.dlp.data.api.errors.ErrorsMapper
@@ -15,7 +18,7 @@ import ua.com.wl.dlp.data.api.responses.consumer.history.TransactionResponse
 import ua.com.wl.dlp.data.api.responses.consumer.profile.ProfileResponse
 import ua.com.wl.dlp.data.api.responses.consumer.referral.QrCodeResponse
 import ua.com.wl.dlp.data.api.responses.consumer.referral.ReferralActivationResponse
-import ua.com.wl.dlp.data.events.EventsCreator
+import ua.com.wl.dlp.data.events.EventsFactory
 import ua.com.wl.dlp.data.prefereces.ConsumerPreferences
 import ua.com.wl.dlp.domain.Result
 import ua.com.wl.dlp.domain.UseCase
@@ -29,6 +32,7 @@ import ua.com.wl.dlp.utils.toPrefs
  */
 
 class ConsumerInteractorImpl(
+    private val application: Application,
     private val consumerPreferences: ConsumerPreferences,
     private val apiV1: ConsumerApiV1,
     private val apiV3: ConsumerApiV3,
@@ -38,7 +42,12 @@ class ConsumerInteractorImpl(
         callApi(call = { apiV3.getProfile() }).fMap { it?.payload }.also {
             if (it is Result.Success && it.data != null) {
                 withContext(Dispatchers.IO) {
+                    val savedBalance = consumerPreferences.profilePrefs.balance
                     consumerPreferences.profilePrefs = it.data.toPrefs()
+                    //-
+                    if (savedBalance != consumerPreferences.profilePrefs.balance) {
+                        EventsFactory.balance(it.data.balance, true)
+                    }
                 }
             }
         }
@@ -47,7 +56,12 @@ class ConsumerInteractorImpl(
         callApi(call = { apiV3.updateProfile(profile) }).fMap { it?.payload }.also {
             if (it is Result.Success && it.data != null) {
                 withContext(Dispatchers.IO) {
+                    val savedBalance = consumerPreferences.profilePrefs.balance
                     consumerPreferences.profilePrefs = it.data.toPrefs()
+                    //-
+                    if (savedBalance != consumerPreferences.profilePrefs.balance) {
+                        EventsFactory.balance(it.data.balance, true)
+                    }
                 }
             }
         }
@@ -62,7 +76,7 @@ class ConsumerInteractorImpl(
             if (it is Result.Success && it.data != null) {
                 withContext(Dispatchers.IO) {
                     consumerPreferences.profilePrefs = consumerPreferences.profilePrefs.copy(balance = it.data.consumerBalance)
-                    EventsCreator.balanceInvalidationEvent(it.data.consumerBalance, true)
+                    EventsFactory.balance(it.data.consumerBalance, true)
                 }
             }
         }
@@ -82,8 +96,13 @@ class ConsumerInteractorImpl(
     override suspend fun feedback(message: String, appVersion: String, callback: Boolean): Result<FeedbackResponse> {
         val request = try {
             feedback {
-                this.message = "$message\n\nI DON'T MIND CALLBACK: " + if (callback) "YES" else "NO"
-                this.appVersion = "Android_app_v$appVersion"
+                val answer = if (callback) {
+                    application.getString(R.string.dlp_feedback_callback_agree)
+                } else {
+                    application.getString(R.string.dlp_feedback_callback_disagree)
+                }
+                this.message = "$message\n\n${application.getString(R.string.dlp_feedback_callback_prefix)}: $answer"
+                this.appVersion = "${application.getString(R.string.dlp_feedback_app_version)}$appVersion"
                 this.phone = consumerPreferences.profilePrefs.phone
                 this.email = consumerPreferences.profilePrefs.email
             }
