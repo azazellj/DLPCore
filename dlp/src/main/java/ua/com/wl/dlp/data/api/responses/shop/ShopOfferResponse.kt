@@ -1,7 +1,6 @@
 package ua.com.wl.dlp.data.api.responses.shop
 
 import com.google.gson.annotations.SerializedName
-import com.idanatz.oneadapter.external.interfaces.Diffable
 
 import ua.com.wl.dlp.data.api.responses.models.another.NoveltyDatesRange
 import ua.com.wl.dlp.data.api.responses.models.shop.offer.promo.PromoSettings
@@ -11,7 +10,7 @@ import ua.com.wl.dlp.data.api.responses.models.shop.offer.social.SocialNetwork
  * @author Denis Makovskyi
  */
 
-class ShopOfferResponse(
+data class ShopOfferResponse(
     @SerializedName("id") val id: Int,
     @SerializedName("trade_item") val tradeItem: Int,
     @SerializedName("name") val name: String,
@@ -36,9 +35,4 @@ class ShopOfferResponse(
     @SerializedName("for_sharing_social_networks") val sharingSocialNetwork: List<SocialNetwork>,
     @SerializedName("payed_for_sharing_social_networks") val sharedSocialNetwork: List<SocialNetwork>,
     @SerializedName("promo_settings") val promoSettings: PromoSettings?,
-    @SerializedName("novelty_date_range") val noveltyDatesRange: NoveltyDatesRange?): Diffable {
-
-    override fun getUniqueIdentifier(): Long = id.toLong()
-
-    override fun areContentTheSame(other: Any): Boolean = other is ShopOfferResponse && other.id == id
-}
+    @SerializedName("novelty_date_range") val noveltyDatesRange: NoveltyDatesRange?)
