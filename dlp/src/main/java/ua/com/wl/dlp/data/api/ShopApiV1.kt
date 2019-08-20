@@ -20,7 +20,7 @@ interface ShopApiV1 {
     @GET("api/v1/consumer/city-shops/")
     suspend fun getCityShops(
         @Query("page") page: Int? = null,
-        @Query("per_page") count: Int? = null
+        @Query("page_size") count: Int? = null
 
     ): Response<PagedResponse<CityShopsResponse>>
 
@@ -28,7 +28,7 @@ interface ShopApiV1 {
     suspend fun getShopNewsFeed(
         @Path("shop_id") shopId: Int,
         @Query("page") page: Int? = null,
-        @Query("per_page") count: Int? = null
+        @Query("page_size") count: Int? = null
 
     ): Response<PagedResponse<ShopNewsItemResponse>>
 
@@ -36,7 +36,7 @@ interface ShopApiV1 {
     suspend fun getShopPromoOffers(
         @Path("shop_id") shopId: Int,
         @Query("page") page: Int? = null,
-        @Query("per_page") count: Int? = null
+        @Query("page_size") count: Int? = null
 
     ): Response<PagedResponse<ShopOfferResponse>>
 }
