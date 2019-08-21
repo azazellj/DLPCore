@@ -9,6 +9,7 @@ import ua.com.wl.dlp.core.Constants
 import ua.com.wl.dlp.data.events.factory.CoreEventsFactory
 import ua.com.wl.dlp.data.prefereces.CorePreferences
 import ua.com.wl.dlp.utils.hasHeader
+import ua.com.wl.dlp.utils.only
 
 /**
  * @author Denis Makovskyi
@@ -26,7 +27,7 @@ class AuthInterceptor(
                     removeHeader(Constants.HEADER_UNAUTHORIZED)
 
                 } else {
-                    corePreferences.corePrefs.authToken?.let { token ->
+                    corePreferences.corePrefs.authToken?.only { token ->
                         addHeader(Constants.HEADER_AUTHORIZATION, "JWT $token")
 
                     } ?: throw RuntimeException("Authorization token required in private api was not found")
