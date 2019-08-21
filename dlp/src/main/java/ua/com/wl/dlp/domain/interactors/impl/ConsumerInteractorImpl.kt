@@ -1,7 +1,8 @@
 package ua.com.wl.dlp.domain.interactors.impl
 
-import android.app.Application
 import kotlinx.coroutines.*
+
+import android.app.Application
 
 import ua.com.wl.dlp.R
 import ua.com.wl.dlp.data.api.ConsumerApiV1
@@ -16,7 +17,7 @@ import ua.com.wl.dlp.data.api.responses.consumer.history.TransactionResponse
 import ua.com.wl.dlp.data.api.responses.consumer.profile.ProfileResponse
 import ua.com.wl.dlp.data.api.responses.consumer.referral.QrCodeResponse
 import ua.com.wl.dlp.data.api.responses.consumer.referral.ReferralActivationResponse
-import ua.com.wl.dlp.data.events.CoreEventsFactory
+import ua.com.wl.dlp.data.events.factory.CoreEventsFactory
 import ua.com.wl.dlp.data.prefereces.ConsumerPreferences
 import ua.com.wl.dlp.data.prefereces.models.ProfilePrefs
 import ua.com.wl.dlp.domain.Result
@@ -24,7 +25,6 @@ import ua.com.wl.dlp.domain.UseCase
 import ua.com.wl.dlp.domain.exeptions.ApiException
 import ua.com.wl.dlp.domain.exeptions.consumer.referral.ReferralException
 import ua.com.wl.dlp.domain.interactors.ConsumerInteractor
-import ua.com.wl.dlp.utils.only
 import ua.com.wl.dlp.utils.toPrefs
 
 /**
@@ -120,17 +120,16 @@ class ConsumerInteractorImpl(
 
     private fun notifyProfileChanges(snapshot: ProfilePrefs) {
         if (snapshot.firstName != consumerPreferences.profilePrefs.firstName) {
-            consumerPreferences.profilePrefs.only {
-                CoreEventsFactory.name("${it.firstName} ${it.lastName}", true)
-            }
+            CoreEventsFactory.firstName(consumerPreferences.profilePrefs.firstName, true)
+        }
+        if (snapshot.patronymic != consumerPreferences.profilePrefs.patronymic) {
+            CoreEventsFactory.patronymic(consumerPreferences.profilePrefs.patronymic, true)
         }
         if (snapshot.lastName != consumerPreferences.profilePrefs.lastName) {
-            consumerPreferences.profilePrefs.only {
-                CoreEventsFactory.name("${it.firstName} ${it.lastName}", true)
-            }
+            CoreEventsFactory.lastName(consumerPreferences.profilePrefs.lastName, true)
         }
         if (snapshot.city != consumerPreferences.profilePrefs.city) {
-            CoreEventsFactory.city(consumerPreferences.profilePrefs.city?.id, true)
+            CoreEventsFactory.city(consumerPreferences.profilePrefs.city, true)
         }
         if (snapshot.phone != consumerPreferences.profilePrefs.phone) {
             CoreEventsFactory.phone(consumerPreferences.profilePrefs.phone, true)
