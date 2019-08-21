@@ -19,4 +19,6 @@ object Constants {
     const val HEADER_AUTHORIZATION = "Authorization"
 
     const val VALUE_PERMIT = "permit"
+
+    const val RECEIVER_ACTION_SOUND_BONUSES = "ua.com.wl.dlp.SOUND_BONUSES"
 }

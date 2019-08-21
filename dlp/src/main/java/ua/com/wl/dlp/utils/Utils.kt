@@ -1,5 +1,9 @@
 package ua.com.wl.dlp.utils
 
+import android.content.Context
+import android.content.Intent
+import android.os.Bundle
+
 /**
  * @author Denis Makovskyi
  */
@@ -14,3 +18,10 @@ internal fun getQueryParam(url: String, key: String): String? {
     }
     return null
 }
+
+internal fun createBroadcastMessage(context: Context, action: String, extras: Bundle? = null) =
+    Intent().apply {
+        setAction(action)
+        addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES)
+        extras?.only { putExtras(it) }
+    }.only { context.sendBroadcast(it) }

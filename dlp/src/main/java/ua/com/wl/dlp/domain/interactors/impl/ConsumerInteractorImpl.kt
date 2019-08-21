@@ -5,6 +5,7 @@ import kotlinx.coroutines.*
 import android.app.Application
 
 import ua.com.wl.dlp.R
+import ua.com.wl.dlp.core.Constants
 import ua.com.wl.dlp.data.api.ConsumerApiV1
 import ua.com.wl.dlp.data.api.ConsumerApiV3
 import ua.com.wl.dlp.data.api.errors.ErrorsMapper
@@ -25,6 +26,7 @@ import ua.com.wl.dlp.domain.UseCase
 import ua.com.wl.dlp.domain.exeptions.ApiException
 import ua.com.wl.dlp.domain.exeptions.consumer.referral.ReferralException
 import ua.com.wl.dlp.domain.interactors.ConsumerInteractor
+import ua.com.wl.dlp.utils.createBroadcastMessage
 import ua.com.wl.dlp.utils.toPrefs
 
 /**
@@ -138,6 +140,7 @@ class ConsumerInteractorImpl(
             CoreEventsFactory.email(consumerPreferences.profilePrefs.email, true)
         }
         if (snapshot.balance != consumerPreferences.profilePrefs.balance) {
+            createBroadcastMessage(application, Constants.RECEIVER_ACTION_SOUND_BONUSES)
             CoreEventsFactory.balance(consumerPreferences.profilePrefs.balance, true)
         }
         if (snapshot.qrCode != consumerPreferences.profilePrefs.qrCode) {
