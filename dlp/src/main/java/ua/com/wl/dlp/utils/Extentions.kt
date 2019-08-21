@@ -10,6 +10,8 @@ import ua.com.wl.dlp.data.prefereces.models.ProfilePrefs
  * @author Denis Makovskyi
  */
 
+inline fun <T> T.only(block: (T) -> Unit) = block(this)
+
 fun CharSequence?.isNonNullOrEmpty(): Boolean =
     this != null && this.isNotEmpty()
 

@@ -6,7 +6,7 @@ import okhttp3.Response
 import okhttp3.Interceptor
 
 import ua.com.wl.dlp.core.Constants
-import ua.com.wl.dlp.data.events.EventsFactory
+import ua.com.wl.dlp.data.events.CoreEventsFactory
 import ua.com.wl.dlp.data.prefereces.CorePreferences
 import ua.com.wl.dlp.utils.hasHeader
 
@@ -33,7 +33,7 @@ class AuthInterceptor(
                 }
             }.build()).also { response ->
                 when (response.code) {
-                    HttpURLConnection.HTTP_FORBIDDEN -> EventsFactory.session(false, response.code)
+                    HttpURLConnection.HTTP_FORBIDDEN -> CoreEventsFactory.session(false, response.code)
                 }
             }
         }

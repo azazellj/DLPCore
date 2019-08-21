@@ -1,9 +1,7 @@
 package ua.com.wl.dlp.domain.interactors.impl
 
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
-
 import android.app.Application
+import kotlinx.coroutines.*
 
 import ua.com.wl.dlp.R
 import ua.com.wl.dlp.data.api.ConsumerApiV1
@@ -18,13 +16,15 @@ import ua.com.wl.dlp.data.api.responses.consumer.history.TransactionResponse
 import ua.com.wl.dlp.data.api.responses.consumer.profile.ProfileResponse
 import ua.com.wl.dlp.data.api.responses.consumer.referral.QrCodeResponse
 import ua.com.wl.dlp.data.api.responses.consumer.referral.ReferralActivationResponse
-import ua.com.wl.dlp.data.events.EventsFactory
+import ua.com.wl.dlp.data.events.CoreEventsFactory
 import ua.com.wl.dlp.data.prefereces.ConsumerPreferences
+import ua.com.wl.dlp.data.prefereces.models.ProfilePrefs
 import ua.com.wl.dlp.domain.Result
 import ua.com.wl.dlp.domain.UseCase
 import ua.com.wl.dlp.domain.exeptions.ApiException
 import ua.com.wl.dlp.domain.exeptions.consumer.referral.ReferralException
 import ua.com.wl.dlp.domain.interactors.ConsumerInteractor
+import ua.com.wl.dlp.utils.only
 import ua.com.wl.dlp.utils.toPrefs
 
 /**
@@ -39,28 +39,26 @@ class ConsumerInteractorImpl(
     errorsMapper: ErrorsMapper) : ConsumerInteractor, UseCase(errorsMapper) {
 
     override suspend fun getProfile(): Result<ProfileResponse> =
-        callApi(call = { apiV3.getProfile() }).fMap { it?.payload }.also {
-            if (it is Result.Success && it.data != null) {
+        callApi(call = { apiV3.getProfile() }).sfMap { data ->
+            data?.payload?.also { profile ->
                 withContext(Dispatchers.IO) {
-                    val savedBalance = consumerPreferences.profilePrefs.balance
-                    consumerPreferences.profilePrefs = it.data.toPrefs()
-                    //-
-                    if (savedBalance != consumerPreferences.profilePrefs.balance) {
-                        EventsFactory.balance(it.data.balance, true)
+                    val snapshot = consumerPreferences.profilePrefs.copy()
+                    consumerPreferences.profilePrefs = profile.toPrefs()
+                    withContext(Dispatchers.Main.immediate) {
+                        notifyProfileChanges(snapshot)
                     }
                 }
             }
         }
 
     override suspend fun updateProfile(profile: ProfileRequest): Result<ProfileResponse> =
-        callApi(call = { apiV3.updateProfile(profile) }).fMap { it?.payload }.also {
-            if (it is Result.Success && it.data != null) {
+        callApi(call = { apiV3.updateProfile(profile) }).sfMap { data ->
+            data?.payload?.also { profile ->
                 withContext(Dispatchers.IO) {
-                    val savedBalance = consumerPreferences.profilePrefs.balance
-                    consumerPreferences.profilePrefs = it.data.toPrefs()
-                    //-
-                    if (savedBalance != consumerPreferences.profilePrefs.balance) {
-                        EventsFactory.balance(it.data.balance, true)
+                    val snapshot = consumerPreferences.profilePrefs.copy()
+                    consumerPreferences.profilePrefs = profile.toPrefs()
+                    withContext(Dispatchers.Main.immediate) {
+                        notifyProfileChanges(snapshot)
                     }
                 }
             }
@@ -70,25 +68,31 @@ class ConsumerInteractorImpl(
         callApi(
             call = { apiV3.activateReferralCode(ReferralActivationRequest(code)) },
             errorClass = ReferralException::class.java
-        ).fMap {
-            it?.payload
-        }.also {
-            if (it is Result.Success && it.data != null) {
+        ).sfMap { data ->
+            data?.payload?.also { referral ->
                 withContext(Dispatchers.IO) {
-                    consumerPreferences.profilePrefs = consumerPreferences.profilePrefs.copy(balance = it.data.consumerBalance)
-                    EventsFactory.balance(it.data.consumerBalance, true)
+                    val snapshot = consumerPreferences.profilePrefs.copy()
+                    consumerPreferences.profilePrefs = consumerPreferences.profilePrefs.copy(balance = referral.consumerBalance, inviteCode = referral.inviteCode)
+                    withContext(Dispatchers.Main.immediate) {
+                        notifyProfileChanges(snapshot)
+                    }
                 }
             }
         }
 
     override suspend fun getQrCode(): Result<QrCodeResponse> =
-        callApi(call = { apiV1.getQrCode() }).also {
-            if (it is Result.Success && it.data != null) {
+        callApi(call = { apiV1.getQrCode() }).sfMap { data ->
+            data?.also { qr ->
                 withContext(Dispatchers.IO) {
-                    consumerPreferences.profilePrefs = consumerPreferences.profilePrefs.copy(qrCode = it.data.qrCode)
+                    val snapshot = consumerPreferences.profilePrefs.copy()
+                    consumerPreferences.profilePrefs = consumerPreferences.profilePrefs.copy(qrCode = qr.qrCode)
+                    withContext(Dispatchers.Main.immediate) {
+                        notifyProfileChanges(snapshot)
+                    }
                 }
             }
         }
+
 
     override suspend fun loadTransactionsHistory(): Result<PagedResponse<TransactionResponse>> =
         callApi(call = { apiV3.loadTransactionsHistory() }).fMap { it?.payload }
@@ -110,6 +114,41 @@ class ConsumerInteractorImpl(
         } catch (e: Exception) {
             return Result.Failure(ApiException())
         }
+
         return callApi(call = { apiV1.feedback(request) })
+    }
+
+    private fun notifyProfileChanges(snapshot: ProfilePrefs) {
+        if (snapshot.firstName != consumerPreferences.profilePrefs.firstName) {
+            consumerPreferences.profilePrefs.only {
+                CoreEventsFactory.name("${it.firstName} ${it.lastName}", true)
+            }
+        }
+        if (snapshot.lastName != consumerPreferences.profilePrefs.lastName) {
+            consumerPreferences.profilePrefs.only {
+                CoreEventsFactory.name("${it.firstName} ${it.lastName}", true)
+            }
+        }
+        if (snapshot.city != consumerPreferences.profilePrefs.city) {
+            CoreEventsFactory.city(consumerPreferences.profilePrefs.city?.id, true)
+        }
+        if (snapshot.phone != consumerPreferences.profilePrefs.phone) {
+            CoreEventsFactory.phone(consumerPreferences.profilePrefs.phone, true)
+        }
+        if (snapshot.email != consumerPreferences.profilePrefs.email) {
+            CoreEventsFactory.email(consumerPreferences.profilePrefs.email, true)
+        }
+        if (snapshot.balance != consumerPreferences.profilePrefs.balance) {
+            CoreEventsFactory.balance(consumerPreferences.profilePrefs.balance, true)
+        }
+        if (snapshot.qrCode != consumerPreferences.profilePrefs.qrCode) {
+            CoreEventsFactory.qrCode(consumerPreferences.profilePrefs.qrCode, true)
+        }
+        if (snapshot.inviteCode != consumerPreferences.profilePrefs.inviteCode) {
+            CoreEventsFactory.inviteCode(consumerPreferences.profilePrefs.inviteCode, true)
+        }
+        if (snapshot.referralCode != consumerPreferences.profilePrefs.referralCode) {
+            CoreEventsFactory.referralCode(consumerPreferences.profilePrefs.referralCode, true)
+        }
     }
 }

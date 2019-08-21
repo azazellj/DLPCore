@@ -34,12 +34,10 @@ class AuthInteractorImpl(
         callApi(
             call = { api.verification(TokenRequest(corePreferences.corePrefs.authToken)) },
             errorClass = AuthException::class.java
-        ).fMap {
-            it?.payload
-        }.also {
-            if (it is Result.Success && it.data != null) {
+        ).sfMap { data ->
+            data?.payload?.also { auth ->
                 withContext(Dispatchers.IO) {
-                    corePreferences.corePrefs = corePreferences.corePrefs.copy(authToken = it.data.token)
+                    corePreferences.corePrefs = corePreferences.corePrefs.copy(authToken = auth.token)
                 }
             }
         }
@@ -48,12 +46,10 @@ class AuthInteractorImpl(
         callApi(
             call = { api.refreshToken(TokenRequest(corePreferences.corePrefs.refreshToken)) },
             errorClass = AuthException::class.java
-        ).fMap {
-            it?.payload
-        }.also {
-            if (it is Result.Success && it.data != null) {
+        ).sfMap { data ->
+            data?.payload?.also { auth ->
                 withContext(Dispatchers.IO) {
-                    corePreferences.corePrefs = corePreferences.corePrefs.copy(authToken = it.data.token)
+                    corePreferences.corePrefs = corePreferences.corePrefs.copy(authToken = auth.token)
                 }
             }
         }
@@ -61,19 +57,18 @@ class AuthInteractorImpl(
     override suspend fun authentication(phone: String, sendSms: Boolean): Result<AuthenticationResponse> =
         callApi(
             call = { api.authentication(AuthenticationRequest(sendSms, phone)) },
-            errorClass = AuthException::class.java).fMap { it?.payload }
+            errorClass = AuthException::class.java
+        ).fMap { it?.payload }
 
     override suspend fun signIn(phone: String, password: String): Result<SignResponse> =
         callApi(
             call = { api.signIn(SignInRequest(phone, password)) },
             errorClass = AuthException::class.java
-        ).fMap {
-            it?.payload
-        }.also {
-            if (it is Result.Success && it.data != null) {
+        ).sfMap { data ->
+            data?.payload?.also { auth ->
                 withContext(Dispatchers.IO) {
                     corePreferences.corePrefs = corePreferences.corePrefs.copy(
-                        authToken = it.data.token, refreshToken = it.data.refreshToken)
+                        authToken = auth.token, refreshToken = auth.refreshToken)
                 }
             }
         }
@@ -81,19 +76,18 @@ class AuthInteractorImpl(
     override suspend fun cardsStatus(phone: String, password: String): Result<CardsStatus> =
         callApi(
             call = { api.cardsStatus(CardsStatusRequest(phone, password)) },
-            errorClass = AuthException::class.java).fMap { it?.payload?.cardsStatus }
+            errorClass = AuthException::class.java
+        ).fMap { it?.payload?.cardsStatus }
 
     override suspend fun signUp(city: Int, phone: String, password: String, barcode: String?): Result<SignResponse> =
         callApi(
             call = { api.signUp(SignUpRequest(city, phone, password, barcode)) },
             errorClass = AuthException::class.java
-        ).fMap {
-            it?.payload
-        }.also {
-            if (it is Result.Success && it.data != null) {
+        ).sfMap { data ->
+            data?.payload?.also { auth ->
                 withContext(Dispatchers.IO) {
                     corePreferences.corePrefs = corePreferences.corePrefs.copy(
-                        authToken = it.data.token, refreshToken = it.data.refreshToken)
+                        authToken = auth.token, refreshToken = auth.refreshToken)
                 }
             }
         }
@@ -102,19 +96,19 @@ class AuthInteractorImpl(
         callApi(
             call = { api.signOut() },
             errorClass = AuthException::class.java
-        ).fMap {
-            it?.type.equals(ResponseType.OK)
-        }.also {
+        ).sfMap { response ->
             withContext(Dispatchers.IO) {
                 corePreferences.removeCorePrefs()
                 consumerPreferences.removeProfilePrefs()
             }
+            response?.type.equals(ResponseType.OK)
         }
 
     override suspend fun requestSmsCode(phone: String): Result<Boolean> =
         callApi(
             call = { api.requestSmsCode(SmsCodeRequest(phone)) },
-            errorClass = AuthException::class.java).fMap { it?.type.equals(ResponseType.OK) }
+            errorClass = AuthException::class.java
+        ).fMap { it?.type.equals(ResponseType.OK) }
 
     override suspend fun cities(): Result<PagedResponse<City>> =
         callApi(call = { api.cities() }).fMap { it?.payload }
