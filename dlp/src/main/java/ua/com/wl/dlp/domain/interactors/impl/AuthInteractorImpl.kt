@@ -30,8 +30,6 @@ class AuthInteractorImpl(
     private val corePreferences: CorePreferences,
     private val consumerPreferences: ConsumerPreferences) : AuthInteractor, UseCase(errorsMapper) {
 
-    private var corePrefs = corePreferences.corePrefs
-
     override suspend fun verification(): Result<TokenResponse> =
         callApi(
             call = { api.verification(TokenRequest(corePreferences.corePrefs.authToken)) },
@@ -39,7 +37,7 @@ class AuthInteractorImpl(
         ).sfMap { data ->
             data?.payload?.also { auth ->
                 withContext(Dispatchers.IO) {
-                    corePrefs = corePrefs.copy(authToken = auth.token)
+                    corePreferences.corePrefs = corePreferences.corePrefs.copy(authToken = auth.token)
                 }
             }
         }
@@ -51,7 +49,7 @@ class AuthInteractorImpl(
         ).sfMap { data ->
             data?.payload?.also { auth ->
                 withContext(Dispatchers.IO) {
-                    corePrefs = corePrefs.copy(authToken = auth.token)
+                    corePreferences.corePrefs = corePreferences.corePrefs.copy(authToken = auth.token)
                 }
             }
         }
@@ -69,7 +67,7 @@ class AuthInteractorImpl(
         ).sfMap { data ->
             data?.payload?.also { auth ->
                 withContext(Dispatchers.IO) {
-                    corePrefs = corePrefs.copy(authToken = auth.token, refreshToken = auth.refreshToken)
+                    corePreferences.corePrefs = corePreferences.corePrefs.copy(authToken = auth.token, refreshToken = auth.refreshToken)
                 }
             }
         }
@@ -87,7 +85,7 @@ class AuthInteractorImpl(
         ).sfMap { data ->
             data?.payload?.also { auth ->
                 withContext(Dispatchers.IO) {
-                    corePrefs = corePrefs.copy(authToken = auth.token, refreshToken = auth.refreshToken)
+                    corePreferences.corePrefs = corePreferences.corePrefs.copy(authToken = auth.token, refreshToken = auth.refreshToken)
                 }
             }
         }
