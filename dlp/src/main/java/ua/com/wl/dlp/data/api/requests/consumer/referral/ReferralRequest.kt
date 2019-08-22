@@ -6,4 +6,4 @@ import com.google.gson.annotations.SerializedName
  * @author Denis Makovskyi
  */
 
-data class ReferralActivationRequest(@SerializedName("invite_code") val code: String)
+data class ReferralRequest(@SerializedName("invite_code") val code: String)

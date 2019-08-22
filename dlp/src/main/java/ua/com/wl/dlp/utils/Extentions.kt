@@ -12,15 +12,13 @@ import ua.com.wl.dlp.data.prefereces.models.ProfilePrefs
 
 inline fun <T> T.only(block: (T) -> Unit) = block(this)
 
-fun CharSequence?.isNonNullOrEmpty(): Boolean =
-    this != null && this.isNotEmpty()
+fun CharSequence?.isNonNullOrEmpty(): Boolean = this != null && this.isNotEmpty()
 
-fun Request.hasHeader(name: String, value: String): Boolean =
-    header(name)?.let { it -> it.isNotEmpty() && it == value } ?: false
+fun PagedResponse<*>.previousPage(): Int? =
+    previousPage?.let { getQueryParam(it, "page") }?.toInt()
 
-fun PagedResponse<*>.previousPage(): Int? = previousPage?.let { getQueryParam(it, "page") }?.toInt()
-
-fun PagedResponse<*>.nextPage(): Int? = nextPage?.let { getQueryParam(it, "page") }?.toInt()
+fun PagedResponse<*>.nextPage(): Int? =
+    nextPage?.let { getQueryParam(it, "page") }?.toInt()
 
 fun ProfileResponse.toPrefs(): ProfilePrefs =
     ProfilePrefs(
@@ -29,3 +27,6 @@ fun ProfileResponse.toPrefs(): ProfilePrefs =
         this.address, this.city, this.birthDate,
         this.isMarried, this.language, this.timezone,
         this.balance, this.inviteCode, this.referralCode, this.comment)
+
+internal fun Request.hasHeader(name: String, value: String): Boolean =
+    header(name)?.let { it -> it.isNotEmpty() && it == value } ?: false

@@ -11,14 +11,14 @@ import ua.com.wl.dlp.data.api.ConsumerApiV3
 import ua.com.wl.dlp.data.api.errors.ErrorsMapper
 import ua.com.wl.dlp.data.api.requests.consumer.feedback.feedback
 import ua.com.wl.dlp.data.api.requests.consumer.profile.ProfileRequest
-import ua.com.wl.dlp.data.api.requests.consumer.referral.ReferralActivationRequest
+import ua.com.wl.dlp.data.api.requests.consumer.referral.ReferralRequest
 import ua.com.wl.dlp.data.api.responses.PagedResponse
 import ua.com.wl.dlp.data.api.responses.consumer.feedback.FeedbackResponse
 import ua.com.wl.dlp.data.api.responses.consumer.history.TransactionResponse
 import ua.com.wl.dlp.data.api.responses.consumer.profile.ProfileResponse
 import ua.com.wl.dlp.data.api.responses.consumer.referral.QrCodeResponse
-import ua.com.wl.dlp.data.api.responses.consumer.referral.ReferralActivationResponse
-import ua.com.wl.dlp.data.events.factory.CoreEventsFactory
+import ua.com.wl.dlp.data.api.responses.consumer.referral.ReferralResponse
+import ua.com.wl.dlp.data.events.factory.CoreBusEventsFactory
 import ua.com.wl.dlp.data.prefereces.ConsumerPreferences
 import ua.com.wl.dlp.data.prefereces.models.ProfilePrefs
 import ua.com.wl.dlp.domain.Result
@@ -34,18 +34,20 @@ import ua.com.wl.dlp.utils.toPrefs
  */
 
 class ConsumerInteractorImpl(
-    private val application: Application,
-    private val consumerPreferences: ConsumerPreferences,
+    private val app: Application,
     private val apiV1: ConsumerApiV1,
     private val apiV3: ConsumerApiV3,
-    errorsMapper: ErrorsMapper) : ConsumerInteractor, UseCase(errorsMapper) {
+    errorsMapper: ErrorsMapper,
+    consumerPreferences: ConsumerPreferences) : ConsumerInteractor, UseCase(errorsMapper) {
+
+    private var profilePrefs = consumerPreferences.profilePrefs
 
     override suspend fun getProfile(): Result<ProfileResponse> =
         callApi(call = { apiV3.getProfile() }).sfMap { data ->
             data?.payload?.also { profile ->
                 withContext(Dispatchers.IO) {
-                    val snapshot = consumerPreferences.profilePrefs.copy()
-                    consumerPreferences.profilePrefs = profile.toPrefs()
+                    val snapshot = profilePrefs.copy()
+                    profilePrefs = profile.toPrefs()
                     withContext(Dispatchers.Main.immediate) {
                         notifyProfileChanges(snapshot)
                     }
@@ -57,8 +59,8 @@ class ConsumerInteractorImpl(
         callApi(call = { apiV3.updateProfile(profile) }).sfMap { data ->
             data?.payload?.also { profile ->
                 withContext(Dispatchers.IO) {
-                    val snapshot = consumerPreferences.profilePrefs.copy()
-                    consumerPreferences.profilePrefs = profile.toPrefs()
+                    val snapshot = profilePrefs.copy()
+                    profilePrefs = profile.toPrefs()
                     withContext(Dispatchers.Main.immediate) {
                         notifyProfileChanges(snapshot)
                     }
@@ -66,15 +68,15 @@ class ConsumerInteractorImpl(
             }
         }
 
-    override suspend fun activateReferralCode(code: String): Result<ReferralActivationResponse> =
+    override suspend fun useReferralCode(code: String): Result<ReferralResponse> =
         callApi(
-            call = { apiV3.activateReferralCode(ReferralActivationRequest(code)) },
+            call = { apiV3.useReferralCode(ReferralRequest(code)) },
             errorClass = ReferralException::class.java
         ).sfMap { data ->
             data?.payload?.also { referral ->
                 withContext(Dispatchers.IO) {
-                    val snapshot = consumerPreferences.profilePrefs.copy()
-                    consumerPreferences.profilePrefs = consumerPreferences.profilePrefs.copy(balance = referral.consumerBalance, inviteCode = referral.inviteCode)
+                    val snapshot = profilePrefs.copy()
+                    profilePrefs = profilePrefs.copy(balance = referral.balance, inviteCode = referral.inviteCode)
                     withContext(Dispatchers.Main.immediate) {
                         notifyProfileChanges(snapshot)
                     }
@@ -86,8 +88,8 @@ class ConsumerInteractorImpl(
         callApi(call = { apiV1.getQrCode() }).sfMap { data ->
             data?.also { qr ->
                 withContext(Dispatchers.IO) {
-                    val snapshot = consumerPreferences.profilePrefs.copy()
-                    consumerPreferences.profilePrefs = consumerPreferences.profilePrefs.copy(qrCode = qr.qrCode)
+                    val snapshot = profilePrefs.copy()
+                    profilePrefs = profilePrefs.copy(qrCode = qr.qrCode)
                     withContext(Dispatchers.Main.immediate) {
                         notifyProfileChanges(snapshot)
                     }
@@ -103,14 +105,14 @@ class ConsumerInteractorImpl(
         val request = try {
             feedback {
                 val answer = if (callback) {
-                    application.getString(R.string.dlp_feedback_callback_agree)
+                    app.getString(R.string.dlp_feedback_callback_agree)
                 } else {
-                    application.getString(R.string.dlp_feedback_callback_disagree)
+                    app.getString(R.string.dlp_feedback_callback_disagree)
                 }
-                this.message = "$message\n\n${application.getString(R.string.dlp_feedback_callback_prefix)}: $answer"
-                this.appVersion = "${application.getString(R.string.dlp_feedback_app_version)}$appVersion"
-                this.phone = consumerPreferences.profilePrefs.phone
-                this.email = consumerPreferences.profilePrefs.email
+                this.message = "$message\n\n${app.getString(R.string.dlp_feedback_callback_prefix)}: $answer"
+                this.appVersion = "${app.getString(R.string.dlp_feedback_app_version)}$appVersion"
+                this.phone = profilePrefs.phone
+                this.email = profilePrefs.email
             }
 
         } catch (e: Exception) {
@@ -121,36 +123,36 @@ class ConsumerInteractorImpl(
     }
 
     private fun notifyProfileChanges(snapshot: ProfilePrefs) {
-        if (snapshot.firstName != consumerPreferences.profilePrefs.firstName) {
-            CoreEventsFactory.firstName(consumerPreferences.profilePrefs.firstName, true)
+        if (snapshot.firstName != profilePrefs.firstName) {
+            CoreBusEventsFactory.firstName(profilePrefs.firstName, true)
         }
-        if (snapshot.patronymic != consumerPreferences.profilePrefs.patronymic) {
-            CoreEventsFactory.patronymic(consumerPreferences.profilePrefs.patronymic, true)
+        if (snapshot.patronymic != profilePrefs.patronymic) {
+            CoreBusEventsFactory.patronymic(profilePrefs.patronymic, true)
         }
-        if (snapshot.lastName != consumerPreferences.profilePrefs.lastName) {
-            CoreEventsFactory.lastName(consumerPreferences.profilePrefs.lastName, true)
+        if (snapshot.lastName != profilePrefs.lastName) {
+            CoreBusEventsFactory.lastName(profilePrefs.lastName, true)
         }
-        if (snapshot.city != consumerPreferences.profilePrefs.city) {
-            CoreEventsFactory.city(consumerPreferences.profilePrefs.city, true)
+        if (snapshot.city != profilePrefs.city) {
+            CoreBusEventsFactory.city(profilePrefs.city, true)
         }
-        if (snapshot.phone != consumerPreferences.profilePrefs.phone) {
-            CoreEventsFactory.phone(consumerPreferences.profilePrefs.phone, true)
+        if (snapshot.phone != profilePrefs.phone) {
+            CoreBusEventsFactory.phone(profilePrefs.phone, true)
         }
-        if (snapshot.email != consumerPreferences.profilePrefs.email) {
-            CoreEventsFactory.email(consumerPreferences.profilePrefs.email, true)
+        if (snapshot.email != profilePrefs.email) {
+            CoreBusEventsFactory.email(profilePrefs.email, true)
         }
-        if (snapshot.balance != consumerPreferences.profilePrefs.balance) {
-            createBroadcastMessage(application, Constants.RECEIVER_ACTION_SOUND_BONUSES)
-            CoreEventsFactory.balance(consumerPreferences.profilePrefs.balance, true)
+        if (snapshot.balance != profilePrefs.balance) {
+            createBroadcastMessage(app, Constants.RECEIVER_ACTION_SOUND_BONUSES)
+            CoreBusEventsFactory.balance(profilePrefs.balance, true)
         }
-        if (snapshot.qrCode != consumerPreferences.profilePrefs.qrCode) {
-            CoreEventsFactory.qrCode(consumerPreferences.profilePrefs.qrCode, true)
+        if (snapshot.qrCode != profilePrefs.qrCode) {
+            CoreBusEventsFactory.qrCode(profilePrefs.qrCode, true)
         }
-        if (snapshot.inviteCode != consumerPreferences.profilePrefs.inviteCode) {
-            CoreEventsFactory.inviteCode(consumerPreferences.profilePrefs.inviteCode, true)
+        if (snapshot.inviteCode != profilePrefs.inviteCode) {
+            CoreBusEventsFactory.inviteCode(profilePrefs.inviteCode, true)
         }
-        if (snapshot.referralCode != consumerPreferences.profilePrefs.referralCode) {
-            CoreEventsFactory.referralCode(consumerPreferences.profilePrefs.referralCode, true)
+        if (snapshot.referralCode != profilePrefs.referralCode) {
+            CoreBusEventsFactory.referralCode(profilePrefs.referralCode, true)
         }
     }
 }

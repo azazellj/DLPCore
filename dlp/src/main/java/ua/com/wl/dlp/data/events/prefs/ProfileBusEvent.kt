@@ -1,15 +1,16 @@
 package ua.com.wl.dlp.data.events.prefs
 
+import ua.com.wl.archetype.core.android.bus.BusEvent
 import ua.com.wl.dlp.data.api.responses.models.auth.City
 
 /**
  * @author Denis Makovskyi
  */
 
-class ConsumerPrefsEvent(
-    saved: Boolean,
+data class ProfileBusEvent(
+    val saved: Boolean,
     val field: Field,
-    val fieldValue: FieldValue) : PrefsEvent(saved) {
+    val value: FieldValue) : BusEvent() {
 
     enum class Field {
         FIRST_NAME,

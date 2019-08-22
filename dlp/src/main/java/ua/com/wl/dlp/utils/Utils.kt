@@ -22,6 +22,5 @@ internal fun getQueryParam(url: String, key: String): String? {
 internal fun createBroadcastMessage(context: Context, action: String, extras: Bundle? = null) =
     Intent().apply {
         setAction(action)
-        addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES)
         extras?.only { putExtras(it) }
     }.only { context.sendBroadcast(it) }

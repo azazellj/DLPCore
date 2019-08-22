@@ -25,10 +25,12 @@ import ua.com.wl.dlp.domain.interactors.AuthInteractor
  */
 
 class AuthInteractorImpl(
-    private val corePreferences: CorePreferences,
-    private val consumerPreferences: ConsumerPreferences,
     private val api: AuthApi,
-    errorsMapper: ErrorsMapper) : AuthInteractor, UseCase(errorsMapper) {
+    errorsMapper: ErrorsMapper,
+    private val corePreferences: CorePreferences,
+    private val consumerPreferences: ConsumerPreferences) : AuthInteractor, UseCase(errorsMapper) {
+
+    private var corePrefs = corePreferences.corePrefs
 
     override suspend fun verification(): Result<TokenResponse> =
         callApi(
@@ -37,7 +39,7 @@ class AuthInteractorImpl(
         ).sfMap { data ->
             data?.payload?.also { auth ->
                 withContext(Dispatchers.IO) {
-                    corePreferences.corePrefs = corePreferences.corePrefs.copy(authToken = auth.token)
+                    corePrefs = corePrefs.copy(authToken = auth.token)
                 }
             }
         }
@@ -49,7 +51,7 @@ class AuthInteractorImpl(
         ).sfMap { data ->
             data?.payload?.also { auth ->
                 withContext(Dispatchers.IO) {
-                    corePreferences.corePrefs = corePreferences.corePrefs.copy(authToken = auth.token)
+                    corePrefs = corePrefs.copy(authToken = auth.token)
                 }
             }
         }
@@ -67,8 +69,7 @@ class AuthInteractorImpl(
         ).sfMap { data ->
             data?.payload?.also { auth ->
                 withContext(Dispatchers.IO) {
-                    corePreferences.corePrefs = corePreferences.corePrefs.copy(
-                        authToken = auth.token, refreshToken = auth.refreshToken)
+                    corePrefs = corePrefs.copy(authToken = auth.token, refreshToken = auth.refreshToken)
                 }
             }
         }
@@ -86,8 +87,7 @@ class AuthInteractorImpl(
         ).sfMap { data ->
             data?.payload?.also { auth ->
                 withContext(Dispatchers.IO) {
-                    corePreferences.corePrefs = corePreferences.corePrefs.copy(
-                        authToken = auth.token, refreshToken = auth.refreshToken)
+                    corePrefs = corePrefs.copy(authToken = auth.token, refreshToken = auth.refreshToken)
                 }
             }
         }
