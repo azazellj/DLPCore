@@ -1,4 +1,4 @@
-package ua.com.wl.dlp.data.api.responses.shop
+package ua.com.wl.dlp.data.api.responses.shop.news
 
 import com.google.gson.annotations.SerializedName
 

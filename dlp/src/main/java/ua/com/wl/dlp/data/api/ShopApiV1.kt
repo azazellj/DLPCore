@@ -1,14 +1,14 @@
 package ua.com.wl.dlp.data.api
 
 import retrofit2.Response
-import retrofit2.http.GET
-import retrofit2.http.Path
-import retrofit2.http.Query
+import retrofit2.http.*
+import ua.com.wl.dlp.data.api.responses.BaseResponse
 
 import ua.com.wl.dlp.data.api.responses.PagedResponse
-import ua.com.wl.dlp.data.api.responses.shop.ShopNewsItemResponse
-import ua.com.wl.dlp.data.api.responses.shop.ShopOfferResponse
+import ua.com.wl.dlp.data.api.responses.shop.news.ShopNewsItemResponse
 import ua.com.wl.dlp.data.api.responses.shop.CityShopsResponse
+import ua.com.wl.dlp.data.api.responses.shop.offer.BaseShopOfferResponse
+import ua.com.wl.dlp.data.api.responses.shop.offer.ShopOfferResponse
 
 /**
  * @author Denis Makovskyi
@@ -38,5 +38,22 @@ interface ShopApiV1 {
         @Query("page") page: Int? = null,
         @Query("page_size") count: Int? = null
 
-    ): Response<PagedResponse<ShopOfferResponse>>
+    ): Response<PagedResponse<BaseShopOfferResponse>>
+
+    @GET("api/v1/consumer/favorite-offers/shop/{shop_id}/")
+    suspend fun getShopFavouriteOffers(
+        @Path("shop_id") shopId: Int,
+        @Query("page") page: Int? = null,
+        @Query("page_size") count: Int? = null
+
+    ): Response<PagedResponse<BaseShopOfferResponse>>
+
+    @POST("api/v1/consumer/favourite-offers/{offer_id}")
+    suspend fun addShopOfferToFavourite(@Path("offer_id") offerId: Int): Response<BaseResponse>
+
+    @DELETE("api/v1/consumer/favourite-offers/{offer_id}")
+    suspend fun removeShopOfferFromFavourite(@Path("offer_id") offerId: Int) : Response<BaseResponse>
+
+    @GET("api/v1/consumer/offers/{offer_id}/")
+    suspend fun getShopOffer(@Path("offer_id") offerId: Int): Response<ShopOfferResponse>
 }

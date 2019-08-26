@@ -4,7 +4,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 import ua.com.wl.dlp.data.api.AuthApi
-import ua.com.wl.dlp.data.api.responses.ResponseType
 import ua.com.wl.dlp.data.api.errors.ErrorsMapper
 import ua.com.wl.dlp.data.api.requests.auth.*
 import ua.com.wl.dlp.data.api.responses.PagedResponse
@@ -99,14 +98,14 @@ class AuthInteractorImpl(
                 corePreferences.removeCorePrefs()
                 consumerPreferences.removeProfilePrefs()
             }
-            response?.type.equals(ResponseType.OK)
+            response?.isSuccessfully()
         }
 
     override suspend fun requestSmsCode(phone: String): Result<Boolean> =
         callApi(
             call = { api.requestSmsCode(SmsCodeRequest(phone)) },
             errorClass = AuthException::class.java
-        ).fMap { it?.type.equals(ResponseType.OK) }
+        ).fMap { it?.isSuccessfully() }
 
     override suspend fun cities(): Result<PagedResponse<City>> =
         callApi(call = { api.cities() }).fMap { it?.payload }
