@@ -9,7 +9,7 @@ open class BaseShopOfferResponse(
     @SerializedName("id") val id: Int = 0,
     @SerializedName("trade_item") val tradeItem: Int = 0,
     @SerializedName("is_new") val isNew: Boolean = false,
-    @SerializedName("in_favourite") val isFavourite: Boolean = false,
+    @SerializedName("in_favourite") var isFavourite: Boolean = false,
     @SerializedName("is_promo_offer") val isPromoOffer: Boolean = false,
     @SerializedName("name") val name: String = "",
     @SerializedName("thumb_image") val thumbImage: String = "",
