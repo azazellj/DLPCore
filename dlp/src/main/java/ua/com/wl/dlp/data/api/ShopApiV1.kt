@@ -48,10 +48,10 @@ interface ShopApiV1 {
 
     ): Response<PagedResponse<BaseShopOfferResponse>>
 
-    @POST("api/v1/consumer/favourite-offers/{offer_id}")
+    @POST("api/v1/consumer/favorite-offers/{offer_id}/")
     suspend fun addShopOfferToFavourite(@Path("offer_id") offerId: Int): Response<BaseResponse>
 
-    @DELETE("api/v1/consumer/favourite-offers/{offer_id}")
+    @DELETE("api/v1/consumer/favorite-offers/{offer_id}/")
     suspend fun removeShopOfferFromFavourite(@Path("offer_id") offerId: Int) : Response<BaseResponse>
 
     @GET("api/v1/consumer/offers/{offer_id}/")

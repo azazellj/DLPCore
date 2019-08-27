@@ -1,5 +1,7 @@
 package ua.com.wl.dlp.domain.interactors.impl
 
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import ua.com.wl.dlp.data.api.ShopApiV1
 import ua.com.wl.dlp.data.api.errors.ErrorsMapper
 import ua.com.wl.dlp.data.api.responses.PagedResponse
@@ -7,6 +9,7 @@ import ua.com.wl.dlp.data.api.responses.shop.news.ShopNewsItemResponse
 import ua.com.wl.dlp.data.api.responses.shop.offer.ShopOfferResponse
 import ua.com.wl.dlp.data.api.responses.shop.CityShopsResponse
 import ua.com.wl.dlp.data.api.responses.shop.offer.BaseShopOfferResponse
+import ua.com.wl.dlp.data.events.factory.CoreBusEventsFactory
 import ua.com.wl.dlp.domain.Result
 import ua.com.wl.dlp.domain.UseCase
 import ua.com.wl.dlp.domain.interactors.ShopInteractor
@@ -30,10 +33,26 @@ class ShopInteractorImpl(private val apiV1: ShopApiV1, errorsMapper: ErrorsMappe
         callApi(call = { apiV1.getShopFavouriteOffers(shopId, page, count) })
 
     override suspend fun addShopOfferToFavourite(offerId: Int): Result<Boolean> =
-        callApi(call = { apiV1.addShopOfferToFavourite(offerId) }).fMap { it?.isSuccessfully() }
+        callApi(call = { apiV1.addShopOfferToFavourite(offerId) }).sfMap { response ->
+            response?.isSuccessfully()?.also {
+                if (it) {
+                    withContext(Dispatchers.Main.immediate) {
+                        CoreBusEventsFactory.offerFavouriteStatus(offerId = offerId, isFavourite = true)
+                    }
+                }
+            }
+        }
 
     override suspend fun removeShopOfferFromFavourite(offerId: Int): Result<Boolean> =
-        callApi(call = { apiV1.removeShopOfferFromFavourite(offerId) }).fMap { it?.isSuccessfully() }
+        callApi(call = { apiV1.removeShopOfferFromFavourite(offerId) }).sfMap { response ->
+            response?.isSuccessfully()?.also {
+                if (it) {
+                    withContext(Dispatchers.Main.immediate) {
+                        CoreBusEventsFactory.offerFavouriteStatus(offerId = offerId, isFavourite = false)
+                    }
+                }
+            }
+        }
 
     override suspend fun getShopOffer(offerId: Int): Result<ShopOfferResponse> =
         callApi(call = { apiV1.getShopOffer(offerId) })

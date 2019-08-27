@@ -4,6 +4,7 @@ import ua.com.wl.archetype.core.android.bus.Bus
 import ua.com.wl.dlp.data.api.responses.models.auth.City
 import ua.com.wl.dlp.data.events.prefs.ProfileBusEvent
 import ua.com.wl.dlp.data.events.session.SessionBusEvent
+import ua.com.wl.dlp.data.events.shop.offer.OfferBusEvent
 import ua.com.wl.dlp.utils.only
 
 /**
@@ -71,6 +72,12 @@ object CoreBusEventsFactory {
             saved,
             ProfileBusEvent.Field.REFERRAL_CODE,
             ProfileBusEvent.FieldValue.StringValue(code)).only { Bus.send(it) }
+
+    fun offerFavouriteStatus(offerId: Int, tradeId: Int? = null, isFavourite: Boolean?) =
+        OfferBusEvent(
+            offerId, tradeId,
+            OfferBusEvent.Field.IS_FAVOURITE,
+            OfferBusEvent.FieldValue.BooleanValue(isFavourite)).only { Bus.send(it) }
 
     fun session(isValid: Boolean, httpCode: Int) =
         SessionBusEvent(isValid, httpCode).only { Bus.send(it) }
