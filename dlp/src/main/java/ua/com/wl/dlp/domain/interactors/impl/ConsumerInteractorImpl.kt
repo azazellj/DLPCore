@@ -96,8 +96,8 @@ class ConsumerInteractorImpl(
         }
 
 
-    override suspend fun loadTransactionsHistory(): Result<PagedResponse<TransactionResponse>> =
-        callApi(call = { apiV3.loadTransactionsHistory() }).fMap { it?.payload }
+    override suspend fun loadTransactionsHistory(page: Int?, count: Int?): Result<PagedResponse<TransactionResponse>> =
+        callApi(call = { apiV3.loadTransactionsHistory(page, count) }).fMap { it?.payload }
 
     override suspend fun feedback(message: String, appVersion: String, callback: Boolean): Result<FeedbackResponse> {
         val request = try {
