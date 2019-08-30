@@ -19,6 +19,7 @@ import ua.com.wl.dlp.data.api.responses.consumer.profile.ProfileResponse
 import ua.com.wl.dlp.data.api.responses.consumer.referral.QrCodeResponse
 import ua.com.wl.dlp.data.api.responses.consumer.referral.ReferralResponse
 import ua.com.wl.dlp.data.events.factory.CoreBusEventsFactory
+import ua.com.wl.dlp.data.events.prefs.ProfileBusEvent
 import ua.com.wl.dlp.data.prefereces.ConsumerPreferences
 import ua.com.wl.dlp.data.prefereces.models.ProfilePrefs
 import ua.com.wl.dlp.domain.Result
@@ -27,6 +28,7 @@ import ua.com.wl.dlp.domain.exeptions.ApiException
 import ua.com.wl.dlp.domain.exeptions.consumer.referral.ReferralException
 import ua.com.wl.dlp.domain.interactors.ConsumerInteractor
 import ua.com.wl.dlp.utils.createBroadcastMessage
+import ua.com.wl.dlp.utils.only
 import ua.com.wl.dlp.utils.toPrefs
 
 /**
@@ -74,7 +76,8 @@ class ConsumerInteractorImpl(
             data?.payload?.also { referral ->
                 withContext(Dispatchers.IO) {
                     val snapshot = consumerPreferences.profilePrefs.copy()
-                    consumerPreferences.profilePrefs = consumerPreferences.profilePrefs.copy(balance = referral.balance, inviteCode = referral.inviteCode)
+                    consumerPreferences.profilePrefs = consumerPreferences.profilePrefs.copy(
+                        balance = referral.balance, inviteCode = referral.inviteCode)
                     withContext(Dispatchers.Main.immediate) {
                         notifyProfileChanges(snapshot)
                     }
@@ -121,36 +124,68 @@ class ConsumerInteractorImpl(
     }
 
     private fun notifyProfileChanges(snapshot: ProfilePrefs) {
+        val changes: MutableList<ProfileBusEvent.Change> = mutableListOf()
         if (snapshot.firstName != consumerPreferences.profilePrefs.firstName) {
-            CoreBusEventsFactory.firstName(consumerPreferences.profilePrefs.firstName, true)
+            ProfileBusEvent.Change(
+                true, ProfileBusEvent.Field.FIRST_NAME,
+                ProfileBusEvent.FieldValue.StringValue(consumerPreferences.profilePrefs.firstName)).only { changes.add(it) }
         }
         if (snapshot.patronymic != consumerPreferences.profilePrefs.patronymic) {
-            CoreBusEventsFactory.patronymic(consumerPreferences.profilePrefs.patronymic, true)
+            ProfileBusEvent.Change(
+                true, ProfileBusEvent.Field.PATRONYMIC,
+                ProfileBusEvent.FieldValue.StringValue(consumerPreferences.profilePrefs.patronymic)).only { changes.add(it) }
         }
         if (snapshot.lastName != consumerPreferences.profilePrefs.lastName) {
-            CoreBusEventsFactory.lastName(consumerPreferences.profilePrefs.lastName, true)
+            ProfileBusEvent.Change(
+                true, ProfileBusEvent.Field.LAST_NAME,
+                ProfileBusEvent.FieldValue.StringValue(consumerPreferences.profilePrefs.lastName)).only { changes.add(it) }
         }
         if (snapshot.city != consumerPreferences.profilePrefs.city) {
-            CoreBusEventsFactory.city(consumerPreferences.profilePrefs.city, true)
+            ProfileBusEvent.Change(
+                true, ProfileBusEvent.Field.CITY,
+                ProfileBusEvent.FieldValue.CityObjectValue(consumerPreferences.profilePrefs.city)).only { changes.add(it) }
         }
         if (snapshot.phone != consumerPreferences.profilePrefs.phone) {
-            CoreBusEventsFactory.phone(consumerPreferences.profilePrefs.phone, true)
+            ProfileBusEvent.Change(
+                true, ProfileBusEvent.Field.PHONE,
+                ProfileBusEvent.FieldValue.StringValue(consumerPreferences.profilePrefs.phone)).only { changes.add(it) }
         }
         if (snapshot.email != consumerPreferences.profilePrefs.email) {
-            CoreBusEventsFactory.email(consumerPreferences.profilePrefs.email, true)
+            ProfileBusEvent.Change(
+                true, ProfileBusEvent.Field.EMAIL,
+                ProfileBusEvent.FieldValue.StringValue(consumerPreferences.profilePrefs.email)).only { changes.add(it) }
+        }
+        if (snapshot.gender != consumerPreferences.profilePrefs.gender) {
+            ProfileBusEvent.Change(
+                true, ProfileBusEvent.Field.GENDER,
+                ProfileBusEvent.FieldValue.GenderObjectValue(consumerPreferences.profilePrefs.gender)).only { changes.add(it) }
+        }
+        if (snapshot.birthDate != consumerPreferences.profilePrefs.birthDate) {
+            ProfileBusEvent.Change(
+                true, ProfileBusEvent.Field.BIRTH_DATE,
+                ProfileBusEvent.FieldValue.StringValue(consumerPreferences.profilePrefs.birthDate)).only { changes.add(it) }
         }
         if (snapshot.balance != consumerPreferences.profilePrefs.balance) {
             createBroadcastMessage(app, Constants.RECEIVER_ACTION_SOUND_BONUSES)
-            CoreBusEventsFactory.balance(consumerPreferences.profilePrefs.balance, true)
+            ProfileBusEvent.Change(
+                true, ProfileBusEvent.Field.BALANCE,
+                ProfileBusEvent.FieldValue.LongValue(consumerPreferences.profilePrefs.balance)).only { changes.add(it) }
         }
         if (snapshot.qrCode != consumerPreferences.profilePrefs.qrCode) {
-            CoreBusEventsFactory.qrCode(consumerPreferences.profilePrefs.qrCode, true)
+            ProfileBusEvent.Change(
+                true, ProfileBusEvent.Field.QR_CODE,
+                ProfileBusEvent.FieldValue.StringValue(consumerPreferences.profilePrefs.qrCode)).only { changes.add(it) }
         }
         if (snapshot.inviteCode != consumerPreferences.profilePrefs.inviteCode) {
-            CoreBusEventsFactory.inviteCode(consumerPreferences.profilePrefs.inviteCode, true)
+            ProfileBusEvent.Change(
+                true, ProfileBusEvent.Field.INVITE_CODE,
+                ProfileBusEvent.FieldValue.StringValue(consumerPreferences.profilePrefs.inviteCode)).only { changes.add(it) }
         }
         if (snapshot.referralCode != consumerPreferences.profilePrefs.referralCode) {
-            CoreBusEventsFactory.referralCode(consumerPreferences.profilePrefs.referralCode, true)
+            ProfileBusEvent.Change(
+                true, ProfileBusEvent.Field.REFERRAL_CODE,
+                ProfileBusEvent.FieldValue.StringValue(consumerPreferences.profilePrefs.referralCode)).only { changes.add(it) }
         }
+        CoreBusEventsFactory.profileChanges(changes)
     }
 }

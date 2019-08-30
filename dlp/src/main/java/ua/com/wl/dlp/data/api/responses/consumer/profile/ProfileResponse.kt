@@ -11,9 +11,9 @@ import ua.com.wl.dlp.data.api.responses.models.consumer.profile.Gender
  */
 
 data class ProfileResponse(
-    @SerializedName("first_name") val firstName: String,
-    @SerializedName("patronymic") val patronymic: String,
-    @SerializedName("last_name") val lastName: String,
+    @SerializedName("first_name") val firstName: String?,
+    @SerializedName("patronymic") val patronymic: String?,
+    @SerializedName("last_name") val lastName: String?,
     @SerializedName("gender") val gender: Gender?,
     @SerializedName("email") val email: String?,
     @SerializedName("mobile_phone") val phone: String,
@@ -26,7 +26,7 @@ data class ProfileResponse(
     @SerializedName("balance") val balance: Long,
     @SerializedName("invite_code") val inviteCode: String?,
     @SerializedName("referral_code") val referralCode: String,
-    @SerializedName("comment") val comment: String,
+    @SerializedName("comment") val comment: String?,
     @SerializedName("notifications") val notifications: Int,
     @SerializedName("notification_token") val notificationToken: String?,
     @SerializedName("balance_changes") val transactions: List<TransactionResponse>?)
