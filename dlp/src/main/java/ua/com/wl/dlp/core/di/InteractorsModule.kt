@@ -25,8 +25,8 @@ val interactorsModule = module {
         ConsumerInteractorImpl(
             app = get(),
             errorsMapper = get(),
-            apiV3 = get(),
             apiV1 = get(),
+            apiV3 = get(),
             consumerPreferences = get())
     }
     single<ShopInteractor> {

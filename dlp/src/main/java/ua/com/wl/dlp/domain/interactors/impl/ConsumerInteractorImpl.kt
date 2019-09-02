@@ -38,8 +38,8 @@ import ua.com.wl.dlp.utils.toPrefs
 class ConsumerInteractorImpl(
     private val app: Application,
     errorsMapper: ErrorsMapper,
-    private val apiV3: ConsumerApiV3,
     private val apiV1: ConsumerApiV1,
+    private val apiV3: ConsumerApiV3,
     private val consumerPreferences: ConsumerPreferences) : ConsumerInteractor, UseCase(errorsMapper) {
     
     override suspend fun getProfile(): Result<ProfileResponse> =
