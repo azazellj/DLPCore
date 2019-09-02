@@ -2,23 +2,14 @@ package ua.com.wl.dlp.data.api.responses.shop
 
 import com.google.gson.annotations.SerializedName
 
-import ua.com.wl.dlp.data.api.responses.models.shop.service.ShopService
-
 /**
  * @author Denis Makovskyi
  */
 
 data class ShopResponse(
-    @SerializedName("id") val id: Int,
-    @SerializedName("name") val name: String,
-    @SerializedName("thumb_logo") val thumbLogo: String?,
-    @SerializedName("thumb_photo") val thumbPhoto: String?,
-    @SerializedName("thumb_photos") val thumbPhotos: List<String>?,
-    @SerializedName("address") val address: String,
-    @SerializedName("is_pending") val isPending: Boolean,
-    @SerializedName("schedule") val schedule: String?,
-    @SerializedName("coordinates_str") val coordinates: String?,
-    @SerializedName("cash_back_percentage") val cashBackPercentage: Int,
-    @SerializedName("allow_pre_order") val isPreOrdersAllowed: Boolean,
-    @SerializedName("allow_table_reservation") val isTableReservationAllowed: Boolean,
-    @SerializedName("services") val services: List<ShopService>?)
+    @SerializedName("phone") val phone: String?,
+    @SerializedName("description") val description: String?,
+    @SerializedName("in_favorite") val isFavourite: Boolean,
+    @SerializedName("link") val link: String?,
+    @SerializedName("fb_link") val facebookLink: String?,
+    @SerializedName("insta_link") val instagramLink: String?): BaseShopResponse()

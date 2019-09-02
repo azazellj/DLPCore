@@ -6,17 +6,17 @@ import ua.com.wl.dlp.data.api.responses.models.another.NoveltyDatesRange
 import ua.com.wl.dlp.data.api.responses.models.shop.offer.promo.PromoSettings
 
 open class BaseShopOfferResponse(
-    @SerializedName("id") val id: Int = 0,
-    @SerializedName("trade_item") val tradeItem: Int = 0,
-    @SerializedName("is_new") val isNew: Boolean = false,
+    @SerializedName("id") var id: Int = 0,
+    @SerializedName("trade_item") var tradeItem: Int = 0,
+    @SerializedName("is_new") var isNew: Boolean = false,
     @SerializedName("in_favorite") var isFavourite: Boolean = false,
-    @SerializedName("is_promo_offer") val isPromoOffer: Boolean = false,
-    @SerializedName("name") val name: String = "",
-    @SerializedName("thumb_image") val thumbImage: String = "",
-    @SerializedName("short_description") val shortDescription: String? = null,
-    @SerializedName("outcome") val outcome: String? = null,
-    @SerializedName("price_in_uah") val priceInCurrency: String? = null,
-    @SerializedName("price_in_bonuses") val priceInBonuses: Long? = null,
-    @SerializedName("cash_back_percentage") val cashBackPercentage: Int? = null,
-    @SerializedName("promo_settings") val promoSettings: PromoSettings? = null,
-    @SerializedName("novelty_date_range") val noveltyDatesRange: NoveltyDatesRange? = null)
+    @SerializedName("is_promo_offer") var isPromoOffer: Boolean = false,
+    @SerializedName("name") var name: String = "",
+    @SerializedName("thumb_image") var thumbImage: String = "",
+    @SerializedName("short_description") var shortDescription: String? = null,
+    @SerializedName("outcome") var outcome: String? = null,
+    @SerializedName("price_in_uah") var priceInCurrency: String? = null,
+    @SerializedName("price_in_bonuses") var priceInBonuses: Long? = null,
+    @SerializedName("cash_back_percentage") var cashBackPercentage: Int? = null,
+    @SerializedName("promo_settings") var promoSettings: PromoSettings? = null,
+    @SerializedName("novelty_date_range") var noveltyDatesRange: NoveltyDatesRange? = null)

@@ -2,11 +2,12 @@ package ua.com.wl.dlp.data.api
 
 import retrofit2.Response
 import retrofit2.http.*
-import ua.com.wl.dlp.data.api.responses.BaseResponse
 
+import ua.com.wl.dlp.data.api.responses.BaseResponse
 import ua.com.wl.dlp.data.api.responses.PagedResponse
 import ua.com.wl.dlp.data.api.responses.shop.news.ShopNewsItemResponse
 import ua.com.wl.dlp.data.api.responses.shop.CityShopsResponse
+import ua.com.wl.dlp.data.api.responses.shop.ShopResponse
 import ua.com.wl.dlp.data.api.responses.shop.offer.BaseShopOfferResponse
 import ua.com.wl.dlp.data.api.responses.shop.offer.ShopOfferResponse
 
@@ -23,6 +24,9 @@ interface ShopApiV1 {
         @Query("page_size") count: Int? = null
 
     ): Response<PagedResponse<CityShopsResponse>>
+
+    @GET("api/v1/consumer/shops/{shop_id}/")
+    suspend fun getShop(@Path("shop_id") shopId: Int): Response<ShopResponse>
 
     @GET("api/v1/consumer/news/feed/shop/{shop_id}/")
     suspend fun getShopNewsFeed(

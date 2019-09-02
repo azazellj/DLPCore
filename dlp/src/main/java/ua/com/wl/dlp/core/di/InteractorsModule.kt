@@ -24,14 +24,14 @@ val interactorsModule = module {
     single<ConsumerInteractor> {
         ConsumerInteractorImpl(
             app = get(),
-            apiV1 = get(),
-            apiV3 = get(),
             errorsMapper = get(),
+            apiV3 = get(),
+            apiV1 = get(),
             consumerPreferences = get())
     }
     single<ShopInteractor> {
         ShopInteractorImpl(
-            apiV1 = get(),
-            errorsMapper = get())
+            errorsMapper = get(),
+            apiV1 = get())
     }
 }
