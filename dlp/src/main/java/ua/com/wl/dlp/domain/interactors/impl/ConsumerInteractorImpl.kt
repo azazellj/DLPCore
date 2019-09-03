@@ -41,39 +41,47 @@ class ConsumerInteractorImpl(
     private val apiV1: ConsumerApiV1,
     private val apiV3: ConsumerApiV3,
     private val consumerPreferences: ConsumerPreferences) : ConsumerInteractor, UseCase(errorsMapper) {
-    
+
     override suspend fun getProfile(): Result<ProfileResponse> =
-        callApi(call = { apiV3.getProfile() }).sfMap { data ->
-            data?.payload?.also { profile ->
-                withContext(Dispatchers.IO) {
-                    val snapshot = consumerPreferences.profilePrefs.copy()
-                    consumerPreferences.profilePrefs = profile.toPrefs()
-                    withContext(Dispatchers.Main.immediate) {
-                        notifyProfileChanges(snapshot)
+        callApi(call = { apiV3.getProfile() })
+            .fMap { response ->
+                response?.payload
+            }.sOnSuccess { payload ->
+                payload?.only { profile ->
+                    withContext(Dispatchers.IO) {
+                        val snapshot = consumerPreferences.profilePrefs.copy()
+                        consumerPreferences.profilePrefs = profile.toPrefs()
+                        withContext(Dispatchers.Main.immediate) {
+                            notifyProfileChanges(snapshot)
+                        }
                     }
                 }
             }
-        }
 
     override suspend fun updateProfile(profile: ProfileRequest): Result<ProfileResponse> =
-        callApi(call = { apiV3.updateProfile(profile) }).sfMap { data ->
-            data?.payload?.also { profile ->
-                withContext(Dispatchers.IO) {
-                    val snapshot = consumerPreferences.profilePrefs.copy()
-                    consumerPreferences.profilePrefs = profile.toPrefs()
-                    withContext(Dispatchers.Main.immediate) {
-                        notifyProfileChanges(snapshot)
+        callApi(call = { apiV3.updateProfile(profile) })
+            .fMap { response ->
+                response?.payload
+            }.sOnSuccess { payload ->
+                payload?.only { profile ->
+                    withContext(Dispatchers.IO) {
+                        val snapshot = consumerPreferences.profilePrefs.copy()
+                        consumerPreferences.profilePrefs = profile.toPrefs()
+                        withContext(Dispatchers.Main.immediate) {
+                            notifyProfileChanges(snapshot)
+                        }
                     }
                 }
             }
-        }
 
     override suspend fun useReferralCode(code: String): Result<ReferralResponse> =
         callApi(
             call = { apiV3.useReferralCode(ReferralRequest(code)) },
             errorClass = ReferralException::class.java
-        ).sfMap { data ->
-            data?.payload?.also { referral ->
+        ).fMap { response ->
+            response?.payload
+        }.sOnSuccess { payload ->
+            payload?.only { referral ->
                 withContext(Dispatchers.IO) {
                     val snapshot = consumerPreferences.profilePrefs.copy()
                     consumerPreferences.profilePrefs = consumerPreferences.profilePrefs.copy(
@@ -86,17 +94,18 @@ class ConsumerInteractorImpl(
         }
 
     override suspend fun getQrCode(): Result<QrCodeResponse> =
-        callApi(call = { apiV1.getQrCode() }).sfMap { data ->
-            data?.also { qr ->
-                withContext(Dispatchers.IO) {
-                    val snapshot = consumerPreferences.profilePrefs.copy()
-                    consumerPreferences.profilePrefs = consumerPreferences.profilePrefs.copy(qrCode = qr.qrCode)
-                    withContext(Dispatchers.Main.immediate) {
-                        notifyProfileChanges(snapshot)
+        callApi(call = { apiV1.getQrCode() })
+            .sOnSuccess { response ->
+                response?.only { qr ->
+                    withContext(Dispatchers.IO) {
+                        val snapshot = consumerPreferences.profilePrefs.copy()
+                        consumerPreferences.profilePrefs = consumerPreferences.profilePrefs.copy(qrCode = qr.qrCode)
+                        withContext(Dispatchers.Main.immediate) {
+                            notifyProfileChanges(snapshot)
+                        }
                     }
                 }
             }
-        }
 
 
     override suspend fun loadTransactionsHistory(page: Int?, count: Int?): Result<PagedResponse<TransactionResponse>> =

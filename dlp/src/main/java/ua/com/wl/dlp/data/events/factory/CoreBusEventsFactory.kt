@@ -21,6 +21,6 @@ object CoreBusEventsFactory {
             OfferBusEvent.Field.IS_FAVOURITE,
             OfferBusEvent.FieldValue.BooleanValue(isFavourite)).only { Bus.send(it) }
 
-    fun session(isValid: Boolean, httpCode: Int) =
-        SessionBusEvent(isValid, httpCode).only { Bus.send(it) }
+    fun session(fallbackType: SessionBusEvent.FallbackType) =
+        SessionBusEvent(fallbackType).only { Bus.send(it) }
 }

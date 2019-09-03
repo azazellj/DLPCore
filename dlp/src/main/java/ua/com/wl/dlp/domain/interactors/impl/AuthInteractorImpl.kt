@@ -12,12 +12,15 @@ import ua.com.wl.dlp.data.api.responses.auth.AuthenticationResponse
 import ua.com.wl.dlp.data.api.responses.auth.SignResponse
 import ua.com.wl.dlp.data.api.responses.models.auth.CardsStatus
 import ua.com.wl.dlp.data.api.responses.models.auth.City
+import ua.com.wl.dlp.data.events.factory.CoreBusEventsFactory
+import ua.com.wl.dlp.data.events.session.SessionBusEvent
 import ua.com.wl.dlp.data.prefereces.ConsumerPreferences
 import ua.com.wl.dlp.data.prefereces.CorePreferences
 import ua.com.wl.dlp.domain.Result
 import ua.com.wl.dlp.domain.UseCase
 import ua.com.wl.dlp.domain.exeptions.auth.AuthException
 import ua.com.wl.dlp.domain.interactors.AuthInteractor
+import ua.com.wl.dlp.utils.only
 
 /**
  * @author Denis Makovskyi
@@ -33,10 +36,12 @@ class AuthInteractorImpl(
         callApi(
             call = { api.verification(TokenRequest(corePreferences.corePrefs.authToken)) },
             errorClass = AuthException::class.java
-        ).sfMap { data ->
-            data?.payload?.also { auth ->
+        ).fMap { response ->
+            response?.payload
+        }.sOnSuccess { payload ->
+            payload?.token?.only { token ->
                 withContext(Dispatchers.IO) {
-                    corePreferences.corePrefs = corePreferences.corePrefs.copy(authToken = auth.token)
+                    corePreferences.corePrefs = corePreferences.corePrefs.copy(authToken = token)
                 }
             }
         }
@@ -45,10 +50,12 @@ class AuthInteractorImpl(
         callApi(
             call = { api.refreshToken(TokenRequest(corePreferences.corePrefs.refreshToken)) },
             errorClass = AuthException::class.java
-        ).sfMap { data ->
-            data?.payload?.also { auth ->
+        ).fMap { response ->
+            response?.payload
+        }.sOnSuccess { payload ->
+            payload?.token?.only { token ->
                 withContext(Dispatchers.IO) {
-                    corePreferences.corePrefs = corePreferences.corePrefs.copy(authToken = auth.token)
+                    corePreferences.corePrefs = corePreferences.corePrefs.copy(authToken = token)
                 }
             }
         }
@@ -63,10 +70,12 @@ class AuthInteractorImpl(
         callApi(
             call = { api.signIn(SignInRequest(phone, password)) },
             errorClass = AuthException::class.java
-        ).sfMap { data ->
-            data?.payload?.also { auth ->
-                withContext(Dispatchers.IO) {
-                    corePreferences.corePrefs = corePreferences.corePrefs.copy(authToken = auth.token, refreshToken = auth.refreshToken)
+        ).fMap { response ->
+            response?.payload
+        }.sOnSuccess { payload ->
+            withContext(Dispatchers.IO) {
+                payload?.apply {
+                    corePreferences.corePrefs = corePreferences.corePrefs.copy(authToken = token, refreshToken = refreshToken)
                 }
             }
         }
@@ -81,10 +90,12 @@ class AuthInteractorImpl(
         callApi(
             call = { api.signUp(SignUpRequest(city, phone, password, barcode)) },
             errorClass = AuthException::class.java
-        ).sfMap { data ->
-            data?.payload?.also { auth ->
-                withContext(Dispatchers.IO) {
-                    corePreferences.corePrefs = corePreferences.corePrefs.copy(authToken = auth.token, refreshToken = auth.refreshToken)
+        ).sfMap { response ->
+            response?.payload
+        }.sOnSuccess { payload ->
+            withContext(Dispatchers.IO) {
+                payload?.apply {
+                    corePreferences.corePrefs = corePreferences.corePrefs.copy(authToken = token, refreshToken = refreshToken)
                 }
             }
         }
@@ -94,11 +105,13 @@ class AuthInteractorImpl(
             call = { api.signOut() },
             errorClass = AuthException::class.java
         ).sfMap { response ->
+            response?.isSuccessfully()
+        }.sOnEach {
             withContext(Dispatchers.IO) {
                 corePreferences.removeCorePrefs()
                 consumerPreferences.removeProfilePrefs()
             }
-            response?.isSuccessfully()
+            CoreBusEventsFactory.session(SessionBusEvent.FallbackType.SIGNED_OUT)
         }
 
     override suspend fun requestSmsCode(phone: String): Result<Boolean> =

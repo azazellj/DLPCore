@@ -7,6 +7,7 @@ import okhttp3.Interceptor
 
 import ua.com.wl.dlp.core.Constants
 import ua.com.wl.dlp.data.events.factory.CoreBusEventsFactory
+import ua.com.wl.dlp.data.events.session.SessionBusEvent
 import ua.com.wl.dlp.data.prefereces.CorePreferences
 import ua.com.wl.dlp.utils.hasHeader
 import ua.com.wl.dlp.utils.only
@@ -34,7 +35,7 @@ class AuthInterceptor(
                 }
             }.build()).also { response ->
                 when (response.code) {
-                    HttpURLConnection.HTTP_FORBIDDEN -> CoreBusEventsFactory.session(false, response.code)
+                    HttpURLConnection.HTTP_FORBIDDEN -> CoreBusEventsFactory.session(SessionBusEvent.FallbackType.TOKEN_EXPIRED)
                 }
             }
         }
