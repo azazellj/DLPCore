@@ -4,9 +4,11 @@ import org.koin.dsl.module
 
 import ua.com.wl.dlp.domain.interactors.AuthInteractor
 import ua.com.wl.dlp.domain.interactors.ConsumerInteractor
+import ua.com.wl.dlp.domain.interactors.NewsFeedInteractor
 import ua.com.wl.dlp.domain.interactors.ShopInteractor
 import ua.com.wl.dlp.domain.interactors.impl.AuthInteractorImpl
 import ua.com.wl.dlp.domain.interactors.impl.ConsumerInteractorImpl
+import ua.com.wl.dlp.domain.interactors.impl.NewsFeedInteractorImpl
 import ua.com.wl.dlp.domain.interactors.impl.ShopInteractorImpl
 
 /**
@@ -31,6 +33,11 @@ val interactorsModule = module {
     }
     single<ShopInteractor> {
         ShopInteractorImpl(
+            errorsMapper = get(),
+            apiV1 = get())
+    }
+    single<NewsFeedInteractor> {
+        NewsFeedInteractorImpl(
             errorsMapper = get(),
             apiV1 = get())
     }

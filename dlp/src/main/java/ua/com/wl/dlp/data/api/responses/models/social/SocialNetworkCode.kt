@@ -1,4 +1,4 @@
-package ua.com.wl.dlp.data.api.responses.models.shop.offer.social
+package ua.com.wl.dlp.data.api.responses.models.social
 
 import com.google.gson.annotations.SerializedName
 

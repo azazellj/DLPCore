@@ -5,7 +5,6 @@ import retrofit2.http.*
 
 import ua.com.wl.dlp.data.api.responses.BaseResponse
 import ua.com.wl.dlp.data.api.responses.PagedResponse
-import ua.com.wl.dlp.data.api.responses.shop.news.ShopNewsItemResponse
 import ua.com.wl.dlp.data.api.responses.shop.CityShopsResponse
 import ua.com.wl.dlp.data.api.responses.shop.ShopResponse
 import ua.com.wl.dlp.data.api.responses.shop.offer.BaseShopOfferResponse
@@ -27,14 +26,6 @@ interface ShopApiV1 {
 
     @GET("api/v1/consumer/shops/{shop_id}/")
     suspend fun getShop(@Path("shop_id") shopId: Int): Response<ShopResponse>
-
-    @GET("api/v1/consumer/news/feed/shop/{shop_id}/")
-    suspend fun getShopNewsFeed(
-        @Path("shop_id") shopId: Int,
-        @Query("page") page: Int? = null,
-        @Query("page_size") count: Int? = null
-
-    ): Response<PagedResponse<ShopNewsItemResponse>>
 
     @GET("api/v1/consumer/shops/{shop_id}/promo-offers/")
     suspend fun getShopPromoOffers(

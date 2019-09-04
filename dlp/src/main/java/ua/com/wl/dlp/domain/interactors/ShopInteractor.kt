@@ -1,7 +1,6 @@
 package ua.com.wl.dlp.domain.interactors
 
 import ua.com.wl.dlp.data.api.responses.PagedResponse
-import ua.com.wl.dlp.data.api.responses.shop.news.ShopNewsItemResponse
 import ua.com.wl.dlp.data.api.responses.shop.offer.ShopOfferResponse
 import ua.com.wl.dlp.data.api.responses.shop.CityShopsResponse
 import ua.com.wl.dlp.data.api.responses.shop.ShopResponse
@@ -21,13 +20,6 @@ interface ShopInteractor {
     ): Result<PagedResponse<CityShopsResponse>>
 
     suspend fun getShop(shopId: Int): Result<ShopResponse>
-
-    suspend fun getShopNewsFeed(
-        shopId: Int,
-        page: Int? = null,
-        count: Int? = null
-
-    ): Result<PagedResponse<ShopNewsItemResponse>>
 
     suspend fun getShopPromoOffers(
         shopId: Int,

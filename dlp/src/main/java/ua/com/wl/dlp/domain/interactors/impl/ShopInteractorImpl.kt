@@ -6,7 +6,7 @@ import kotlinx.coroutines.withContext
 import ua.com.wl.dlp.data.api.ShopApiV1
 import ua.com.wl.dlp.data.api.errors.ErrorsMapper
 import ua.com.wl.dlp.data.api.responses.PagedResponse
-import ua.com.wl.dlp.data.api.responses.shop.news.ShopNewsItemResponse
+import ua.com.wl.dlp.data.api.responses.news.BaseNewsItemResponse
 import ua.com.wl.dlp.data.api.responses.shop.offer.ShopOfferResponse
 import ua.com.wl.dlp.data.api.responses.shop.CityShopsResponse
 import ua.com.wl.dlp.data.api.responses.shop.ShopResponse
@@ -21,7 +21,9 @@ import ua.com.wl.dlp.utils.only
  * @author Denis Makovskyi
  */
 
-class ShopInteractorImpl(errorsMapper: ErrorsMapper, private val apiV1: ShopApiV1) : ShopInteractor, UseCase(errorsMapper) {
+class ShopInteractorImpl(
+    errorsMapper: ErrorsMapper,
+    private val apiV1: ShopApiV1) : ShopInteractor, UseCase(errorsMapper) {
 
     override suspend fun getCityShops(
         page: Int?,
@@ -33,13 +35,6 @@ class ShopInteractorImpl(errorsMapper: ErrorsMapper, private val apiV1: ShopApiV
     override suspend fun getShop(shopId: Int): Result<ShopResponse> =
         callApi(call = { apiV1.getShop(shopId) })
 
-    override suspend fun getShopNewsFeed(
-        shopId: Int,
-        page: Int?,
-        count: Int?
-
-    ): Result<PagedResponse<ShopNewsItemResponse>> =
-        callApi(call = { apiV1.getShopNewsFeed(shopId, page, count) })
 
     override suspend fun getShopPromoOffers(
         shopId: Int,
