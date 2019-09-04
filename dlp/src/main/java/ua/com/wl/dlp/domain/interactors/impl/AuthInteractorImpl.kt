@@ -18,9 +18,9 @@ import ua.com.wl.dlp.data.prefereces.ConsumerPreferences
 import ua.com.wl.dlp.data.prefereces.CorePreferences
 import ua.com.wl.dlp.domain.Result
 import ua.com.wl.dlp.domain.UseCase
+import ua.com.wl.dlp.domain.exeptions.ApiException
 import ua.com.wl.dlp.domain.exeptions.auth.AuthException
 import ua.com.wl.dlp.domain.interactors.AuthInteractor
-import ua.com.wl.dlp.utils.only
 
 /**
  * @author Denis Makovskyi
@@ -36,13 +36,13 @@ class AuthInteractorImpl(
         callApi(
             call = { api.verification(TokenRequest(corePreferences.authPrefs.authToken)) },
             errorClass = AuthException::class.java
-        ).fMap { response ->
-            response?.payload
-        }.sOnSuccess { payload ->
-            payload?.token?.only { token ->
-                withContext(Dispatchers.IO) {
-                    corePreferences.authPrefs = corePreferences.authPrefs.copy(authToken = token)
-                }
+        ).flatMap { dataResponse ->
+            dataResponse.ifPresentOrDefault(
+                { Result.Success(it.payload) },
+                { Result.Failure(ApiException()) })
+        }.sOnSuccess { tokenResponse ->
+            withContext(Dispatchers.IO) {
+                corePreferences.authPrefs = corePreferences.authPrefs.copy(authToken = tokenResponse.token)
             }
         }
 
@@ -50,13 +50,13 @@ class AuthInteractorImpl(
         callApi(
             call = { api.refreshToken(TokenRequest(corePreferences.authPrefs.refreshToken)) },
             errorClass = AuthException::class.java
-        ).fMap { response ->
-            response?.payload
-        }.sOnSuccess { payload ->
-            payload?.token?.only { token ->
-                withContext(Dispatchers.IO) {
-                    corePreferences.authPrefs = corePreferences.authPrefs.copy(authToken = token)
-                }
+        ).flatMap { dataResponse ->
+            dataResponse.ifPresentOrDefault(
+                { Result.Success(it.payload) },
+                { Result.Failure(ApiException()) })
+        }.sOnSuccess { tokenResponse ->
+            withContext(Dispatchers.IO) {
+                corePreferences.authPrefs = corePreferences.authPrefs.copy(authToken = tokenResponse.token)
             }
         }
 
@@ -64,21 +64,25 @@ class AuthInteractorImpl(
         callApi(
             call = { api.authentication(AuthenticationRequest(sendSms, phone)) },
             errorClass = AuthException::class.java
-        ).fMap { it?.payload }
+        ).flatMap { dataResponse ->
+            dataResponse.ifPresentOrDefault(
+                { Result.Success(it.payload) },
+                { Result.Failure(ApiException()) })
+        }
 
     override suspend fun signIn(phone: String, password: String): Result<SignResponse> =
         callApi(
             call = { api.signIn(SignInRequest(phone, password)) },
             errorClass = AuthException::class.java
-        ).fMap { response ->
-            response?.payload
-        }.sOnSuccess { payload ->
+        ).flatMap { dataResponse ->
+            dataResponse.ifPresentOrDefault(
+                { Result.Success(it.payload) },
+                { Result.Failure(ApiException()) })
+        }.sOnSuccess { tokenResponse ->
             withContext(Dispatchers.IO) {
-                payload?.apply {
-                    corePreferences.authPrefs = corePreferences.authPrefs.copy(
-                        authToken = token,
-                        refreshToken = refreshToken)
-                }
+                corePreferences.authPrefs = corePreferences.authPrefs.copy(
+                    authToken = tokenResponse.token,
+                    refreshToken = tokenResponse.refreshToken)
             }
         }
 
@@ -86,21 +90,25 @@ class AuthInteractorImpl(
         callApi(
             call = { api.cardsStatus(CardsStatusRequest(phone, password)) },
             errorClass = AuthException::class.java
-        ).fMap { it?.payload?.cardsStatus }
+        ).flatMap { dataResponse ->
+            dataResponse.ifPresentOrDefault(
+                { Result.Success(it.payload.cardsStatus) },
+                { Result.Failure(ApiException()) })
+        }
 
     override suspend fun signUp(city: Int, phone: String, password: String, barcode: String?): Result<SignResponse> =
         callApi(
             call = { api.signUp(SignUpRequest(city, phone, password, barcode)) },
             errorClass = AuthException::class.java
-        ).fMap { response ->
-            response?.payload
-        }.sOnSuccess { payload ->
+        ).flatMap { dataResponse ->
+            dataResponse.ifPresentOrDefault(
+                { Result.Success(it.payload) },
+                { Result.Failure(ApiException()) })
+        }.sOnSuccess { tokenResponse ->
             withContext(Dispatchers.IO) {
-                payload?.apply {
-                    corePreferences.authPrefs = corePreferences.authPrefs.copy(
-                            authToken = token,
-                            refreshToken = refreshToken)
-                }
+                corePreferences.authPrefs = corePreferences.authPrefs.copy(
+                    authToken = tokenResponse.token,
+                    refreshToken = tokenResponse.refreshToken)
             }
         }
 
@@ -108,8 +116,8 @@ class AuthInteractorImpl(
         callApi(
             call = { api.signOut() },
             errorClass = AuthException::class.java
-        ).fMap { response ->
-            response?.isSuccessfully()
+        ).map { baseResponse ->
+            baseResponse.getUnsafe()?.isSuccessfully() ?: false
         }.sOnEach {
             withContext(Dispatchers.IO) {
                 corePreferences.removeAuthPrefs()
@@ -122,8 +130,14 @@ class AuthInteractorImpl(
         callApi(
             call = { api.requestSmsCode(SmsCodeRequest(phone)) },
             errorClass = AuthException::class.java
-        ).fMap { it?.isSuccessfully() }
+        ).map { baseResponse ->
+            baseResponse.getUnsafe()?.isSuccessfully() ?: false
+        }
 
     override suspend fun cities(): Result<PagedResponse<City>> =
-        callApi(call = { api.cities() }).fMap { it?.payload }
+        callApi(call = { api.cities() }).flatMap { dataResponse ->
+            dataResponse.ifPresentOrDefault(
+                { Result.Success(it.payload) },
+                { Result.Failure(ApiException()) })
+        }
 }

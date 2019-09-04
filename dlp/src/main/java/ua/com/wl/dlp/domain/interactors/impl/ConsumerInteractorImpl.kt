@@ -24,6 +24,7 @@ import ua.com.wl.dlp.data.prefereces.ConsumerPreferences
 import ua.com.wl.dlp.data.prefereces.models.ProfilePrefs
 import ua.com.wl.dlp.domain.Result
 import ua.com.wl.dlp.domain.UseCase
+import ua.com.wl.dlp.domain.exeptions.ApiException
 import ua.com.wl.dlp.domain.exeptions.consumer.referral.ReferralException
 import ua.com.wl.dlp.domain.interactors.ConsumerInteractor
 import ua.com.wl.dlp.utils.createBroadcastMessage
@@ -43,32 +44,32 @@ class ConsumerInteractorImpl(
 
     override suspend fun getProfile(): Result<ProfileResponse> =
         callApi(call = { apiV3.getProfile() })
-            .fMap { response ->
-                response?.payload
-            }.sOnSuccess { payload ->
-                payload?.only { profile ->
-                    withContext(Dispatchers.IO) {
-                        val snapshot = consumerPreferences.profilePrefs.copy()
-                        consumerPreferences.profilePrefs = profile.toPrefs()
-                        withContext(Dispatchers.Main.immediate) {
-                            notifyProfileChanges(snapshot)
-                        }
+            .flatMap { dataResponse ->
+                dataResponse.ifPresentOrDefault(
+                    { Result.Success(it.payload) },
+                    { Result.Failure(ApiException()) })
+            }.sOnSuccess { profileResponse ->
+                withContext(Dispatchers.IO) {
+                    val snapshot = consumerPreferences.profilePrefs.copy()
+                    consumerPreferences.profilePrefs = profileResponse.toPrefs()
+                    withContext(Dispatchers.Main.immediate) {
+                        notifyProfileChanges(snapshot)
                     }
                 }
             }
 
     override suspend fun updateProfile(profile: ProfileRequest): Result<ProfileResponse> =
         callApi(call = { apiV3.updateProfile(profile) })
-            .fMap { response ->
-                response?.payload
-            }.sOnSuccess { payload ->
-                payload?.only { profile ->
-                    withContext(Dispatchers.IO) {
-                        val snapshot = consumerPreferences.profilePrefs.copy()
-                        consumerPreferences.profilePrefs = profile.toPrefs()
-                        withContext(Dispatchers.Main.immediate) {
-                            notifyProfileChanges(snapshot)
-                        }
+            .flatMap { dataResponse ->
+                dataResponse.ifPresentOrDefault(
+                    { Result.Success(it.payload) },
+                    { Result.Failure(ApiException()) })
+            }.sOnSuccess { profileResponse ->
+                withContext(Dispatchers.IO) {
+                    val snapshot = consumerPreferences.profilePrefs.copy()
+                    consumerPreferences.profilePrefs = profileResponse.toPrefs()
+                    withContext(Dispatchers.Main.immediate) {
+                        notifyProfileChanges(snapshot)
                     }
                 }
             }
@@ -77,42 +78,48 @@ class ConsumerInteractorImpl(
         callApi(
             call = { apiV3.useReferralCode(ReferralRequest(code)) },
             errorClass = ReferralException::class.java
-        ).fMap { response ->
-            response?.payload
-        }.sOnSuccess { payload ->
-            payload?.only { referral ->
-                withContext(Dispatchers.IO) {
-                    val snapshot = consumerPreferences.profilePrefs.copy()
-                    consumerPreferences.profilePrefs = consumerPreferences.profilePrefs.copy(
-                            balance = referral.balance,
-                            inviteCode = referral.inviteCode)
-                    withContext(Dispatchers.Main.immediate) {
-                        notifyProfileChanges(snapshot)
-                    }
+        ).flatMap { dataResponse ->
+            dataResponse.ifPresentOrDefault(
+                { Result.Success(it.payload) },
+                { Result.Failure(ApiException()) })
+        }.sOnSuccess { referralResponse ->
+            withContext(Dispatchers.IO) {
+                val snapshot = consumerPreferences.profilePrefs.copy()
+                consumerPreferences.profilePrefs = consumerPreferences.profilePrefs.copy(
+                    balance = referralResponse.balance,
+                    inviteCode = referralResponse.inviteCode)
+                withContext(Dispatchers.Main.immediate) {
+                    notifyProfileChanges(snapshot)
                 }
             }
         }
 
     override suspend fun getQrCode(): Result<QrCodeResponse> =
         callApi(call = { apiV1.getQrCode() })
-            .sOnSuccess { response ->
-                response?.only { qr ->
-                    withContext(Dispatchers.IO) {
-                        val snapshot = consumerPreferences.profilePrefs.copy()
-                        consumerPreferences.profilePrefs = consumerPreferences.profilePrefs.copy(qrCode = qr.qrCode)
-                        withContext(Dispatchers.Main.immediate) {
-                            notifyProfileChanges(snapshot)
-                        }
+            .flatMap { response ->
+                response.ifPresentOrDefault(
+                    { Result.Success(it) },
+                    { Result.Failure(ApiException()) })
+            }.sOnSuccess { qrResponse ->
+                withContext(Dispatchers.IO) {
+                    val snapshot = consumerPreferences.profilePrefs.copy()
+                    consumerPreferences.profilePrefs = consumerPreferences.profilePrefs.copy(qrCode = qrResponse.qrCode)
+                    withContext(Dispatchers.Main.immediate) {
+                        notifyProfileChanges(snapshot)
                     }
                 }
             }
 
-
     override suspend fun loadTransactionsHistory(
         page: Int?,
         count: Int?
+
     ): Result<PagedResponse<TransactionResponse>> =
-        callApi(call = { apiV3.loadTransactionsHistory(page, count) }).fMap { it?.payload }
+        callApi(call = { apiV3.loadTransactionsHistory(page, count) }).flatMap { dataResponse ->
+            dataResponse.ifPresentOrDefault(
+                { Result.Success(it.payload) },
+                { Result.Failure(ApiException()) })
+        }
 
     override suspend fun feedback(
         message: String,
@@ -131,7 +138,13 @@ class ConsumerInteractorImpl(
             this.phone = consumerPreferences.profilePrefs.phone
             this.email = consumerPreferences.profilePrefs.email
 
-        }.let { callApi(call = { apiV1.feedback(it) }) }
+        }.let {
+            callApi(call = { apiV1.feedback(it) }).flatMap { response ->
+                response.ifPresentOrDefault(
+                    { Result.Success(it) },
+                    { Result.Failure(ApiException()) })
+            }
+        }
 
 
     private fun notifyProfileChanges(snapshot: ProfilePrefs) {

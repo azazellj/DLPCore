@@ -27,9 +27,9 @@ class ConsumerPreferences(
             save(KEY_PROFILE_PREFS, gson.toJson(field))
         }
         get() {
-            val raw = getString(KEY_PROFILE_PREFS)
-            return if (raw.isNonNullOrEmpty()) {
-                gson.fromJson(raw, ProfilePrefs::class.java)
+            val json = getString(KEY_PROFILE_PREFS)
+            return if (json.isNonNullOrEmpty()) {
+                gson.fromJson(json, ProfilePrefs::class.java)
                 field
 
             } else {
