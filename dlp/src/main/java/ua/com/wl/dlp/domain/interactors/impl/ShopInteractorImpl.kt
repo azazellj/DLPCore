@@ -23,19 +23,38 @@ import ua.com.wl.dlp.utils.only
 
 class ShopInteractorImpl(errorsMapper: ErrorsMapper, private val apiV1: ShopApiV1) : ShopInteractor, UseCase(errorsMapper) {
 
-    override suspend fun getCityShops(page: Int?, count: Int?): Result<PagedResponse<CityShopsResponse>> =
+    override suspend fun getCityShops(
+        page: Int?,
+        count: Int?
+
+    ): Result<PagedResponse<CityShopsResponse>> =
         callApi(call = { apiV1.getCityShops(page, count) })
 
     override suspend fun getShop(shopId: Int): Result<ShopResponse> =
         callApi(call = { apiV1.getShop(shopId) })
 
-    override suspend fun getShopNewsFeed(shopId: Int, page: Int?, count: Int?): Result<PagedResponse<ShopNewsItemResponse>> =
+    override suspend fun getShopNewsFeed(
+        shopId: Int,
+        page: Int?,
+        count: Int?
+
+    ): Result<PagedResponse<ShopNewsItemResponse>> =
         callApi(call = { apiV1.getShopNewsFeed(shopId, page, count) })
 
-    override suspend fun getShopPromoOffers(shopId: Int, page: Int?, count: Int?): Result<PagedResponse<BaseShopOfferResponse>> =
+    override suspend fun getShopPromoOffers(
+        shopId: Int,
+        page: Int?,
+        count: Int?
+
+    ): Result<PagedResponse<BaseShopOfferResponse>> =
         callApi(call = { apiV1.getShopPromoOffers(shopId, page, count) })
 
-    override suspend fun getShopFavouriteOffers(shopId: Int, page: Int?, count: Int?): Result<PagedResponse<BaseShopOfferResponse>> =
+    override suspend fun getShopFavouriteOffers(
+        shopId: Int,
+        page: Int?,
+        count: Int?
+
+    ): Result<PagedResponse<BaseShopOfferResponse>> =
         callApi(call = { apiV1.getShopFavouriteOffers(shopId, page, count) })
 
     override suspend fun addShopOfferToFavourite(offerId: Int): Result<Boolean> =

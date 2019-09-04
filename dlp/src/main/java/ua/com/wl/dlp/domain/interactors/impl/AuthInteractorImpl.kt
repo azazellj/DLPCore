@@ -34,28 +34,28 @@ class AuthInteractorImpl(
 
     override suspend fun verification(): Result<TokenResponse> =
         callApi(
-            call = { api.verification(TokenRequest(corePreferences.corePrefs.authToken)) },
+            call = { api.verification(TokenRequest(corePreferences.authPrefs.authToken)) },
             errorClass = AuthException::class.java
         ).fMap { response ->
             response?.payload
         }.sOnSuccess { payload ->
             payload?.token?.only { token ->
                 withContext(Dispatchers.IO) {
-                    corePreferences.corePrefs = corePreferences.corePrefs.copy(authToken = token)
+                    corePreferences.authPrefs = corePreferences.authPrefs.copy(authToken = token)
                 }
             }
         }
 
     override suspend fun refreshToken(): Result<TokenResponse> =
         callApi(
-            call = { api.refreshToken(TokenRequest(corePreferences.corePrefs.refreshToken)) },
+            call = { api.refreshToken(TokenRequest(corePreferences.authPrefs.refreshToken)) },
             errorClass = AuthException::class.java
         ).fMap { response ->
             response?.payload
         }.sOnSuccess { payload ->
             payload?.token?.only { token ->
                 withContext(Dispatchers.IO) {
-                    corePreferences.corePrefs = corePreferences.corePrefs.copy(authToken = token)
+                    corePreferences.authPrefs = corePreferences.authPrefs.copy(authToken = token)
                 }
             }
         }
@@ -75,7 +75,9 @@ class AuthInteractorImpl(
         }.sOnSuccess { payload ->
             withContext(Dispatchers.IO) {
                 payload?.apply {
-                    corePreferences.corePrefs = corePreferences.corePrefs.copy(authToken = token, refreshToken = refreshToken)
+                    corePreferences.authPrefs = corePreferences.authPrefs.copy(
+                        authToken = token,
+                        refreshToken = refreshToken)
                 }
             }
         }
@@ -90,12 +92,14 @@ class AuthInteractorImpl(
         callApi(
             call = { api.signUp(SignUpRequest(city, phone, password, barcode)) },
             errorClass = AuthException::class.java
-        ).sfMap { response ->
+        ).fMap { response ->
             response?.payload
         }.sOnSuccess { payload ->
             withContext(Dispatchers.IO) {
                 payload?.apply {
-                    corePreferences.corePrefs = corePreferences.corePrefs.copy(authToken = token, refreshToken = refreshToken)
+                    corePreferences.authPrefs = corePreferences.authPrefs.copy(
+                            authToken = token,
+                            refreshToken = refreshToken)
                 }
             }
         }
@@ -104,11 +108,11 @@ class AuthInteractorImpl(
         callApi(
             call = { api.signOut() },
             errorClass = AuthException::class.java
-        ).sfMap { response ->
+        ).fMap { response ->
             response?.isSuccessfully()
         }.sOnEach {
             withContext(Dispatchers.IO) {
-                corePreferences.removeCorePrefs()
+                corePreferences.removeAuthPrefs()
                 consumerPreferences.removeProfilePrefs()
             }
             CoreBusEventsFactory.session(SessionBusEvent.FallbackType.SIGNED_OUT)

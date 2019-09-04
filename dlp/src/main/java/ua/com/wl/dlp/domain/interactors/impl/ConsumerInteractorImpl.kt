@@ -24,7 +24,6 @@ import ua.com.wl.dlp.data.prefereces.ConsumerPreferences
 import ua.com.wl.dlp.data.prefereces.models.ProfilePrefs
 import ua.com.wl.dlp.domain.Result
 import ua.com.wl.dlp.domain.UseCase
-import ua.com.wl.dlp.domain.exeptions.ApiException
 import ua.com.wl.dlp.domain.exeptions.consumer.referral.ReferralException
 import ua.com.wl.dlp.domain.interactors.ConsumerInteractor
 import ua.com.wl.dlp.utils.createBroadcastMessage
@@ -85,7 +84,8 @@ class ConsumerInteractorImpl(
                 withContext(Dispatchers.IO) {
                     val snapshot = consumerPreferences.profilePrefs.copy()
                     consumerPreferences.profilePrefs = consumerPreferences.profilePrefs.copy(
-                        balance = referral.balance, inviteCode = referral.inviteCode)
+                            balance = referral.balance,
+                            inviteCode = referral.inviteCode)
                     withContext(Dispatchers.Main.immediate) {
                         notifyProfileChanges(snapshot)
                     }
@@ -108,29 +108,31 @@ class ConsumerInteractorImpl(
             }
 
 
-    override suspend fun loadTransactionsHistory(page: Int?, count: Int?): Result<PagedResponse<TransactionResponse>> =
+    override suspend fun loadTransactionsHistory(
+        page: Int?,
+        count: Int?
+    ): Result<PagedResponse<TransactionResponse>> =
         callApi(call = { apiV3.loadTransactionsHistory(page, count) }).fMap { it?.payload }
 
-    override suspend fun feedback(message: String, appVersion: String, callback: Boolean): Result<FeedbackResponse> {
-        val request = try {
-            feedback {
-                val answer = if (callback) {
-                    app.getString(R.string.dlp_feedback_callback_agree)
-                } else {
-                    app.getString(R.string.dlp_feedback_callback_disagree)
-                }
-                this.message = "$message\n\n${app.getString(R.string.dlp_feedback_callback_prefix)}: $answer"
-                this.appVersion = "${app.getString(R.string.dlp_feedback_app_version)}$appVersion"
-                this.phone = consumerPreferences.profilePrefs.phone
-                this.email = consumerPreferences.profilePrefs.email
+    override suspend fun feedback(
+        message: String,
+        appVersion: String,
+        callback: Boolean
+
+    ): Result<FeedbackResponse> =
+        feedback {
+            val answer = if (callback) {
+                app.getString(R.string.dlp_feedback_callback_agree)
+            } else {
+                app.getString(R.string.dlp_feedback_callback_disagree)
             }
+            this.message = "$message\n\n${app.getString(R.string.dlp_feedback_callback_prefix)}: $answer"
+            this.appVersion = "${app.getString(R.string.dlp_feedback_app_version)}$appVersion"
+            this.phone = consumerPreferences.profilePrefs.phone
+            this.email = consumerPreferences.profilePrefs.email
 
-        } catch (e: Exception) {
-            return Result.Failure(ApiException())
-        }
+        }.let { callApi(call = { apiV1.feedback(it) }) }
 
-        return callApi(call = { apiV1.feedback(request) })
-    }
 
     private fun notifyProfileChanges(snapshot: ProfilePrefs) {
         val changes: MutableList<ProfileBusEvent.Change> = mutableListOf()

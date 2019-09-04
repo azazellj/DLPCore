@@ -14,15 +14,34 @@ import ua.com.wl.dlp.domain.Result
 
 interface ShopInteractor {
 
-    suspend fun getCityShops(page: Int? = null, count: Int? = null): Result<PagedResponse<CityShopsResponse>>
+    suspend fun getCityShops(
+        page: Int? = null,
+        count: Int? = null
+
+    ): Result<PagedResponse<CityShopsResponse>>
 
     suspend fun getShop(shopId: Int): Result<ShopResponse>
 
-    suspend fun getShopNewsFeed(shopId: Int, page: Int? = null, count: Int? = null): Result<PagedResponse<ShopNewsItemResponse>>
+    suspend fun getShopNewsFeed(
+        shopId: Int,
+        page: Int? = null,
+        count: Int? = null
 
-    suspend fun getShopPromoOffers(shopId: Int, page: Int? = null, count: Int? = null): Result<PagedResponse<BaseShopOfferResponse>>
+    ): Result<PagedResponse<ShopNewsItemResponse>>
 
-    suspend fun getShopFavouriteOffers(shopId: Int, page: Int? = null, count: Int? = null): Result<PagedResponse<BaseShopOfferResponse>>
+    suspend fun getShopPromoOffers(
+        shopId: Int,
+        page: Int? = null,
+        count: Int? = null
+
+    ): Result<PagedResponse<BaseShopOfferResponse>>
+
+    suspend fun getShopFavouriteOffers(
+        shopId: Int,
+        page: Int? = null,
+        count: Int? = null
+
+    ): Result<PagedResponse<BaseShopOfferResponse>>
 
     suspend fun addShopOfferToFavourite(offerId: Int): Result<Boolean>
 

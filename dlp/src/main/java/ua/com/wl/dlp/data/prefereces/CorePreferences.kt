@@ -5,7 +5,7 @@ import android.content.Context
 import com.google.gson.Gson
 
 import ua.com.wl.archetype.core.android.preferences.BasePreferences
-import ua.com.wl.dlp.data.prefereces.models.CorePrefs
+import ua.com.wl.dlp.data.prefereces.models.AuthPrefs
 import ua.com.wl.dlp.utils.isNonNullOrEmpty
 
 /**
@@ -18,25 +18,25 @@ class CorePreferences(
 
     companion object {
 
-        const val KEY_CORE_PREFS = "core_prefs"
+        const val KEY_AUTH_PREFS = "auth_prefs"
     }
 
-    var corePrefs: CorePrefs = CorePrefs()
+    var authPrefs: AuthPrefs = AuthPrefs()
         set(value) {
             field = value
-            save(KEY_CORE_PREFS, gson.toJson(field))
+            save(KEY_AUTH_PREFS, gson.toJson(field))
         }
         get() {
-            val raw = getString(KEY_CORE_PREFS)
-            return if (raw.isNonNullOrEmpty()) {
-                field = gson.fromJson(raw, CorePrefs::class.java)
+            val json = getString(KEY_AUTH_PREFS)
+            return if (json.isNonNullOrEmpty()) {
+                field = gson.fromJson(json, AuthPrefs::class.java)
                 field
 
             } else {
-                field = CorePrefs()
+                field = AuthPrefs()
                 field
             }
         }
 
-    fun removeCorePrefs() = remove(KEY_CORE_PREFS)
+    fun removeAuthPrefs() = remove(KEY_AUTH_PREFS)
 }

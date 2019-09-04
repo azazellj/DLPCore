@@ -28,14 +28,16 @@ class AuthInterceptor(
                     removeHeader(Constants.HEADER_UNAUTHORIZED)
 
                 } else {
-                    corePreferences.corePrefs.authToken?.only { token ->
+                    corePreferences.authPrefs.authToken?.only { token ->
                         addHeader(Constants.HEADER_AUTHORIZATION, "JWT $token")
 
                     } ?: throw RuntimeException("Authorization token required in private api was not found")
                 }
+
             }.build()).also { response ->
                 when (response.code) {
-                    HttpURLConnection.HTTP_FORBIDDEN -> CoreBusEventsFactory.session(SessionBusEvent.FallbackType.TOKEN_EXPIRED)
+                    HttpURLConnection.HTTP_FORBIDDEN ->
+                        CoreBusEventsFactory.session(SessionBusEvent.FallbackType.TOKEN_EXPIRED)
                 }
             }
         }

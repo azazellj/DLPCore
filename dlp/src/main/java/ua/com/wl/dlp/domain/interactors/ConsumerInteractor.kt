@@ -23,7 +23,16 @@ interface ConsumerInteractor {
 
     suspend fun getQrCode(): Result<QrCodeResponse>
 
-    suspend fun loadTransactionsHistory(page: Int? = null, count: Int? = null): Result<PagedResponse<TransactionResponse>>
+    suspend fun loadTransactionsHistory(
+        page: Int? = null,
+        count: Int? = null
 
-    suspend fun feedback(message: String, appVersion: String, callback: Boolean): Result<FeedbackResponse>
+    ): Result<PagedResponse<TransactionResponse>>
+
+    suspend fun feedback(
+        message: String,
+        appVersion: String,
+        callback: Boolean
+
+    ): Result<FeedbackResponse>
 }
