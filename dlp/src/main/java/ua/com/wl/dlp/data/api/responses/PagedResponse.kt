@@ -20,4 +20,4 @@ data class PagedResponse<T>(
     @SerializedName("previous")
     val previousPage: String?,
     @SerializedName(value = "data", alternate = ["results"])
-    val items: List<T>?)
+    val items: List<T>)
