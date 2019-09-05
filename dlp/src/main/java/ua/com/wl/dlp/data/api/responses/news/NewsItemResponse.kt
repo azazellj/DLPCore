@@ -9,6 +9,7 @@ import ua.com.wl.dlp.data.api.responses.models.social.SocialNetwork
  */
 
 data class NewsItemResponse(
+    @SerializedName("description") val description: String,
     @SerializedName("is_promo_news_item") val isPromo: Boolean,
     @SerializedName("in_favorite") val isFavourite: Boolean,
     @SerializedName("payed_per_view") val payedPerView: Boolean,
