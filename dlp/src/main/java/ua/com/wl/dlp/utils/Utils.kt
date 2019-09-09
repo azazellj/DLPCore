@@ -8,7 +8,7 @@ import android.os.Bundle
  * @author Denis Makovskyi
  */
 
-internal fun getQueryParam(url: String, key: String): String? {
+fun getQueryParam(url: String, key: String): String? {
     if (url.contains("?")) {
         val params = url.substring(url.indexOf("?") + 1).split("&")
         for (param in params) {
