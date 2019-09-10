@@ -29,7 +29,7 @@ class ConsumerPreferences(
         get() {
             val json = getString(KEY_PROFILE_PREFS)
             return if (json.isNonNullOrEmpty()) {
-                gson.fromJson(json, ProfilePrefs::class.java)
+                field = gson.fromJson(json, ProfilePrefs::class.java)
                 field
 
             } else {
