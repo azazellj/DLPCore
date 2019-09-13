@@ -6,10 +6,7 @@ import org.koin.dsl.koinApplication
 import org.koin.core.KoinApplication
 import org.koin.android.ext.koin.androidContext
 
-import ua.com.wl.dlp.core.di.apiModule
-import ua.com.wl.dlp.core.di.appModule
-import ua.com.wl.dlp.core.di.interactorsModule
-import ua.com.wl.dlp.core.di.preferencesModule
+import ua.com.wl.dlp.core.di.*
 
 /**
  * @author Denis Makovskyi
@@ -30,7 +27,13 @@ object DLPCore {
     fun initialize(app: Application) {
         koinApp = koinApplication {
             androidContext(app)
-            modules(listOf(appModule, preferencesModule, apiModule, interactorsModule))
+            modules(
+                listOf(
+                    appModule,
+                    preferencesModule,
+                    apiModule,
+                    databaseModule,
+                    interactorsModule))
         }
     }
 

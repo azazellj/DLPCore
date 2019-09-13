@@ -6,10 +6,15 @@
     <string name="dlp_feedback_callback_agree">YES</string>
     <string name="dlp_feedback_callback_disagree">NO</string>
 
-    <string name="dlp_error_io">Network connection error</string>
-    <string name="dlp_error_ssl">Ssl certificate error</string>
-    <string name="dlp_error_json">Unexpected server response</string>
-    <string name="dlp_error_runtime">Runtime error. Please, try again later</string>
+    <string name="dlp_error_db_select">Can not get records from local database</string>
+    <string name="dlp_error_db_insert">Can not insert record into local database</string>
+    <string name="dlp_error_db_update">Can not update record in local database</string>
+    <string name="dlp_error_db_upsert">Can not insert or update record in local database</string>
+    <string name="dlp_error_db_delete">Can not delete records from local database</string>
+
+    <string name="dlp_error_network_io">Network connection error</string>
+    <string name="dlp_error_network_ssl">Ssl certificate error</string>
+    <string name="dlp_error_network_json">Unexpected server response</string>
 
     <string name="dlp_error_token_required">Access token is required</string>
     <string name="dlp_error_token_invalid">Access token is invalid</string>
@@ -44,4 +49,6 @@
 
     <string name="dlp_error_server_unreachable">Remote server is unreachable</string>
     <string name="dlp_error_server_database">Remote server database error</string>
+
+    <string name="dlp_error_runtime">Runtime error. Please, try again later</string>
 </resources>

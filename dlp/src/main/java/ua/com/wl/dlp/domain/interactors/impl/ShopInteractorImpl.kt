@@ -6,14 +6,14 @@ import kotlinx.coroutines.withContext
 import ua.com.wl.dlp.data.api.ShopApiV1
 import ua.com.wl.dlp.data.api.errors.ErrorsMapper
 import ua.com.wl.dlp.data.api.responses.PagedResponse
-import ua.com.wl.dlp.data.api.responses.shop.offer.ShopOfferResponse
+import ua.com.wl.dlp.data.api.responses.shop.offer.OfferResponse
 import ua.com.wl.dlp.data.api.responses.shop.CityShopsResponse
 import ua.com.wl.dlp.data.api.responses.shop.ShopResponse
-import ua.com.wl.dlp.data.api.responses.shop.offer.BaseShopOfferResponse
+import ua.com.wl.dlp.data.api.responses.shop.offer.BaseOfferResponse
 import ua.com.wl.dlp.data.events.factory.CoreBusEventsFactory
 import ua.com.wl.dlp.domain.Result
 import ua.com.wl.dlp.domain.UseCase
-import ua.com.wl.dlp.domain.exeptions.ApiException
+import ua.com.wl.dlp.domain.exeptions.api.ApiException
 import ua.com.wl.dlp.domain.interactors.ShopInteractor
 
 /**
@@ -48,7 +48,7 @@ class ShopInteractorImpl(
         page: Int?,
         count: Int?
 
-    ): Result<PagedResponse<BaseShopOfferResponse>> =
+    ): Result<PagedResponse<BaseOfferResponse>> =
         callApi(call = { apiV1.getShopPromoOffers(shopId, page, count) }).flatMap { response ->
             response.ifPresentOrDefault(
                 { Result.Success(it) },
@@ -60,7 +60,7 @@ class ShopInteractorImpl(
         page: Int?,
         count: Int?
 
-    ): Result<PagedResponse<BaseShopOfferResponse>> =
+    ): Result<PagedResponse<BaseOfferResponse>> =
         callApi(call = { apiV1.getShopFavouriteOffers(shopId, page, count) }).flatMap { response ->
             response.ifPresentOrDefault(
                 { Result.Success(it) },
@@ -91,7 +91,7 @@ class ShopInteractorImpl(
                 }
             }
 
-    override suspend fun getShopOffer(offerId: Int): Result<ShopOfferResponse> =
+    override suspend fun getShopOffer(offerId: Int): Result<OfferResponse> =
         callApi(call = { apiV1.getShopOffer(offerId) }).flatMap { response ->
             response.ifPresentOrDefault(
                 { Result.Success(it) },

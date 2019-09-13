@@ -24,8 +24,8 @@ import ua.com.wl.dlp.data.prefereces.ConsumerPreferences
 import ua.com.wl.dlp.data.prefereces.models.ProfilePrefs
 import ua.com.wl.dlp.domain.Result
 import ua.com.wl.dlp.domain.UseCase
-import ua.com.wl.dlp.domain.exeptions.ApiException
-import ua.com.wl.dlp.domain.exeptions.consumer.referral.ReferralException
+import ua.com.wl.dlp.domain.exeptions.api.ApiException
+import ua.com.wl.dlp.domain.exeptions.api.consumer.referral.ReferralException
 import ua.com.wl.dlp.domain.interactors.ConsumerInteractor
 import ua.com.wl.dlp.utils.createBroadcastMessage
 import ua.com.wl.dlp.utils.only

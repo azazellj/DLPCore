@@ -1,10 +1,10 @@
 package ua.com.wl.dlp.domain.interactors
 
 import ua.com.wl.dlp.data.api.responses.PagedResponse
-import ua.com.wl.dlp.data.api.responses.shop.offer.ShopOfferResponse
+import ua.com.wl.dlp.data.api.responses.shop.offer.OfferResponse
 import ua.com.wl.dlp.data.api.responses.shop.CityShopsResponse
 import ua.com.wl.dlp.data.api.responses.shop.ShopResponse
-import ua.com.wl.dlp.data.api.responses.shop.offer.BaseShopOfferResponse
+import ua.com.wl.dlp.data.api.responses.shop.offer.BaseOfferResponse
 import ua.com.wl.dlp.domain.Result
 
 /**
@@ -26,18 +26,18 @@ interface ShopInteractor {
         page: Int? = null,
         count: Int? = null
 
-    ): Result<PagedResponse<BaseShopOfferResponse>>
+    ): Result<PagedResponse<BaseOfferResponse>>
 
     suspend fun getShopFavouriteOffers(
         shopId: Int,
         page: Int? = null,
         count: Int? = null
 
-    ): Result<PagedResponse<BaseShopOfferResponse>>
+    ): Result<PagedResponse<BaseOfferResponse>>
 
     suspend fun addShopOfferToFavourite(offerId: Int): Result<Boolean>
 
     suspend fun removeShopOfferFromFavourite(offerId: Int): Result<Boolean>
 
-    suspend fun getShopOffer(offerId: Int): Result<ShopOfferResponse>
+    suspend fun getShopOffer(offerId: Int): Result<OfferResponse>
 }

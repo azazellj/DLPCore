@@ -7,8 +7,8 @@ import ua.com.wl.dlp.data.api.responses.BaseResponse
 import ua.com.wl.dlp.data.api.responses.PagedResponse
 import ua.com.wl.dlp.data.api.responses.shop.CityShopsResponse
 import ua.com.wl.dlp.data.api.responses.shop.ShopResponse
-import ua.com.wl.dlp.data.api.responses.shop.offer.BaseShopOfferResponse
-import ua.com.wl.dlp.data.api.responses.shop.offer.ShopOfferResponse
+import ua.com.wl.dlp.data.api.responses.shop.offer.BaseOfferResponse
+import ua.com.wl.dlp.data.api.responses.shop.offer.OfferResponse
 
 /**
  * @author Denis Makovskyi
@@ -33,7 +33,7 @@ interface ShopApiV1 {
         @Query("page") page: Int? = null,
         @Query("page_size") count: Int? = null
 
-    ): Response<PagedResponse<BaseShopOfferResponse>>
+    ): Response<PagedResponse<BaseOfferResponse>>
 
     @GET("api/v1/consumer/favorite-offers/shop/{shop_id}/")
     suspend fun getShopFavouriteOffers(
@@ -41,7 +41,7 @@ interface ShopApiV1 {
         @Query("page") page: Int? = null,
         @Query("page_size") count: Int? = null
 
-    ): Response<PagedResponse<BaseShopOfferResponse>>
+    ): Response<PagedResponse<BaseOfferResponse>>
 
     @POST("api/v1/consumer/favorite-offers/{offer_id}/")
     suspend fun addShopOfferToFavourite(@Path("offer_id") offerId: Int): Response<BaseResponse>
@@ -50,5 +50,5 @@ interface ShopApiV1 {
     suspend fun removeShopOfferFromFavourite(@Path("offer_id") offerId: Int) : Response<BaseResponse>
 
     @GET("api/v1/consumer/offers/{offer_id}/")
-    suspend fun getShopOffer(@Path("offer_id") offerId: Int): Response<ShopOfferResponse>
+    suspend fun getShopOffer(@Path("offer_id") offerId: Int): Response<OfferResponse>
 }

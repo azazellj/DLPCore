@@ -5,7 +5,11 @@ import com.google.gson.annotations.SerializedName
 import ua.com.wl.dlp.data.api.responses.models.another.NoveltyDatesRange
 import ua.com.wl.dlp.data.api.responses.models.shop.offer.promo.PromoSettings
 
-open class BaseShopOfferResponse(
+/**
+ * @author Denis Makovskyi
+ */
+
+open class BaseOfferResponse(
     @SerializedName("id") var id: Int = 0,
     @SerializedName("trade_item") var tradeItem: Int = 0,
     @SerializedName("is_new") var isNew: Boolean = false,

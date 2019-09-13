@@ -5,7 +5,7 @@ import retrofit2.Response
 import ua.com.wl.archetype.utils.Optional
 import ua.com.wl.dlp.data.api.errors.ErrorsMapper
 import ua.com.wl.dlp.domain.exeptions.CoreException
-import ua.com.wl.dlp.domain.exeptions.ApiException
+import ua.com.wl.dlp.domain.exeptions.api.ApiException
 
 /**
  * @author Denis Makovskyi

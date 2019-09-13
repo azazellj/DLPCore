@@ -1,10 +1,10 @@
-package ua.com.wl.dlp.domain.exeptions.auth
+package ua.com.wl.dlp.domain.exeptions.api.auth
 
 import android.content.Context
 
 import ua.com.wl.dlp.R
 import ua.com.wl.dlp.data.api.responses.ResponseType
-import ua.com.wl.dlp.domain.exeptions.ApiException
+import ua.com.wl.dlp.domain.exeptions.api.ApiException
 
 /**
  * @author Denis Makovskyi

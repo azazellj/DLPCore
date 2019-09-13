@@ -18,8 +18,8 @@ import ua.com.wl.dlp.data.prefereces.ConsumerPreferences
 import ua.com.wl.dlp.data.prefereces.CorePreferences
 import ua.com.wl.dlp.domain.Result
 import ua.com.wl.dlp.domain.UseCase
-import ua.com.wl.dlp.domain.exeptions.ApiException
-import ua.com.wl.dlp.domain.exeptions.auth.AuthException
+import ua.com.wl.dlp.domain.exeptions.api.ApiException
+import ua.com.wl.dlp.domain.exeptions.api.auth.AuthException
 import ua.com.wl.dlp.domain.interactors.AuthInteractor
 
 /**
