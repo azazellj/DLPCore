@@ -4,6 +4,7 @@ import retrofit2.Response
 import retrofit2.http.*
 
 import ua.com.wl.dlp.data.api.requests.shop.order.PreOrderCreationRequest
+import ua.com.wl.dlp.data.api.requests.shop.table.TableReservationRequest
 import ua.com.wl.dlp.data.api.responses.BaseResponse
 import ua.com.wl.dlp.data.api.responses.PagedResponse
 import ua.com.wl.dlp.data.api.responses.shop.CityShopsResponse
@@ -13,6 +14,7 @@ import ua.com.wl.dlp.data.api.responses.shop.offer.OfferResponse
 import ua.com.wl.dlp.data.api.responses.shop.order.BasePreOrderResponse
 import ua.com.wl.dlp.data.api.responses.shop.order.PreOrderCreationResponse
 import ua.com.wl.dlp.data.api.responses.shop.order.PreOrderResponse
+import ua.com.wl.dlp.data.api.responses.shop.table.TableReservationResponse
 
 /**
  * @author Denis Makovskyi
@@ -64,4 +66,19 @@ interface ShopApiV1 {
 
     @GET("api/v1/consumer/pre-orders/{pre_order_id}")
     suspend fun getPreOrder(@Path("pre_order_id") preOrderId: Int): Response<PreOrderResponse>
+
+    @POST("api/v1/consumer/table-reservations/")
+    suspend fun createTableReservation(@Body request: TableReservationRequest): Response<TableReservationResponse>
+
+    @GET("api/v1/consumer/table-reservations/")
+    suspend fun getTablesReservations(
+        @Query("page") page: Int? = null,
+        @Query("page_size") count: Int? = null
+    ): Response<PagedResponse<TableReservationResponse>>
+
+    @GET("api/v1/consumer/table-reservation/{reservation_id}/")
+    suspend fun getTableReservation(@Path("reservation_id") reservationId: Int): Response<TableReservationResponse>
+
+    @PATCH("api/v1/consumer/table-reservation/{reservation_id}/reject/")
+    suspend fun cancelTableReservation(@Path("reservation_id") reservationId: Int): Response<BaseResponse>
 }

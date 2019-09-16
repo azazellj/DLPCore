@@ -24,7 +24,12 @@ interface AuthInteractor {
 
     suspend fun cardsStatus(phone: String, password: String): Result<CardsStatus>
 
-    suspend fun signUp(city: Int, phone: String, password: String, barcode: String? = null): Result<SignResponse>
+    suspend fun signUp(
+        city: Int,
+        phone: String,
+        password: String,
+        barcode: String? = null
+    ): Result<SignResponse>
 
     suspend fun signOut(): Result<Boolean>
 

@@ -1,6 +1,7 @@
 package ua.com.wl.dlp.domain.interactors
 
 import ua.com.wl.dlp.data.api.requests.shop.order.PreOrderCreationRequest
+import ua.com.wl.dlp.data.api.requests.shop.table.TableReservationRequest
 import ua.com.wl.dlp.data.api.responses.PagedResponse
 import ua.com.wl.dlp.data.api.responses.shop.offer.OfferResponse
 import ua.com.wl.dlp.data.api.responses.shop.CityShopsResponse
@@ -9,6 +10,7 @@ import ua.com.wl.dlp.data.api.responses.shop.offer.BaseOfferResponse
 import ua.com.wl.dlp.data.api.responses.shop.order.BasePreOrderResponse
 import ua.com.wl.dlp.data.api.responses.shop.order.PreOrderCreationResponse
 import ua.com.wl.dlp.data.api.responses.shop.order.PreOrderResponse
+import ua.com.wl.dlp.data.api.responses.shop.table.TableReservationResponse
 import ua.com.wl.dlp.data.db.entities.shops.OfferEntity
 import ua.com.wl.dlp.data.db.entities.shops.ShopEntity
 import ua.com.wl.dlp.domain.Result
@@ -60,4 +62,15 @@ interface ShopInteractor {
     ): Result<PagedResponse<BasePreOrderResponse>>
 
     suspend fun getPreOrder(preOrderId: Int): Result<PreOrderResponse>
+
+    suspend fun createTableReservation(request: TableReservationRequest): Result<TableReservationResponse>
+
+    suspend fun getTablesReservations(
+        page: Int? = null,
+        count: Int? = null
+    ): Result<PagedResponse<TableReservationResponse>>
+
+    suspend fun getTableReservation(reservationId: Int): Result<TableReservationResponse>
+
+    suspend fun cancelTableReservation(reservationId: Int): Result<Boolean>
 }

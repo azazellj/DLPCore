@@ -96,7 +96,12 @@ class AuthInteractorImpl(
                 { Result.Failure(ApiException()) })
         }
 
-    override suspend fun signUp(city: Int, phone: String, password: String, barcode: String?): Result<SignResponse> =
+    override suspend fun signUp(
+        city: Int,
+        phone: String,
+        password: String,
+        barcode: String?
+    ): Result<SignResponse> =
         callApi(
             call = { api.signUp(SignUpRequest(city, phone, password, barcode)) },
             errorClass = AuthException::class.java

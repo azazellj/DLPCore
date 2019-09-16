@@ -6,6 +6,7 @@ import kotlinx.coroutines.withContext
 import ua.com.wl.dlp.data.api.ShopApiV1
 import ua.com.wl.dlp.data.api.errors.ErrorsMapper
 import ua.com.wl.dlp.data.api.requests.shop.order.PreOrderCreationRequest
+import ua.com.wl.dlp.data.api.requests.shop.table.TableReservationRequest
 import ua.com.wl.dlp.data.api.responses.PagedResponse
 import ua.com.wl.dlp.data.api.responses.shop.offer.OfferResponse
 import ua.com.wl.dlp.data.api.responses.shop.CityShopsResponse
@@ -14,6 +15,7 @@ import ua.com.wl.dlp.data.api.responses.shop.offer.BaseOfferResponse
 import ua.com.wl.dlp.data.api.responses.shop.order.BasePreOrderResponse
 import ua.com.wl.dlp.data.api.responses.shop.order.PreOrderCreationResponse
 import ua.com.wl.dlp.data.api.responses.shop.order.PreOrderResponse
+import ua.com.wl.dlp.data.api.responses.shop.table.TableReservationResponse
 import ua.com.wl.dlp.data.db.DbErrorKeys
 import ua.com.wl.dlp.data.db.datasources.ShopsDataSource
 import ua.com.wl.dlp.data.db.entities.shops.OfferEntity
@@ -35,9 +37,13 @@ import ua.com.wl.dlp.utils.toOfferEntity
 class ShopInteractorImpl(
     errorsMapper: ErrorsMapper,
     private val apiV1: ShopApiV1,
-    private val shopsDataSource: ShopsDataSource) : ShopInteractor, UseCase(errorsMapper) {
+    private val shopsDataSource: ShopsDataSource
+) : ShopInteractor, UseCase(errorsMapper) {
 
-    override suspend fun getCityShops(page: Int?, count: Int?): Result<PagedResponse<CityShopsResponse>> =
+    override suspend fun getCityShops(
+        page: Int?,
+        count: Int?
+    ): Result<PagedResponse<CityShopsResponse>> =
         callApi(call = { apiV1.getCityShops(page, count) }).flatMap { response ->
             response.ifPresentOrDefault(
                 { Result.Success(it) },
@@ -51,14 +57,22 @@ class ShopInteractorImpl(
                 { Result.Failure(ApiException()) })
         }
 
-    override suspend fun getPromoOffers(shopId: Int, page: Int?, count: Int?): Result<PagedResponse<BaseOfferResponse>> =
+    override suspend fun getPromoOffers(
+        shopId: Int,
+        page: Int?,
+        count: Int?
+    ): Result<PagedResponse<BaseOfferResponse>> =
         callApi(call = { apiV1.getShopPromoOffers(shopId, page, count) }).flatMap { response ->
             response.ifPresentOrDefault(
                 { Result.Success(it) },
                 { Result.Failure(ApiException()) })
         }
 
-    override suspend fun getFavouriteOffers(shopId: Int, page: Int?, count: Int?): Result<PagedResponse<BaseOfferResponse>> =
+    override suspend fun getFavouriteOffers(
+        shopId: Int,
+        page: Int?,
+        count: Int?
+    ): Result<PagedResponse<BaseOfferResponse>> =
         callApi(call = { apiV1.getShopFavouriteOffers(shopId, page, count) }).flatMap { response ->
             response.ifPresentOrDefault(
                 { Result.Success(it) },
@@ -68,11 +82,15 @@ class ShopInteractorImpl(
     override suspend fun addOfferToFavourites(offerId: Int): Result<Boolean> =
         callApi(call = { apiV1.addShopOfferToFavourite(offerId) })
             .map { response ->
-                response.getUnsafe()?.isSuccessfully() ?: false
+                response.ifPresentOrDefault(
+                    { it.isSuccessfully() },
+                    { false })
             }.sOnSuccess { isSuccess ->
                 if (isSuccess) {
                     withContext(Dispatchers.Main.immediate) {
-                        CoreBusEventsFactory.offerFavouriteStatus(offerId = offerId, isFavourite = true)
+                        CoreBusEventsFactory.offerFavouriteStatus(
+                            offerId = offerId,
+                            isFavourite = true)
                     }
                 }
             }
@@ -80,11 +98,15 @@ class ShopInteractorImpl(
     override suspend fun removeOfferFromFavourites(offerId: Int): Result<Boolean> =
         callApi(call = { apiV1.removeShopOfferFromFavourite(offerId) })
             .map { response ->
-                response.getUnsafe()?.isSuccessfully() ?: false
+                response.ifPresentOrDefault(
+                    { it.isSuccessfully() },
+                    { false })
             }.sOnSuccess { isSuccess ->
                 if (isSuccess) {
                     withContext(Dispatchers.Main.immediate) {
-                        CoreBusEventsFactory.offerFavouriteStatus(offerId = offerId, isFavourite = false)
+                        CoreBusEventsFactory.offerFavouriteStatus(
+                            offerId = offerId,
+                            isFavourite = false)
                     }
                 }
             }
@@ -121,7 +143,10 @@ class ShopInteractorImpl(
                 }
             }
 
-    override suspend fun incrementPreOrderCounter(shopId: Int, offer: BaseOfferResponse): Result<OfferEntity> =
+    override suspend fun incrementPreOrderCounter(
+        shopId: Int,
+        offer: BaseOfferResponse
+    ): Result<OfferEntity> =
         callQuery(call = { shopsDataSource.getShop(shopId) })
             .sFlatMap { shopOptional ->
                 if (shopOptional.isEmpty()) {
@@ -147,7 +172,10 @@ class ShopInteractorImpl(
                         val offerEntity = if (selectOfferQueryRes.data.isEmpty()) {
                             offer.toOfferEntity(shop.id, 1)
                         } else {
-                            offer.toOfferEntity(shop.id, selectOfferQueryRes.data.getOrThrow().preOrderCount.inc())
+                            offer.toOfferEntity(
+                                shop.id,
+                                selectOfferQueryRes.data.getOrThrow().preOrderCount.inc()
+                            )
                         }
                         when(val upsertOfferQueryRes = callQuery(call = { shopsDataSource.upsertOffer(offerEntity) })) {
                             is Result.Success -> {
@@ -164,7 +192,8 @@ class ShopInteractorImpl(
                 }
             }.sOnSuccess { offerEntity ->
                 CoreBusEventsFactory.orderCounter(
-                    offerEntity.tradeItem, offerEntity.preOrderCount)
+                    offerEntity.tradeItem, offerEntity.preOrderCount
+                )
                 //-
                 val selectOffersQueryRes = callQuery(call = { shopsDataSource.getShopOffers(shopId) })
                 if (selectOffersQueryRes is Result.Success) {
@@ -191,7 +220,8 @@ class ShopInteractorImpl(
                             Result.Failure(DatabaseException(DbErrorKeys.ENTITY_IS_NOT_EXISTS))
                         } else {
                             val offerEntity = offer.toOfferEntity(
-                                shop.id, offerOptional.getOrThrow().preOrderCount)
+                                shop.id, offerOptional.getOrThrow().preOrderCount
+                            )
                             if (offerEntity.preOrderCount > 0) {
                                 offerEntity.preOrderCount = offerEntity.preOrderCount.dec()
                             }
@@ -203,7 +233,11 @@ class ShopInteractorImpl(
 
                             } else {
                                 when(val deleteOfferQueryRes = callQuery(call = { shopsDataSource.deleteOffer(offerEntity.id) })) {
-                                    is Result.Success -> Result.Failure(DatabaseException(DbErrorKeys.ENTITY_IS_NOT_EXISTS_ANYMORE))
+                                    is Result.Success -> Result.Failure(
+                                        DatabaseException(
+                                            DbErrorKeys.ENTITY_IS_NOT_EXISTS_ANYMORE
+                                        )
+                                    )
                                     is Result.Failure -> deleteOfferQueryRes
                                 }
                             }
@@ -213,7 +247,8 @@ class ShopInteractorImpl(
                 }
             }.sOnSuccess { offerEntity ->
                 CoreBusEventsFactory.orderCounter(
-                    offerEntity.tradeItem, offerEntity.preOrderCount)
+                    offerEntity.tradeItem, offerEntity.preOrderCount
+                )
                 //-
                 val selectOffersQueryRes = callQuery(call = { shopsDataSource.getShopOffers(shopId) })
                 if (selectOffersQueryRes is Result.Success) {
@@ -237,7 +272,10 @@ class ShopInteractorImpl(
                 { Result.Failure(ApiException()) })
         }
 
-    override suspend fun getPreOrders(page: Int?, count: Int?): Result<PagedResponse<BasePreOrderResponse>> =
+    override suspend fun getPreOrders(
+        page: Int?,
+        count: Int?
+    ): Result<PagedResponse<BasePreOrderResponse>> =
         callApi(call = { apiV1.getPreOrders(page, count) }).flatMap { response ->
             response.ifPresentOrDefault(
                 { Result.Success(it) },
@@ -249,5 +287,36 @@ class ShopInteractorImpl(
             response.ifPresentOrDefault(
                 { Result.Success(it) },
                 { Result.Failure(ApiException()) })
+        }
+
+    override suspend fun createTableReservation(request: TableReservationRequest): Result<TableReservationResponse> =
+        callApi(call = { apiV1.createTableReservation(request) }).flatMap { response ->
+            response.ifPresentOrDefault(
+                { Result.Success(it) },
+                { Result.Failure(ApiException()) })
+        }
+
+    override suspend fun getTablesReservations(
+        page: Int?,
+        count: Int?
+    ): Result<PagedResponse<TableReservationResponse>> =
+        callApi(call = { apiV1.getTablesReservations(page, count) }).flatMap { response ->
+            response.ifPresentOrDefault(
+                { Result.Success(it) },
+                { Result.Failure(ApiException()) })
+        }
+
+    override suspend fun getTableReservation(reservationId: Int): Result<TableReservationResponse> =
+        callApi(call = { apiV1.getTableReservation(reservationId) }).flatMap { response ->
+            response.ifPresentOrDefault(
+                { Result.Success(it) },
+                { Result.Failure(ApiException()) })
+        }
+
+    override suspend fun cancelTableReservation(reservationId: Int): Result<Boolean> =
+        callApi(call = { apiV1.cancelTableReservation(reservationId) }).map { response ->
+            response.ifPresentOrDefault(
+                { it.isSuccessfully() },
+                { false })
         }
 }
