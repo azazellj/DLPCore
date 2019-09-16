@@ -30,6 +30,5 @@ interface ConsumerApiV3 {
     suspend fun loadTransactionsHistory(
         @Query("page") page: Int? = null,
         @Query("page_size") count: Int? = null
-
     ): Response<DataResponse<PagedResponse<TransactionResponse>>>
 }

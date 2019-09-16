@@ -1,9 +1,8 @@
-package ua.com.wl.dlp.data.db.dao.orders
+package ua.com.wl.dlp.data.db.dao.shops
 
-import androidx.lifecycle.LiveData
 import androidx.room.*
 
-import ua.com.wl.dlp.data.db.entities.orders.OfferEntity
+import ua.com.wl.dlp.data.db.entities.shops.OfferEntity
 
 /**
  * @author Denis Makovskyi
@@ -16,10 +15,10 @@ interface OffersDao {
     suspend fun getOffer(id: Int): OfferEntity?
 
     @Query("SELECT * FROM ${OfferEntity.TABLE_NAME}")
-    suspend fun getOffers(): LiveData<List<OfferEntity>>
+    suspend fun getOffers(): List<OfferEntity>
 
     @Query("SELECT * FROM ${OfferEntity.TABLE_NAME} WHERE shop_id = :shopId")
-    suspend fun getShopOffers(shopId: Int): LiveData<List<OfferEntity>>
+    suspend fun getShopOffers(shopId: Int): List<OfferEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun upsertOffer(offer: OfferEntity): Long

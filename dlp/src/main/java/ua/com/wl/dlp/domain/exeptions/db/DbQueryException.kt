@@ -12,6 +12,7 @@ import ua.com.wl.dlp.data.db.DbErrorKeys
 class DbQueryException(message: String): DatabaseException(message) {
 
     override fun getLocalizedMessage(context: Context): String = when(message) {
+        DbErrorKeys.QUERY_ERROR -> context.getString(R.string.dlp_error_db_query)
         DbErrorKeys.SELECT_QUERY_ERROR -> context.getString(R.string.dlp_error_db_select)
         DbErrorKeys.INSERT_QUERY_ERROR -> context.getString(R.string.dlp_error_db_insert)
         DbErrorKeys.UPDATE_QUERY_ERROR -> context.getString(R.string.dlp_error_db_update)

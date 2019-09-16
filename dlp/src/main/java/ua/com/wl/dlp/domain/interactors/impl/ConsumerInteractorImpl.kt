@@ -110,23 +110,14 @@ class ConsumerInteractorImpl(
                 }
             }
 
-    override suspend fun loadTransactionsHistory(
-        page: Int?,
-        count: Int?
-
-    ): Result<PagedResponse<TransactionResponse>> =
+    override suspend fun loadTransactionsHistory(page: Int?, count: Int?): Result<PagedResponse<TransactionResponse>> =
         callApi(call = { apiV3.loadTransactionsHistory(page, count) }).flatMap { dataResponse ->
             dataResponse.ifPresentOrDefault(
                 { Result.Success(it.payload) },
                 { Result.Failure(ApiException()) })
         }
 
-    override suspend fun feedback(
-        message: String,
-        appVersion: String,
-        callback: Boolean
-
-    ): Result<FeedbackResponse> =
+    override suspend fun feedback(message: String, appVersion: String, callback: Boolean): Result<FeedbackResponse> =
         feedback {
             val answer = if (callback) {
                 app.getString(R.string.dlp_feedback_callback_agree)

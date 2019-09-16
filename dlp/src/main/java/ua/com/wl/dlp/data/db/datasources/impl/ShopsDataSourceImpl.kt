@@ -3,24 +3,23 @@ package ua.com.wl.dlp.data.db.datasources.impl
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-import androidx.lifecycle.LiveData
-
 import ua.com.wl.archetype.utils.Optional
 import ua.com.wl.dlp.data.db.DbErrorKeys
-import ua.com.wl.dlp.data.db.dao.orders.OffersDao
-import ua.com.wl.dlp.data.db.dao.orders.ShopsDao
-import ua.com.wl.dlp.data.db.datasources.OrdersDataSource
-import ua.com.wl.dlp.data.db.entities.orders.OfferEntity
-import ua.com.wl.dlp.data.db.entities.orders.ShopEntity
+import ua.com.wl.dlp.data.db.dao.shops.OffersDao
+import ua.com.wl.dlp.data.db.dao.shops.ShopsDao
+import ua.com.wl.dlp.data.db.datasources.ShopsDataSource
+import ua.com.wl.dlp.data.db.entities.shops.OfferEntity
+import ua.com.wl.dlp.data.db.entities.shops.ShopEntity
 import ua.com.wl.dlp.domain.exeptions.db.DbQueryException
 
 /**
  * @author Denis Makovskyi
  */
 
-class OrdersDataSourceImpl(
+class ShopsDataSourceImpl(
     private val shopsDao: ShopsDao,
-    private val offersDao: OffersDao) : OrdersDataSource {
+    private val offersDao: OffersDao
+) : ShopsDataSource {
 
     override suspend fun getShop(id: Int): Optional<ShopEntity> =
         try {
@@ -32,7 +31,7 @@ class OrdersDataSourceImpl(
             throw DbQueryException(DbErrorKeys.SELECT_QUERY_ERROR)
         }
 
-    override suspend fun getShops(): LiveData<List<ShopEntity>> =
+    override suspend fun getShops(): List<ShopEntity> =
         try {
             withContext(Dispatchers.IO) {
                 shopsDao.getShops()
@@ -45,7 +44,7 @@ class OrdersDataSourceImpl(
     override suspend fun upsertShop(shop: ShopEntity): Boolean =
         try {
             withContext(Dispatchers.IO) {
-                shopsDao.upsertShop(shop) > -1
+                shopsDao.upsertShop(shop) > 0
             }
 
         } catch (e: Exception) {
@@ -92,7 +91,7 @@ class OrdersDataSourceImpl(
             throw DbQueryException(DbErrorKeys.SELECT_QUERY_ERROR)
         }
 
-    override suspend fun getOffers(): LiveData<List<OfferEntity>> =
+    override suspend fun getOffers(): List<OfferEntity> =
         try {
             withContext(Dispatchers.IO) {
                 offersDao.getOffers()
@@ -102,7 +101,7 @@ class OrdersDataSourceImpl(
             throw DbQueryException(DbErrorKeys.SELECT_QUERY_ERROR)
         }
 
-    override suspend fun getShopOffers(shopId: Int): LiveData<List<OfferEntity>> =
+    override suspend fun getShopOffers(shopId: Int): List<OfferEntity> =
         try {
             withContext(Dispatchers.IO) {
                 offersDao.getShopOffers(shopId)
@@ -115,7 +114,7 @@ class OrdersDataSourceImpl(
     override suspend fun upsertOffer(offer: OfferEntity): Boolean =
         try {
             withContext(Dispatchers.IO) {
-                offersDao.upsertOffer(offer) > -1
+                offersDao.upsertOffer(offer) > 0
             }
 
         } catch (e: Exception) {

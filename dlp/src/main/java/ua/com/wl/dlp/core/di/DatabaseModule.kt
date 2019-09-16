@@ -3,9 +3,9 @@ package ua.com.wl.dlp.core.di
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 
-import ua.com.wl.dlp.data.db.OrdersDatabase
-import ua.com.wl.dlp.data.db.datasources.OrdersDataSource
-import ua.com.wl.dlp.data.db.datasources.impl.OrdersDataSourceImpl
+import ua.com.wl.dlp.data.db.ShopsDatabase
+import ua.com.wl.dlp.data.db.datasources.ShopsDataSource
+import ua.com.wl.dlp.data.db.datasources.impl.ShopsDataSourceImpl
 
 /**
  * @author Denis Makovskyi
@@ -13,10 +13,10 @@ import ua.com.wl.dlp.data.db.datasources.impl.OrdersDataSourceImpl
 
 val databaseModule = module {
     single {
-        OrdersDatabase(androidContext())
+        ShopsDatabase(androidContext())
     }
-    single<OrdersDataSource> {
-        val db = get<OrdersDatabase>()
-        OrdersDataSourceImpl(db.getShopsDao(), db.getOffersDao())
+    single<ShopsDataSource> {
+        val db = get<ShopsDatabase>()
+        ShopsDataSourceImpl(db.getShopsDao(), db.getOffersDao())
     }
 }

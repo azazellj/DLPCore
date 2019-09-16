@@ -35,6 +35,16 @@ sealed class Result<out T> {
         }
     }
 
+    suspend fun <R> sMap(block: suspend (T) -> R): Result<R> = when(this) {
+        is Success -> Success(block(data))
+        is Failure -> this
+    }
+
+    suspend fun <R> sFlatMap(block: suspend (T) -> Result<R>): Result<R> = when(this) {
+        is Success -> block(data)
+        is Failure -> this
+    }
+
     suspend fun sOnEach(block: suspend () -> Unit): Result<T> = apply {
         block()
     }

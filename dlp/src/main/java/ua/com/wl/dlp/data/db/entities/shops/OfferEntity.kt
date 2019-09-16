@@ -1,9 +1,9 @@
-package ua.com.wl.dlp.data.db.entities.orders
+package ua.com.wl.dlp.data.db.entities.shops
 
 import androidx.room.*
 import androidx.room.ForeignKey.CASCADE
 
-import ua.com.wl.dlp.data.db.entities.orders.embedded.OfferEntityPromoSettings
+import ua.com.wl.dlp.data.db.entities.shops.embedded.OfferEntityPromoSettings
 
 /**
  * @author Denis Makovskyi
@@ -40,13 +40,13 @@ data class OfferEntity(
     var shortDescription: String? = null,
 
     @ColumnInfo(name = "price_in_bonuses")
-    var priceInBonuses: String? = null,
+    var priceInBonuses: Long? = null,
 
     @ColumnInfo(name = "price_in_currency")
     var priceInCurrency: String? = null,
 
     @ColumnInfo(name = "cashback_percentage")
-    var cashbackPercentage: String? = null,
+    var cashbackPercentage: Int? = null,
 
     @ColumnInfo(name = "is_promo_offer")
     var isPromoOffer: Boolean = false,
@@ -57,7 +57,7 @@ data class OfferEntity(
     @ColumnInfo(name = "pre_order_count")
     var preOrderCount: Int = 0,
 
-    @Embedded
+    @Embedded(prefix = "settings_")
     var promoSettings: OfferEntityPromoSettings? = null
 ) {
     companion object {

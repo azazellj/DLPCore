@@ -1,4 +1,4 @@
-package ua.com.wl.dlp.data.db.entities.orders.embedded
+package ua.com.wl.dlp.data.db.entities.shops.embedded
 
 import androidx.room.ColumnInfo
 

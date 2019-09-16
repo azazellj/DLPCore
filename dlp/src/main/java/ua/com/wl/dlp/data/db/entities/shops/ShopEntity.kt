@@ -1,4 +1,4 @@
-package ua.com.wl.dlp.data.db.entities.orders
+package ua.com.wl.dlp.data.db.entities.shops
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
@@ -15,7 +15,7 @@ data class ShopEntity(
     var id: Int,
 
     @ColumnInfo(name = "date")
-    var date: Long,
+    var date: Long? = null,
 
     @ColumnInfo(name = "comment")
     var comment: String? = null

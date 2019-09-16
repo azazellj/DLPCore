@@ -6,6 +6,7 @@ import ua.com.wl.archetype.utils.Optional
 import ua.com.wl.dlp.data.api.errors.ErrorsMapper
 import ua.com.wl.dlp.domain.exeptions.CoreException
 import ua.com.wl.dlp.domain.exeptions.api.ApiException
+import ua.com.wl.dlp.domain.exeptions.db.DatabaseException
 
 /**
  * @author Denis Makovskyi
@@ -34,5 +35,13 @@ open class UseCase(private val errorsMapper: ErrorsMapper) {
 
         } catch (e: Exception) {
             Result.Failure(ApiException(cause = e))
+        }
+
+    protected suspend fun <T : Any> callQuery(call: suspend () -> T): Result<T> =
+        try {
+            Result.Success(call.invoke())
+
+        } catch (e: Exception) {
+            Result.Failure(DatabaseException(cause = e))
         }
 }

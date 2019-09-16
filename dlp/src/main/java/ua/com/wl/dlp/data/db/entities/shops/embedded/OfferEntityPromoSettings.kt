@@ -1,4 +1,4 @@
-package ua.com.wl.dlp.data.db.entities.orders.embedded
+package ua.com.wl.dlp.data.db.entities.shops.embedded
 
 import androidx.room.ColumnInfo
 import androidx.room.Embedded
@@ -25,5 +25,5 @@ data class OfferEntityPromoSettings(
     @ColumnInfo(name = "active_to")
     var activeTo: String? = null,
 
-    @Embedded
+    @Embedded(prefix = "params_")
     var promoParams: OfferEntityPromoParams? = null)

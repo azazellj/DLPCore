@@ -22,7 +22,8 @@ data class FeedbackRequest(
 
         fun build(): FeedbackRequest =
             FeedbackRequest(
-                requireNotNull(message), requireNotNull(appVersion),
+                requireNotNull(message),
+                requireNotNull(appVersion),
                 phone, email, deviceInfo)
     }
 }

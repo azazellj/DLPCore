@@ -8,10 +8,10 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 
 import ua.com.wl.dlp.data.db.converters.PromoTypeConverter
-import ua.com.wl.dlp.data.db.dao.orders.OffersDao
-import ua.com.wl.dlp.data.db.dao.orders.ShopsDao
-import ua.com.wl.dlp.data.db.entities.orders.OfferEntity
-import ua.com.wl.dlp.data.db.entities.orders.ShopEntity
+import ua.com.wl.dlp.data.db.dao.shops.OffersDao
+import ua.com.wl.dlp.data.db.dao.shops.ShopsDao
+import ua.com.wl.dlp.data.db.entities.shops.OfferEntity
+import ua.com.wl.dlp.data.db.entities.shops.ShopEntity
 
 /**
  * @author Denis Makovskyi
@@ -19,9 +19,9 @@ import ua.com.wl.dlp.data.db.entities.orders.ShopEntity
 
 @Database(
     entities = [ShopEntity::class, OfferEntity::class],
-    version = OrdersDatabase.VERSION, exportSchema = false)
+    version = ShopsDatabase.VERSION, exportSchema = false)
 @TypeConverters(PromoTypeConverter::class)
-abstract class OrdersDatabase : RoomDatabase() {
+abstract class ShopsDatabase : RoomDatabase() {
 
     abstract fun getShopsDao(): ShopsDao
 
@@ -29,21 +29,21 @@ abstract class OrdersDatabase : RoomDatabase() {
 
     companion object {
 
-        private const val NAME = "Orders.db"
+        private const val NAME = "Shops.db"
         internal const val VERSION = 1
 
         @Volatile
-        private var INSTANCE: OrdersDatabase? = null
+        private var INSTANCE: ShopsDatabase? = null
 
-        operator fun invoke(context: Context): OrdersDatabase =
+        operator fun invoke(context: Context): ShopsDatabase =
             synchronized(this) {
                 INSTANCE ?: buildDatabase(context).also {
                     INSTANCE = it
                 }
             }
 
-        private fun buildDatabase(context: Context): OrdersDatabase =
-            Room.databaseBuilder(context, OrdersDatabase::class.java, NAME)
+        private fun buildDatabase(context: Context): ShopsDatabase =
+            Room.databaseBuilder(context, ShopsDatabase::class.java, NAME)
                 .build()
     }
 }

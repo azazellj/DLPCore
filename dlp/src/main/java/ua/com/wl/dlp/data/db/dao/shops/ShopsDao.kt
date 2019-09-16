@@ -1,9 +1,8 @@
-package ua.com.wl.dlp.data.db.dao.orders
+package ua.com.wl.dlp.data.db.dao.shops
 
-import androidx.lifecycle.LiveData
 import androidx.room.*
 
-import ua.com.wl.dlp.data.db.entities.orders.ShopEntity
+import ua.com.wl.dlp.data.db.entities.shops.ShopEntity
 
 /**
  * @author Denis Makovskyi
@@ -16,7 +15,7 @@ interface ShopsDao {
     suspend fun getShop(id: Int): ShopEntity?
 
     @Query("SELECT * FROM ${ShopEntity.TABLE_NAME}")
-    suspend fun getShops(): LiveData<List<ShopEntity>>
+    suspend fun getShops(): List<ShopEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun upsertShop(shop: ShopEntity): Long

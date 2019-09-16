@@ -20,7 +20,6 @@ interface NewsApiV1 {
     suspend fun getCityNewsFeed(
         @Query("page") page: Int? = null,
         @Query("page_size") count: Int? = null
-
     ): Response<PagedResponse<BaseNewsItemResponse>>
 
     @GET("api/v1/consumer/news/feed/shop/{shop_id}/")
@@ -28,10 +27,8 @@ interface NewsApiV1 {
         @Path("shop_id") shopId: Int,
         @Query("page") page: Int? = null,
         @Query("page_size") count: Int? = null
-
     ): Response<PagedResponse<BaseNewsItemResponse>>
 
     @GET("api/v1/consumer/news/{item_id}/")
     suspend fun getNewsItem(@Path("item_id")id: Int): Response<NewsItemResponse>
-
 }

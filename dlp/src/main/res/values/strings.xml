@@ -6,11 +6,14 @@
     <string name="dlp_feedback_callback_agree">YES</string>
     <string name="dlp_feedback_callback_disagree">NO</string>
 
+    <string name="dlp_error_db_query">Database query execution error</string>
     <string name="dlp_error_db_select">Can not get records from local database</string>
     <string name="dlp_error_db_insert">Can not insert record into local database</string>
     <string name="dlp_error_db_update">Can not update record in local database</string>
     <string name="dlp_error_db_upsert">Can not insert or update record in local database</string>
     <string name="dlp_error_db_delete">Can not delete records from local database</string>
+    <string name="dlp_error_db_entity_is_not_exists">Requested entity in database is not exists</string>
+    <string name="dlp_error_db_entity_is_not_exists_anymore">Requested entity was deleted from database</string>
 
     <string name="dlp_error_network_io">Network connection error</string>
     <string name="dlp_error_network_ssl">Ssl certificate error</string>
