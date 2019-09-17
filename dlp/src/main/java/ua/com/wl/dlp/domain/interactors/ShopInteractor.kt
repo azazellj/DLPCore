@@ -46,13 +46,15 @@ interface ShopInteractor {
 
     suspend fun getOffer(offerId: Int): Result<OfferResponse>
 
-    suspend fun upsertShopInDb(shop: ShopEntity): Result<Boolean>
+    suspend fun saveShopInDb(shop: ShopEntity): Result<Boolean>
 
     suspend fun deleteShopFromDb(shop: ShopEntity): Result<Boolean>
 
     suspend fun incrementPreOrderCounter(shopId: Int, offer: BaseOfferResponse): Result<OfferEntity>
 
     suspend fun decrementPreOrderCounter(shopId: Int, offer: BaseOfferResponse): Result<OfferEntity>
+
+    suspend fun getShopPreOrders(shopId: Int): Result<List<OfferEntity>>
 
     suspend fun createPreOrder(request: PreOrderCreationRequest): Result<PreOrderCreationResponse>
 

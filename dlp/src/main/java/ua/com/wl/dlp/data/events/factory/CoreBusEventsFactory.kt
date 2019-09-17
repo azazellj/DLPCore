@@ -29,8 +29,11 @@ object CoreBusEventsFactory {
         Bus.send(event)
     }
 
-    fun ordersPrice(shopId: Int, price: Double) {
-        Bus.send(OrdersPriceBusEvent(shopId, price))
+    fun ordersPrice(
+        shopId: Int,
+        count: Int = 0,
+        price: Double = 0.0) {
+        Bus.send(OrdersPriceBusEvent(shopId, count, price))
     }
 
     fun orderCounter(
