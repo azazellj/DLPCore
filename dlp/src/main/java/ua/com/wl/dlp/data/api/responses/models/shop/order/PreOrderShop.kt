@@ -8,6 +8,6 @@ import com.google.gson.annotations.SerializedName
 
 data class PreOrderShop(
     @SerializedName("id") val id: Int,
-    @SerializedName("name") val name: String? = null,
-    @SerializedName("address") val address: String? = null,
-    @SerializedName("thumb_logo") val thumbLogo: String? = null)
+    @SerializedName("name") val name: String,
+    @SerializedName("address") val address: String?,
+    @SerializedName("thumb_logo") val thumbLogo: String?)

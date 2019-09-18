@@ -3,8 +3,8 @@ package ua.com.wl.dlp.utils
 import ua.com.wl.dlp.data.api.responses.consumer.profile.ProfileResponse
 import ua.com.wl.dlp.data.api.responses.shop.offer.BaseOfferResponse
 import ua.com.wl.dlp.data.db.entities.shops.OfferEntity
-import ua.com.wl.dlp.data.db.entities.shops.embedded.OfferEntityPromoParams
-import ua.com.wl.dlp.data.db.entities.shops.embedded.OfferEntityPromoSettings
+import ua.com.wl.dlp.data.db.entities.shops.embedded.offer.OfferEntityPromoParams
+import ua.com.wl.dlp.data.db.entities.shops.embedded.offer.OfferEntityPromoSettings
 import ua.com.wl.dlp.data.prefereces.models.ProfilePrefs
 
 /**
@@ -37,10 +37,10 @@ fun BaseOfferResponse.toOfferEntity(shopId: Int, count: Int = 0): OfferEntity {
         promoSettings?.activeTo,
         entityPromoParams)
     return OfferEntity(
-        requireNotNull(id), shopId, tradeItem,
+        id, shopId, tradeItem,
         name, thumbImage, shortDescription,
         priceInBonuses, priceInCurrency, cashBackPercentage,
-        requireNotNull(isPromo), requireNotNull(isFavourite)).apply {
+        isPromo, isFavourite).apply {
         preOrderCount = count
         promoSettings = entityPromoSettings
     }

@@ -64,7 +64,7 @@ class ShopInteractorImpl(
         page: Int?,
         count: Int?
     ): Result<PagedResponse<BaseOfferResponse>> =
-        callApi(call = { apiV1.getShopPromoOffers(shopId, page, count) })
+        callApi(call = { apiV1.getPromoOffers(shopId, page, count) })
             .flatMap { response ->
                 response.ifPresentOrDefault(
                     { Result.Success(it) },
@@ -76,7 +76,7 @@ class ShopInteractorImpl(
         page: Int?,
         count: Int?
     ): Result<PagedResponse<BaseOfferResponse>> =
-        callApi(call = { apiV1.getShopFavouriteOffers(shopId, page, count) })
+        callApi(call = { apiV1.getFavouriteOffers(shopId, page, count) })
             .flatMap { response ->
                 response.ifPresentOrDefault(
                     { Result.Success(it) },
@@ -84,7 +84,7 @@ class ShopInteractorImpl(
             }
 
     override suspend fun addOfferToFavourites(offerId: Int): Result<Boolean> =
-        callApi(call = { apiV1.addShopOfferToFavourite(offerId) })
+        callApi(call = { apiV1.addOfferToFavourite(offerId) })
             .map { response ->
                 response.ifPresentOrDefault(
                     { it.isSuccessfully() },
@@ -101,7 +101,7 @@ class ShopInteractorImpl(
             }
 
     override suspend fun removeOfferFromFavourites(offerId: Int): Result<Boolean> =
-        callApi(call = { apiV1.removeShopOfferFromFavourite(offerId) })
+        callApi(call = { apiV1.removeOfferFromFavourite(offerId) })
             .map { response ->
                 response.ifPresentOrDefault(
                     { it.isSuccessfully() },
@@ -118,7 +118,7 @@ class ShopInteractorImpl(
             }
 
     override suspend fun getOffer(offerId: Int): Result<OfferResponse> =
-        callApi(call = { apiV1.getShopOffer(offerId) })
+        callApi(call = { apiV1.getOffer(offerId) })
             .flatMap { response ->
                 response.ifPresentOrDefault(
                     { Result.Success(it) },

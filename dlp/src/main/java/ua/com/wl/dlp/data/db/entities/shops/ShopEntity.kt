@@ -1,8 +1,11 @@
 package ua.com.wl.dlp.data.db.entities.shops
 
 import androidx.room.ColumnInfo
+import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+
+import ua.com.wl.dlp.data.db.entities.shops.embedded.shop.PreOrderParams
 
 /**
  * @author Denis Makovskyi
@@ -14,11 +17,8 @@ data class ShopEntity(
     @ColumnInfo(name = "id")
     var id: Int,
 
-    @ColumnInfo(name = "date")
-    var date: Long? = null,
-
-    @ColumnInfo(name = "comment")
-    var comment: String? = null
+    @Embedded
+    var preOrderParams: PreOrderParams
 ) {
 
     companion object {

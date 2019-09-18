@@ -7,5 +7,5 @@ import com.google.gson.annotations.SerializedName
  */
 
 open class BasePreOrderTradeItem(
-    @SerializedName("trade_item") val tradeItem: Int? = null,
-    @SerializedName("count") val count: Int? = null)
+    @SerializedName("count") var count: Int = 0,
+    @SerializedName("trade_item") var tradeItem: Int = 0)

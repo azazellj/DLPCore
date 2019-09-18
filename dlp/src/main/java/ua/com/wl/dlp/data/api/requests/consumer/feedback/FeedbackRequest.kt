@@ -7,11 +7,11 @@ import com.google.gson.annotations.SerializedName
  */
 
 data class FeedbackRequest(
-    @SerializedName("message") val message: String,
-    @SerializedName("mobile_app_version") val appVersion: String,
-    @SerializedName("mobile_phone") val phone: String? = null,
-    @SerializedName("email") val email: String? = null,
-    @SerializedName("mobile_phone_info") val deviceInfo: String? = null) {
+    @SerializedName("message") val message: String?,
+    @SerializedName("mobile_app_version") val appVersion: String?,
+    @SerializedName("mobile_phone") val phone: String?,
+    @SerializedName("email") val email: String?,
+    @SerializedName("mobile_phone_info") val deviceInfo: String?) {
 
     internal class Builder {
         var message: String? = null
@@ -22,10 +22,9 @@ data class FeedbackRequest(
 
         fun build(): FeedbackRequest =
             FeedbackRequest(
-                requireNotNull(message),
-                requireNotNull(appVersion),
-                phone, email, deviceInfo)
+                message, appVersion, phone, email, deviceInfo)
     }
 }
 
-internal fun feedback(init: FeedbackRequest.Builder.() -> Unit): FeedbackRequest = FeedbackRequest.Builder().apply(init).build()
+internal fun feedback(
+    init: FeedbackRequest.Builder.() -> Unit): FeedbackRequest = FeedbackRequest.Builder().apply(init).build()

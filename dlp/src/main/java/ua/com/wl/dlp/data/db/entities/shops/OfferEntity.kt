@@ -3,7 +3,7 @@ package ua.com.wl.dlp.data.db.entities.shops
 import androidx.room.*
 import androidx.room.ForeignKey.CASCADE
 
-import ua.com.wl.dlp.data.db.entities.shops.embedded.OfferEntityPromoSettings
+import ua.com.wl.dlp.data.db.entities.shops.embedded.offer.OfferEntityPromoSettings
 
 /**
  * @author Denis Makovskyi

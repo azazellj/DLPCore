@@ -9,4 +9,4 @@ import com.google.gson.annotations.SerializedName
 data class PreOrderOffer(
     @SerializedName("id") val id: Int,
     @SerializedName("name") val name: String,
-    @SerializedName("thumb_image") val thumbImage: String)
+    @SerializedName("thumb_image") val thumbImage: String?)

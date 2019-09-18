@@ -2,12 +2,15 @@ package ua.com.wl.dlp.data.api.responses.shop.order
 
 import com.google.gson.annotations.SerializedName
 
+import ua.com.wl.dlp.data.api.responses.models.shop.order.PreOrderTradeItem
+
 /**
  * @author Denis Makovskyi
  */
 
 data class PreOrderResponse(
-    @SerializedName("readiness_date") val readinessDate: String,
-    @SerializedName("readiness_time") val readinessTime: String,
     @SerializedName("pay_with_bonuses") val usedBonuses: Boolean,
-    @SerializedName("count_of_bonuses") val bonusesCount: Long) : BasePreOrderResponse()
+    @SerializedName("count_of_bonuses") val bonusesCount: Long,
+    @SerializedName("readiness_date") val readinessDate: String?,
+    @SerializedName("readiness_time") val readinessTime: String?,
+    @SerializedName("pre_order_trade_items") val tradeItems: List<PreOrderTradeItem>) : BasePreOrderResponse()

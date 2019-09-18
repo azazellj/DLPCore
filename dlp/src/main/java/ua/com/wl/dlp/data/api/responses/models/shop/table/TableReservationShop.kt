@@ -8,6 +8,6 @@ import com.google.gson.annotations.SerializedName
 
 data class TableReservationShop(
     @SerializedName("id") val id: Int,
-    @SerializedName("name") val name: String? = null,
-    @SerializedName("city") val city: String? = null,
-    @SerializedName("address") val address: String? = null)
+    @SerializedName("name") val name: String,
+    @SerializedName("city") val city: String,
+    @SerializedName("address") val address: String)

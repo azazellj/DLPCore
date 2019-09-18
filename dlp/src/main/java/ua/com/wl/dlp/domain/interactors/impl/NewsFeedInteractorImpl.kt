@@ -3,8 +3,8 @@ package ua.com.wl.dlp.domain.interactors.impl
 import ua.com.wl.dlp.data.api.NewsApiV1
 import ua.com.wl.dlp.data.api.errors.ErrorsMapper
 import ua.com.wl.dlp.data.api.responses.PagedResponse
-import ua.com.wl.dlp.data.api.responses.news.BaseNewsItemResponse
-import ua.com.wl.dlp.data.api.responses.news.NewsItemResponse
+import ua.com.wl.dlp.data.api.responses.news.BaseArticleResponse
+import ua.com.wl.dlp.data.api.responses.news.ArticleResponse
 import ua.com.wl.dlp.domain.Result
 import ua.com.wl.dlp.domain.UseCase
 import ua.com.wl.dlp.domain.exeptions.api.ApiException
@@ -21,7 +21,7 @@ class NewsFeedInteractorImpl(
     override suspend fun getCityNewsFeed(
         page: Int?,
         count: Int?
-    ): Result<PagedResponse<BaseNewsItemResponse>> =
+    ): Result<PagedResponse<BaseArticleResponse>> =
         callApi(call = { apiV1.getCityNewsFeed(page, count) }).flatMap { response ->
             response.ifPresentOrDefault(
                 { Result.Success(it) },
@@ -32,14 +32,14 @@ class NewsFeedInteractorImpl(
         shopId: Int,
         page: Int?,
         count: Int?
-    ): Result<PagedResponse<BaseNewsItemResponse>> =
+    ): Result<PagedResponse<BaseArticleResponse>> =
         callApi(call = { apiV1.getShopNewsFeed(shopId, page, count) }).flatMap { response ->
             response.ifPresentOrDefault(
                 { Result.Success(it) },
                 { Result.Failure(ApiException()) })
         }
 
-    override suspend fun getNewsItem(id: Int): Result<NewsItemResponse> =
+    override suspend fun getNewsItem(id: Int): Result<ArticleResponse> =
         callApi(call = { apiV1.getNewsItem(id) }).flatMap { response ->
             response.ifPresentOrDefault(
                 { Result.Success(it) },

@@ -18,7 +18,7 @@ import ua.com.wl.dlp.domain.interactors.impl.ShopInteractorImpl
 val interactorsModule = module {
     single<AuthInteractor> {
         AuthInteractorImpl(
-            api = get(),
+            apiV3 = get(),
             errorsMapper = get(),
             corePreferences = get(),
             consumerPreferences = get())

@@ -33,27 +33,27 @@ interface ShopApiV1 {
     suspend fun getShop(@Path("shop_id") shopId: Int): Response<ShopResponse>
 
     @GET("api/v1/consumer/shops/{shop_id}/promo-offers/")
-    suspend fun getShopPromoOffers(
+    suspend fun getPromoOffers(
         @Path("shop_id") shopId: Int,
         @Query("page") page: Int? = null,
         @Query("page_size") count: Int? = null
     ): Response<PagedResponse<BaseOfferResponse>>
 
     @GET("api/v1/consumer/favorite-offers/shop/{shop_id}/")
-    suspend fun getShopFavouriteOffers(
+    suspend fun getFavouriteOffers(
         @Path("shop_id") shopId: Int,
         @Query("page") page: Int? = null,
         @Query("page_size") count: Int? = null
     ): Response<PagedResponse<BaseOfferResponse>>
 
     @POST("api/v1/consumer/favorite-offers/{offer_id}/")
-    suspend fun addShopOfferToFavourite(@Path("offer_id") offerId: Int): Response<BaseResponse>
+    suspend fun addOfferToFavourite(@Path("offer_id") offerId: Int): Response<BaseResponse>
 
     @DELETE("api/v1/consumer/favorite-offers/{offer_id}/")
-    suspend fun removeShopOfferFromFavourite(@Path("offer_id") offerId: Int): Response<BaseResponse>
+    suspend fun removeOfferFromFavourite(@Path("offer_id") offerId: Int): Response<BaseResponse>
 
     @GET("api/v1/consumer/offers/{offer_id}/")
-    suspend fun getShopOffer(@Path("offer_id") offerId: Int): Response<OfferResponse>
+    suspend fun getOffer(@Path("offer_id") offerId: Int): Response<OfferResponse>
 
     @POST("api/v1/consumer/pre-orders/")
     suspend fun createPreOrder(@Body request: PreOrderCreationRequest): Response<PreOrderCreationResponse>

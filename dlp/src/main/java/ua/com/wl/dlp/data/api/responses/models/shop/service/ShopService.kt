@@ -8,4 +8,4 @@ import com.google.gson.annotations.SerializedName
 
 data class ShopService(
     @SerializedName("name") val name: String,
-    @SerializedName("thumb_icon") val thumbIcon: String)
+    @SerializedName("thumb_icon") val thumbIcon: String?)

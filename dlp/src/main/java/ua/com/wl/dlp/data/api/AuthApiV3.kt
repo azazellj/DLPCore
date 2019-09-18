@@ -21,7 +21,7 @@ import ua.com.wl.dlp.data.api.responses.models.auth.City
  * @author Denis Makovskyi
  */
 
-interface AuthApi {
+interface AuthApiV3 {
 
     @Headers("${Constants.HEADER_UNAUTHORIZED}: ${Constants.VALUE_PERMIT}")
     @POST("api/v3/consumer/auth/token/verify/")

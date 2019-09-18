@@ -10,8 +10,8 @@ import ua.com.wl.dlp.data.api.responses.models.shop.order.PreOrderStatus
  */
 
 open class BasePreOrderResponse(
-    @SerializedName("number") val number: Int? = null,
-    @SerializedName("status") val status: PreOrderStatus? = null,
-    @SerializedName("created_at") val createdAt: String? = null,
-    @SerializedName("price_total") val totalPrice: String? = null,
-    @SerializedName("shop") val shop: PreOrderShop? = null)
+    @SerializedName("number") var number: Int = 0,
+    @SerializedName("status") var status: PreOrderStatus? = null,
+    @SerializedName("created_at") var createdAt: String = "",
+    @SerializedName("price_total") var totalPrice: String = "",
+    @SerializedName("shop") var shop: PreOrderShop? = null)

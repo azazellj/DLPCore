@@ -7,6 +7,8 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 
+import ua.com.wl.dlp.data.db.converters.DeliveryTypeConverter
+import ua.com.wl.dlp.data.db.converters.PaymentMethodTypeConverter
 import ua.com.wl.dlp.data.db.converters.PromoTypeConverter
 import ua.com.wl.dlp.data.db.dao.shops.OffersDao
 import ua.com.wl.dlp.data.db.dao.shops.ShopsDao
@@ -18,9 +20,18 @@ import ua.com.wl.dlp.data.db.entities.shops.ShopEntity
  */
 
 @Database(
-    entities = [ShopEntity::class, OfferEntity::class],
-    version = ShopsDatabase.VERSION, exportSchema = false)
-@TypeConverters(PromoTypeConverter::class)
+    entities = [
+        ShopEntity::class,
+        OfferEntity::class
+    ],
+    version = ShopsDatabase.VERSION,
+    exportSchema = false
+)
+@TypeConverters(value = [
+    PromoTypeConverter::class,
+    DeliveryTypeConverter::class,
+    PaymentMethodTypeConverter::class
+])
 abstract class ShopsDatabase : RoomDatabase() {
 
     abstract fun getShopsDao(): ShopsDao

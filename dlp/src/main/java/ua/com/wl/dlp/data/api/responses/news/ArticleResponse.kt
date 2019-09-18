@@ -8,7 +8,7 @@ import ua.com.wl.dlp.data.api.responses.models.social.SocialNetwork
  * @author Denis Makovskyi
  */
 
-data class NewsItemResponse(
+data class ArticleResponse(
     @SerializedName("description") val description: String,
     @SerializedName("is_promo_news_item") val isPromo: Boolean,
     @SerializedName("in_favorite") val isFavourite: Boolean,
@@ -18,4 +18,4 @@ data class NewsItemResponse(
     @SerializedName("gives_bonuses_for_sharing") val givesBonusesPerSharing: Boolean,
     @SerializedName("for_sharing_amount") val bonusesPerSharing: Long?,
     @SerializedName("for_sharing_social_networks") val sharingSocialNetwork: List<SocialNetwork>,
-    @SerializedName("payed_for_sharing_social_networks") val sharedSocialNetwork: List<SocialNetwork>): BaseNewsItemResponse()
+    @SerializedName("payed_for_sharing_social_networks") val sharedSocialNetwork: List<SocialNetwork>): BaseArticleResponse()

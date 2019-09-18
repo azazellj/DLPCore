@@ -95,10 +95,10 @@ class ConsumerInteractorImpl(
         }
 
     override suspend fun getQrCode(): Result<QrCodeResponse> =
-        callApi(call = { apiV1.getQrCode() })
-            .flatMap { response ->
-                response.ifPresentOrDefault(
-                    { Result.Success(it) },
+        callApi(call = { apiV3.getQrCode() })
+            .flatMap { dataResponse ->
+                dataResponse.ifPresentOrDefault(
+                    { Result.Success(it.payload) },
                     { Result.Failure(ApiException()) })
             }.sOnSuccess { qrResponse ->
                 withContext(Dispatchers.IO) {
@@ -110,10 +110,7 @@ class ConsumerInteractorImpl(
                 }
             }
 
-    override suspend fun loadTransactionsHistory(
-        page: Int?,
-        count: Int?
-    ): Result<PagedResponse<TransactionResponse>> =
+    override suspend fun loadTransactionsHistory(page: Int?, count: Int?): Result<PagedResponse<TransactionResponse>> =
         callApi(call = { apiV3.loadTransactionsHistory(page, count) }).flatMap { dataResponse ->
             dataResponse.ifPresentOrDefault(
                 { Result.Success(it.payload) },
@@ -150,63 +147,75 @@ class ConsumerInteractorImpl(
         if (snapshot.firstName != consumerPreferences.profilePrefs.firstName) {
             ProfileBusEvent.Change(
                 true, ProfileBusEvent.Field.FIRST_NAME,
-                ProfileBusEvent.FieldValue.StringValue(consumerPreferences.profilePrefs.firstName)).only { changes.add(it) }
+                ProfileBusEvent.FieldValue.StringValue(consumerPreferences.profilePrefs.firstName)
+            ).only { changes.add(it) }
         }
         if (snapshot.patronymic != consumerPreferences.profilePrefs.patronymic) {
             ProfileBusEvent.Change(
                 true, ProfileBusEvent.Field.PATRONYMIC,
-                ProfileBusEvent.FieldValue.StringValue(consumerPreferences.profilePrefs.patronymic)).only { changes.add(it) }
+                ProfileBusEvent.FieldValue.StringValue(consumerPreferences.profilePrefs.patronymic)
+            ).only { changes.add(it) }
         }
         if (snapshot.lastName != consumerPreferences.profilePrefs.lastName) {
             ProfileBusEvent.Change(
                 true, ProfileBusEvent.Field.LAST_NAME,
-                ProfileBusEvent.FieldValue.StringValue(consumerPreferences.profilePrefs.lastName)).only { changes.add(it) }
+                ProfileBusEvent.FieldValue.StringValue(consumerPreferences.profilePrefs.lastName)
+            ).only { changes.add(it) }
         }
         if (snapshot.city != consumerPreferences.profilePrefs.city) {
             ProfileBusEvent.Change(
                 true, ProfileBusEvent.Field.CITY,
-                ProfileBusEvent.FieldValue.CityObjectValue(consumerPreferences.profilePrefs.city)).only { changes.add(it) }
+                ProfileBusEvent.FieldValue.CityObjectValue(consumerPreferences.profilePrefs.city)
+            ).only { changes.add(it) }
         }
         if (snapshot.phone != consumerPreferences.profilePrefs.phone) {
             ProfileBusEvent.Change(
                 true, ProfileBusEvent.Field.PHONE,
-                ProfileBusEvent.FieldValue.StringValue(consumerPreferences.profilePrefs.phone)).only { changes.add(it) }
+                ProfileBusEvent.FieldValue.StringValue(consumerPreferences.profilePrefs.phone)
+            ).only { changes.add(it) }
         }
         if (snapshot.email != consumerPreferences.profilePrefs.email) {
             ProfileBusEvent.Change(
                 true, ProfileBusEvent.Field.EMAIL,
-                ProfileBusEvent.FieldValue.StringValue(consumerPreferences.profilePrefs.email)).only { changes.add(it) }
+                ProfileBusEvent.FieldValue.StringValue(consumerPreferences.profilePrefs.email)
+            ).only { changes.add(it) }
         }
         if (snapshot.gender != consumerPreferences.profilePrefs.gender) {
             ProfileBusEvent.Change(
                 true, ProfileBusEvent.Field.GENDER,
-                ProfileBusEvent.FieldValue.GenderObjectValue(consumerPreferences.profilePrefs.gender)).only { changes.add(it) }
+                ProfileBusEvent.FieldValue.GenderObjectValue(consumerPreferences.profilePrefs.gender)
+            ).only { changes.add(it) }
         }
         if (snapshot.birthDate != consumerPreferences.profilePrefs.birthDate) {
             ProfileBusEvent.Change(
                 true, ProfileBusEvent.Field.BIRTH_DATE,
-                ProfileBusEvent.FieldValue.StringValue(consumerPreferences.profilePrefs.birthDate)).only { changes.add(it) }
+                ProfileBusEvent.FieldValue.StringValue(consumerPreferences.profilePrefs.birthDate)
+            ).only { changes.add(it) }
         }
         if (snapshot.balance != consumerPreferences.profilePrefs.balance) {
             createBroadcastMessage(app, Constants.RECEIVER_ACTION_SOUND_BONUSES)
             ProfileBusEvent.Change(
                 true, ProfileBusEvent.Field.BALANCE,
-                ProfileBusEvent.FieldValue.LongValue(consumerPreferences.profilePrefs.balance)).only { changes.add(it) }
+                ProfileBusEvent.FieldValue.LongValue(consumerPreferences.profilePrefs.balance)
+            ).only { changes.add(it) }
         }
         if (snapshot.qrCode != consumerPreferences.profilePrefs.qrCode) {
             ProfileBusEvent.Change(
                 true, ProfileBusEvent.Field.QR_CODE,
-                ProfileBusEvent.FieldValue.StringValue(consumerPreferences.profilePrefs.qrCode)).only { changes.add(it) }
+                ProfileBusEvent.FieldValue.StringValue(consumerPreferences.profilePrefs.qrCode)
+            ).only { changes.add(it) }
         }
         if (snapshot.inviteCode != consumerPreferences.profilePrefs.inviteCode) {
             ProfileBusEvent.Change(
                 true, ProfileBusEvent.Field.INVITE_CODE,
-                ProfileBusEvent.FieldValue.StringValue(consumerPreferences.profilePrefs.inviteCode)).only { changes.add(it) }
+                ProfileBusEvent.FieldValue.StringValue(consumerPreferences.profilePrefs.inviteCode)
+            ).only { changes.add(it) }
         }
         if (snapshot.referralCode != consumerPreferences.profilePrefs.referralCode) {
             ProfileBusEvent.Change(
                 true, ProfileBusEvent.Field.REFERRAL_CODE,
-                ProfileBusEvent.FieldValue.StringValue(consumerPreferences.profilePrefs.referralCode)).only { changes.add(it) }
+                ProfileBusEvent.FieldValue.StringValue(consumerPreferences.profilePrefs.referralCode)
+            ).only { changes.add(it) }
         }
         CoreBusEventsFactory.profileChanges(changes)
     }

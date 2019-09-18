@@ -11,7 +11,7 @@ import ua.com.wl.dlp.data.api.models.shop.order.BasePreOrderTradeItem
  */
 
 open class PreOrderCreationRequest(
-    @SerializedName("shop") var shopId: Int? = null,
+    @SerializedName("shop") var shopId: Int = 0,
     @SerializedName("readiness_time") var time: String? = null,
     @SerializedName("comment") var comment: String? = null,
     @SerializedName("delivery_type") var deliveryType: DeliveryType? = null,
@@ -22,4 +22,5 @@ open class PreOrderCreationRequest(
     @SerializedName("count_of_bonuses") var bonusesCount: Long? = null,
     @SerializedName("pre_order_trade_items") var tradeItems: List<BasePreOrderTradeItem>? = null)
 
-fun preOrder(init: PreOrderCreationRequest.() -> Unit): PreOrderCreationRequest = PreOrderCreationRequest().apply(init)
+fun preOrder(
+    init: PreOrderCreationRequest.() -> Unit): PreOrderCreationRequest = PreOrderCreationRequest().apply(init)

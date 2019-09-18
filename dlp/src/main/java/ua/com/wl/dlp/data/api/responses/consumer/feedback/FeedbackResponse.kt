@@ -7,8 +7,8 @@ import com.google.gson.annotations.SerializedName
  */
 
 data class FeedbackResponse(
-    @SerializedName("email") val email: String? = null,
-    @SerializedName("mobile_phone") val phone: String? = null,
-    @SerializedName("message") val message: String? = null,
-    @SerializedName("app_version") val appVersion: String? = null,
-    @SerializedName("mobile_phone_info") val deviceInfo: String? = null)
+    @SerializedName("email") val email: String,
+    @SerializedName("mobile_phone") val phone: String,
+    @SerializedName("message") val message: String,
+    @SerializedName("app_version") val appVersion: String,
+    @SerializedName("mobile_phone_info") val deviceInfo: String)

@@ -9,6 +9,7 @@ import ua.com.wl.dlp.data.api.responses.DataResponse
 import ua.com.wl.dlp.data.api.responses.PagedResponse
 import ua.com.wl.dlp.data.api.responses.consumer.history.TransactionResponse
 import ua.com.wl.dlp.data.api.responses.consumer.profile.ProfileResponse
+import ua.com.wl.dlp.data.api.responses.consumer.referral.QrCodeResponse
 import ua.com.wl.dlp.data.api.responses.consumer.referral.ReferralResponse
 
 /**
@@ -22,6 +23,9 @@ interface ConsumerApiV3 {
 
     @PATCH("api/v3/consumer/profile/")
     suspend fun updateProfile(@Body request: ProfileRequest): Response<DataResponse<ProfileResponse>>
+
+    @GET("api/v3/consumer/qr-code/")
+    suspend fun getQrCode(): Response<DataResponse<QrCodeResponse>>
 
     @POST("api/v3/consumer/refer-lead/")
     suspend fun useReferralCode(@Body request: ReferralRequest): Response<DataResponse<ReferralResponse>>
