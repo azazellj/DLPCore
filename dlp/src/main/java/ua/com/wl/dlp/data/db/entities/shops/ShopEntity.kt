@@ -15,10 +15,10 @@ import ua.com.wl.dlp.data.db.entities.shops.embedded.shop.PreOrderParams
 data class ShopEntity(
     @PrimaryKey
     @ColumnInfo(name = "id")
-    var id: Int,
+    val id: Int,
 
     @Embedded
-    var preOrderParams: PreOrderParams
+    val preOrderParams: PreOrderParams? = null
 ) {
 
     companion object {

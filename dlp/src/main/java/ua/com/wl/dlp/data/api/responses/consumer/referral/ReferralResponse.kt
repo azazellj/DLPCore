@@ -7,5 +7,8 @@ import com.google.gson.annotations.SerializedName
  */
 
 data class ReferralResponse(
-    @SerializedName("consumer_balance") val balance: Long,
-    @SerializedName("invite_code") val inviteCode: String)
+    @SerializedName("consumer_balance")
+    val balance: Long,
+
+    @SerializedName("invite_code")
+    val inviteCode: String)

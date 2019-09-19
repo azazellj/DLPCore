@@ -11,25 +11,25 @@ import ua.com.wl.dlp.data.api.models.shop.order.PaymentMethod
 
 data class PreOrderParams(
     @ColumnInfo(name = "time")
-    var time: String? = null,
+    val time: String? = null,
 
     @ColumnInfo(name = "address")
-    var address: String? = null,
+    val address: String? = null,
 
     @ColumnInfo(name = "delivery_type")
-    var deliveryType: DeliveryType? = null,
+    val deliveryType: DeliveryType? = null,
 
     @ColumnInfo(name = "payment_method")
-    var paymentMethod: PaymentMethod? = null,
+    val paymentMethod: PaymentMethod? = null,
 
     @ColumnInfo(name = "change_from_amount")
-    var changeFromAmount: String? = null,
+    val changeFromAmount: String? = null,
 
     @ColumnInfo(name = "use_bonuses")
-    var useBonuses: Boolean? = null,
+    val useBonuses: Boolean? = null,
 
     @ColumnInfo(name = "bonuses_amount")
-    var bonusesAmount: Long? = null,
+    val bonusesAmount: Long? = null,
 
     @ColumnInfo(name = "comment")
-    var comment: String? = null)
+    val comment: String? = null)

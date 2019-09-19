@@ -7,9 +7,7 @@ import ua.com.wl.dlp.data.api.responses.shop.offer.OfferResponse
 import ua.com.wl.dlp.data.api.responses.shop.CityShopsResponse
 import ua.com.wl.dlp.data.api.responses.shop.ShopResponse
 import ua.com.wl.dlp.data.api.responses.shop.offer.BaseOfferResponse
-import ua.com.wl.dlp.data.api.responses.shop.order.BasePreOrderResponse
-import ua.com.wl.dlp.data.api.responses.shop.order.PreOrderCreationResponse
-import ua.com.wl.dlp.data.api.responses.shop.order.PreOrderResponse
+import ua.com.wl.dlp.data.api.responses.shop.order.*
 import ua.com.wl.dlp.data.api.responses.shop.table.TableReservationResponse
 import ua.com.wl.dlp.data.db.entities.shops.OfferEntity
 import ua.com.wl.dlp.data.db.entities.shops.ShopEntity
@@ -45,6 +43,23 @@ interface ShopInteractor {
     suspend fun removeOfferFromFavourites(offerId: Int): Result<Boolean>
 
     suspend fun getOffer(offerId: Int): Result<OfferResponse>
+
+    suspend fun getOrders(
+        page: Int? = null,
+        count: Int? = null
+    ): Result<PagedResponse<OrderSimpleResponse>>
+
+    suspend fun getOrder(orderId: Int): Result<OrderResponse>
+
+    suspend fun rateOrder(
+        orderId: Int,
+        value: Int,
+        comment: String = ""
+    ): Result<BaseOrderRateResponse>
+
+    suspend fun getOrderRate(orderId: Int): Result<OrderRateResponse>
+
+    suspend fun getLastOrderRate(): Result<OrderRateResponse>
 
     suspend fun saveShopInDb(shop: ShopEntity): Result<Boolean>
 

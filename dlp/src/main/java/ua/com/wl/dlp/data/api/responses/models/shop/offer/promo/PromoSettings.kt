@@ -7,9 +7,20 @@ import com.google.gson.annotations.SerializedName
  */
 
 data class PromoSettings(
-    @SerializedName("promo_type") val promoType: PromoType,
-    @SerializedName("active_from") val activeFrom: String?,
-    @SerializedName("active_to") val activeTo: String?,
-    @SerializedName("active_since") val activeSince: String,
-    @SerializedName("active_until") val activeUntil: String?,
-    @SerializedName("promo_params") val promoParams: PromoParams?)
+    @SerializedName("promo_type")
+    val promoType: PromoType,
+
+    @SerializedName("active_from")
+    val activeFrom: String?,
+
+    @SerializedName("active_to")
+    val activeTo: String?,
+
+    @SerializedName("active_since")
+    val activeSince: String,
+
+    @SerializedName("active_until")
+    val activeUntil: String?,
+
+    @SerializedName("promo_params")
+    val promoParams: PromoParams?)

@@ -7,5 +7,8 @@ import com.google.gson.annotations.SerializedName
  */
 
 data class CardsStatusRequest(
-    @SerializedName("phone_number") val phone: String,
-    @SerializedName("sms_code") val smsCode: String)
+    @SerializedName("phone_number") 
+    val phone: String,
+    
+    @SerializedName("sms_code") 
+    val smsCode: String)

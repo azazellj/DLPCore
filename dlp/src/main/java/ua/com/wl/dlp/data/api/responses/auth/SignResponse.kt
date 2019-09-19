@@ -7,5 +7,8 @@ import com.google.gson.annotations.SerializedName
  */
 
 data class SignResponse(
-    @SerializedName("token") val token: String,
-    @SerializedName("refresh_token") val refreshToken: String)
+    @SerializedName("token") 
+    val token: String,
+    
+    @SerializedName("refresh_token") 
+    val refreshToken: String)

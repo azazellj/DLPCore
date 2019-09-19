@@ -7,7 +7,14 @@ import com.google.gson.annotations.SerializedName
  */
 
 data class PreOrderShop(
-    @SerializedName("id") val id: Int,
-    @SerializedName("name") val name: String,
-    @SerializedName("address") val address: String?,
-    @SerializedName("thumb_logo") val thumbLogo: String?)
+    @SerializedName("id")
+    val id: Int,
+
+    @SerializedName("name")
+    val name: String,
+
+    @SerializedName("address")
+    val address: String?,
+
+    @SerializedName("thumb_logo")
+    val thumbLogo: String?)

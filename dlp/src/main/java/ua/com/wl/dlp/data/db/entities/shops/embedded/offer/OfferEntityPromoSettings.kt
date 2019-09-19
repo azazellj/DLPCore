@@ -11,19 +11,19 @@ import ua.com.wl.dlp.data.api.responses.models.shop.offer.promo.PromoType
 
 data class OfferEntityPromoSettings(
     @ColumnInfo(name = "promo_type")
-    var promoType: PromoType? = null,
+    val promoType: PromoType? = null,
 
     @ColumnInfo(name = "active_since")
-    var activeSince: String? = null,
+    val activeSince: String? = null,
 
     @ColumnInfo(name = "active_until")
-    var activeUntil: String? = null,
+    val activeUntil: String? = null,
 
     @ColumnInfo(name = "active_from")
-    var activeFrom: String? = null,
+    val activeFrom: String? = null,
 
     @ColumnInfo(name = "active_to")
-    var activeTo: String? = null,
+    val activeTo: String? = null,
 
     @Embedded(prefix = "params_")
-    var promoParams: OfferEntityPromoParams? = null)
+    val promoParams: OfferEntityPromoParams? = null)

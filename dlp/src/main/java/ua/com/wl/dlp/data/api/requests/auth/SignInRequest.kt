@@ -7,5 +7,8 @@ import com.google.gson.annotations.SerializedName
  */
 
 data class SignInRequest(
-    @SerializedName("mobile_phone") val phone: String,
-    @SerializedName("password") val password: String)
+    @SerializedName("mobile_phone") 
+    val phone: String,
+    
+    @SerializedName("password") 
+    val password: String)

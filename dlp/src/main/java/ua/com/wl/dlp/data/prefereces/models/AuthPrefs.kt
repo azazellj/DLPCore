@@ -7,5 +7,8 @@ import com.google.gson.annotations.SerializedName
  */
 
 data class AuthPrefs(
-    @SerializedName("auth_token") val authToken: String? = null,
-    @SerializedName("refresh_token") val refreshToken: String? = null)
+    @SerializedName("auth_token")
+    val authToken: String? = null,
+
+    @SerializedName("refresh_token")
+    val refreshToken: String? = null)

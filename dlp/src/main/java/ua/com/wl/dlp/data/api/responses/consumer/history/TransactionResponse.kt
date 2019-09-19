@@ -10,8 +10,17 @@ import ua.com.wl.dlp.data.api.responses.models.consumer.history.TransactionDetai
  */
 
 data class TransactionResponse(
-    @SerializedName("accounting_type") val accountingType: AccountingType,
-    @SerializedName("initial_value") val initialValue: Long,
-    @SerializedName("resulting_value") val resultingValue: Long,
-    @SerializedName("created_at") val createdAt: String,
-    @SerializedName("detail") val details: TransactionDetails)
+    @SerializedName("accounting_type")
+    val accountingType: AccountingType,
+
+    @SerializedName("initial_value")
+    val initialValue: Long,
+
+    @SerializedName("resulting_value")
+    val resultingValue: Long,
+
+    @SerializedName("created_at")
+    val createdAt: String,
+
+    @SerializedName("detail")
+    val details: TransactionDetails)

@@ -8,25 +8,25 @@ import androidx.room.ColumnInfo
 
 data class OfferEntityPromoParams(
     @ColumnInfo(name = "gift_name")
-    var giftName: String? = null,
+    val giftName: String? = null,
 
     @ColumnInfo(name = "sale_price")
-    var salePrice: String? = null,
+    val salePrice: String? = null,
 
     @ColumnInfo(name = "event_price")
-    var eventPrice: String? = null,
+    val eventPrice: String? = null,
 
     @ColumnInfo(name = "event_place")
-    var eventPlace: String? = null,
+    val eventPlace: String? = null,
 
     @ColumnInfo(name = "discount_size")
-    var discountSize: Long? = null,
+    val discountSize: Long? = null,
 
     @ColumnInfo(name = "discount_price")
-    var discountPrice: String? = null,
+    val discountPrice: String? = null,
 
     @ColumnInfo(name = "price_in_bonuses")
-    var priceInBonuses: Long? = null,
+    val priceInBonuses: Long? = null,
 
     @ColumnInfo(name = "Cashback_size")
-    var cashbackSize: Long? = null)
+    val cashbackSize: Long? = null)

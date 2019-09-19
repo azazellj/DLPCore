@@ -6,12 +6,18 @@ import com.google.gson.annotations.SerializedName
  * @author Denis Makovskyi
  */
 
-data class PreOrderOffer(
+data class OrderShop(
     @SerializedName("id")
     val id: Int,
 
     @SerializedName("name")
     val name: String,
 
-    @SerializedName("thumb_image")
-    val thumbImage: String?)
+    @SerializedName("address")
+    val address: String?,
+
+    @SerializedName("thumb_logo")
+    val thumbLogo: String?,
+
+    @SerializedName("city")
+    val city: OrderShopCity)

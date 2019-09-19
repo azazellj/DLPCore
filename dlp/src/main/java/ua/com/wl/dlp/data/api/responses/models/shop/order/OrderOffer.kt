@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName
  * @author Denis Makovskyi
  */
 
-data class PreOrderOffer(
+data class OrderOffer(
     @SerializedName("id")
     val id: Int,
 

@@ -9,5 +9,8 @@ import ua.com.wl.dlp.data.api.models.shop.order.BasePreOrderTradeItem
  */
 
 data class PreOrderTradeItem(
-    @SerializedName("price") val price: String,
-    @SerializedName("offer") val offer: PreOrderOffer) : BasePreOrderTradeItem()
+    @SerializedName("price")
+    val price: String,
+
+    @SerializedName("offer")
+    val offer: PreOrderOffer) : BasePreOrderTradeItem()

@@ -11,6 +11,11 @@ import ua.com.wl.dlp.data.api.responses.models.shop.table.TableReservationStatus
  */
 
 data class TableReservationResponse(
-    @SerializedName("id") val id: Int,
-    @SerializedName("shop") val shop: TableReservationShop,
-    @SerializedName("status") val status: TableReservationStatus) : TableReservationRequest()
+    @SerializedName("id")
+    val id: Int,
+
+    @SerializedName("shop")
+    val shop: TableReservationShop,
+
+    @SerializedName("status")
+    val status: TableReservationStatus) : TableReservationRequest()

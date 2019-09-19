@@ -6,15 +6,14 @@ import kotlinx.coroutines.withContext
 import ua.com.wl.dlp.data.api.ShopApiV1
 import ua.com.wl.dlp.data.api.errors.ErrorsMapper
 import ua.com.wl.dlp.data.api.requests.shop.order.PreOrderCreationRequest
+import ua.com.wl.dlp.data.api.requests.shop.order.RateOrderRequest
 import ua.com.wl.dlp.data.api.requests.shop.table.TableReservationRequest
 import ua.com.wl.dlp.data.api.responses.PagedResponse
 import ua.com.wl.dlp.data.api.responses.shop.offer.OfferResponse
 import ua.com.wl.dlp.data.api.responses.shop.CityShopsResponse
 import ua.com.wl.dlp.data.api.responses.shop.ShopResponse
 import ua.com.wl.dlp.data.api.responses.shop.offer.BaseOfferResponse
-import ua.com.wl.dlp.data.api.responses.shop.order.BasePreOrderResponse
-import ua.com.wl.dlp.data.api.responses.shop.order.PreOrderCreationResponse
-import ua.com.wl.dlp.data.api.responses.shop.order.PreOrderResponse
+import ua.com.wl.dlp.data.api.responses.shop.order.*
 import ua.com.wl.dlp.data.api.responses.shop.table.TableReservationResponse
 import ua.com.wl.dlp.data.db.DbErrorKeys
 import ua.com.wl.dlp.data.db.datasources.ShopsDataSource
@@ -125,6 +124,50 @@ class ShopInteractorImpl(
                     { Result.Failure(ApiException()) })
             }
 
+    override suspend fun getOrders(page: Int?, count: Int?): Result<PagedResponse<OrderSimpleResponse>> =
+        callApi(call = { apiV1.getOrders(page, count) })
+            .flatMap { response ->
+                response.ifPresentOrDefault(
+                    { Result.Success(it) },
+                    { Result.Failure(ApiException()) })
+            }
+
+    override suspend fun getOrder(orderId: Int): Result<OrderResponse> =
+        callApi(call = { apiV1.getOrder(orderId) })
+            .flatMap { response ->
+                response.ifPresentOrDefault(
+                    { Result.Success(it) },
+                    { Result.Failure(ApiException()) })
+            }
+
+    override suspend fun rateOrder(
+        orderId: Int,
+        value: Int,
+        comment: String
+    ): Result<BaseOrderRateResponse> =
+        callApi(call = { apiV1.rateOrder(orderId, RateOrderRequest(value, comment)) })
+            .flatMap { response ->
+                response.ifPresentOrDefault(
+                    { Result.Success(it) },
+                    { Result.Failure(ApiException()) })
+            }
+
+    override suspend fun getOrderRate(orderId: Int): Result<OrderRateResponse> =
+        callApi(call = { apiV1.getOrderRate(orderId) })
+            .flatMap { response ->
+                response.ifPresentOrDefault(
+                    { Result.Success(it) },
+                    { Result.Failure(ApiException()) })
+            }
+
+    override suspend fun getLastOrderRate(): Result<OrderRateResponse> =
+        callApi(call = { apiV1.getLastOrderRate() })
+            .flatMap { response ->
+                response.ifPresentOrDefault(
+                    { Result.Success(it) },
+                    { Result.Failure(ApiException()) })
+            }
+
     override suspend fun saveShopInDb(shop: ShopEntity): Result<Boolean> =
         callQuery(call = { shopsDataSource.upsertShop(shop) })
             .sOnSuccess { isSuccess ->
@@ -222,9 +265,9 @@ class ShopInteractorImpl(
                     is Result.Success -> {
                         selectOfferQueryRes.data.sIfPresentOrDefault(
                             {
-                                val offerEntity = offer.toOfferEntity(shop.id, it.preOrderCount)
+                                var offerEntity = offer.toOfferEntity(shop.id, it.preOrderCount)
                                 if (offerEntity.preOrderCount > 0) {
-                                    offerEntity.preOrderCount = offerEntity.preOrderCount.dec()
+                                    offerEntity = offerEntity.copy(preOrderCount = offerEntity.preOrderCount.dec())
                                 }
                                 if (offerEntity.preOrderCount > 0) {
                                     when(val upsertOfferQueryRes = callQuery(call = { shopsDataSource.upsertOffer(offerEntity) })) {

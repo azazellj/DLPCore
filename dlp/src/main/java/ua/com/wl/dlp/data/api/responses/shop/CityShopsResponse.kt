@@ -7,7 +7,14 @@ import com.google.gson.annotations.SerializedName
  */
 
 data class CityShopsResponse(
-    @SerializedName("id") val id: Int,
-    @SerializedName("name") val name: String,
-    @SerializedName("is_native_city") val isNativeCity: Boolean,
-    @SerializedName("shops") val shops: List<BaseShopResponse>)
+    @SerializedName("id")
+    val id: Int,
+
+    @SerializedName("name")
+    val name: String,
+
+    @SerializedName("is_native_city")
+    val isNativeCity: Boolean,
+
+    @SerializedName("shops")
+    val shops: List<BaseShopResponse>)

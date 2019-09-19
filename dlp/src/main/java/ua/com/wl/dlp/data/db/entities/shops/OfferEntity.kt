@@ -22,43 +22,43 @@ import ua.com.wl.dlp.data.db.entities.shops.embedded.offer.OfferEntityPromoSetti
 data class OfferEntity(
     @PrimaryKey
     @ColumnInfo(name = "id")
-    var id: Int,
+    val id: Int,
 
     @ColumnInfo(name = "shop_id")
-    var shopId: Int,
+    val shopId: Int,
 
     @ColumnInfo(name = "trade_item")
-    var tradeItem: Int? = null,
+    val tradeItem: Int? = null,
 
     @ColumnInfo(name = "name")
-    var name: String? = null,
+    val name: String? = null,
 
     @ColumnInfo(name = "thumb_image")
-    var thumbImage: String? = null,
+    val thumbImage: String? = null,
 
     @ColumnInfo(name = "short_description")
-    var shortDescription: String? = null,
+    val shortDescription: String? = null,
 
     @ColumnInfo(name = "price_in_bonuses")
-    var priceInBonuses: Long? = null,
+    val priceInBonuses: Long? = null,
 
     @ColumnInfo(name = "price_in_currency")
-    var priceInCurrency: String? = null,
+    val priceInCurrency: String? = null,
 
     @ColumnInfo(name = "cashback_percentage")
-    var cashbackPercentage: Int? = null,
+    val cashbackPercentage: Int? = null,
 
     @ColumnInfo(name = "is_promo_offer")
-    var isPromoOffer: Boolean = false,
+    val isPromoOffer: Boolean = false,
 
     @ColumnInfo(name = "is_favourite_offer")
-    var isFavouriteOffer: Boolean = false,
+    val isFavouriteOffer: Boolean = false,
 
     @ColumnInfo(name = "pre_order_count")
-    var preOrderCount: Int = 0,
+    val preOrderCount: Int = 0,
 
     @Embedded(prefix = "settings_")
-    var promoSettings: OfferEntityPromoSettings? = null
+    val promoSettings: OfferEntityPromoSettings? = null
 ) {
     companion object {
 
