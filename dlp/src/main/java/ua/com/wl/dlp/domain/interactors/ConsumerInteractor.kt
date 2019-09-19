@@ -7,6 +7,7 @@ import ua.com.wl.dlp.data.api.responses.consumer.history.TransactionResponse
 import ua.com.wl.dlp.data.api.responses.consumer.profile.ProfileResponse
 import ua.com.wl.dlp.data.api.responses.consumer.referral.QrCodeResponse
 import ua.com.wl.dlp.data.api.responses.consumer.referral.ReferralResponse
+import ua.com.wl.dlp.data.api.responses.shop.offer.BaseOfferResponse
 import ua.com.wl.dlp.domain.Result
 
 /**
@@ -19,11 +20,21 @@ interface ConsumerInteractor {
 
     suspend fun updateProfile(profile: ProfileRequest): Result<ProfileResponse>
 
-    suspend fun useReferralCode(code: String): Result<ReferralResponse>
-
     suspend fun getQrCode(): Result<QrCodeResponse>
 
-    suspend fun loadTransactionsHistory(
+    suspend fun useReferralCode(code: String): Result<ReferralResponse>
+
+    suspend fun getPromoOffers(
+        page: Int? = null,
+        count: Int? = null
+    ): Result<PagedResponse<BaseOfferResponse>>
+
+    suspend fun getNoveltyOffers(
+        page: Int? = null,
+        count: Int? = null
+    ): Result<PagedResponse<BaseOfferResponse>>
+
+    suspend fun getTransactionsHistory(
         page: Int? = null,
         count: Int? = null
     ): Result<PagedResponse<TransactionResponse>>

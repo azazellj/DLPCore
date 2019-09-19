@@ -7,7 +7,7 @@ import android.app.Application
 import ua.com.wl.dlp.R
 import ua.com.wl.dlp.core.Constants
 import ua.com.wl.dlp.data.api.ConsumerApiV1
-import ua.com.wl.dlp.data.api.ConsumerApiV3
+import ua.com.wl.dlp.data.api.ConsumerApiV2
 import ua.com.wl.dlp.data.api.errors.ErrorsMapper
 import ua.com.wl.dlp.data.api.requests.consumer.feedback.feedback
 import ua.com.wl.dlp.data.api.requests.consumer.profile.ProfileRequest
@@ -18,6 +18,7 @@ import ua.com.wl.dlp.data.api.responses.consumer.history.TransactionResponse
 import ua.com.wl.dlp.data.api.responses.consumer.profile.ProfileResponse
 import ua.com.wl.dlp.data.api.responses.consumer.referral.QrCodeResponse
 import ua.com.wl.dlp.data.api.responses.consumer.referral.ReferralResponse
+import ua.com.wl.dlp.data.api.responses.shop.offer.BaseOfferResponse
 import ua.com.wl.dlp.data.events.factory.CoreBusEventsFactory
 import ua.com.wl.dlp.data.events.prefs.ProfileBusEvent
 import ua.com.wl.dlp.data.prefereces.ConsumerPreferences
@@ -27,6 +28,7 @@ import ua.com.wl.dlp.domain.UseCase
 import ua.com.wl.dlp.domain.exeptions.api.ApiException
 import ua.com.wl.dlp.domain.exeptions.api.consumer.referral.ReferralException
 import ua.com.wl.dlp.domain.interactors.ConsumerInteractor
+import ua.com.wl.dlp.domain.interactors.OffersInteractor
 import ua.com.wl.dlp.utils.createBroadcastMessage
 import ua.com.wl.dlp.utils.only
 import ua.com.wl.dlp.utils.toPrefs
@@ -36,14 +38,16 @@ import ua.com.wl.dlp.utils.toPrefs
  */
 
 class ConsumerInteractorImpl(
-    private val app: Application,
     errorsMapper: ErrorsMapper,
+    private val app: Application,
     private val apiV1: ConsumerApiV1,
-    private val apiV3: ConsumerApiV3,
-    private val consumerPreferences: ConsumerPreferences) : ConsumerInteractor, UseCase(errorsMapper) {
+    private val apiV2: ConsumerApiV2,
+    private val offersInteractor: OffersInteractor,
+    private val consumerPreferences: ConsumerPreferences
+) : UseCase(errorsMapper), ConsumerInteractor, OffersInteractor by offersInteractor {
 
     override suspend fun getProfile(): Result<ProfileResponse> =
-        callApi(call = { apiV3.getProfile() })
+        callApi(call = { apiV2.getProfile() })
             .flatMap { dataResponse ->
                 dataResponse.ifPresentOrDefault(
                     { Result.Success(it.payload) },
@@ -59,7 +63,7 @@ class ConsumerInteractorImpl(
             }
 
     override suspend fun updateProfile(profile: ProfileRequest): Result<ProfileResponse> =
-        callApi(call = { apiV3.updateProfile(profile) })
+        callApi(call = { apiV2.updateProfile(profile) })
             .flatMap { dataResponse ->
                 dataResponse.ifPresentOrDefault(
                     { Result.Success(it.payload) },
@@ -74,9 +78,25 @@ class ConsumerInteractorImpl(
                 }
             }
 
+    override suspend fun getQrCode(): Result<QrCodeResponse> =
+        callApi(call = { apiV2.getQrCode() })
+            .flatMap { dataResponse ->
+                dataResponse.ifPresentOrDefault(
+                    { Result.Success(it.payload) },
+                    { Result.Failure(ApiException()) })
+            }.sOnSuccess { qrResponse ->
+                withContext(Dispatchers.IO) {
+                    val snapshot = consumerPreferences.profilePrefs.copy()
+                    consumerPreferences.profilePrefs = consumerPreferences.profilePrefs.copy(qrCode = qrResponse.qrCode)
+                    withContext(Dispatchers.Main.immediate) {
+                        notifyProfileChanges(snapshot)
+                    }
+                }
+            }
+
     override suspend fun useReferralCode(code: String): Result<ReferralResponse> =
         callApi(
-            call = { apiV3.useReferralCode(ReferralRequest(code)) },
+            call = { apiV2.useReferralCode(ReferralRequest(code)) },
             errorClass = ReferralException::class.java
         ).flatMap { dataResponse ->
             dataResponse.ifPresentOrDefault(
@@ -94,24 +114,30 @@ class ConsumerInteractorImpl(
             }
         }
 
-    override suspend fun getQrCode(): Result<QrCodeResponse> =
-        callApi(call = { apiV3.getQrCode() })
-            .flatMap { dataResponse ->
-                dataResponse.ifPresentOrDefault(
-                    { Result.Success(it.payload) },
+    override suspend fun getPromoOffers(
+        page: Int?,
+        count: Int?
+    ): Result<PagedResponse<BaseOfferResponse>> =
+        callApi(call = { apiV1.getPromoOffers(page, count) })
+            .flatMap { response ->
+                response.ifPresentOrDefault(
+                    { Result.Success(it) },
                     { Result.Failure(ApiException()) })
-            }.sOnSuccess { qrResponse ->
-                withContext(Dispatchers.IO) {
-                    val snapshot = consumerPreferences.profilePrefs.copy()
-                    consumerPreferences.profilePrefs = consumerPreferences.profilePrefs.copy(qrCode = qrResponse.qrCode)
-                    withContext(Dispatchers.Main.immediate) {
-                        notifyProfileChanges(snapshot)
-                    }
-                }
             }
 
-    override suspend fun loadTransactionsHistory(page: Int?, count: Int?): Result<PagedResponse<TransactionResponse>> =
-        callApi(call = { apiV3.loadTransactionsHistory(page, count) }).flatMap { dataResponse ->
+    override suspend fun getNoveltyOffers(
+        page: Int?,
+        count: Int?
+    ): Result<PagedResponse<BaseOfferResponse>> =
+        callApi(call = { apiV1.getNoveltyOffers(page, count) })
+            .flatMap { response ->
+                response.ifPresentOrDefault(
+                    { Result.Success(it) },
+                    { Result.Failure(ApiException()) })
+            }
+
+    override suspend fun getTransactionsHistory(page: Int?, count: Int?): Result<PagedResponse<TransactionResponse>> =
+        callApi(call = { apiV2.loadTransactionsHistory(page, count) }).flatMap { dataResponse ->
             dataResponse.ifPresentOrDefault(
                 { Result.Success(it.payload) },
                 { Result.Failure(ApiException()) })

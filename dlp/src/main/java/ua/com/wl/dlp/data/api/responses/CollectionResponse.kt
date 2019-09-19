@@ -6,8 +6,6 @@ import com.google.gson.annotations.SerializedName
  * @author Denis Makovskyi
  */
 
-class DataResponse<T>(
-    type: String,
-
-    @SerializedName("results")
-    val payload: T) : BaseResponse(type)
+data class CollectionResponse<T>(
+    @SerializedName(value = "data")
+    val items: List<T>)

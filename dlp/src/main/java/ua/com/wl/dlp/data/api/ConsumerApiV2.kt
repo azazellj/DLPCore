@@ -16,21 +16,21 @@ import ua.com.wl.dlp.data.api.responses.consumer.referral.ReferralResponse
  * @author Denis Makovskyi
  */
 
-interface ConsumerApiV3 {
+interface ConsumerApiV2 {
 
-    @GET("api/v3/consumer/profile/")
+    @GET("api/mobile/v2/consumer/profile/")
     suspend fun getProfile(): Response<DataResponse<ProfileResponse>>
 
-    @PATCH("api/v3/consumer/profile/")
+    @PATCH("api/mobile/v2/consumer/profile/")
     suspend fun updateProfile(@Body request: ProfileRequest): Response<DataResponse<ProfileResponse>>
 
-    @GET("api/v3/consumer/qr-code/")
+    @GET("api/mobile/v2/consumer/qr-code/")
     suspend fun getQrCode(): Response<DataResponse<QrCodeResponse>>
 
-    @POST("api/v3/consumer/refer-lead/")
+    @POST("api/mobile/v2/consumer/refer-lead/")
     suspend fun useReferralCode(@Body request: ReferralRequest): Response<DataResponse<ReferralResponse>>
 
-    @GET("api/v3/consumer/balance/history/")
+    @GET("api/mobile/v2/consumer/balance/history/")
     suspend fun loadTransactionsHistory(
         @Query("page") page: Int? = null,
         @Query("page_size") count: Int? = null

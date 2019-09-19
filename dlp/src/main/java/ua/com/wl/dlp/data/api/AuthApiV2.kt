@@ -21,40 +21,40 @@ import ua.com.wl.dlp.data.api.responses.models.auth.City
  * @author Denis Makovskyi
  */
 
-interface AuthApiV3 {
+interface AuthApiV2 {
 
     @Headers("${Constants.HEADER_UNAUTHORIZED}: ${Constants.VALUE_PERMIT}")
-    @POST("api/v3/consumer/auth/token/verify/")
+    @POST("api/mobile/v2/consumer/auth/token/verify/")
     suspend fun verification(@Body request: TokenRequest): Response<DataResponse<TokenResponse>>
 
     @Headers("${Constants.HEADER_UNAUTHORIZED}: ${Constants.VALUE_PERMIT}")
-    @POST("api/v3/consumer/auth/token/refresh/")
+    @POST("api/mobile/v2/consumer/auth/token/refresh/")
     suspend fun refreshToken(@Body request: TokenRequest): Response<DataResponse<TokenResponse>>
 
     @Headers("${Constants.HEADER_UNAUTHORIZED}: ${Constants.VALUE_PERMIT}")
-    @POST("api/v3/consumer/registration/check/")
+    @POST("api/mobile/v2/consumer/registration/check/")
     suspend fun authentication(@Body request: AuthenticationRequest): Response<DataResponse<AuthenticationResponse>>
 
     @Headers("${Constants.HEADER_UNAUTHORIZED}: ${Constants.VALUE_PERMIT}")
-    @POST("api/v3/consumer/auth/token/")
+    @POST("api/mobile/v2/consumer/auth/token/")
     suspend fun signIn(@Body request: SignInRequest): Response<DataResponse<SignResponse>>
 
     @Headers("${Constants.HEADER_UNAUTHORIZED}: ${Constants.VALUE_PERMIT}")
-    @POST("api/v3/rs/os/cards/status/")
+    @POST("api/mobile/v2/rs/os/cards/status/")
     suspend fun cardsStatus(@Body request: CardsStatusRequest): Response<DataResponse<CardsStatusResponse>>
 
     @Headers("${Constants.HEADER_UNAUTHORIZED}: ${Constants.VALUE_PERMIT}")
-    @POST("api/v3/consumer/registration/")
+    @POST("api/mobile/v2/consumer/registration/")
     suspend fun signUp(@Body request: SignUpRequest): Response<DataResponse<SignResponse>>
 
-    @POST("api/v3/consumer/auth/log-out/")
+    @POST("api/mobile/v2/consumer/auth/log-out/")
     suspend fun signOut(): Response<BaseResponse>
 
     @Headers("${Constants.HEADER_UNAUTHORIZED}: ${Constants.VALUE_PERMIT}")
-    @POST("api/v3/consumer/auth/code/")
+    @POST("api/mobile/v2/consumer/auth/code/")
     suspend fun requestSmsCode(@Body request: SmsCodeRequest): Response<BaseResponse>
 
     @Headers("${Constants.HEADER_UNAUTHORIZED}: ${Constants.VALUE_PERMIT}")
-    @GET("api/v3/business/city/")
+    @GET("api/mobile/v2/business/city/")
     suspend fun cities(): Response<DataResponse<PagedResponse<City>>>
 }

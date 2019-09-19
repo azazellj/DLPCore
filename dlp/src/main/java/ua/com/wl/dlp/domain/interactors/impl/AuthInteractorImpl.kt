@@ -3,7 +3,7 @@ package ua.com.wl.dlp.domain.interactors.impl
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-import ua.com.wl.dlp.data.api.AuthApiV3
+import ua.com.wl.dlp.data.api.AuthApiV2
 import ua.com.wl.dlp.data.api.errors.ErrorsMapper
 import ua.com.wl.dlp.data.api.requests.auth.*
 import ua.com.wl.dlp.data.api.responses.PagedResponse
@@ -27,14 +27,15 @@ import ua.com.wl.dlp.domain.interactors.AuthInteractor
  */
 
 class AuthInteractorImpl(
-    private val apiV3: AuthApiV3,
     errorsMapper: ErrorsMapper,
+    private val apiV2: AuthApiV2,
     private val corePreferences: CorePreferences,
-    private val consumerPreferences: ConsumerPreferences) : AuthInteractor, UseCase(errorsMapper) {
+    private val consumerPreferences: ConsumerPreferences
+) : UseCase(errorsMapper), AuthInteractor {
 
     override suspend fun verification(): Result<TokenResponse> =
         callApi(
-            call = { apiV3.verification(TokenRequest(corePreferences.authPrefs.authToken)) },
+            call = { apiV2.verification(TokenRequest(corePreferences.authPrefs.authToken)) },
             errorClass = AuthException::class.java
         ).flatMap { dataResponse ->
             dataResponse.ifPresentOrDefault(
@@ -48,7 +49,7 @@ class AuthInteractorImpl(
 
     override suspend fun refreshToken(): Result<TokenResponse> =
         callApi(
-            call = { apiV3.refreshToken(TokenRequest(corePreferences.authPrefs.refreshToken)) },
+            call = { apiV2.refreshToken(TokenRequest(corePreferences.authPrefs.refreshToken)) },
             errorClass = AuthException::class.java
         ).flatMap { dataResponse ->
             dataResponse.ifPresentOrDefault(
@@ -62,7 +63,7 @@ class AuthInteractorImpl(
 
     override suspend fun authentication(phone: String, sendSms: Boolean): Result<AuthenticationResponse> =
         callApi(
-            call = { apiV3.authentication(AuthenticationRequest(sendSms, phone)) },
+            call = { apiV2.authentication(AuthenticationRequest(sendSms, phone)) },
             errorClass = AuthException::class.java
         ).flatMap { dataResponse ->
             dataResponse.ifPresentOrDefault(
@@ -72,7 +73,7 @@ class AuthInteractorImpl(
 
     override suspend fun signIn(phone: String, password: String): Result<SignResponse> =
         callApi(
-            call = { apiV3.signIn(SignInRequest(phone, password)) },
+            call = { apiV2.signIn(SignInRequest(phone, password)) },
             errorClass = AuthException::class.java
         ).flatMap { dataResponse ->
             dataResponse.ifPresentOrDefault(
@@ -88,7 +89,7 @@ class AuthInteractorImpl(
 
     override suspend fun cardsStatus(phone: String, password: String): Result<CardsStatus> =
         callApi(
-            call = { apiV3.cardsStatus(CardsStatusRequest(phone, password)) },
+            call = { apiV2.cardsStatus(CardsStatusRequest(phone, password)) },
             errorClass = AuthException::class.java
         ).flatMap { dataResponse ->
             dataResponse.ifPresentOrDefault(
@@ -103,7 +104,7 @@ class AuthInteractorImpl(
         barcode: String?
     ): Result<SignResponse> =
         callApi(
-            call = { apiV3.signUp(SignUpRequest(city, phone, password, barcode)) },
+            call = { apiV2.signUp(SignUpRequest(city, phone, password, barcode)) },
             errorClass = AuthException::class.java
         ).flatMap { dataResponse ->
             dataResponse.ifPresentOrDefault(
@@ -119,7 +120,7 @@ class AuthInteractorImpl(
 
     override suspend fun signOut(): Result<Boolean> =
         callApi(
-            call = { apiV3.signOut() },
+            call = { apiV2.signOut() },
             errorClass = AuthException::class.java
         ).map { baseResponse ->
             baseResponse.getUnsafe()?.isSuccessfully() ?: false
@@ -133,14 +134,14 @@ class AuthInteractorImpl(
 
     override suspend fun requestSmsCode(phone: String): Result<Boolean> =
         callApi(
-            call = { apiV3.requestSmsCode(SmsCodeRequest(phone)) },
+            call = { apiV2.requestSmsCode(SmsCodeRequest(phone)) },
             errorClass = AuthException::class.java
         ).map { baseResponse ->
             baseResponse.getUnsafe()?.isSuccessfully() ?: false
         }
 
     override suspend fun cities(): Result<PagedResponse<City>> =
-        callApi(call = { apiV3.cities() }).flatMap { dataResponse ->
+        callApi(call = { apiV2.cities() }).flatMap { dataResponse ->
             dataResponse.ifPresentOrDefault(
                 { Result.Success(it.payload) },
                 { Result.Failure(ApiException()) })

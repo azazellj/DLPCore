@@ -2,14 +2,8 @@ package ua.com.wl.dlp.core.di
 
 import org.koin.dsl.module
 
-import ua.com.wl.dlp.domain.interactors.AuthInteractor
-import ua.com.wl.dlp.domain.interactors.ConsumerInteractor
-import ua.com.wl.dlp.domain.interactors.NewsFeedInteractor
-import ua.com.wl.dlp.domain.interactors.ShopInteractor
-import ua.com.wl.dlp.domain.interactors.impl.AuthInteractorImpl
-import ua.com.wl.dlp.domain.interactors.impl.ConsumerInteractorImpl
-import ua.com.wl.dlp.domain.interactors.impl.NewsFeedInteractorImpl
-import ua.com.wl.dlp.domain.interactors.impl.ShopInteractorImpl
+import ua.com.wl.dlp.domain.interactors.*
+import ua.com.wl.dlp.domain.interactors.impl.*
 
 /**
  * @author Denis Makovskyi
@@ -18,28 +12,36 @@ import ua.com.wl.dlp.domain.interactors.impl.ShopInteractorImpl
 val interactorsModule = module {
     single<AuthInteractor> {
         AuthInteractorImpl(
-            apiV3 = get(),
             errorsMapper = get(),
+            apiV2 = get(),
             corePreferences = get(),
             consumerPreferences = get())
     }
+    single<OffersInteractor> {
+        OffersInteractorImpl(
+            errorsMapper = get(),
+            api = get())
+    }
     single<ConsumerInteractor> {
         ConsumerInteractorImpl(
+            errorsMapper = get(),
             app = get(),
-            errorsMapper = get(),
             apiV1 = get(),
-            apiV3 = get(),
+            apiV2 = get(),
+            offersInteractor = get(),
             consumerPreferences = get())
-    }
-    single<ShopInteractor> {
-        ShopInteractorImpl(
-            errorsMapper = get(),
-            apiV1 = get(),
-            shopsDataSource = get())
     }
     single<NewsFeedInteractor> {
         NewsFeedInteractorImpl(
             errorsMapper = get(),
             apiV1 = get())
+    }
+    single<ShopInteractor> {
+        ShopInteractorImpl(
+            errorsMapper = get(),
+            apiV1 = get(),
+            apiV2 = get(),
+            shopsDataSource = get(),
+            offersInteractor = get())
     }
 }

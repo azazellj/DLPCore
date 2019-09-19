@@ -4,16 +4,18 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 import ua.com.wl.dlp.data.api.ShopApiV1
+import ua.com.wl.dlp.data.api.ShopApiV2
 import ua.com.wl.dlp.data.api.errors.ErrorsMapper
 import ua.com.wl.dlp.data.api.requests.shop.order.PreOrderCreationRequest
 import ua.com.wl.dlp.data.api.requests.shop.order.RateOrderRequest
 import ua.com.wl.dlp.data.api.requests.shop.table.TableReservationRequest
+import ua.com.wl.dlp.data.api.responses.CollectionResponse
 import ua.com.wl.dlp.data.api.responses.PagedResponse
-import ua.com.wl.dlp.data.api.responses.shop.offer.OfferResponse
 import ua.com.wl.dlp.data.api.responses.shop.CityShopsResponse
 import ua.com.wl.dlp.data.api.responses.shop.ShopResponse
 import ua.com.wl.dlp.data.api.responses.shop.offer.BaseOfferResponse
 import ua.com.wl.dlp.data.api.responses.shop.order.*
+import ua.com.wl.dlp.data.api.responses.shop.rubric.RubricResponse
 import ua.com.wl.dlp.data.api.responses.shop.table.TableReservationResponse
 import ua.com.wl.dlp.data.db.DbErrorKeys
 import ua.com.wl.dlp.data.db.datasources.ShopsDataSource
@@ -25,6 +27,7 @@ import ua.com.wl.dlp.domain.UseCase
 import ua.com.wl.dlp.domain.exeptions.api.ApiException
 import ua.com.wl.dlp.domain.exeptions.db.DatabaseException
 import ua.com.wl.dlp.domain.exeptions.db.DbQueryException
+import ua.com.wl.dlp.domain.interactors.OffersInteractor
 import ua.com.wl.dlp.domain.interactors.ShopInteractor
 import ua.com.wl.dlp.utils.only
 import ua.com.wl.dlp.utils.toOfferEntity
@@ -36,8 +39,10 @@ import ua.com.wl.dlp.utils.toOfferEntity
 class ShopInteractorImpl(
     errorsMapper: ErrorsMapper,
     private val apiV1: ShopApiV1,
-    private val shopsDataSource: ShopsDataSource
-) : ShopInteractor, UseCase(errorsMapper) {
+    private val apiV2: ShopApiV2,
+    private val shopsDataSource: ShopsDataSource,
+    private val offersInteractor: OffersInteractor
+) : UseCase(errorsMapper), ShopInteractor, OffersInteractor by offersInteractor {
 
     override suspend fun getCityShops(
         page: Int?,
@@ -58,6 +63,29 @@ class ShopInteractorImpl(
                     { Result.Failure(ApiException()) })
             }
 
+    override suspend fun getRubrics(
+        shopId: Int,
+        language: String): Result<CollectionResponse<RubricResponse>> =
+        callApi(call = { apiV2.getRubrics(shopId, language) })
+            .flatMap { dataResponse ->
+                dataResponse.ifPresentOrDefault(
+                    { Result.Success(it.payload) },
+                    { Result.Failure(ApiException()) })
+            }
+
+    override suspend fun getOffers(
+        shopId: Int,
+        page: Int?,
+        count: Int?,
+        rubricId: String?
+    ): Result<PagedResponse<BaseOfferResponse>> =
+        callApi(call = { apiV1.getOffers(shopId, page, count) })
+            .flatMap { response ->
+                response.ifPresentOrDefault(
+                    { Result.Success(it) },
+                    { Result.Failure(ApiException()) })
+            }
+
     override suspend fun getPromoOffers(
         shopId: Int,
         page: Int?,
@@ -70,54 +98,24 @@ class ShopInteractorImpl(
                     { Result.Failure(ApiException()) })
             }
 
-    override suspend fun getFavouriteOffers(
+    override suspend fun getNoveltyOffers(
         shopId: Int,
         page: Int?,
         count: Int?
     ): Result<PagedResponse<BaseOfferResponse>> =
-        callApi(call = { apiV1.getFavouriteOffers(shopId, page, count) })
+        callApi(call = { apiV1.getNoveltyOffers(shopId, page, count) })
             .flatMap { response ->
                 response.ifPresentOrDefault(
                     { Result.Success(it) },
                     { Result.Failure(ApiException()) })
             }
 
-    override suspend fun addOfferToFavourites(offerId: Int): Result<Boolean> =
-        callApi(call = { apiV1.addOfferToFavourite(offerId) })
-            .map { response ->
-                response.ifPresentOrDefault(
-                    { it.isSuccessfully() },
-                    { false })
-            }.sOnSuccess { isSuccess ->
-                if (isSuccess) {
-                    withContext(Dispatchers.Main.immediate) {
-                        CoreBusEventsFactory.offerFavouriteStatus(
-                            offerId = offerId,
-                            isFavourite = true
-                        )
-                    }
-                }
-            }
-
-    override suspend fun removeOfferFromFavourites(offerId: Int): Result<Boolean> =
-        callApi(call = { apiV1.removeOfferFromFavourite(offerId) })
-            .map { response ->
-                response.ifPresentOrDefault(
-                    { it.isSuccessfully() },
-                    { false })
-            }.sOnSuccess { isSuccess ->
-                if (isSuccess) {
-                    withContext(Dispatchers.Main.immediate) {
-                        CoreBusEventsFactory.offerFavouriteStatus(
-                            offerId = offerId,
-                            isFavourite = false
-                        )
-                    }
-                }
-            }
-
-    override suspend fun getOffer(offerId: Int): Result<OfferResponse> =
-        callApi(call = { apiV1.getOffer(offerId) })
+    override suspend fun getFavouriteOffers(
+        shopId: Int,
+        page: Int?,
+        count: Int?
+    ): Result<PagedResponse<BaseOfferResponse>> =
+        callApi(call = { apiV1.getFavouriteOffers(shopId, page, count) })
             .flatMap { response ->
                 response.ifPresentOrDefault(
                     { Result.Success(it) },

@@ -13,22 +13,22 @@ import ua.com.wl.dlp.data.api.responses.news.ArticleResponse
  * @author Denis Makovskyi
  */
 
-@Deprecated(message = "Needs further refactoring and merging with api/v3")
+@Deprecated(message = "Needs further refactoring and merging with api/mobile/v2")
 interface NewsApiV1 {
 
-    @GET("api/v1/consumer/news/feed/")
+    @GET("api/mobile/v1/consumer/news/feed/")
     suspend fun getCityNewsFeed(
         @Query("page") page: Int? = null,
         @Query("page_size") count: Int? = null
     ): Response<PagedResponse<BaseArticleResponse>>
 
-    @GET("api/v1/consumer/news/feed/shop/{shop_id}/")
+    @GET("api/mobile/v1/consumer/news/feed/shop/{shop_id}/")
     suspend fun getShopNewsFeed(
         @Path("shop_id") shopId: Int,
         @Query("page") page: Int? = null,
         @Query("page_size") count: Int? = null
     ): Response<PagedResponse<BaseArticleResponse>>
 
-    @GET("api/v1/consumer/news/{item_id}/")
+    @GET("api/mobile/v1/consumer/news/{item_id}/")
     suspend fun getNewsItem(@Path("item_id")id: Int): Response<ArticleResponse>
 }

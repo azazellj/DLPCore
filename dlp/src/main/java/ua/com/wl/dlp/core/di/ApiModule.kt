@@ -72,9 +72,11 @@ val apiModule = module {
             .build()
     }
     factory { ErrorsMapper(gson = get()) }
-    factory { get<Retrofit>().create(AuthApiV3::class.java) }
+    factory { get<Retrofit>().create(AuthApiV2::class.java) }
+    factory { get<Retrofit>().create(OffersApi::class.java) }
     factory { get<Retrofit>().create(ConsumerApiV1::class.java) }
-    factory { get<Retrofit>().create(ConsumerApiV3::class.java) }
+    factory { get<Retrofit>().create(ConsumerApiV2::class.java) }
     factory { get<Retrofit>().create(NewsApiV1::class.java) }
     factory { get<Retrofit>().create(ShopApiV1::class.java) }
+    factory { get<Retrofit>().create(ShopApiV2::class.java) }
 }

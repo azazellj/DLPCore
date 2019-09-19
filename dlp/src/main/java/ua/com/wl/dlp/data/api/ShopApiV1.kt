@@ -11,7 +11,6 @@ import ua.com.wl.dlp.data.api.responses.PagedResponse
 import ua.com.wl.dlp.data.api.responses.shop.CityShopsResponse
 import ua.com.wl.dlp.data.api.responses.shop.ShopResponse
 import ua.com.wl.dlp.data.api.responses.shop.offer.BaseOfferResponse
-import ua.com.wl.dlp.data.api.responses.shop.offer.OfferResponse
 import ua.com.wl.dlp.data.api.responses.shop.order.*
 import ua.com.wl.dlp.data.api.responses.shop.table.TableReservationResponse
 
@@ -19,86 +18,92 @@ import ua.com.wl.dlp.data.api.responses.shop.table.TableReservationResponse
  * @author Denis Makovskyi
  */
 
-@Deprecated(message = "Needs further refactoring for api/v3")
+@Deprecated(message = "Needs further refactoring for api/mobile/v2")
 interface ShopApiV1 {
 
-    @GET("api/v1/consumer/city-shops/")
+    @GET("api/mobile/v1/consumer/city-shops/")
     suspend fun getCityShops(
         @Query("page") page: Int? = null,
         @Query("page_size") count: Int? = null
     ): Response<PagedResponse<CityShopsResponse>>
 
-    @GET("api/v1/consumer/shops/{shop_id}/")
+    @GET("api/mobile/v1/consumer/shops/{shop_id}/")
     suspend fun getShop(@Path("shop_id") shopId: Int): Response<ShopResponse>
 
-    @GET("api/v1/consumer/shops/{shop_id}/promo-offers/")
+    @GET("api/mobile/v1/consumer/shops/{shop_id}/promo-offers/")
+    suspend fun getOffers(
+        @Path("shop_id") shopId: Int,
+        @Query("page") page: Int? = null,
+        @Query("page_size") count: Int? = null,
+        @Query("rubric_ids") rubricId: String? = null
+    ): Response<PagedResponse<BaseOfferResponse>>
+
+    @GET("api/mobile/v1/consumer/shops/{shop_id}/promo-offers/")
     suspend fun getPromoOffers(
         @Path("shop_id") shopId: Int,
         @Query("page") page: Int? = null,
         @Query("page_size") count: Int? = null
     ): Response<PagedResponse<BaseOfferResponse>>
 
-    @GET("api/v1/consumer/favorite-offers/shop/{shop_id}/")
+    @GET("api/mobile/v1/consumer/shops/{shop_id}/novelty-offers/")
+    suspend fun getNoveltyOffers(
+        @Path("shop_id") shopId: Int,
+        @Query("page") page: Int? = null,
+        @Query("page_size") count: Int? = null
+    ): Response<PagedResponse<BaseOfferResponse>>
+
+    @GET("api/mobile/v1/consumer/favorite-offers/shop/{shop_id}/")
     suspend fun getFavouriteOffers(
         @Path("shop_id") shopId: Int,
         @Query("page") page: Int? = null,
         @Query("page_size") count: Int? = null
     ): Response<PagedResponse<BaseOfferResponse>>
 
-    @POST("api/v1/consumer/favorite-offers/{offer_id}/")
-    suspend fun addOfferToFavourite(@Path("offer_id") offerId: Int): Response<BaseResponse>
-
-    @DELETE("api/v1/consumer/favorite-offers/{offer_id}/")
-    suspend fun removeOfferFromFavourite(@Path("offer_id") offerId: Int): Response<BaseResponse>
-
-    @GET("api/v1/consumer/offers/{offer_id}/")
-    suspend fun getOffer(@Path("offer_id") offerId: Int): Response<OfferResponse>
-
-    @GET("api/v1/consumer/orders/")
+    @GET("api/mobile/v1/consumer/orders/")
     suspend fun getOrders(
         @Query("page") page: Int? = null,
         @Query("page_size") count: Int? = null
     ): Response<PagedResponse<OrderSimpleResponse>>
 
-    @GET("api/v1/consumer/orders/{order_id}/")
+    @GET("api/mobile/v1/consumer/orders/{order_id}/")
     suspend fun getOrder(@Path("order_id") orderId: Int): Response<OrderResponse>
 
-    @PATCH("api/v1/consumer/order-rates/{order_id}/")
+    @PATCH("api/mobile/v1/consumer/order-rates/{order_id}/")
     suspend fun rateOrder(
         @Path("order_id") orderId: Int,
         @Body request: RateOrderRequest
     ): Response<BaseOrderRateResponse>
 
-    @GET("api/v1/consumer/order-rates/{order_id}/")
+    @GET("api/mobile/v1/consumer/order-rates/{order_id}/")
     suspend fun getOrderRate(@Path("order_id") orderId: Int): Response<OrderRateResponse>
 
-    @GET("api/v1/consumer/last-order-rate/")
+    @GET("api/mobile/v1/consumer/last-order-rate/")
     suspend fun getLastOrderRate(): Response<OrderRateResponse>
 
-    @POST("api/v1/consumer/pre-orders/")
+    @POST("api/mobile/v1/consumer/pre-orders/")
     suspend fun createPreOrder(@Body request: PreOrderCreationRequest): Response<PreOrderCreationResponse>
 
-    @GET("api/v1/consumer/pre-orders/")
+    @GET("api/mobile/v1/consumer/pre-orders/")
     suspend fun getPreOrders(
         @Query("page") page: Int? = null,
         @Query("page_size") count: Int? = null
     ): Response<PagedResponse<BasePreOrderResponse>>
 
-    @GET("api/v1/consumer/pre-orders/{pre_order_id}")
+    @GET("api/mobile/v1/consumer/pre-orders/{pre_order_id}")
     suspend fun getPreOrder(@Path("pre_order_id") preOrderId: Int): Response<PreOrderResponse>
 
-    @POST("api/v1/consumer/table-reservations/")
+    @POST("api/mobile/v1/consumer/table-reservations/")
     suspend fun createTableReservation(@Body request: TableReservationRequest): Response<TableReservationResponse>
 
-    @GET("api/v1/consumer/table-reservations/")
+    @GET("api/mobile/v1/consumer/table-reservations/")
     suspend fun getTablesReservations(
         @Query("page") page: Int? = null,
         @Query("page_size") count: Int? = null
     ): Response<PagedResponse<TableReservationResponse>>
 
-    @GET("api/v1/consumer/table-reservation/{reservation_id}/")
+    @GET("api/mobile/v1/consumer/table-reservation/{reservation_id}/")
     suspend fun getTableReservation(@Path("reservation_id") reservationId: Int): Response<TableReservationResponse>
 
-    @PATCH("api/v1/consumer/table-reservation/{reservation_id}/reject/")
+    @PATCH("api/mobile/v1/consumer/table-reservation/{reservation_id}/reject/")
     suspend fun cancelTableReservation(@Path("reservation_id") reservationId: Int): Response<BaseResponse>
 }

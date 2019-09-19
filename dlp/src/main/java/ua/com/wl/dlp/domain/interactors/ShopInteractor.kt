@@ -1,13 +1,16 @@
 package ua.com.wl.dlp.domain.interactors
 
+import java.util.*
+
 import ua.com.wl.dlp.data.api.requests.shop.order.PreOrderCreationRequest
 import ua.com.wl.dlp.data.api.requests.shop.table.TableReservationRequest
+import ua.com.wl.dlp.data.api.responses.CollectionResponse
 import ua.com.wl.dlp.data.api.responses.PagedResponse
-import ua.com.wl.dlp.data.api.responses.shop.offer.OfferResponse
 import ua.com.wl.dlp.data.api.responses.shop.CityShopsResponse
 import ua.com.wl.dlp.data.api.responses.shop.ShopResponse
 import ua.com.wl.dlp.data.api.responses.shop.offer.BaseOfferResponse
 import ua.com.wl.dlp.data.api.responses.shop.order.*
+import ua.com.wl.dlp.data.api.responses.shop.rubric.RubricResponse
 import ua.com.wl.dlp.data.api.responses.shop.table.TableReservationResponse
 import ua.com.wl.dlp.data.db.entities.shops.OfferEntity
 import ua.com.wl.dlp.data.db.entities.shops.ShopEntity
@@ -26,7 +29,25 @@ interface ShopInteractor {
 
     suspend fun getShop(shopId: Int): Result<ShopResponse>
 
+    suspend fun getRubrics(
+        shopId: Int,
+        language: String = Locale.getDefault().language
+    ): Result<CollectionResponse<RubricResponse>>
+
+    suspend fun getOffers(
+        shopId: Int,
+        page: Int? = null,
+        count: Int? = null,
+        rubricId: String? = null
+    ): Result<PagedResponse<BaseOfferResponse>>
+
     suspend fun getPromoOffers(
+        shopId: Int,
+        page: Int? = null,
+        count: Int? = null
+    ): Result<PagedResponse<BaseOfferResponse>>
+
+    suspend fun getNoveltyOffers(
         shopId: Int,
         page: Int? = null,
         count: Int? = null
@@ -37,12 +58,6 @@ interface ShopInteractor {
         page: Int? = null,
         count: Int? = null
     ): Result<PagedResponse<BaseOfferResponse>>
-
-    suspend fun addOfferToFavourites(offerId: Int): Result<Boolean>
-
-    suspend fun removeOfferFromFavourites(offerId: Int): Result<Boolean>
-
-    suspend fun getOffer(offerId: Int): Result<OfferResponse>
 
     suspend fun getOrders(
         page: Int? = null,
