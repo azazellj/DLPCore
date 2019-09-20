@@ -40,7 +40,7 @@ interface AuthApiV2 {
     suspend fun signIn(@Body request: SignInRequest): Response<DataResponse<SignResponse>>
 
     @Headers("${Constants.HEADER_UNAUTHORIZED}: ${Constants.VALUE_PERMIT}")
-    @POST("api/mobile/v2/rs/os/cards/status/")
+    @POST("api/mobile/v2/consumer/registration/barcode/check/")
     suspend fun cardsStatus(@Body request: CardsStatusRequest): Response<DataResponse<CardsStatusResponse>>
 
     @Headers("${Constants.HEADER_UNAUTHORIZED}: ${Constants.VALUE_PERMIT}")
