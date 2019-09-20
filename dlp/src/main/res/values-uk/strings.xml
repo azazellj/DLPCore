@@ -2,56 +2,56 @@
     <string name="app_name">dlp</string>
 
     <string name="dlp_feedback_app_version">Android_app_v</string>
-    <string name="dlp_feedback_callback_prefix">Я не против, чтобы мне позвонили</string>
-    <string name="dlp_feedback_callback_agree">ДА</string>
-    <string name="dlp_feedback_callback_disagree">НЕТ</string>
+    <string name="dlp_feedback_callback_prefix">Я не проти щоб мені зателефонували</string>
+    <string name="dlp_feedback_callback_agree">ТАК</string>
+    <string name="dlp_feedback_callback_disagree">НІ</string>
 
-    <string name="dlp_error_db_query">Ошибка запроса к базе данных</string>
-    <string name="dlp_error_db_select">Не удалось получить записи из базы данных</string>
-    <string name="dlp_error_db_insert">Не удалось вставить запись в базу данных</string>
-    <string name="dlp_error_db_update">Не удалось обновить запись в базе данных</string>
-    <string name="dlp_error_db_upsert">Не удалось вставить или обновить запись в базе данных</string>
-    <string name="dlp_error_db_delete">Не удалось удалить запись из базы данных</string>
-    <string name="dlp_error_db_entity_is_not_exists">Запись не найдена</string>
-    <string name="dlp_error_db_entity_is_not_exists_anymore">Запись была удалена</string>
+    <string name="dlp_error_db_query">Помилка запиту до бази даних</string>
+    <string name="dlp_error_db_select">Не вдалося отримати записи з бази даних</string>
+    <string name="dlp_error_db_insert">Не вдалося вставити запис в базу даних</string>
+    <string name="dlp_error_db_update">Не вдалося оновити запис в базі даних</string>
+    <string name="dlp_error_db_upsert">Не вдалося вставити або оновити запис в базі даних</string>
+    <string name="dlp_error_db_delete">Не вдалося видалити запис з бази даних</string>
+    <string name="dlp_error_db_entity_is_not_exists">Запис не знайдено</string>
+    <string name="dlp_error_db_entity_is_not_exists_anymore">Запис було видалено</string>
 
-    <string name="dlp_error_network_io">Ошибка соединения с сетью</string>
-    <string name="dlp_error_network_ssl">Ошибка SSL сертификата</string>
-    <string name="dlp_error_network_json">Неожиданный ответ от сервера</string>
+    <string name="dlp_error_network_io">Помилка з\’єднання з мережею</string>
+    <string name="dlp_error_network_ssl">Помилка SSL сертифікату</string>
+    <string name="dlp_error_network_json">Неочікувана відповідь від серверу</string>
 
-    <string name="dlp_error_token_required">Отсутствует токен доступа</string>
-    <string name="dlp_error_token_invalid">Неверный токен доступа</string>
-    <string name="dlp_error_token_expired">Сроки действия токена доступа истекли</string>
+    <string name="dlp_error_token_required">Відсутній токен доступу</string>
+    <string name="dlp_error_token_invalid">Хибний токен доступу</string>
+    <string name="dlp_error_token_expired">Термін дії токена доступу вийшов</string>
 
-    <string name="dlp_error_phone_required">Необходимо ввести номер телефона</string>
-    <string name="dlp_error_phone_invalid">Неверный номер телефона</string>
-    <string name="dlp_error_phone_registered">Номер телефона уже привязан к другой учетной записи</string>
+    <string name="dlp_error_phone_required">Необхідно ввести номер телефону</string>
+    <string name="dlp_error_phone_invalid">Хибний номер телефону</string>
+    <string name="dlp_error_phone_registered">Номер телефону вже прив\’язаний до іншого облікового запису</string>
 
-    <string name="dlp_error_sms_delivery_failure">Не удалось отослать смс</string>
-    <string name="dlp_error_sms_retrieval_attempts_exceeded">Количество попыток исперпано</string>
-    <string name="dlp_error_sms_auth_not_supported_for_business">Аутентификация через смс не поддерживается</string>
+    <string name="dlp_error_sms_delivery_failure">Не вдалося надіслати sms</string>
+    <string name="dlp_error_sms_retrieval_attempts_exceeded">Кількість спроб вичерпано</string>
+    <string name="dlp_error_sms_auth_not_supported_for_business">Автентифікація через sms не підтримується</string>
 
-    <string name="dlp_error_password_required">Необходимо ввести пароль</string>
-    <string name="dlp_error_password_invalid">Неверный пароль</string>
+    <string name="dlp_error_password_required">Необхідно ввести пароль</string>
+    <string name="dlp_error_password_invalid">Хибний пароль</string>
 
-    <string name="dlp_error_precondition_request_specified">Не удалось выбрать учетную запись</string>
-    <string name="dlp_error_manual_registration_already_specified">Необходимо пройти регистрацию вручную. Обратитесь к администратору</string>
+    <string name="dlp_error_precondition_request_specified">Не вдалося обрати обліковий запис</string>
+    <string name="dlp_error_manual_registration_already_specified">Необхідно пройти реєстрацію вручну. Зверніться до адміністратора</string>
 
-    <string name="dlp_error_city_required">Необходимо указать город</string>
+    <string name="dlp_error_city_required">Необхідно вказати місто</string>
 
-    <string name="dlp_error_consumer_not_found">Учетная запись не найдена</string>
-    <string name="dlp_error_consumer_account_disabled">Учетная запись деактивирована</string>
-    <string name="dlp_error_consumer_credential_invalid">Не удалось выполнить вход</string>
-    <string name="dlp_error_consumer_self_invited">Пользователь пытается пригласить самого себя</string>
-    <string name="dlp_error_consumer_already_invited">Пользователь уже активировал реферальный код</string>
-    <string name="dlp_error_consumer_can_not_be_invited">Невозможно пригласить пользователя</string>
-    <string name="dlp_error_multiple_consumers_returned">Найдено несколько учетных записей</string>
+    <string name="dlp_error_consumer_not_found">Обліковий запис не знайдено</string>
+    <string name="dlp_error_consumer_account_disabled">Обліковий запис деактивовано</string>
+    <string name="dlp_error_consumer_credential_invalid">Не вдалося виконати вхід</string>
+    <string name="dlp_error_consumer_self_invited">Користувач намагаєтья запросити самого себе</string>
+    <string name="dlp_error_consumer_already_invited">Користувач вже активував реферальний код</string>
+    <string name="dlp_error_consumer_can_not_be_invited">Неможливо запросити користувача</string>
+    <string name="dlp_error_multiple_consumers_returned">Знайдено декілька облікових записів</string>
 
-    <string name="dlp_error_invite_code_required">Необходимо ввести реферальный код</string>
-    <string name="dlp_error_invite_code_not_found">Реферальный код не найден</string>
+    <string name="dlp_error_invite_code_required">Необхідно ввести реферальний код</string>
+    <string name="dlp_error_invite_code_not_found">Реферальний код не знайдено</string>
 
-    <string name="dlp_error_server_unreachable">Отдаленный сервер недоступен</string>
-    <string name="dlp_error_server_database">Ошибка базы данных на отдаленном сервере</string>
+    <string name="dlp_error_server_unreachable">Віддалений сервер недоступний</string>
+    <string name="dlp_error_server_database">Помилка бази даних на віддаленому сервері</string>
 
-    <string name="dlp_error_runtime">Ошибка исполнения. Пожалуйста, попробуйте еще раз</string>
+    <string name="dlp_error_runtime">Помилка виконання. Будь ласка, спробуйте ще раз</string>
 </resources>
