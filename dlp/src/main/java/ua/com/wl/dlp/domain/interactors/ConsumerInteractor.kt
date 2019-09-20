@@ -14,7 +14,7 @@ import ua.com.wl.dlp.domain.Result
  * @author Denis Makovskyi
  */
 
-interface ConsumerInteractor {
+interface ConsumerInteractor : OffersInteractor {
 
     suspend fun getProfile(): Result<ProfileResponse>
 

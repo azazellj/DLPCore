@@ -20,7 +20,7 @@ import ua.com.wl.dlp.domain.Result
  * @author Denis Makovskyi
  */
 
-interface ShopInteractor {
+interface ShopInteractor: OffersInteractor {
 
     suspend fun getCityShops(
         page: Int? = null,
