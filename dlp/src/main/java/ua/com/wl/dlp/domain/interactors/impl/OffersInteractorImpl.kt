@@ -18,7 +18,7 @@ import ua.com.wl.dlp.domain.interactors.OffersInteractor
 
 class OffersInteractorImpl(
     errorsMapper: ErrorsMapper,
-    private val api: OffersApi): OffersInteractor, UseCase(errorsMapper) {
+    private val api: OffersApi): UseCase(errorsMapper), OffersInteractor {
 
     override suspend fun addOfferToFavourites(offerId: Int): Result<Boolean> =
         callApi(call = { api.addOfferToFavourite(offerId) })

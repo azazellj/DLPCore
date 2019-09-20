@@ -21,15 +21,11 @@ import ua.com.wl.dlp.data.api.responses.models.auth.City
  * @author Denis Makovskyi
  */
 
-interface AuthApiV2 {
+interface AuthApiV2: SessionApi {
 
     @Headers("${Constants.HEADER_UNAUTHORIZED}: ${Constants.VALUE_PERMIT}")
     @POST("api/mobile/v2/consumer/auth/token/verify/")
     suspend fun verification(@Body request: TokenRequest): Response<DataResponse<TokenResponse>>
-
-    @Headers("${Constants.HEADER_UNAUTHORIZED}: ${Constants.VALUE_PERMIT}")
-    @POST("api/mobile/v2/consumer/auth/token/refresh/")
-    suspend fun refreshToken(@Body request: TokenRequest): Response<DataResponse<TokenResponse>>
 
     @Headers("${Constants.HEADER_UNAUTHORIZED}: ${Constants.VALUE_PERMIT}")
     @POST("api/mobile/v2/consumer/registration/check/")

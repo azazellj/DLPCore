@@ -19,7 +19,7 @@ fun getQueryParam(url: String, key: String): String? {
     return null
 }
 
-internal fun createBroadcastMessage(context: Context, action: String, extras: Bundle? = null) {
+internal fun sendBroadcastMessage(context: Context, action: String, extras: Bundle? = null) {
     val intent = Intent().apply {
         setAction(action)
         extras?.only { putExtras(it) }

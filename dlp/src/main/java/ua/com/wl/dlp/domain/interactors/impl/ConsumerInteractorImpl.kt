@@ -29,7 +29,7 @@ import ua.com.wl.dlp.domain.exeptions.api.ApiException
 import ua.com.wl.dlp.domain.exeptions.api.consumer.referral.ReferralException
 import ua.com.wl.dlp.domain.interactors.ConsumerInteractor
 import ua.com.wl.dlp.domain.interactors.OffersInteractor
-import ua.com.wl.dlp.utils.createBroadcastMessage
+import ua.com.wl.dlp.utils.sendBroadcastMessage
 import ua.com.wl.dlp.utils.only
 import ua.com.wl.dlp.utils.toPrefs
 
@@ -219,7 +219,7 @@ class ConsumerInteractorImpl(
             ).only { changes.add(it) }
         }
         if (snapshot.balance != consumerPreferences.profilePrefs.balance) {
-            createBroadcastMessage(app, Constants.RECEIVER_ACTION_SOUND_BONUSES)
+            sendBroadcastMessage(app, Constants.RECEIVER_ACTION_SOUND_BONUSES)
             ProfileBusEvent.Change(
                 true, ProfileBusEvent.Field.BALANCE,
                 ProfileBusEvent.FieldValue.LongValue(consumerPreferences.profilePrefs.balance)

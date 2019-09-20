@@ -14,6 +14,11 @@ object Constants {
     const val KOIN_NAMED_URL = "url"
     const val KOIN_NAMED_APP_ID = "app_id"
 
+    const val KOIN_NAMED_SESSION_OKHTTP = "SESSION_OKHTTP"
+    const val KOIN_NAMED_SESSION_RETROFIT = "SESSION_RETROFIT"
+    const val KOIN_NAMED_API_OKHTTP = "API_OKHTTP"
+    const val KOIN_NAMED_API_RETROFIT = "APi_RETROFIT"
+
     const val HEADER_APP_ID = "X-APPLICATION-ID"
     const val HEADER_UNAUTHORIZED = "Unauthorized"
     const val HEADER_AUTHORIZATION = "Authorization"

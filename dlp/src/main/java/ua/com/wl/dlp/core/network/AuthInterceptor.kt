@@ -1,16 +1,12 @@
 package ua.com.wl.dlp.core.network
 
-import java.net.HttpURLConnection
-
 import okhttp3.Response
 import okhttp3.Interceptor
 
 import ua.com.wl.dlp.core.Constants
-import ua.com.wl.dlp.data.events.factory.CoreBusEventsFactory
-import ua.com.wl.dlp.data.events.session.SessionBusEvent
 import ua.com.wl.dlp.data.prefereces.CorePreferences
 import ua.com.wl.dlp.utils.hasHeader
-import ua.com.wl.dlp.utils.only
+import ua.com.wl.dlp.utils.toJwt
 
 /**
  * @author Denis Makovskyi
@@ -23,22 +19,20 @@ class AuthInterceptor(
     override fun intercept(chain: Interceptor.Chain): Response =
         chain.request().let { request ->
             chain.proceed(request.newBuilder().apply {
-                addHeader(Constants.HEADER_APP_ID, appId)
+                header(Constants.HEADER_APP_ID, appId)
                 if (request.hasHeader(Constants.HEADER_UNAUTHORIZED, Constants.VALUE_PERMIT)) {
                     removeHeader(Constants.HEADER_UNAUTHORIZED)
 
                 } else {
-                    corePreferences.authPrefs.authToken?.only { token ->
-                        addHeader(Constants.HEADER_AUTHORIZATION, "JWT $token")
+                    val token = corePreferences.authPrefs.authToken
+                    if (token != null) {
+                        header(Constants.HEADER_AUTHORIZATION, token.toJwt())
 
-                    } ?: throw RuntimeException("Authorization token required in private api was not found")
+                    } else {
+                        throw RuntimeException("Authorization token required in private api was not found")
+                    }
                 }
 
-            }.build()).also { response ->
-                when (response.code) {
-                    HttpURLConnection.HTTP_FORBIDDEN ->
-                        CoreBusEventsFactory.session(SessionBusEvent.FallbackType.TOKEN_EXPIRED)
-                }
-            }
+            }.build())
         }
 }

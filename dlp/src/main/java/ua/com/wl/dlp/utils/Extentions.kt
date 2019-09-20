@@ -18,5 +18,7 @@ fun PagedResponse<*>.previousPage(): Int? =
 fun PagedResponse<*>.nextPage(): Int? =
     nextPage?.let { getQueryParam(it, "page") }?.toInt()
 
+internal fun String?.toJwt(): String = "JWT $this"
+
 internal fun Request.hasHeader(name: String, value: String): Boolean =
     header(name)?.let { it -> it.isNotEmpty() && it == value } ?: false

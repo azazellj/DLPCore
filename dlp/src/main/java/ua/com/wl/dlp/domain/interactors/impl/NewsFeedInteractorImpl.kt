@@ -16,7 +16,7 @@ import ua.com.wl.dlp.domain.interactors.NewsFeedInteractor
 
 class NewsFeedInteractorImpl(
     errorsMapper: ErrorsMapper,
-    private val apiV1: NewsApiV1) : NewsFeedInteractor, UseCase(errorsMapper) {
+    private val apiV1: NewsApiV1) : UseCase(errorsMapper), NewsFeedInteractor {
 
     override suspend fun getCityNewsFeed(
         page: Int?,
