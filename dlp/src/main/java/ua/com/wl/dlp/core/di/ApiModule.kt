@@ -3,6 +3,7 @@ package ua.com.wl.dlp.core.di
 import java.util.concurrent.TimeUnit
 
 import android.content.pm.PackageManager
+import com.chuckerteam.chucker.api.ChuckerInterceptor
 
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -68,6 +69,11 @@ val apiModule = module {
             .followSslRedirects(false)
             .addInterceptor(interceptor = get<AuthInterceptor>())
             .addInterceptor(interceptor = get<HttpLoggingInterceptor>())
+            .apply {
+                if (DLPCore.mode == DLPCore.Mode.DEBUG) {
+                    addInterceptor(interceptor = ChuckerInterceptor(androidContext()))
+                }
+            }
             .build()
     }
     // - Session retrofit - for session api, such as refresh token api
@@ -95,6 +101,11 @@ val apiModule = module {
             .addInterceptor(interceptor = get<AuthInterceptor>())
             .addInterceptor(interceptor = get<HttpLoggingInterceptor>())
             .authenticator(authenticator = get<SessionAuthenticator>())
+            .apply {
+                if (DLPCore.mode == DLPCore.Mode.DEBUG) {
+                    addInterceptor(interceptor = ChuckerInterceptor(androidContext()))
+                }
+            }
             .build()
     }
     // - Api retrofit - for regular apis
