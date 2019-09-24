@@ -35,5 +35,7 @@ interface AuthInteractor {
 
     suspend fun requestSmsCode(phone: String): Result<Boolean>
 
+    suspend fun restorePassword(phone: String): Result<Boolean>
+
     suspend fun cities(): Result<PagedResponse<City>>
 }

@@ -3,6 +3,7 @@ package ua.com.wl.dlp.domain.interactors.impl
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
+import ua.com.wl.dlp.data.api.AuthApiV1
 import ua.com.wl.dlp.data.api.AuthApiV2
 import ua.com.wl.dlp.data.api.errors.ErrorsMapper
 import ua.com.wl.dlp.data.api.requests.auth.*
@@ -28,6 +29,7 @@ import ua.com.wl.dlp.domain.interactors.AuthInteractor
 
 class AuthInteractorImpl(
     errorsMapper: ErrorsMapper,
+    private val apiV1: AuthApiV1,
     private val apiV2: AuthApiV2,
     private val corePreferences: CorePreferences,
     private val consumerPreferences: ConsumerPreferences
@@ -43,7 +45,8 @@ class AuthInteractorImpl(
                 { Result.Failure(ApiException()) })
         }.sOnSuccess { tokenResponse ->
             withContext(Dispatchers.IO) {
-                corePreferences.authPrefs = corePreferences.authPrefs.copy(authToken = tokenResponse.token)
+                corePreferences.authPrefs =
+                    corePreferences.authPrefs.copy(authToken = tokenResponse.token)
             }
         }
 
@@ -57,11 +60,15 @@ class AuthInteractorImpl(
                 { Result.Failure(ApiException()) })
         }.sOnSuccess { tokenResponse ->
             withContext(Dispatchers.IO) {
-                corePreferences.authPrefs = corePreferences.authPrefs.copy(authToken = tokenResponse.token)
+                corePreferences.authPrefs =
+                    corePreferences.authPrefs.copy(authToken = tokenResponse.token)
             }
         }
 
-    override suspend fun authentication(phone: String, sendSms: Boolean): Result<AuthenticationResponse> =
+    override suspend fun authentication(
+        phone: String,
+        sendSms: Boolean
+    ): Result<AuthenticationResponse> =
         callApi(
             call = { apiV2.authentication(AuthenticationRequest(sendSms, phone)) },
             errorClass = AuthException::class.java
@@ -83,7 +90,8 @@ class AuthInteractorImpl(
             withContext(Dispatchers.IO) {
                 corePreferences.authPrefs = corePreferences.authPrefs.copy(
                     authToken = tokenResponse.token,
-                    refreshToken = tokenResponse.refreshToken)
+                    refreshToken = tokenResponse.refreshToken
+                )
             }
         }
 
@@ -114,7 +122,8 @@ class AuthInteractorImpl(
             withContext(Dispatchers.IO) {
                 corePreferences.authPrefs = corePreferences.authPrefs.copy(
                     authToken = tokenResponse.token,
-                    refreshToken = tokenResponse.refreshToken)
+                    refreshToken = tokenResponse.refreshToken
+                )
             }
         }
 
@@ -139,6 +148,12 @@ class AuthInteractorImpl(
         ).map { baseResponse ->
             baseResponse.getUnsafe()?.isSuccessfully() ?: false
         }
+
+    override suspend fun restorePassword(phone: String): Result<Boolean> =
+        callApi(call = { apiV1.restorePassword(SmsCodeRequest(phone)) })
+            .map { baseResponse ->
+                baseResponse.getUnsafe()?.isSuccessfully() ?: false
+            }
 
     override suspend fun cities(): Result<PagedResponse<City>> =
         callApi(call = { apiV2.cities() }).flatMap { dataResponse ->

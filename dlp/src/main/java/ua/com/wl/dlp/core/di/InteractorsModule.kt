@@ -13,6 +13,7 @@ val interactorsModule = module {
     single<AuthInteractor> {
         AuthInteractorImpl(
             errorsMapper = get(),
+            apiV1 = get(),
             apiV2 = get(),
             corePreferences = get(),
             consumerPreferences = get())

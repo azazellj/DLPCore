@@ -3,6 +3,7 @@ package ua.com.wl.dlp.core.di
 import java.util.concurrent.TimeUnit
 
 import android.content.pm.PackageManager
+
 import com.chuckerteam.chucker.api.ChuckerInterceptor
 
 import okhttp3.OkHttpClient
@@ -119,6 +120,10 @@ val apiModule = module {
     // - Apis implementations
     factory {
         ErrorsMapper(gson = get())
+    }
+    factory {
+        get<Retrofit>(qualifier = named(Constants.KOIN_NAMED_API_RETROFIT))
+            .create(AuthApiV1::class.java)
     }
     factory {
         get<Retrofit>(qualifier = named(Constants.KOIN_NAMED_API_RETROFIT))
