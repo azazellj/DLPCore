@@ -70,5 +70,5 @@ dependencies {
     implementation "com.github.ChuckerTeam.Chucker:library:3.0.1"
 
     // Architecture
-    implementation 'com.github.DenisMakovskyi:Archetype:87676a27d4'
+    implementation 'com.github.DenisMakovskyi:Archetype:ea08283ce0'
 }

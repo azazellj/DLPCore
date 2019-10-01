@@ -30,7 +30,7 @@ interface ShopApiV1 {
     @GET("api/mobile/v1/consumer/shops/{shop_id}/")
     suspend fun getShop(@Path("shop_id") shopId: Int): Response<ShopResponse>
 
-    @GET("api/mobile/v1/consumer/shops/{shop_id}/promo-offers/")
+    @GET("api/mobile/v1/consumer/offers/feed/shop/{shop_id}/")
     suspend fun getOffers(
         @Path("shop_id") shopId: Int,
         @Query("page") page: Int? = null,
