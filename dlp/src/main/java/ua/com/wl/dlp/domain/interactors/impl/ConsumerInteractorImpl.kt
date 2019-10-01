@@ -146,7 +146,9 @@ class ConsumerInteractorImpl(
     override suspend fun feedback(
         message: String,
         appVersion: String,
-        callback: Boolean
+        callback: Boolean,
+        phone: String?,
+        email: String?
     ): Result<FeedbackResponse> =
         feedback {
             val answer = if (callback) {
@@ -156,8 +158,8 @@ class ConsumerInteractorImpl(
             }
             this.message = "$message\n\n${app.getString(R.string.dlp_feedback_callback_prefix)}: $answer"
             this.appVersion = "${app.getString(R.string.dlp_feedback_app_version)}$appVersion"
-            this.phone = consumerPreferences.profilePrefs.phone
-            this.email = consumerPreferences.profilePrefs.email
+            this.phone = phone ?: consumerPreferences.profilePrefs.phone
+            this.email = email ?: consumerPreferences.profilePrefs.email
 
         }.let {
             callApi(call = { apiV1.feedback(it) }).flatMap { response ->

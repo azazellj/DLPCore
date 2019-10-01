@@ -42,6 +42,8 @@ interface ConsumerInteractor : OffersInteractor {
     suspend fun feedback(
         message: String,
         appVersion: String,
-        callback: Boolean
+        callback: Boolean,
+        phone: String? = null,
+        email: String? = null
     ): Result<FeedbackResponse>
 }
