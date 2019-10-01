@@ -219,7 +219,9 @@ class ConsumerInteractorImpl(
             ).only { changes.add(it) }
         }
         if (snapshot.balance != consumerPreferences.profilePrefs.balance) {
-            sendBroadcastMessage(app, Constants.RECEIVER_ACTION_SOUND_BONUSES)
+            if (snapshot.balance != null) {
+                sendBroadcastMessage(app, Constants.RECEIVER_ACTION_SOUND_BONUSES)
+            }
             ProfileBusEvent.Change(
                 true, ProfileBusEvent.Field.BALANCE,
                 ProfileBusEvent.FieldValue.LongValue(consumerPreferences.profilePrefs.balance)
