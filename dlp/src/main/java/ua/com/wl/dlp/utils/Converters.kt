@@ -17,7 +17,7 @@ fun ProfileResponse.toPrefs(): ProfilePrefs =
         this.gender, this.email, this.phone,
         this.address, this.city, this.birthDate,
         this.isMarried, this.language, this.timezone,
-        this.balance, this.inviteCode, this.referralCode, this.comment)
+        this.balance, null, this.inviteCode, this.referralCode, this.comment)
 
 fun BaseOfferResponse.toOfferEntity(shopId: Int, count: Int = 0): OfferEntity {
     val entityPromoParams = OfferEntityPromoParams(
