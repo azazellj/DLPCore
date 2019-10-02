@@ -11,13 +11,13 @@ import ua.com.wl.dlp.data.api.ConsumerApiV2
 import ua.com.wl.dlp.data.api.errors.ErrorsMapper
 import ua.com.wl.dlp.data.api.requests.consumer.feedback.feedback
 import ua.com.wl.dlp.data.api.requests.consumer.profile.ProfileRequest
-import ua.com.wl.dlp.data.api.requests.consumer.referral.ReferralRequest
+import ua.com.wl.dlp.data.api.requests.consumer.referral.InvitationRequest
 import ua.com.wl.dlp.data.api.responses.PagedResponse
 import ua.com.wl.dlp.data.api.responses.consumer.feedback.FeedbackResponse
 import ua.com.wl.dlp.data.api.responses.consumer.history.TransactionResponse
 import ua.com.wl.dlp.data.api.responses.consumer.profile.ProfileResponse
 import ua.com.wl.dlp.data.api.responses.consumer.referral.QrCodeResponse
-import ua.com.wl.dlp.data.api.responses.consumer.referral.ReferralResponse
+import ua.com.wl.dlp.data.api.responses.consumer.referral.InvitationResponse
 import ua.com.wl.dlp.data.api.responses.shop.offer.BaseOfferResponse
 import ua.com.wl.dlp.data.events.factory.CoreBusEventsFactory
 import ua.com.wl.dlp.data.events.prefs.ProfileBusEvent
@@ -94,20 +94,20 @@ class ConsumerInteractorImpl(
                 }
             }
 
-    override suspend fun useReferralCode(code: String): Result<ReferralResponse> =
+    override suspend fun useInviteCode(code: String): Result<InvitationResponse> =
         callApi(
-            call = { apiV2.useReferralCode(ReferralRequest(code)) },
+            call = { apiV2.useInviteCode(InvitationRequest(code)) },
             errorClass = ReferralException::class.java
         ).flatMap { dataResponse ->
             dataResponse.ifPresentOrDefault(
                 { Result.Success(it.payload) },
                 { Result.Failure(ApiException()) })
-        }.sOnSuccess { referralResponse ->
+        }.sOnSuccess { inviteResponse ->
             withContext(Dispatchers.IO) {
                 val snapshot = consumerPreferences.profilePrefs.copy()
                 consumerPreferences.profilePrefs = consumerPreferences.profilePrefs.copy(
-                    balance = referralResponse.balance,
-                    inviteCode = referralResponse.inviteCode)
+                    balance = inviteResponse.balance,
+                    inviteCode = inviteResponse.inviteCode)
                 withContext(Dispatchers.Main.immediate) {
                     notifyProfileChanges(snapshot)
                 }

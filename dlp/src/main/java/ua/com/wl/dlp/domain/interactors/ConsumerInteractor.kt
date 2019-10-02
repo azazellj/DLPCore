@@ -6,7 +6,7 @@ import ua.com.wl.dlp.data.api.responses.consumer.feedback.FeedbackResponse
 import ua.com.wl.dlp.data.api.responses.consumer.history.TransactionResponse
 import ua.com.wl.dlp.data.api.responses.consumer.profile.ProfileResponse
 import ua.com.wl.dlp.data.api.responses.consumer.referral.QrCodeResponse
-import ua.com.wl.dlp.data.api.responses.consumer.referral.ReferralResponse
+import ua.com.wl.dlp.data.api.responses.consumer.referral.InvitationResponse
 import ua.com.wl.dlp.data.api.responses.shop.offer.BaseOfferResponse
 import ua.com.wl.dlp.domain.Result
 
@@ -22,7 +22,7 @@ interface ConsumerInteractor : OffersInteractor {
 
     suspend fun getQrCode(): Result<QrCodeResponse>
 
-    suspend fun useReferralCode(code: String): Result<ReferralResponse>
+    suspend fun useInviteCode(code: String): Result<InvitationResponse>
 
     suspend fun getPromoOffers(
         page: Int? = null,
