@@ -27,12 +27,10 @@ class AuthInterceptor(
                     val token = corePreferences.authPrefs.authToken
                     if (token != null) {
                         header(Constants.HEADER_AUTHORIZATION, token.toJwt())
-
                     } else {
                         throw RuntimeException("Authorization token required in private api was not found")
                     }
                 }
-
             }.build())
         }
 }

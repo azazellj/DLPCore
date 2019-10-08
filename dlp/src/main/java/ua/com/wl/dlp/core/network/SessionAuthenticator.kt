@@ -2,7 +2,9 @@ package ua.com.wl.dlp.core.network
 
 import java.net.HttpURLConnection
 
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 
 import okhttp3.Authenticator
 import okhttp3.Request
@@ -38,7 +40,9 @@ class SessionAuthenticator(
                     if (dataResponse.isSuccessful) {
                         val tokenResponse = dataResponse.body()?.payload
                         if (tokenResponse != null) {
-                            corePreferences.authPrefs = corePreferences.authPrefs.copy(authToken = tokenResponse.token)
+                            withContext(Dispatchers.IO) {
+                                corePreferences.authPrefs = corePreferences.authPrefs.copy(authToken = tokenResponse.token)
+                            }
                             response.request.newBuilder()
                                 .header(Constants.HEADER_APP_ID, appId)
                                 .header(Constants.HEADER_AUTHORIZATION, corePreferences.authPrefs.authToken.toJwt())
