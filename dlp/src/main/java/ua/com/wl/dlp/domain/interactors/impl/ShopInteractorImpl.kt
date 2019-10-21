@@ -79,7 +79,7 @@ class ShopInteractorImpl(
         count: Int?,
         rubricId: String?
     ): Result<PagedResponse<BaseOfferResponse>> =
-        callApi(call = { apiV1.getOffers(shopId, page, count) })
+        callApi(call = { apiV1.getOffers(shopId, page, count, rubricId) })
             .flatMap { response ->
                 response.ifPresentOrDefault(
                     { Result.Success(it) },
