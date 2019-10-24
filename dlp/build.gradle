@@ -31,11 +31,12 @@ android {
 }
 
 dependencies {
-    def room_version = "2.2.0-rc01"
+    def core_version = "1.2.0-beta01"
+    def room_version = "2.2.0"
     def koin_version = "2.0.1"
-    def gson_version = "2.8.5"
-    def okhttp_version = "4.0.0-RC1"
-    def retrofit_version = "2.6.0"
+    def gson_version = '2.8.6'
+    def okhttp_version = '4.2.2'
+    def retrofit_version = '2.6.2'
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
@@ -46,7 +47,7 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlin_coroutines_version"
 
     // AndroidX
-    implementation 'androidx.core:core-ktx:1.2.0-alpha04'
+    implementation "androidx.core:core-ktx:$core_version"
     kapt "androidx.databinding:databinding-compiler:$android_plugin_version"
 
     // Android Jetpack
@@ -70,5 +71,5 @@ dependencies {
     implementation "com.github.ChuckerTeam.Chucker:library:3.0.1"
 
     // Architecture
-    implementation 'com.github.DenisMakovskyi:Archetype:fe65b17e8c'
+    implementation 'com.github.DenisMakovskyi:Archetype:56e3b32907'
 }
