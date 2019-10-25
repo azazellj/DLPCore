@@ -80,9 +80,17 @@ interface ShopInteractor: OffersInteractor {
 
     suspend fun deleteShopFromDb(shop: ShopEntity): Result<Boolean>
 
-    suspend fun incrementPreOrderCounter(shopId: Int, offer: BaseOfferResponse): Result<OfferEntity>
+    suspend fun incrementPreOrderCounter(
+        shopId: Int,
+        offer: BaseOfferResponse
+    ): Result<OfferEntity>
 
-    suspend fun decrementPreOrderCounter(shopId: Int, offer: BaseOfferResponse): Result<OfferEntity>
+    suspend fun decrementPreOrderCounter(
+        shopId: Int,
+        offer: BaseOfferResponse
+    ): Result<OfferEntity>
+
+    suspend fun evaluateShopDbOrdersPrice(shopId: Int)
 
     suspend fun getShopPreOrders(shopId: Int): Result<List<OfferEntity>>
 

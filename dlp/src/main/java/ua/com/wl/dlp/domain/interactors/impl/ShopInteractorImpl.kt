@@ -11,6 +11,7 @@ import ua.com.wl.dlp.data.api.requests.shop.order.RateOrderRequest
 import ua.com.wl.dlp.data.api.requests.shop.table.TableReservationRequest
 import ua.com.wl.dlp.data.api.responses.CollectionResponse
 import ua.com.wl.dlp.data.api.responses.PagedResponse
+import ua.com.wl.dlp.data.api.responses.models.shop.offer.promo.PromoType
 import ua.com.wl.dlp.data.api.responses.shop.CityShopsResponse
 import ua.com.wl.dlp.data.api.responses.shop.ShopResponse
 import ua.com.wl.dlp.data.api.responses.shop.offer.BaseOfferResponse
@@ -235,18 +236,8 @@ class ShopInteractorImpl(
                 }
             }.sOnSuccess { offerEntity ->
                 CoreBusEventsFactory.orderCounter(
-                    offerEntity.tradeItem, offerEntity.preOrderCount
-                )
-                //-
-                val selectOffersQueryRes = callQuery(call = { shopsDataSource.getShopOffers(shopId) })
-                if (selectOffersQueryRes is Result.Success) {
-                    selectOffersQueryRes.data.only { offers ->
-                        val price = offers.sumByDouble { offer ->
-                            offer.priceInCurrency?.toDouble()?.times(offer.preOrderCount) ?: 0.0
-                        }
-                        CoreBusEventsFactory.ordersPrice(shopId, offers.size, price)
-                    }
-                }
+                    offerEntity.tradeItem, offerEntity.preOrderCount)
+                evaluateShopDbOrdersPrice(shopId)
             }
 
     override suspend fun decrementPreOrderCounter(
@@ -289,21 +280,35 @@ class ShopInteractorImpl(
             }.sOnSuccess { offerEntity ->
                 CoreBusEventsFactory.orderCounter(
                     offerEntity.tradeItem, offerEntity.preOrderCount)
-                //-
-                val selectOffersQueryRes = callQuery(call = { shopsDataSource.getShopOffers(shopId) })
-                if (selectOffersQueryRes is Result.Success) {
-                    selectOffersQueryRes.data.only { offers ->
-                        val price = offers.sumByDouble { offer ->
-                            offer.priceInCurrency?.toDouble()?.times(offer.preOrderCount) ?: 0.0
-                        }
-                        CoreBusEventsFactory.ordersPrice(shopId, offers.size, price)
-                    }
-                }
+                evaluateShopDbOrdersPrice(shopId)
             }.sOnFailure { error ->
                 if (error.message == DbErrorKeys.ENTITY_IS_NOT_EXISTS_ANYMORE) {
                     CoreBusEventsFactory.orderCounter(offer.tradeItem, 0)
+                    evaluateShopDbOrdersPrice(shopId)
                 }
             }
+
+    override suspend fun evaluateShopDbOrdersPrice(shopId: Int) {
+        val selectOffersQueryRes = callQuery(call = { shopsDataSource.getShopOffers(shopId) })
+        if (selectOffersQueryRes is Result.Success) {
+            selectOffersQueryRes.data.only { offers ->
+                val price = offers.sumByDouble { offer ->
+                    if (offer.isPromoOffer) {
+                        when(offer.promoSettings?.promoType) {
+                            PromoType.SALE -> offer.promoSettings.promoParams?.salePrice?.toDouble()?.times(offer.preOrderCount) ?: 0.0
+                            PromoType.EVENT -> offer.promoSettings.promoParams?.eventPrice?.toDouble()?.times(offer.preOrderCount) ?: 0.0
+                            PromoType.DISCOUNT -> offer.promoSettings.promoParams?.discountPrice?.toDouble()?.times(offer.preOrderCount) ?: 0.0
+                            else -> offer.priceInCurrency?.toDouble()?.times(offer.preOrderCount) ?: 0.0
+                        }
+
+                    } else {
+                        offer.priceInCurrency?.toDouble()?.times(offer.preOrderCount) ?: 0.0
+                    }
+                }
+                CoreBusEventsFactory.ordersPrice(shopId, offers.size, price)
+            }
+        }
+    }
 
     override suspend fun getShopPreOrders(shopId: Int): Result<List<OfferEntity>> =
         callQuery(call = { shopsDataSource.getShopOffers(shopId) })
