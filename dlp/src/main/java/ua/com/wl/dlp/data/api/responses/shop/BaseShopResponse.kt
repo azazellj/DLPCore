@@ -39,7 +39,7 @@ open class BaseShopResponse(
     @SerializedName("cash_back_percentage")
     var cashBackPercentage: Int? = null,
 
-    @SerializedName("allow_pre_order")
+    @SerializedName("allow_pre_orders")
     var isPreOrdersAllowed: Boolean = false,
 
     @SerializedName("allow_table_reservation")
