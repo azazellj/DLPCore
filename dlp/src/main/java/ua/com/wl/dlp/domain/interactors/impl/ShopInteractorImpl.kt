@@ -3,6 +3,7 @@ package ua.com.wl.dlp.domain.interactors.impl
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
+import ua.com.wl.archetype.utils.Optional
 import ua.com.wl.dlp.data.api.ShopApiV1
 import ua.com.wl.dlp.data.api.ShopApiV2
 import ua.com.wl.dlp.data.api.errors.ErrorsMapper
@@ -173,12 +174,7 @@ class ShopInteractorImpl(
                 if (isSuccess) {
                     val selectOffersQueryRes = callQuery(call = { shopsDataSource.getShopOffers(shop.id) })
                     if (selectOffersQueryRes is Result.Success) {
-                        selectOffersQueryRes.data.only { offers ->
-                            val price = offers.sumByDouble { offer ->
-                                offer.priceInCurrency?.toDouble()?.times(offer.preOrderCount) ?: 0.0
-                            }
-                            CoreBusEventsFactory.ordersPrice(shop.id, offers.size, price)
-                        }
+                        populatePersistedPreOrdersPrice(shop.id)
                     }
                 }
             }
@@ -192,7 +188,27 @@ class ShopInteractorImpl(
                 }
             }
 
-    override suspend fun incrementPreOrderCounter(
+    override suspend fun persistShop(shopId: Int): Result<Optional<ShopEntity>> =
+        callQuery(call = { shopsDataSource.getShop(shopId) })
+
+    override suspend fun getPersistedShop(): Result<List<ShopEntity>> =
+        callQuery(call = { shopsDataSource.getShops() })
+
+    override suspend fun updatePersistedPreOrder(offer: BaseOfferResponse): Result<Boolean> =
+        callQuery(call = { shopsDataSource.getOffer(offer.id) })
+            .sFlatMap { offerEntityOpt ->
+                offerEntityOpt.sIfPresentOrDefault(
+                    {
+                        val entity = offer.toOfferEntity(it.shopId, it.preOrderCount)
+                        when(val upsertOfferQueryRes = callQuery(call = { shopsDataSource.upsertOffer(entity) })) {
+                            is Result.Success -> Result.Success(true)
+                            is Result.Failure -> upsertOfferQueryRes
+                        }
+                    },
+                    { Result.Failure(DbQueryException(DbErrorKeys.ENTITY_IS_NOT_EXISTS)) })
+            }
+
+    override suspend fun incrementPersistedPreOrderCounter(
         shopId: Int,
         offer: BaseOfferResponse
     ): Result<OfferEntity> =
@@ -235,12 +251,11 @@ class ShopInteractorImpl(
                     is Result.Failure -> selectOfferQueryRes
                 }
             }.sOnSuccess { offerEntity ->
-                CoreBusEventsFactory.orderCounter(
-                    offerEntity.tradeItem, offerEntity.preOrderCount)
-                evaluateShopDbOrdersPrice(shopId)
+                CoreBusEventsFactory.orderCounter(offerEntity.tradeItem, offerEntity.preOrderCount)
+                populatePersistedPreOrdersPrice(shopId)
             }
 
-    override suspend fun decrementPreOrderCounter(
+    override suspend fun decrementPersistedPreOrderCounter(
         shopId: Int,
         offer: BaseOfferResponse
     ): Result<OfferEntity> =
@@ -278,17 +293,16 @@ class ShopInteractorImpl(
                     is Result.Failure -> selectOfferQueryRes
                 }
             }.sOnSuccess { offerEntity ->
-                CoreBusEventsFactory.orderCounter(
-                    offerEntity.tradeItem, offerEntity.preOrderCount)
-                evaluateShopDbOrdersPrice(shopId)
+                CoreBusEventsFactory.orderCounter(offerEntity.tradeItem, offerEntity.preOrderCount)
+                populatePersistedPreOrdersPrice(shopId)
             }.sOnFailure { error ->
                 if (error.message == DbErrorKeys.ENTITY_IS_NOT_EXISTS_ANYMORE) {
                     CoreBusEventsFactory.orderCounter(offer.tradeItem, 0)
-                    evaluateShopDbOrdersPrice(shopId)
+                    populatePersistedPreOrdersPrice(shopId)
                 }
             }
 
-    override suspend fun evaluateShopDbOrdersPrice(shopId: Int) {
+    override suspend fun populatePersistedPreOrdersPrice(shopId: Int) {
         val selectOffersQueryRes = callQuery(call = { shopsDataSource.getShopOffers(shopId) })
         if (selectOffersQueryRes is Result.Success) {
             selectOffersQueryRes.data.only { offers ->
@@ -310,7 +324,10 @@ class ShopInteractorImpl(
         }
     }
 
-    override suspend fun getShopPreOrders(shopId: Int): Result<List<OfferEntity>> =
+    override suspend fun getPersistedPreOrder(offerId: Int): Result<Optional<OfferEntity>> =
+        callQuery(call = { shopsDataSource.getOffer(offerId) })
+
+    override suspend fun getPersistedPreOrders(shopId: Int): Result<List<OfferEntity>> =
         callQuery(call = { shopsDataSource.getShopOffers(shopId) })
 
     override suspend fun createPreOrder(request: PreOrderCreationRequest): Result<PreOrderCreationResponse> =

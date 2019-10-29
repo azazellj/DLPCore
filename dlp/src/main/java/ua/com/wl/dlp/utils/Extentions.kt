@@ -10,6 +10,18 @@ import ua.com.wl.dlp.data.api.responses.PagedResponse
 
 inline fun <T> T.only(block: (T) -> Unit) = block(this)
 
+fun IntArray?.add(element: Int): IntArray {
+    val resultArray: IntArray
+    if (this == null || isEmpty()) {
+        resultArray = IntArray(1) { element }
+    } else {
+        resultArray = IntArray(size + 1)
+        copyInto(resultArray, 0, 0, size)
+        resultArray[resultArray.lastIndex] = element
+    }
+    return resultArray
+}
+
 fun CharSequence?.isNonNullOrEmpty(): Boolean = this != null && this.isNotEmpty()
 
 fun PagedResponse<*>.previousPage(): Int? =

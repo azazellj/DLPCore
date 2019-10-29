@@ -2,6 +2,8 @@ package ua.com.wl.dlp.domain.interactors
 
 import java.util.*
 
+import ua.com.wl.archetype.utils.Optional
+
 import ua.com.wl.dlp.data.api.requests.shop.order.PreOrderCreationRequest
 import ua.com.wl.dlp.data.api.requests.shop.table.TableReservationRequest
 import ua.com.wl.dlp.data.api.responses.CollectionResponse
@@ -80,19 +82,27 @@ interface ShopInteractor: OffersInteractor {
 
     suspend fun deleteShopFromDb(shop: ShopEntity): Result<Boolean>
 
-    suspend fun incrementPreOrderCounter(
+    suspend fun persistShop(shopId: Int): Result<Optional<ShopEntity>>
+
+    suspend fun getPersistedShop(): Result<List<ShopEntity>>
+
+    suspend fun updatePersistedPreOrder(offer: BaseOfferResponse): Result<Boolean>
+
+    suspend fun incrementPersistedPreOrderCounter(
         shopId: Int,
         offer: BaseOfferResponse
     ): Result<OfferEntity>
 
-    suspend fun decrementPreOrderCounter(
+    suspend fun decrementPersistedPreOrderCounter(
         shopId: Int,
         offer: BaseOfferResponse
     ): Result<OfferEntity>
 
-    suspend fun evaluateShopDbOrdersPrice(shopId: Int)
+    suspend fun populatePersistedPreOrdersPrice(shopId: Int)
 
-    suspend fun getShopPreOrders(shopId: Int): Result<List<OfferEntity>>
+    suspend fun getPersistedPreOrder(offerId: Int): Result<Optional<OfferEntity>>
+
+    suspend fun getPersistedPreOrders(shopId: Int): Result<List<OfferEntity>>
 
     suspend fun createPreOrder(request: PreOrderCreationRequest): Result<PreOrderCreationResponse>
 
