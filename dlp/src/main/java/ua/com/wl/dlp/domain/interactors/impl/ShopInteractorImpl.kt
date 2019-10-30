@@ -168,7 +168,7 @@ class ShopInteractorImpl(
                     { Result.Failure(ApiException()) })
             }
 
-    override suspend fun saveShopInDb(shop: ShopEntity): Result<Boolean> =
+    override suspend fun persistShop(shop: ShopEntity): Result<Boolean> =
         callQuery(call = { shopsDataSource.upsertShop(shop) })
             .sOnSuccess { isSuccess ->
                 if (isSuccess) {
@@ -179,19 +179,19 @@ class ShopInteractorImpl(
                 }
             }
 
-    override suspend fun deleteShopFromDb(shop: ShopEntity): Result<Boolean> =
+    override suspend fun deletePersistedShop(shop: ShopEntity): Result<Boolean> =
         callQuery(call = { shopsDataSource.deleteShop(shop) })
             .sOnEach {
                 withContext(Dispatchers.Main.immediate) {
                     CoreBusEventsFactory.ordersPrice(shop.id)
-                    CoreBusEventsFactory.orderCounter(resetAll = true)
+                    CoreBusEventsFactory.orderCounter(shopId = shop.id, resetAll = true)
                 }
             }
 
-    override suspend fun persistShop(shopId: Int): Result<Optional<ShopEntity>> =
+    override suspend fun getPersistedShop(shopId: Int): Result<Optional<ShopEntity>> =
         callQuery(call = { shopsDataSource.getShop(shopId) })
 
-    override suspend fun getPersistedShop(): Result<List<ShopEntity>> =
+    override suspend fun getPersistedShops(): Result<List<ShopEntity>> =
         callQuery(call = { shopsDataSource.getShops() })
 
     override suspend fun updatePersistedPreOrder(offer: BaseOfferResponse): Result<Boolean> =
@@ -208,10 +208,7 @@ class ShopInteractorImpl(
                     { Result.Failure(DbQueryException(DbErrorKeys.ENTITY_IS_NOT_EXISTS)) })
             }
 
-    override suspend fun incrementPersistedPreOrderCounter(
-        shopId: Int,
-        offer: BaseOfferResponse
-    ): Result<OfferEntity> =
+    override suspend fun incrementPersistedPreOrderCounter(shopId: Int, offer: BaseOfferResponse): Result<OfferEntity> =
         callQuery(call = { shopsDataSource.getShop(shopId) })
             .sFlatMap { shopOptional ->
                 shopOptional.sIfPresentOrDefault(
@@ -251,14 +248,12 @@ class ShopInteractorImpl(
                     is Result.Failure -> selectOfferQueryRes
                 }
             }.sOnSuccess { offerEntity ->
-                CoreBusEventsFactory.orderCounter(offerEntity.tradeItem, offerEntity.preOrderCount)
                 populatePersistedPreOrdersPrice(shopId)
+                CoreBusEventsFactory.orderCounter(
+                    shopId = shopId, tradeId = offerEntity.tradeItem, counter = offerEntity.preOrderCount)
             }
 
-    override suspend fun decrementPersistedPreOrderCounter(
-        shopId: Int,
-        offer: BaseOfferResponse
-    ): Result<OfferEntity> =
+    override suspend fun decrementPersistedPreOrderCounter(shopId: Int, offer: BaseOfferResponse): Result<OfferEntity> =
         callQuery(call = { shopsDataSource.getShop(shopId) })
             .sFlatMap { shopOptional ->
                 shopOptional.ifPresentOrDefault(
@@ -293,12 +288,13 @@ class ShopInteractorImpl(
                     is Result.Failure -> selectOfferQueryRes
                 }
             }.sOnSuccess { offerEntity ->
-                CoreBusEventsFactory.orderCounter(offerEntity.tradeItem, offerEntity.preOrderCount)
                 populatePersistedPreOrdersPrice(shopId)
+                CoreBusEventsFactory.orderCounter(
+                    shopId = shopId, tradeId = offerEntity.tradeItem, counter = offerEntity.preOrderCount)
             }.sOnFailure { error ->
                 if (error.message == DbErrorKeys.ENTITY_IS_NOT_EXISTS_ANYMORE) {
-                    CoreBusEventsFactory.orderCounter(offer.tradeItem, 0)
                     populatePersistedPreOrdersPrice(shopId)
+                    CoreBusEventsFactory.orderCounter(shopId = shopId, tradeId = offer.tradeItem)
                 }
             }
 
@@ -321,6 +317,9 @@ class ShopInteractorImpl(
                 }
                 CoreBusEventsFactory.ordersPrice(shopId, offers.size, price)
             }
+
+        } else {
+            CoreBusEventsFactory.ordersPrice(shopId)
         }
     }
 

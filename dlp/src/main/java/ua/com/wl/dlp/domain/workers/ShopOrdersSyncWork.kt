@@ -83,7 +83,7 @@ class ShopOrdersSyncWork(
     }
 
     private suspend fun launch() {
-        when(val shopResult = shopInteractor.persistShop(shopId)) {
+        when(val shopResult = shopInteractor.getPersistedShop(shopId)) {
             is Success -> {
                 shopResult.data.sIfPresentOrElse(
                     { getPreOrders(it) },

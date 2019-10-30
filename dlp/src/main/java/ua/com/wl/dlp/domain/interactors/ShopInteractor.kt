@@ -78,25 +78,19 @@ interface ShopInteractor: OffersInteractor {
 
     suspend fun getLastOrderRate(): Result<OrderRateResponse>
 
-    suspend fun saveShopInDb(shop: ShopEntity): Result<Boolean>
+    suspend fun persistShop(shop: ShopEntity): Result<Boolean>
 
-    suspend fun deleteShopFromDb(shop: ShopEntity): Result<Boolean>
+    suspend fun deletePersistedShop(shop: ShopEntity): Result<Boolean>
 
-    suspend fun persistShop(shopId: Int): Result<Optional<ShopEntity>>
+    suspend fun getPersistedShop(shopId: Int): Result<Optional<ShopEntity>>
 
-    suspend fun getPersistedShop(): Result<List<ShopEntity>>
+    suspend fun getPersistedShops(): Result<List<ShopEntity>>
 
     suspend fun updatePersistedPreOrder(offer: BaseOfferResponse): Result<Boolean>
 
-    suspend fun incrementPersistedPreOrderCounter(
-        shopId: Int,
-        offer: BaseOfferResponse
-    ): Result<OfferEntity>
+    suspend fun incrementPersistedPreOrderCounter(shopId: Int, offer: BaseOfferResponse): Result<OfferEntity>
 
-    suspend fun decrementPersistedPreOrderCounter(
-        shopId: Int,
-        offer: BaseOfferResponse
-    ): Result<OfferEntity>
+    suspend fun decrementPersistedPreOrderCounter(shopId: Int, offer: BaseOfferResponse): Result<OfferEntity>
 
     suspend fun populatePersistedPreOrdersPrice(shopId: Int)
 

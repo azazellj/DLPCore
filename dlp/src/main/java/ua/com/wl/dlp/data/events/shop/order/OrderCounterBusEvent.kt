@@ -7,6 +7,7 @@ import ua.com.wl.archetype.core.android.bus.BusEvent
  */
 
 data class OrderCounterBusEvent(
+    val shopId: Int,
     val tradeId: Int? = null,
-    val counter: Int? = null,
-    val resetAllCounters: Boolean = true) : BusEvent()
+    val counter: Int = 0,
+    val resetAllCounters: Boolean = false) : BusEvent()

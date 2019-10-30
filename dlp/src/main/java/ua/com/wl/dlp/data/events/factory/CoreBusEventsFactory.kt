@@ -37,11 +37,12 @@ object CoreBusEventsFactory {
     }
 
     fun orderCounter(
+        shopId: Int,
         tradeId: Int? = null,
-        counter: Int? = null,
+        counter: Int = 0,
         resetAll: Boolean = false
     ) {
-        val event = OrderCounterBusEvent(tradeId, counter, resetAll)
+        val event = OrderCounterBusEvent(shopId, tradeId, counter, resetAll)
         Bus.send(event)
     }
 
