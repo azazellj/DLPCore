@@ -20,23 +20,24 @@ import ua.com.wl.dlp.utils.Success
  * @author Denis Makovskyi
  */
 
-class ShopOrderSyncWork(
+class ShopOfferSyncWork(
     context: Context,
     workerParams: WorkerParameters
 ) : CoroutineWorker(context, workerParams), DLPCoreComponent {
 
     companion object {
 
-        const val INPUT_KEY_SHOP_ID = "order_id"
-        const val INPUT_KEY_ORDER_ID = "order_id"
+        const val INPUT_KEY_SHOP_ID = "shop_id"
+        const val INPUT_KEY_OFFER_ID = "offer_id"
 
         fun schedule(
             context: Context,
             shopId: Int,
-            orderId: Int,
-            workerTag: String? = null): UUID {
-            val uniqueWorkName = workerTag ?: orderId.toString()
-            val request = OneTimeWorkRequestBuilder<ShopOrderSyncWork>()
+            offerId: Int,
+            workerTag: String? = null
+        ): UUID {
+            val uniqueWorkName = workerTag ?: offerId.toString()
+            val request = OneTimeWorkRequestBuilder<ShopOfferSyncWork>()
                 .apply {
                     addTag(uniqueWorkName)
                     setConstraints(
@@ -46,7 +47,7 @@ class ShopOrderSyncWork(
                     setInputData(
                         Data.Builder()
                             .putInt(INPUT_KEY_SHOP_ID, shopId)
-                            .putInt(INPUT_KEY_ORDER_ID, orderId)
+                            .putInt(INPUT_KEY_OFFER_ID, offerId)
                             .build())
                 }.build()
             WorkManager.getInstance(context)
@@ -57,23 +58,29 @@ class ShopOrderSyncWork(
     }
 
     private val shopId = inputData.getInt(INPUT_KEY_SHOP_ID, 0)
-    private val orderId = inputData.getInt(INPUT_KEY_ORDER_ID, 0)
+    private val offerId = inputData.getInt(INPUT_KEY_OFFER_ID, 0)
     private val shopInteractor: ShopInteractor by inject()
 
     override suspend fun doWork(): Result =
         withContext(Dispatchers.IO) {
-            launch()
+            launch(
+                Data.Builder()
+                    .putInt(INPUT_KEY_OFFER_ID, offerId)
+                    .build()
+            )
         }
 
-    private suspend fun launch(): Result =
-        when(val offerResult = shopInteractor.getOffer(orderId)) {
-            is Success -> when(shopInteractor.updatePersistedPreOrder(offerResult.data)) {
-                is Success -> {
-                    shopInteractor.populatePersistedPreOrdersPrice(shopId)
-                    Result.success()
+    private suspend fun launch(outputs: Data): Result =
+        when(val offerResult = shopInteractor.getOffer(offerId)) {
+            is Success -> {
+                when(shopInteractor.updatePersistedOffer(offerResult.data)) {
+                    is Success -> {
+                        shopInteractor.populatePersistedPreOrdersPrice(shopId)
+                        Result.success(outputs)
+                    }
+                    is Failure -> Result.failure(outputs)
                 }
-                is Failure -> Result.failure()
             }
-            is Failure -> Result.failure()
+            is Failure -> Result.failure(outputs)
         }
 }

@@ -1,10 +1,10 @@
-package ua.com.wl.dlp.data.api.requests.shop.order
+package ua.com.wl.dlp.data.api.requests.orders.order
 
 import com.google.gson.annotations.SerializedName
 
-import ua.com.wl.dlp.data.api.models.shop.order.DeliveryType
-import ua.com.wl.dlp.data.api.models.shop.order.PaymentMethod
-import ua.com.wl.dlp.data.api.models.shop.order.BasePreOrderTradeItem
+import ua.com.wl.dlp.data.api.models.order.DeliveryType
+import ua.com.wl.dlp.data.api.models.order.PaymentMethod
+import ua.com.wl.dlp.data.api.models.order.BasePreOrderTradeItem
 
 /**
  * @author Denis Makovskyi

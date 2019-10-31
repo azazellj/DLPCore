@@ -18,7 +18,7 @@ data class ShopEntity(
     val id: Int,
 
     @Embedded
-    val preOrderParams: PreOrderParams? = null
+    var preOrderParams: PreOrderParams? = null
 ) {
 
     companion object {

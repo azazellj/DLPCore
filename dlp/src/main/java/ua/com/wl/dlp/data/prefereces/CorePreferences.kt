@@ -14,7 +14,8 @@ import ua.com.wl.dlp.utils.isNonNullOrEmpty
 
 class CorePreferences(
     context: Context,
-    private val gson: Gson) : BasePreferences(context, CorePreferences::class.java.simpleName) {
+    private val gson: Gson
+) : BasePreferences(context, CorePreferences::class.java.simpleName) {
 
     companion object {
 

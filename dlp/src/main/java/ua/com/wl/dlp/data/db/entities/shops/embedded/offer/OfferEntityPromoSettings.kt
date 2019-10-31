@@ -26,4 +26,4 @@ data class OfferEntityPromoSettings(
     val activeTo: String? = null,
 
     @Embedded(prefix = "params_")
-    val promoParams: OfferEntityPromoParams? = null)
+    var promoParams: OfferEntityPromoParams? = null)

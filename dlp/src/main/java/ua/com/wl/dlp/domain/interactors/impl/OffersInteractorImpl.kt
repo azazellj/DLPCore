@@ -3,7 +3,7 @@ package ua.com.wl.dlp.domain.interactors.impl
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-import ua.com.wl.dlp.data.api.OffersApi
+import ua.com.wl.dlp.data.api.OffersApiV1
 import ua.com.wl.dlp.data.api.errors.ErrorsMapper
 import ua.com.wl.dlp.data.api.responses.shop.offer.OfferResponse
 import ua.com.wl.dlp.data.events.factory.CoreBusEventsFactory
@@ -18,10 +18,10 @@ import ua.com.wl.dlp.domain.interactors.OffersInteractor
 
 class OffersInteractorImpl(
     errorsMapper: ErrorsMapper,
-    private val api: OffersApi): UseCase(errorsMapper), OffersInteractor {
+    private val apiV1: OffersApiV1): UseCase(errorsMapper), OffersInteractor {
 
     override suspend fun addOfferToFavourites(offerId: Int): Result<Boolean> =
-        callApi(call = { api.addOfferToFavourite(offerId) })
+        callApi(call = { apiV1.addOfferToFavourite(offerId) })
             .map { response ->
                 response.ifPresentOrDefault(
                     { it.isSuccessfully() },
@@ -38,7 +38,7 @@ class OffersInteractorImpl(
             }
 
     override suspend fun removeOfferFromFavourites(offerId: Int): Result<Boolean> =
-        callApi(call = { api.removeOfferFromFavourite(offerId) })
+        callApi(call = { apiV1.removeOfferFromFavourite(offerId) })
             .map { response ->
                 response.ifPresentOrDefault(
                     { it.isSuccessfully() },
@@ -55,7 +55,7 @@ class OffersInteractorImpl(
             }
 
     override suspend fun getOffer(offerId: Int): Result<OfferResponse> =
-        callApi(call = { api.getOffer(offerId) })
+        callApi(call = { apiV1.getOffer(offerId) })
             .flatMap { response ->
                 response.ifPresentOrDefault(
                     { Result.Success(it) },

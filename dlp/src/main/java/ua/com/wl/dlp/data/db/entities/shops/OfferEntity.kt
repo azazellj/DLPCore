@@ -58,7 +58,7 @@ data class OfferEntity(
     val preOrderCount: Int = 0,
 
     @Embedded(prefix = "settings_")
-    val promoSettings: OfferEntityPromoSettings? = null
+    var promoSettings: OfferEntityPromoSettings? = null
 ) {
     companion object {
 

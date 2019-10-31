@@ -13,7 +13,8 @@ import ua.com.wl.dlp.data.api.responses.shop.offer.OfferResponse
  * @author Denis Makovskyi
  */
 
-interface OffersApi {
+@Deprecated(message = "Needs further refactoring for api/mobile/v2")
+interface OffersApiV1 {
 
     @POST("api/mobile/v1/consumer/favorite-offers/{offer_id}/")
     suspend fun addOfferToFavourite(@Path("offer_id") offerId: Int): Response<BaseResponse>

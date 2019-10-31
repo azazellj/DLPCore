@@ -17,7 +17,8 @@ fun ProfileResponse.toPrefs(): ProfilePrefs =
         this.gender, this.email, this.phone,
         this.address, this.city, this.birthDate,
         this.isMarried, this.language, this.timezone,
-        this.balance, null, this.inviteCode, this.referralCode, this.comment)
+        this.balance, null, this.inviteCode, this.referralCode, this.comment
+    )
 
 fun BaseOfferResponse.toOfferEntity(shopId: Int, count: Int = 0): OfferEntity {
     val entityPromoParams = OfferEntityPromoParams(
@@ -28,17 +29,20 @@ fun BaseOfferResponse.toOfferEntity(shopId: Int, count: Int = 0): OfferEntity {
         promoSettings?.promoParams?.discountSize,
         promoSettings?.promoParams?.discountPrice,
         promoSettings?.promoParams?.priceInBonuses,
-        promoSettings?.promoParams?.cashBackSize)
+        promoSettings?.promoParams?.cashBackSize
+    )
     val entityPromoSettings = OfferEntityPromoSettings(
         promoSettings?.promoType,
         promoSettings?.activeSince,
         promoSettings?.activeUntil,
         promoSettings?.activeFrom,
         promoSettings?.activeTo,
-        entityPromoParams)
+        entityPromoParams
+    )
     return OfferEntity(
         id, shopId, tradeItem,
         name, thumbImage, shortDescription,
         priceInBonuses, priceInCurrency, cashBackPercentage,
-        isPromo, isFavourite, count, entityPromoSettings)
+        isPromo, isFavourite, count, entityPromoSettings
+    )
 }

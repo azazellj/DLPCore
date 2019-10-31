@@ -18,11 +18,6 @@ val interactorsModule = module {
             corePreferences = get(),
             consumerPreferences = get())
     }
-    single<OffersInteractor> {
-        OffersInteractorImpl(
-            errorsMapper = get(),
-            api = get())
-    }
     single<ConsumerInteractor> {
         ConsumerInteractorImpl(
             errorsMapper = get(),
@@ -44,5 +39,15 @@ val interactorsModule = module {
             apiV2 = get(),
             shopsDataSource = get(),
             offersInteractor = get())
+    }
+    single<OffersInteractor> {
+        OffersInteractorImpl(
+            errorsMapper = get(),
+            apiV1 = get())
+    }
+    single<OrdersInteractor> {
+        OrdersInteractorImpl(
+            errorsMapper = get(),
+            apiV1 = get())
     }
 }

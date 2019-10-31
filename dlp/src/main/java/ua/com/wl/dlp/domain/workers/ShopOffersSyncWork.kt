@@ -24,14 +24,14 @@ import ua.com.wl.dlp.utils.add
  * @author Denis Makovskyi
  */
 
-class ShopOrdersSyncWork(
+class ShopOffersSyncWork(
     context: Context,
     workerParams: WorkerParameters
 ) : CoroutineWorker(context, workerParams), DLPCoreComponent {
 
     companion object {
 
-        val TAG = ShopOrdersSyncWork::class.java.name
+        val TAG = ShopOffersSyncWork::class.java.name
 
         const val INPUT_KEY_SHOP_ID = "shop_id"
 
@@ -46,7 +46,7 @@ class ShopOrdersSyncWork(
         const val WHEN_SYNCING_OFFER_WITH_ORDER = "when_syncing_offer_with_order"
 
         fun schedule(context: Context, shopId: Int): UUID {
-            val request = OneTimeWorkRequestBuilder<ShopOrdersSyncWork>()
+            val request = OneTimeWorkRequestBuilder<ShopOffersSyncWork>()
                 .apply {
                     addTag(TAG)
                     setConstraints(
@@ -97,7 +97,7 @@ class ShopOrdersSyncWork(
     }
 
     private suspend fun getPreOrders(shop: ShopEntity) {
-        when(val preOrdersResult = shopInteractor.getPersistedPreOrders(shop.id)) {
+        when(val preOrdersResult = shopInteractor.getPersistedOffers(shop.id)) {
             is Success -> getOffers(preOrdersResult.data)
             is Failure -> {
                 outputs.apply {
@@ -124,7 +124,7 @@ class ShopOrdersSyncWork(
     }
 
     private suspend fun updatePreOrder(offer: BaseOfferResponse) {
-        val upsertResult = shopInteractor.updatePersistedPreOrder(offer)
+        val upsertResult = shopInteractor.updatePersistedOffer(offer)
         if (upsertResult is Failure) {
             outputs.apply {
                 putString(OUTPUT_KEY_ERROR_WHEN, WHEN_SYNCING_OFFER_WITH_ORDER)

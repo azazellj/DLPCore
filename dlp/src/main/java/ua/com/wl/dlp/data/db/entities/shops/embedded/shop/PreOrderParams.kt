@@ -2,8 +2,8 @@ package ua.com.wl.dlp.data.db.entities.shops.embedded.shop
 
 import androidx.room.ColumnInfo
 
-import ua.com.wl.dlp.data.api.models.shop.order.DeliveryType
-import ua.com.wl.dlp.data.api.models.shop.order.PaymentMethod
+import ua.com.wl.dlp.data.api.models.order.DeliveryType
+import ua.com.wl.dlp.data.api.models.order.PaymentMethod
 
 /**
  * @author Denis Makovskyi
