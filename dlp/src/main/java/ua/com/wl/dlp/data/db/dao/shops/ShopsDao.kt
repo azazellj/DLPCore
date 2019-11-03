@@ -20,6 +20,9 @@ interface ShopsDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun upsertShop(shop: ShopEntity): Long
 
+    @Update
+    suspend fun updateShop(shop: ShopEntity): Int
+
     @Query("DELETE FROM ${ShopEntity.TABLE_NAME} WHERE id = :id")
     suspend fun deleteShop(id: Int): Int
 

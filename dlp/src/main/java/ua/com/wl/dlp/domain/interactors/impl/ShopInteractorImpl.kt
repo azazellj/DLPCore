@@ -130,6 +130,17 @@ class ShopInteractorImpl(
                 }
             }
 
+    override suspend fun updatePersistedShop(shop: ShopEntity): Result<Boolean> =
+        callQuery(call = { shopsDataSource.updateShop(shop) })
+            .sOnSuccess { isSuccess ->
+                if (isSuccess) {
+                    val selectOffersQueryRes = callQuery(call = { shopsDataSource.getShopOffers(shop.id) })
+                    if (selectOffersQueryRes is Result.Success) {
+                        populatePersistedPreOrdersPrice(shop.id)
+                    }
+                }
+            }
+
     override suspend fun getPersistedShop(shopId: Int): Result<Optional<ShopEntity>> =
         callQuery(call = { shopsDataSource.getShop(shopId) })
 

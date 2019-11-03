@@ -16,6 +16,8 @@ interface ShopsDataSource {
 
     suspend fun upsertShop(shop: ShopEntity): Boolean
 
+    suspend fun updateShop(shop: ShopEntity): Boolean
+
     suspend fun deleteShop(id: Int): Boolean
 
     suspend fun deleteShop(shop: ShopEntity): Boolean

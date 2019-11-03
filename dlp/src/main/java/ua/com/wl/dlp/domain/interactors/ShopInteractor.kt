@@ -120,6 +120,14 @@ interface ShopInteractor : OffersInteractor {
     suspend fun persistShop(shop: ShopEntity): Result<Boolean>
 
     /**
+     * Allows to update persisted shop in local DB.
+     * @param [shop] entity that will be updated.
+     * @return If success, result is an instance of [Result.Success] with boolean flag inside, that indicates
+     * whether entity was updated successfully, otherwise [Result.Failure] with detailed [Throwable].
+     */
+    suspend fun updatePersistedShop(shop: ShopEntity): Result<Boolean>
+
+    /**
      * Allows to retrieve persisted shop entity from local DB by given id.
      * @param [shopId] shop's unique identifier.
      * @return If success, result is an instance of [Result.Success] with [Optional] wrapper, that may
@@ -212,7 +220,7 @@ interface ShopInteractor : OffersInteractor {
     suspend fun getPersistedOffer(offerId: Int): Result<Optional<OfferEntity>>
 
     /**
-     * Allows to retrieveall persisted offers from local DB by given shop id.
+     * Allows to retrieve all persisted offers from local DB by given shop id.
      * @param [shopId] shop's unique identifier.
      * @return If success, result is an instance of [Result.Success] with [OfferEntity] list,
      * otherwise [Result.Failure] with detailed [Throwable].

@@ -51,6 +51,16 @@ class ShopsDataSourceImpl(
             throw DbQueryException(DbErrorKeys.UPSERT_QUERY_ERROR)
         }
 
+    override suspend fun updateShop(shop: ShopEntity): Boolean =
+        try {
+            withContext(Dispatchers.IO) {
+                shopsDao.updateShop(shop) > 0
+            }
+
+        } catch (e: Exception) {
+            throw DbQueryException(DbErrorKeys.UPDATE_QUERY_ERROR)
+        }
+
     override suspend fun deleteShop(id: Int): Boolean =
         try {
             withContext(Dispatchers.IO) {
