@@ -87,8 +87,7 @@ class ShopOffersSyncWork(
             is Success -> {
                 shopResult.data.sIfPresentOrElse(
                     { getPreOrders(it) },
-                    { outputs.putString(OUTPUT_KEY_ERROR_WHEN, WHEN_READING_SHOP) }
-                )
+                    { outputs.putString(OUTPUT_KEY_ERROR_WHEN, WHEN_READING_SHOP) })
             }
             is Failure -> {
                 outputs.putString(OUTPUT_KEY_ERROR_WHEN, WHEN_READING_SHOP)

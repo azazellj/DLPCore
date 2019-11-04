@@ -136,7 +136,7 @@ interface ShopInteractor : OffersInteractor {
     suspend fun getPersistedShop(shopId: Int): Result<Optional<ShopEntity>>
 
     /**
-     * Allows to retrieve ll persisted shop entities from local DB.
+     * Allows to retrieve all persisted shop entities from local DB.
      * @return If success, result is an instance of [Result.Success] with [ShopEntity] list,
      * otherwise [Result.Failure] with detailed [Throwable].
      */
