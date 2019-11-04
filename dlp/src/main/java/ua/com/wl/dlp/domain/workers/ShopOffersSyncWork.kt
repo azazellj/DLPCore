@@ -18,7 +18,6 @@ import ua.com.wl.dlp.data.db.entities.shops.ShopEntity
 import ua.com.wl.dlp.domain.interactors.ShopInteractor
 import ua.com.wl.dlp.utils.Failure
 import ua.com.wl.dlp.utils.Success
-import ua.com.wl.dlp.utils.add
 
 /**
  * @author Denis Makovskyi
@@ -35,15 +34,10 @@ class ShopOffersSyncWork(
 
         const val INPUT_KEY_SHOP_ID = "shop_id"
 
-        const val OUTPUT_KEY_ERROR_WHEN = "error_when"
-        const val OUTPUT_KEY_SHOP_IDS = "shop_ids"
-        const val OUTPUT_KEY_OFFER_IDS = "offer_ids"
-        const val OUTPUT_KEY_ORDER_IDS = "order_ids"
-
-        const val WHEN_READING_SHOP = "when_reading_shop"
-        const val WHEN_READING_PRE_ORDERS = "when_reading_pre_orders"
-        const val WHEN_LOADING_REMOTE_OFFER = "when_loading_remote_offer"
-        const val WHEN_SYNCING_OFFER_WITH_ORDER = "when_syncing_offer_with_order"
+        const val ERROR_KEY_WHEN_READ_SHOP = "error_when_read_shop"
+        const val ERROR_KEY_WHEN_READ_ORDERS = "error_when_read_orders"
+        const val ERROR_KEY_WHEN_LOAD_OFFERS = "error_when_load_offers"
+        const val ERROR_KEY_WHEN_WRITE_IN_DB = "error_when_write_in_db"
 
         fun schedule(context: Context, shopId: Int): UUID {
             val request = OneTimeWorkRequestBuilder<ShopOffersSyncWork>()
@@ -63,6 +57,9 @@ class ShopOffersSyncWork(
                 .enqueue()
             return request.id
         }
+
+        fun containsError(key: String, data: Data): Boolean =
+            data.keyValueMap.containsKey(key) && data.getBoolean(key, false)
     }
 
     private val shopId = inputData.getInt(INPUT_KEY_SHOP_ID, 0)
@@ -87,10 +84,10 @@ class ShopOffersSyncWork(
             is Success -> {
                 shopResult.data.sIfPresentOrElse(
                     { getPreOrders(it) },
-                    { outputs.putString(OUTPUT_KEY_ERROR_WHEN, WHEN_READING_SHOP) })
+                    { outputs.putBoolean(ERROR_KEY_WHEN_READ_SHOP, true) })
             }
             is Failure -> {
-                outputs.putString(OUTPUT_KEY_ERROR_WHEN, WHEN_READING_SHOP)
+                outputs.putBoolean(ERROR_KEY_WHEN_READ_SHOP, true)
             }
         }
     }
@@ -98,12 +95,7 @@ class ShopOffersSyncWork(
     private suspend fun getPreOrders(shop: ShopEntity) {
         when(val preOrdersResult = shopInteractor.getPersistedOffers(shop.id)) {
             is Success -> getOffers(preOrdersResult.data)
-            is Failure -> {
-                outputs.apply {
-                    putString(OUTPUT_KEY_ERROR_WHEN, WHEN_READING_PRE_ORDERS)
-                    putIntArray(OUTPUT_KEY_SHOP_IDS, build().getIntArray(OUTPUT_KEY_SHOP_IDS).add(shop.id))
-                }
-            }
+            is Failure -> outputs.putBoolean(ERROR_KEY_WHEN_READ_ORDERS, true)
         }
     }
 
@@ -111,12 +103,7 @@ class ShopOffersSyncWork(
         for (preOrder in preOrders) {
             when(val offerResult = shopInteractor.getOffer(preOrder.id)) {
                 is Success -> updatePreOrder(offerResult.data)
-                is Failure -> {
-                    outputs.apply {
-                        putString(OUTPUT_KEY_ERROR_WHEN, WHEN_LOADING_REMOTE_OFFER)
-                        putIntArray(OUTPUT_KEY_OFFER_IDS, build().getIntArray(OUTPUT_KEY_SHOP_IDS).add(preOrder.id))
-                    }
-                }
+                is Failure -> outputs.putBoolean(ERROR_KEY_WHEN_LOAD_OFFERS, true)
             }
         }
         shopInteractor.populatePersistedPreOrdersPrice(shopId)
@@ -125,10 +112,7 @@ class ShopOffersSyncWork(
     private suspend fun updatePreOrder(offer: BaseOfferResponse) {
         val upsertResult = shopInteractor.updatePersistedOffer(offer)
         if (upsertResult is Failure) {
-            outputs.apply {
-                putString(OUTPUT_KEY_ERROR_WHEN, WHEN_SYNCING_OFFER_WITH_ORDER)
-                putIntArray(OUTPUT_KEY_ORDER_IDS, build().getIntArray(OUTPUT_KEY_ORDER_IDS).add(offer.id))
-            }
+            outputs.putBoolean(ERROR_KEY_WHEN_WRITE_IN_DB, true)
         }
     }
 }

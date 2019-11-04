@@ -22,6 +22,17 @@ fun IntArray?.add(element: Int): IntArray {
     return resultArray
 }
 
+inline fun <reified T> Array<T>?.add(element: T): Array<T?> {
+    val resultArray: Array<T?>
+    if (this == null) {
+        resultArray = Array(1) { element }
+    } else {
+        resultArray = copyOf(size + 1)
+        resultArray[size] = element
+    }
+    return resultArray
+}
+
 fun CharSequence?.isNonNullOrEmpty(): Boolean = this != null && this.isNotEmpty()
 
 fun PagedResponse<*>.previousPage(): Int? =
