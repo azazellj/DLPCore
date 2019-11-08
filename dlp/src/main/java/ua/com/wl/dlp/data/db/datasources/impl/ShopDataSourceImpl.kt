@@ -7,7 +7,7 @@ import ua.com.wl.archetype.utils.Optional
 import ua.com.wl.dlp.data.db.DbErrorKeys
 import ua.com.wl.dlp.data.db.dao.shops.OffersDao
 import ua.com.wl.dlp.data.db.dao.shops.ShopsDao
-import ua.com.wl.dlp.data.db.datasources.ShopsDataSource
+import ua.com.wl.dlp.data.db.datasources.ShopDataSource
 import ua.com.wl.dlp.data.db.entities.shops.OfferEntity
 import ua.com.wl.dlp.data.db.entities.shops.ShopEntity
 import ua.com.wl.dlp.domain.exeptions.db.DbQueryException
@@ -16,10 +16,10 @@ import ua.com.wl.dlp.domain.exeptions.db.DbQueryException
  * @author Denis Makovskyi
  */
 
-class ShopsDataSourceImpl(
+class ShopDataSourceImpl(
     private val shopsDao: ShopsDao,
     private val offersDao: OffersDao
-) : ShopsDataSource {
+) : ShopDataSource {
 
     override suspend fun getShop(id: Int): Optional<ShopEntity> =
         try {
@@ -101,6 +101,16 @@ class ShopsDataSourceImpl(
             throw DbQueryException(DbErrorKeys.SELECT_QUERY_ERROR)
         }
 
+    override suspend fun getOffer(id: Int, shopId: Int): Optional<OfferEntity> =
+        try {
+            withContext(Dispatchers.IO) {
+                Optional.ofNullable(offersDao.getOffer(id, shopId))
+            }
+
+        } catch (e: Exception) {
+            throw DbQueryException(DbErrorKeys.SELECT_QUERY_ERROR)
+        }
+
     override suspend fun getOffers(): List<OfferEntity> =
         try {
             withContext(Dispatchers.IO) {
@@ -111,10 +121,10 @@ class ShopsDataSourceImpl(
             throw DbQueryException(DbErrorKeys.SELECT_QUERY_ERROR)
         }
 
-    override suspend fun getShopOffers(shopId: Int): List<OfferEntity> =
+    override suspend fun getOffers(shopId: Int): List<OfferEntity> =
         try {
             withContext(Dispatchers.IO) {
-                offersDao.getShopOffers(shopId)
+                offersDao.getOffers(shopId)
             }
 
         } catch (e: Exception) {
@@ -141,6 +151,16 @@ class ShopsDataSourceImpl(
             throw DbQueryException(DbErrorKeys.DELETE_QUERY_ERROR)
         }
 
+    override suspend fun deleteOffer(id: Int, shopId: Int): Boolean =
+        try {
+            withContext(Dispatchers.IO) {
+                offersDao.deleteOffer(id, shopId) > 0
+            }
+
+        } catch (e: Exception) {
+            throw DbQueryException(DbErrorKeys.DELETE_QUERY_ERROR)
+        }
+
     override suspend fun deleteOffer(offer: OfferEntity): Boolean =
         try {
             withContext(Dispatchers.IO) {
@@ -161,10 +181,10 @@ class ShopsDataSourceImpl(
             throw DbQueryException(DbErrorKeys.DELETE_QUERY_ERROR)
         }
 
-    override suspend fun deleteShopOffers(shopId: Int): Boolean =
+    override suspend fun deleteOffers(shopId: Int): Boolean =
         try {
             withContext(Dispatchers.IO) {
-                offersDao.deleteShopOffers(shopId) > 0
+                offersDao.deleteOffers(shopId) > 0
             }
 
         } catch (e: Exception) {

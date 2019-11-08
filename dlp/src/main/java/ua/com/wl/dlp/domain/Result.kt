@@ -7,57 +7,88 @@ package ua.com.wl.dlp.domain
 sealed class Result<out T> {
 
     data class Success<out T>(val data: T) : Result<T>()
+
     data class Failure(val error: Throwable) : Result<Nothing>()
 
-    fun <R> map(block: (T) -> R): Result<R> = when(this) {
-        is Success -> Success(block(data))
+    fun isSuccess(): Boolean = this is Success
+
+    fun <R> map(mapper: (T) -> R): Result<R> = when(this) {
+        is Success -> Success(mapper(data))
         is Failure -> this
     }
 
-    fun <R> flatMap(block: (T) -> Result<R>): Result<R> = when(this) {
-        is Success -> block(data)
+    fun <R> flatMap(mapper: (T) -> Result<R>): Result<R> = when(this) {
+        is Success -> mapper(data)
         is Failure -> this
     }
 
-    fun onEach(block: () -> Unit): Result<T> = apply {
-        block()
+    fun <S, R> zipWith(
+        second: Result<S>,
+        zipper: (T, S) -> R
+    ): Result<*> = when(this) {
+        is Success -> {
+            if (second is Success) {
+                Success(zipper(this.data, second.data))
+            } else {
+                this
+            }
+        }
+        is Failure -> this
     }
 
-    fun onSuccess(block: (T) -> Unit): Result<T> = apply {
+    fun onEach(callback: (Boolean) -> Unit): Result<T> = apply {
+        callback(this is Success)
+    }
+
+    fun onSuccess(callback: (T) -> Unit): Result<T> = apply {
         if (this is Success) {
-            block(data)
+            callback(data)
         }
     }
 
-    fun onFailure(block: (Throwable) -> Unit): Result<T> = apply {
+    fun onFailure(callback: (Throwable) -> Unit): Result<T> = apply {
         if (this is Failure) {
-            block(error)
+            callback(error)
         }
     }
 
-    suspend fun <R> sMap(block: suspend (T) -> R): Result<R> = when(this) {
-        is Success -> Success(block(data))
+    suspend fun <R> sMap(mapper: suspend (T) -> R): Result<R> = when(this) {
+        is Success -> Success(mapper(data))
         is Failure -> this
     }
 
-    suspend fun <R> sFlatMap(block: suspend (T) -> Result<R>): Result<R> = when(this) {
-        is Success -> block(data)
+    suspend fun <R> sFlatMap(mapper: suspend (T) -> Result<R>): Result<R> = when(this) {
+        is Success -> mapper(data)
         is Failure -> this
     }
 
-    suspend fun sOnEach(block: suspend () -> Unit): Result<T> = apply {
-        block()
+    suspend fun <S, R> sZipWith(
+        second: Result<S>,
+        zipper: suspend (T, S) -> R
+    ): Result<*> = when(this) {
+        is Success -> {
+            if (second is Success) {
+                Success(zipper(this.data, second.data))
+            } else {
+                this
+            }
+        }
+        is Failure -> this
     }
 
-    suspend fun sOnSuccess(block: suspend (T) -> Unit): Result<T> = apply {
+    suspend fun sOnEach(callback: suspend (Boolean) -> Unit): Result<T> = apply {
+        callback(this is Success)
+    }
+
+    suspend fun sOnSuccess(callback: suspend (T) -> Unit): Result<T> = apply {
         if (this is Success) {
-            block(data)
+            callback(data)
         }
     }
 
-    suspend fun sOnFailure(block: suspend (Throwable) -> Unit): Result<T> = apply {
+    suspend fun sOnFailure(callback: suspend (Throwable) -> Unit): Result<T> = apply {
         if (this is Failure) {
-            block(error)
+            callback(error)
         }
     }
 }

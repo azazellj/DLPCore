@@ -37,7 +37,7 @@ val interactorsModule = module {
             errorsMapper = get(),
             apiV1 = get(),
             apiV2 = get(),
-            shopsDataSource = get(),
+            shopDataSource = get(),
             offersInteractor = get())
     }
     single<OffersInteractor> {
