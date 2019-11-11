@@ -133,9 +133,6 @@ class ShopInteractorImpl(
     override suspend fun getPersistedShop(shopId: Int): Result<Optional<ShopEntity>> =
         callQuery(call = { shopDataSource.getShop(shopId) })
 
-    override suspend fun getPersistedShops(): Result<List<ShopEntity>> =
-        callQuery(call = { shopDataSource.getShops() })
-
     override suspend fun deletePersistedShop(shop: ShopEntity): Result<Boolean> =
         callQuery(call = { shopDataSource.deleteShop(shop) })
             .sOnSuccess {
@@ -148,8 +145,8 @@ class ShopInteractorImpl(
     override suspend fun deletePersistedShops(): Result<Boolean> =
         callQuery(call = { shopDataSource.deleteShops() })
 
-    override suspend fun updatePersistedOffer(offer: BaseOfferResponse): Result<Boolean> =
-        callQuery(call = { shopDataSource.getOffer(offer.id) })
+    override suspend fun updatePersistedOffer(shopId: Int, offer: BaseOfferResponse): Result<Boolean> =
+        callQuery(call = { shopDataSource.getOffer(offer.id, shopId) })
             .sFlatMap { offerEntityOpt ->
                 offerEntityOpt.sIfPresentOrDefault(
                     {

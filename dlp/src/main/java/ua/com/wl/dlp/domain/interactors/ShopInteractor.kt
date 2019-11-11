@@ -136,13 +136,6 @@ interface ShopInteractor : OffersInteractor {
     suspend fun getPersistedShop(shopId: Int): Result<Optional<ShopEntity>>
 
     /**
-     * Allows to retrieve all persisted shop entities from local DB.
-     * @return If success, result is an instance of [Result.Success] with [ShopEntity] list,
-     * otherwise [Result.Failure] with detailed [Throwable].
-     */
-    suspend fun getPersistedShops(): Result<List<ShopEntity>>
-
-    /**
      * Allows to delete persisted shop from local DB.
      * @param [shop] - entity that will be deleted.
      * @return If success, result is an instance of [Result.Success] with boolean flag inside, that indicates
@@ -159,11 +152,12 @@ interface ShopInteractor : OffersInteractor {
 
     /**
      * Allows to update persisted offer in local DB. [BaseOfferResponse] is a projection of [OfferEntity].
+     * @param [shopId] - [ShopEntity]'s unique identifier to which belongs offer.
      * @param [offer] - object that will update related [OfferEntity].
      * @return If success, result is an instance of [Result.Success] with boolean flag inside, that indicates
      * whether entity was updated successfully, otherwise [Result.Failure] with detailed [Throwable].
      */
-    suspend fun updatePersistedOffer(offer: BaseOfferResponse): Result<Boolean>
+    suspend fun updatePersistedOffer(shopId: Int, offer: BaseOfferResponse): Result<Boolean>
 
     /**
      * Takes persisted offer by given id from local DB and increment pre orders counter if entity exist.

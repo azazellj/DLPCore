@@ -41,6 +41,6 @@ data class OrderEntity(
 ) {
     companion object {
 
-        const val TABLE_NAME = "shop_offers"
+        const val TABLE_NAME = "orders"
     }
 }

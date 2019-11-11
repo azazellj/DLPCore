@@ -11,9 +11,6 @@ import ua.com.wl.dlp.data.db.entities.shops.OfferEntity
 @Dao
 interface OffersDao {
 
-    @Query("SELECT * FROM ${OfferEntity.TABLE_NAME} WHERE id = :id")
-    suspend fun getOffer(id: Int): OfferEntity?
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun upsertOffer(offer: OfferEntity): Long
 

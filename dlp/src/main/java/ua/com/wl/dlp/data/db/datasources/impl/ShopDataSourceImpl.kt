@@ -34,16 +34,6 @@ class ShopDataSourceImpl(
             throw DbQueryException(DbErrorKeys.SELECT_QUERY_ERROR)
         }
 
-    override suspend fun getShops(): List<ShopEntity> =
-        try {
-            withContext(Dispatchers.IO) {
-                shopsDao.getShops()
-            }
-
-        } catch (e: Exception) {
-            throw DbQueryException(DbErrorKeys.SELECT_QUERY_ERROR)
-        }
-
     override suspend fun upsertShop(shop: ShopEntity): Boolean =
         try {
             withContext(Dispatchers.IO) {
@@ -92,21 +82,11 @@ class ShopDataSourceImpl(
             }
         }
 
-    override suspend fun getOffer(id: Int): Optional<OfferEntity> =
-        try {
-            withContext(Dispatchers.IO) {
-                Optional.ofNullable(offersDao.getOffer(id))
-            }
-
-        } catch (e: Exception) {
-            throw DbQueryException(DbErrorKeys.SELECT_QUERY_ERROR)
-        }
-
     override suspend fun getOffer(id: Int, shopId: Int): Optional<OfferEntity> =
         try {
             withContext(Dispatchers.IO) {
                 ordersDao.getOrderRelation(shopId, id)?.let { relation ->
-                    Optional.ofNullable(ordersDao.getOffersForShop(shopId, id)?.apply {
+                    Optional.ofNullable(ordersDao.getOfferForShop(shopId, id)?.apply {
                         this.shopId = relation.shopId
                         this.preOrdersCount = relation.preOrdersCount
                     })
@@ -125,7 +105,7 @@ class ShopDataSourceImpl(
                         ordersDao.getOrderRelation(shopId, offer.id)?.let { relation ->
                             offer.shopId = relation.shopId
                             offer.preOrdersCount = relation.preOrdersCount
-                        } ?: throw DbQueryException(DbErrorKeys.ENTITY_IS_NOT_EXISTS)
+                        } ?: throw IllegalStateException("Relation between offer and order was not found")
                     }
                 }
             }

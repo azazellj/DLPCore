@@ -94,23 +94,23 @@ class ShopOffersSyncWork(
 
     private suspend fun getPreOrders(shop: ShopEntity) {
         when(val preOrdersResult = shopInteractor.getPersistedOffers(shop.id)) {
-            is Success -> getOffers(preOrdersResult.data)
+            is Success -> getOffers(shop.id, preOrdersResult.data)
             is Failure -> outputs.putBoolean(ERROR_KEY_WHEN_READ_ORDERS, true)
         }
     }
 
-    private suspend fun getOffers(preOrders: List<OfferEntity>) {
+    private suspend fun getOffers(shopId: Int, preOrders: List<OfferEntity>) {
         for (preOrder in preOrders) {
             when(val offerResult = shopInteractor.getOffer(preOrder.id)) {
-                is Success -> updatePreOrder(offerResult.data)
+                is Success -> updatePreOrder(shopId, offerResult.data)
                 is Failure -> outputs.putBoolean(ERROR_KEY_WHEN_LOAD_OFFERS, true)
             }
         }
         shopInteractor.populatePersistedPreOrdersPrice(shopId)
     }
 
-    private suspend fun updatePreOrder(offer: BaseOfferResponse) {
-        val upsertResult = shopInteractor.updatePersistedOffer(offer)
+    private suspend fun updatePreOrder(shopId: Int, offer: BaseOfferResponse) {
+        val upsertResult = shopInteractor.updatePersistedOffer(shopId, offer)
         if (upsertResult is Failure) {
             outputs.putBoolean(ERROR_KEY_WHEN_WRITE_IN_DB, true)
         }

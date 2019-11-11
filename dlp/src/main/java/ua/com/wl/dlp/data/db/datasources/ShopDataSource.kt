@@ -12,8 +12,6 @@ interface ShopDataSource {
 
     suspend fun getShop(id: Int): Optional<ShopEntity>
 
-    suspend fun getShops(): List<ShopEntity>
-
     suspend fun upsertShop(shop: ShopEntity): Boolean
 
     suspend fun updateShop(shop: ShopEntity): Boolean
@@ -21,8 +19,6 @@ interface ShopDataSource {
     suspend fun deleteShop(shop: ShopEntity): Boolean
 
     suspend fun deleteShops(): Boolean
-
-    suspend fun getOffer(id: Int): Optional<OfferEntity>
 
     suspend fun getOffer(id: Int, shopId: Int): Optional<OfferEntity>
 

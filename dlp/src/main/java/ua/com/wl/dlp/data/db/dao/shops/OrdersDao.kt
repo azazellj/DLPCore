@@ -22,7 +22,7 @@ interface OrdersDao {
         WHERE OrdersTable.shop_id= :shopId
         AND OffersTable.id= :offerId
         """)
-    suspend fun getOffersForShop(shopId: Int, offerId: Int): OfferEntity?
+    suspend fun getOfferForShop(shopId: Int, offerId: Int): OfferEntity?
 
     @Query(
         """
