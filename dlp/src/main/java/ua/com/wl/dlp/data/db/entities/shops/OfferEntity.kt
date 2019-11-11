@@ -17,10 +17,18 @@ import ua.com.wl.dlp.data.db.entities.shops.embedded.offer.OfferEntityPromoSetti
             parentColumns = arrayOf("id"),
             childColumns = arrayOf("shop_id"),
             onDelete = CASCADE)
+    ],
+    indices = [
+        Index(
+            value = ["id", "shop_id"],
+            unique = true)
     ]
 )
 data class OfferEntity(
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "unique_id")
+    val uniqueId: Long,
+
     @ColumnInfo(name = "id")
     val id: Int,
 
