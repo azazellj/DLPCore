@@ -7,7 +7,7 @@ import androidx.room.*
  */
 
 @Entity(
-    tableName = ShopOfferEntity.TABLE_NAME,
+    tableName = OrderEntity.TABLE_NAME,
     primaryKeys = ["shop_id", "offer_id"],
     foreignKeys = [
         ForeignKey(
@@ -29,7 +29,7 @@ import androidx.room.*
             unique = true)
     ]
 )
-data class ShopOfferEntity(
+data class OrderEntity(
     @ColumnInfo(name = "shop_id")
     val shopId: Int,
 

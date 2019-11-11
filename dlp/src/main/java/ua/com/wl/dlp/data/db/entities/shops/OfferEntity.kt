@@ -50,10 +50,8 @@ data class OfferEntity(
     }
 
     @Ignore
-    @ColumnInfo(name = "shop_id_ignored")
     var shopId: Int = 0
 
     @Ignore
-    @ColumnInfo(name = "pre_orders_count_ignored")
     var preOrdersCount: Int = 0
 }

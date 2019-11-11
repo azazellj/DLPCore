@@ -12,10 +12,10 @@ import ua.com.wl.dlp.data.db.converters.PaymentMethodTypeConverter
 import ua.com.wl.dlp.data.db.converters.PromoTypeConverter
 import ua.com.wl.dlp.data.db.dao.shops.OffersDao
 import ua.com.wl.dlp.data.db.dao.shops.ShopsDao
-import ua.com.wl.dlp.data.db.dao.shops.ShopsOffersDao
+import ua.com.wl.dlp.data.db.dao.shops.OrdersDao
 import ua.com.wl.dlp.data.db.entities.shops.OfferEntity
 import ua.com.wl.dlp.data.db.entities.shops.ShopEntity
-import ua.com.wl.dlp.data.db.entities.shops.ShopOfferEntity
+import ua.com.wl.dlp.data.db.entities.shops.OrderEntity
 
 /**
  * @author Denis Makovskyi
@@ -25,7 +25,7 @@ import ua.com.wl.dlp.data.db.entities.shops.ShopOfferEntity
     entities = [
         ShopEntity::class,
         OfferEntity::class,
-        ShopOfferEntity::class
+        OrderEntity::class
     ],
     version = ShopsDatabase.VERSION,
     exportSchema = false
@@ -41,7 +41,7 @@ abstract class ShopsDatabase : RoomDatabase() {
 
     abstract fun getOffersDao(): OffersDao
 
-    abstract fun getShopsOffersDao(): ShopsOffersDao
+    abstract fun getShopsOffersDao(): OrdersDao
 
     companion object {
 
