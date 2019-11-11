@@ -27,7 +27,7 @@ class ShopDataSourceImpl(
     override suspend fun getShop(id: Int): Optional<ShopEntity> =
         try {
             withContext(Dispatchers.IO) {
-                Optional.ofNullable(shopsDao.getShop(id))
+                return@withContext Optional.ofNullable(shopsDao.getShop(id))
             }
 
         } catch (e: Exception) {
@@ -37,7 +37,7 @@ class ShopDataSourceImpl(
     override suspend fun getShops(): List<ShopEntity> =
         try {
             withContext(Dispatchers.IO) {
-                shopsDao.getShops()
+                return@withContext shopsDao.getShops()
             }
 
         } catch (e: Exception) {
@@ -47,7 +47,7 @@ class ShopDataSourceImpl(
     override suspend fun upsertShop(shop: ShopEntity): Boolean =
         try {
             withContext(Dispatchers.IO) {
-                shopsDao.upsertShop(shop) > 0
+                return@withContext shopsDao.upsertShop(shop) > 0
             }
 
         } catch (e: Exception) {
@@ -57,7 +57,7 @@ class ShopDataSourceImpl(
     override suspend fun updateShop(shop: ShopEntity): Boolean =
         try {
             withContext(Dispatchers.IO) {
-                shopsDao.updateShop(shop) > 0
+                return@withContext shopsDao.updateShop(shop) > 0
             }
 
         } catch (e: Exception) {
@@ -95,7 +95,7 @@ class ShopDataSourceImpl(
     override suspend fun getOffer(id: Int): Optional<OfferEntity> =
         try {
             withContext(Dispatchers.IO) {
-                Optional.ofNullable(offersDao.getOffer(id))
+                return@withContext Optional.ofNullable(offersDao.getOffer(id))
             }
 
         } catch (e: Exception) {
@@ -105,7 +105,7 @@ class ShopDataSourceImpl(
     override suspend fun getOffer(id: Int, shopId: Int): Optional<OfferEntity> =
         try {
             withContext(Dispatchers.IO) {
-                Optional.ofNullable(shopsOffersDao.getOfferForShop(shopId, id))
+                return@withContext Optional.ofNullable(shopsOffersDao.getOfferForShop(shopId, id))
             }
 
         } catch (e: Exception) {
@@ -115,7 +115,7 @@ class ShopDataSourceImpl(
     override suspend fun getOffers(shopId: Int): List<OfferEntity> =
         try {
             withContext(Dispatchers.IO) {
-                shopsOffersDao.getOffersForShop(shopId)
+                return@withContext shopsOffersDao.getOffersForShop(shopId)
             }
 
         } catch (e: Exception) {
@@ -125,7 +125,7 @@ class ShopDataSourceImpl(
     override suspend fun upsertOffer(offer: OfferEntity): Boolean =
         try {
             withContext(Dispatchers.IO) {
-                offersDao.upsertOffer(offer) > 0
+                return@withContext offersDao.upsertOffer(offer) > 0
                     && shopsOffersDao.upsertRelation(ShopOfferEntity(offer.shopId, offer.id, offer.preOrdersCount)) > 0
             }
 
