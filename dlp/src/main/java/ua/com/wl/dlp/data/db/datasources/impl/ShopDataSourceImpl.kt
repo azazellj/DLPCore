@@ -140,7 +140,7 @@ class ShopDataSourceImpl(
                 if (isDeleted && (shopsOffersDao.getOfferEntries(offer.id) == 0L)) {
                     isDeleted = offersDao.deleteOffer(offer) > 0
                 }
-                isDeleted
+                return@withContext isDeleted
             }
 
         } catch (e: Exception) {
