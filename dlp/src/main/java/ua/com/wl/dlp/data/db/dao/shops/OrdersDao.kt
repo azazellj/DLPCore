@@ -36,7 +36,7 @@ interface OrdersDao {
     @Query("SELECT * FROM ${OrderEntity.TABLE_NAME} WHERE shop_id= :shopId AND offer_id= :offerId")
     suspend fun getOrderRelation(shopId: Int, offerId: Int): OrderEntity?
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun upsertOrderRelation(entity: OrderEntity): Long
 
     @Query("DELETE FROM ${OrderEntity.TABLE_NAME} WHERE shop_id= :shopId AND offer_id= :offerId")

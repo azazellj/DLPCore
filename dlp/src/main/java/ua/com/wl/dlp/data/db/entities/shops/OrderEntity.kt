@@ -22,11 +22,6 @@ import androidx.room.*
             childColumns = ["offer_id"],
             onDelete = ForeignKey.CASCADE
         )
-    ],
-    indices = [
-        Index(
-            value = ["shop_id", "offer_id"],
-            unique = true)
     ]
 )
 data class OrderEntity(
