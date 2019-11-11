@@ -8,14 +8,7 @@ import androidx.room.*
 
 @Entity(
     tableName = ShopOfferEntity.TABLE_NAME,
-    indices = [
-        Index(
-            value = ["id"],
-            unique = true),
-        Index(
-            value = ["shop_id", "offer_id"],
-            unique = true)
-    ],
+    primaryKeys = ["shop_id", "offer_id"],
     foreignKeys = [
         ForeignKey(
             entity = ShopEntity::class,
@@ -29,6 +22,11 @@ import androidx.room.*
             childColumns = ["offer_id"],
             onDelete = ForeignKey.CASCADE
         )
+    ],
+    indices = [
+        Index(
+            value = ["shop_id", "offer_id"],
+            unique = true)
     ]
 )
 data class ShopOfferEntity(
@@ -45,8 +43,4 @@ data class ShopOfferEntity(
 
         const val TABLE_NAME = "shop_offers"
     }
-
-    @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "id")
-    var id: Int = 0
 }

@@ -24,7 +24,7 @@ interface ShopsOffersDao {
         INNER JOIN ${ShopOfferEntity.TABLE_NAME} ShopsOffersTable
         ON OffersTable.id=ShopsOffersTable.offer_id
         WHERE ShopsOffersTable.shop_id= :shopId
-        AND ShopsOffersTable.offer_id= :offerId
+        AND OffersTable.id= :offerId
         """)
     suspend fun getOfferForShop(shopId: Int, offerId: Int): OfferEntity?
 
