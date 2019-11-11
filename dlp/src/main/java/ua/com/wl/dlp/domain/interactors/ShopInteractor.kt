@@ -167,7 +167,7 @@ interface ShopInteractor : OffersInteractor {
 
     /**
      * Takes persisted offer by given id from local DB and increment pre orders counter if entity exist.
-     * * @param [shopId] - [ShopEntity]'s unique identifier to which belongs offer.
+     * @param [shopId] - [ShopEntity]'s unique identifier to which belongs offer.
      * @param [offerId] - [OfferEntity]'s unique identifier.
      * @return If success, result is an instance of [Result.Success] with [OfferEntity] inside,
      * which cache related [BaseOfferResponse] info and holds actual pre orders counter,

@@ -40,7 +40,7 @@ class ShopInteractorImpl(
     private val shopDataSource: ShopDataSource,
     private val offersInteractor: OffersInteractor
 ) : UseCase(errorsMapper), ShopInteractor, OffersInteractor by offersInteractor {
-
+    
     override suspend fun getCityShops(
         page: Int?,
         count: Int?
@@ -126,9 +126,7 @@ class ShopInteractorImpl(
         callQuery(call = { shopDataSource.updateShop(shop) })
             .sOnSuccess { isSuccess ->
                 if (isSuccess) {
-                    if (callQuery(call = { shopDataSource.getOffers(shop.id) }).isSuccess()) {
-                        populatePersistedPreOrdersPrice(shop.id)
-                    }
+                    populatePersistedPreOrdersPrice(shop.id)
                 }
             }
 
@@ -140,7 +138,7 @@ class ShopInteractorImpl(
 
     override suspend fun deletePersistedShop(shop: ShopEntity): Result<Boolean> =
         callQuery(call = { shopDataSource.deleteShop(shop) })
-            .sOnEach {
+            .sOnSuccess {
                 withContext(Dispatchers.Main.immediate) {
                     CoreBusEventsFactory.ordersPrice(shop.id)
                     CoreBusEventsFactory.orderCounter(shopId = shop.id, resetAll = true)
@@ -155,7 +153,7 @@ class ShopInteractorImpl(
             .sFlatMap { offerEntityOpt ->
                 offerEntityOpt.sIfPresentOrDefault(
                     {
-                        val offerEntity = offer.toOfferEntity(it.shopId, it.preOrderCount)
+                        val offerEntity = offer.toOfferEntity(it.shopId, it.preOrdersCount)
                         when(val upsertOfferQueryRes = callQuery(call = { shopDataSource.upsertOffer(offerEntity) })) {
                             is Result.Success -> Result.Success(true)
                             is Result.Failure -> upsertOfferQueryRes
@@ -170,8 +168,8 @@ class ShopInteractorImpl(
         callQuery(call = { shopDataSource.getOffer(offerId, shopId) })
             .sFlatMap { offerEntityOpt ->
                 offerEntityOpt.sIfPresentOrDefault(
-                    {
-                        val offerEntity = it.copy(preOrderCount = it.preOrderCount.inc())
+                    { offerEntity ->
+                        offerEntity.preOrdersCount = offerEntity.preOrdersCount.inc()
                         when(val upsertOfferQueryRes = callQuery(call = { shopDataSource.upsertOffer(offerEntity) })) {
                             is Result.Success -> {
                                 if (upsertOfferQueryRes.data) {
@@ -191,7 +189,7 @@ class ShopInteractorImpl(
                 CoreBusEventsFactory.orderCounter(
                     shopId = offerEntity.shopId,
                     tradeId = offerEntity.tradeItem,
-                    counter = offerEntity.preOrderCount)
+                    counter = offerEntity.preOrdersCount)
             }
 
     override suspend fun incrementPersistedPreOrderCounter(shopId: Int, offer: BaseOfferResponse): Result<OfferEntity> =
@@ -218,7 +216,7 @@ class ShopInteractorImpl(
                 when(val selectOfferQueryRes = callQuery(call = { shopDataSource.getOffer(requireNotNull(offer.id), shopEntity.id) })) {
                     is Result.Success -> {
                         val offerEntity = selectOfferQueryRes.data.ifPresentOrDefault(
-                            { offer.toOfferEntity(shopEntity.id, it.preOrderCount.inc()) },
+                            { offer.toOfferEntity(shopEntity.id, it.preOrdersCount.inc()) },
                             { offer.toOfferEntity(shopEntity.id, 1) })
                         when(val upsertOfferQueryRes = callQuery(call = { shopDataSource.upsertOffer(offerEntity) })) {
                             is Result.Success -> {
@@ -238,19 +236,18 @@ class ShopInteractorImpl(
                 CoreBusEventsFactory.orderCounter(
                     shopId = offerEntity.shopId,
                     tradeId = offerEntity.tradeItem,
-                    counter = offerEntity.preOrderCount)
+                    counter = offerEntity.preOrdersCount)
             }
 
     override suspend fun decrementPersistedPreOrderCounter(shopId: Int, offerId: Int, tradeItem: Int): Result<OfferEntity> =
         callQuery(call = { shopDataSource.getOffer(offerId, shopId) })
             .sFlatMap { offerEntityOpt ->
                 offerEntityOpt.sIfPresentOrDefault(
-                    {
-                        var offerEntity = it
-                        if (offerEntity.preOrderCount > 0) {
-                            offerEntity = offerEntity.copy(preOrderCount = offerEntity.preOrderCount.dec())
+                    { offerEntity ->
+                        if (offerEntity.preOrdersCount > 0) {
+                            offerEntity.preOrdersCount = offerEntity.preOrdersCount.dec()
                         }
-                        if (offerEntity.preOrderCount > 0) {
+                        if (offerEntity.preOrdersCount > 0) {
                             when(val upsertOfferQueryRes = callQuery(call = { shopDataSource.upsertOffer(offerEntity) })) {
                                 is Result.Success -> Result.Success(offerEntity)
                                 is Result.Failure -> upsertOfferQueryRes
@@ -271,7 +268,7 @@ class ShopInteractorImpl(
                 CoreBusEventsFactory.orderCounter(
                     shopId = offerEntity.shopId,
                     tradeId = offerEntity.tradeItem,
-                    counter = offerEntity.preOrderCount)
+                    counter = offerEntity.preOrdersCount)
             }.sOnFailure { error ->
                 if (error.message == DbErrorKeys.ENTITY_IS_NOT_EXISTS_ANYMORE) {
                     populatePersistedPreOrdersPrice(shopId)
@@ -290,11 +287,11 @@ class ShopInteractorImpl(
                     is Result.Success -> {
                         selectOfferQueryRes.data.sIfPresentOrDefault(
                             {
-                                var offerEntity = offer.toOfferEntity(shop.id, it.preOrderCount)
-                                if (offerEntity.preOrderCount > 0) {
-                                    offerEntity = offerEntity.copy(preOrderCount = offerEntity.preOrderCount.dec())
+                                val offerEntity = offer.toOfferEntity(shop.id, it.preOrdersCount)
+                                if (offerEntity.preOrdersCount > 0) {
+                                    offerEntity.preOrdersCount = offerEntity.preOrdersCount.dec()
                                 }
-                                if (offerEntity.preOrderCount > 0) {
+                                if (offerEntity.preOrdersCount > 0) {
                                     when(val upsertOfferQueryRes = callQuery(call = { shopDataSource.upsertOffer(offerEntity) })) {
                                         is Result.Success -> Result.Success(offerEntity)
                                         is Result.Failure -> upsertOfferQueryRes
@@ -318,7 +315,7 @@ class ShopInteractorImpl(
                 CoreBusEventsFactory.orderCounter(
                     shopId = offerEntity.shopId,
                     tradeId = offerEntity.tradeItem,
-                    counter = offerEntity.preOrderCount)
+                    counter = offerEntity.preOrdersCount)
             }.sOnFailure { error ->
                 if (error.message == DbErrorKeys.ENTITY_IS_NOT_EXISTS_ANYMORE) {
                     populatePersistedPreOrdersPrice(shopId)
@@ -338,7 +335,7 @@ class ShopInteractorImpl(
                                     ?.promoParams
                                     ?.salePrice
                                     ?.toDouble()
-                                    ?.times(offer.preOrderCount)
+                                    ?.times(offer.preOrdersCount)
                                     ?: 0.0
                             }
                             PromoType.EVENT -> {
@@ -346,7 +343,7 @@ class ShopInteractorImpl(
                                     ?.promoParams
                                     ?.eventPrice
                                     ?.toDouble()
-                                    ?.times(offer.preOrderCount)
+                                    ?.times(offer.preOrdersCount)
                                     ?: 0.0
                             }
                             PromoType.DISCOUNT -> {
@@ -354,14 +351,14 @@ class ShopInteractorImpl(
                                     ?.promoParams
                                     ?.discountPrice
                                     ?.toDouble()
-                                    ?.times(offer.preOrderCount)
+                                    ?.times(offer.preOrdersCount)
                                     ?: 0.0
                             }
-                            else -> offer.priceInCurrency?.toDouble()?.times(offer.preOrderCount) ?: 0.0
+                            else -> offer.priceInCurrency?.toDouble()?.times(offer.preOrdersCount) ?: 0.0
                         }
 
                     } else {
-                        offer.priceInCurrency?.toDouble()?.times(offer.preOrderCount) ?: 0.0
+                        offer.priceInCurrency?.toDouble()?.times(offer.preOrdersCount) ?: 0.0
                     }
                 }
                 CoreBusEventsFactory.ordersPrice(shopId, offers.size, price)

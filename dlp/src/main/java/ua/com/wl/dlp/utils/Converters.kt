@@ -40,9 +40,11 @@ fun BaseOfferResponse.toOfferEntity(shopId: Int, count: Int = 0): OfferEntity {
         entityPromoParams
     )
     return OfferEntity(
-        id, shopId, tradeItem,
+        id, tradeItem,
         name, thumbImage, shortDescription,
         priceInBonuses, priceInCurrency, cashBackPercentage,
-        isPromo, isFavourite, count, entityPromoSettings
-    )
+        isPromo, isFavourite, entityPromoSettings).apply {
+        this.shopId = shopId
+        this.preOrdersCount = count
+    }
 }

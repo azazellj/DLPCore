@@ -17,6 +17,9 @@ val databaseModule = module {
     }
     single<ShopDataSource> {
         val db = get<ShopsDatabase>()
-        ShopDataSourceImpl(db.getShopsDao(), db.getOffersDao())
+        ShopDataSourceImpl(
+            db.getShopsDao(),
+            db.getOffersDao(),
+            db.getShopsOffersDao())
     }
 }

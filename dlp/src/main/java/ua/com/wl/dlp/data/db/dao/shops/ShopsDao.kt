@@ -23,12 +23,9 @@ interface ShopsDao {
     @Update
     suspend fun updateShop(shop: ShopEntity): Int
 
-    @Query("DELETE FROM ${ShopEntity.TABLE_NAME} WHERE id = :id")
-    suspend fun deleteShop(id: Int): Int
-
     @Delete
     suspend fun deleteShop(shop: ShopEntity): Int
 
-    @Query("DELETE FROM ${ShopEntity.TABLE_NAME}")
+    @Query("DELETE FROM ${ShopEntity.TABLE_NAME} WHERE 1 = 1")
     suspend fun deleteShops(): Int
 }

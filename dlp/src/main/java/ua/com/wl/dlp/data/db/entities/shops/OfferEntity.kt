@@ -1,7 +1,6 @@
 package ua.com.wl.dlp.data.db.entities.shops
 
 import androidx.room.*
-import androidx.room.ForeignKey.CASCADE
 
 import ua.com.wl.dlp.data.db.entities.shops.embedded.offer.OfferEntityPromoSettings
 
@@ -9,31 +8,11 @@ import ua.com.wl.dlp.data.db.entities.shops.embedded.offer.OfferEntityPromoSetti
  * @author Denis Makovskyi
  */
 
-@Entity(
-    tableName = OfferEntity.TABLE_NAME,
-    foreignKeys = [
-        ForeignKey(
-            entity = ShopEntity::class,
-            parentColumns = arrayOf("id"),
-            childColumns = arrayOf("shop_id"),
-            onDelete = CASCADE)
-    ],
-    indices = [
-        Index(
-            value = ["id", "shop_id"],
-            unique = true)
-    ]
-)
+@Entity(tableName = OfferEntity.TABLE_NAME)
 data class OfferEntity(
-    @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "unique_id")
-    val uniqueId: Long,
-
+    @PrimaryKey
     @ColumnInfo(name = "id")
     val id: Int,
-
-    @ColumnInfo(name = "shop_id")
-    val shopId: Int,
 
     @ColumnInfo(name = "trade_item")
     val tradeItem: Int? = null,
@@ -62,9 +41,6 @@ data class OfferEntity(
     @ColumnInfo(name = "is_favourite_offer")
     val isFavouriteOffer: Boolean = false,
 
-    @ColumnInfo(name = "pre_order_count")
-    val preOrderCount: Int = 0,
-
     @Embedded(prefix = "settings_")
     var promoSettings: OfferEntityPromoSettings? = null
 ) {
@@ -72,4 +48,12 @@ data class OfferEntity(
 
         const val TABLE_NAME = "offers"
     }
+
+    @Ignore
+    @ColumnInfo(name = "shop_id_ignored")
+    var shopId: Int = 0
+
+    @Ignore
+    @ColumnInfo(name = "pre_orders_count_ignored")
+    var preOrdersCount: Int = 0
 }
