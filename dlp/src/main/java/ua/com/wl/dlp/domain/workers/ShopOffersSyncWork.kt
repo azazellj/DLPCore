@@ -110,7 +110,7 @@ class ShopOffersSyncWork(
     }
 
     private suspend fun updatePreOrder(shopId: Int, offer: BaseOfferResponse) {
-        val upsertResult = shopInteractor.updatePersistedOffer(shopId, offer)
+        val upsertResult = shopInteractor.updateOrder(shopId, offer)
         if (upsertResult is Failure) {
             outputs.putBoolean(ERROR_KEY_WHEN_WRITE_IN_DB, true)
         }

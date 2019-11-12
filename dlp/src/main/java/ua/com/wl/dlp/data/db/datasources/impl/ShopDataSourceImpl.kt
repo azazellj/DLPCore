@@ -82,7 +82,17 @@ class ShopDataSourceImpl(
             }
         }
 
-    override suspend fun getOffer(id: Int, shopId: Int): Optional<OfferEntity> =
+    override suspend fun getOffer(id: Int): Optional<OfferEntity> =
+        try {
+            withContext(Dispatchers.IO) {
+                Optional.ofNullable(offersDao.getOffer(id))
+            }
+
+        } catch (e: Exception) {
+            throw DbQueryException(DbErrorKeys.SELECT_QUERY_ERROR)
+        }
+
+    override suspend fun getOrder(id: Int, shopId: Int): Optional<OfferEntity> =
         try {
             withContext(Dispatchers.IO) {
                 ordersDao.getOrder(shopId, id)?.let { order ->
@@ -97,7 +107,7 @@ class ShopDataSourceImpl(
             throw DbQueryException(DbErrorKeys.SELECT_QUERY_ERROR)
         }
 
-    override suspend fun getOffers(shopId: Int): List<OfferEntity> =
+    override suspend fun getOrders(shopId: Int): List<OfferEntity> =
         try {
             withContext(Dispatchers.IO) {
                 ordersDao.getOffersForShop(shopId).also { offers ->
@@ -114,11 +124,16 @@ class ShopDataSourceImpl(
             throw DbQueryException(DbErrorKeys.SELECT_QUERY_ERROR)
         }
 
-    override suspend fun insertOffer(offer: OfferEntity): Boolean =
+    override suspend fun insertOrder(offer: OfferEntity): Boolean =
         try {
             withContext(Dispatchers.IO) {
+                val isOfferInserted = if (offersDao.getOffersCount(offer.id) > 0) {
+                    offersDao.updateOffer(offer) > 0
+                } else {
+                    offersDao.insertOffer(offer) > 0
+                }
                 OrderEntity(offer.shopId, offer.id, offer.preOrdersCount).let {
-                    offersDao.insertOffer(offer) > 0 && ordersDao.insertOrder(it) > 0
+                    isOfferInserted && ordersDao.insertOrder(it) > 0
                 }
             }
 
@@ -126,7 +141,7 @@ class ShopDataSourceImpl(
             throw DbQueryException(DbErrorKeys.INSERT_QUERY_ERROR)
         }
 
-    override suspend fun updateOffer(offer: OfferEntity): Boolean =
+    override suspend fun updateOrder(offer: OfferEntity): Boolean =
         try {
             withContext(Dispatchers.IO) {
                 OrderEntity(offer.shopId, offer.id, offer.preOrdersCount).let {
@@ -138,7 +153,7 @@ class ShopDataSourceImpl(
             throw DbQueryException(DbErrorKeys.UPDATE_QUERY_ERROR)
         }
 
-    override suspend fun deleteOffer(offer: OfferEntity): Boolean =
+    override suspend fun deleteOrder(offer: OfferEntity): Boolean =
         try {
             withContext(Dispatchers.IO) {
                 var isDeleted = ordersDao.deleteOrder(OrderEntity(offer.shopId, offer.id)) > 0

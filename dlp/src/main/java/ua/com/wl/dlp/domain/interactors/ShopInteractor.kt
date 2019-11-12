@@ -157,7 +157,7 @@ interface ShopInteractor : OffersInteractor {
      * @return If success, result is an instance of [Result.Success] with boolean flag inside, that indicates
      * whether entity was updated successfully, otherwise [Result.Failure] with detailed [Throwable].
      */
-    suspend fun updatePersistedOffer(shopId: Int, offer: BaseOfferResponse): Result<Boolean>
+    suspend fun updateOrder(shopId: Int, offer: BaseOfferResponse): Result<Boolean>
 
     /**
      * Takes persisted offer by given id from local DB and increment pre orders counter if entity exist.
