@@ -29,16 +29,14 @@ fun BaseOfferResponse.toOfferEntity(shopId: Int, count: Int = 0): OfferEntity {
         promoSettings?.promoParams?.discountSize,
         promoSettings?.promoParams?.discountPrice,
         promoSettings?.promoParams?.priceInBonuses,
-        promoSettings?.promoParams?.cashBackSize
-    )
+        promoSettings?.promoParams?.cashBackSize)
     val entityPromoSettings = OfferEntityPromoSettings(
         promoSettings?.promoType,
         promoSettings?.activeSince,
         promoSettings?.activeUntil,
         promoSettings?.activeFrom,
         promoSettings?.activeTo,
-        entityPromoParams
-    )
+        entityPromoParams)
     return OfferEntity(
         id, tradeItem,
         name, thumbImage, shortDescription,

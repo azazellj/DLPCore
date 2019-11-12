@@ -11,8 +11,11 @@ import ua.com.wl.dlp.data.db.entities.shops.OfferEntity
 @Dao
 interface OffersDao {
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun upsertOffer(offer: OfferEntity): Long
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertOffer(offer: OfferEntity): Long
+
+    @Update
+    suspend fun updateOffer(offer: OfferEntity): Int
 
     @Delete
     suspend fun deleteOffer(offer: OfferEntity): Int

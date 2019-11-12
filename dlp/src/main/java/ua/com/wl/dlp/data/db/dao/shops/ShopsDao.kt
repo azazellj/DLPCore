@@ -17,8 +17,8 @@ interface ShopsDao {
     @Query("SELECT * FROM ${ShopEntity.TABLE_NAME}")
     suspend fun getShops(): List<ShopEntity>
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun upsertShop(shop: ShopEntity): Long
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertShop(shop: ShopEntity): Long
 
     @Update
     suspend fun updateShop(shop: ShopEntity): Int
