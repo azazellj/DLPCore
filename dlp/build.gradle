@@ -34,7 +34,7 @@ android {
 }
 
 dependencies {
-    def core_version = "1.2.0-beta01"
+    def core_version = '1.2.0-beta02'
     def room_version = "2.2.1"
     def work_version = "2.2.0"
     def koin_version = "2.0.1"
@@ -77,5 +77,5 @@ dependencies {
     implementation "com.github.ChuckerTeam.Chucker:library:3.0.1"
 
     // Architecture
-    implementation 'com.github.DenisMakovskyi:Archetype:0.2'
+    implementation 'com.github.DenisMakovskyi:Archetype:0.3'
 }
