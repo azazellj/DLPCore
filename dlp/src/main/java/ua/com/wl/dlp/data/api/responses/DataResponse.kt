@@ -10,4 +10,5 @@ class DataResponse<T>(
     type: String,
 
     @SerializedName("results")
-    val payload: T) : BaseResponse(type)
+    val payload: T
+) : BaseResponse(type)

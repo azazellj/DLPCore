@@ -7,17 +7,9 @@ import com.google.gson.annotations.SerializedName
  */
 
 data class OrderShop(
-    @SerializedName("id")
-    val id: Int,
-
     @SerializedName("name")
     val name: String,
 
-    @SerializedName("address")
-    val address: String?,
-
-    @SerializedName("thumb_logo")
-    val thumbLogo: String?,
-
     @SerializedName("city")
-    val city: OrderShopCity)
+    val city: OrderShopCity
+): BaseOrderShop()

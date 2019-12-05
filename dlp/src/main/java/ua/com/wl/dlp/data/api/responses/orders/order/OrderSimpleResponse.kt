@@ -16,4 +16,5 @@ data class OrderSimpleResponse(
     val shopThumbLogo: String,
 
     @SerializedName("rs_order")
-    val consumerOrder: ConsumerOrder?) : BaseOrderResponse()
+    val consumerOrder: ConsumerOrder?
+) : BaseOrderResponse()

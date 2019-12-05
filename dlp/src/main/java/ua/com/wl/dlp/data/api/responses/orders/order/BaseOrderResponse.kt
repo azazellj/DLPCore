@@ -19,8 +19,8 @@ open class BaseOrderResponse(
     @SerializedName("changed_at")
     var changedAt: String? = null,
 
-    @SerializedName("price_in_money_total")
-    var priceInCurrency: String? = null,
-
     @SerializedName("price_in_bonuses_total")
-    var priceInBonuses: Long? = null)
+    var priceInBonuses: Long? = null,
+
+    @SerializedName("price_in_money_total")
+    var priceInCurrency: String? = null)
