@@ -10,6 +10,9 @@ data class Order(
     @SerializedName("id")
     val id: Int,
 
+    @SerializedName("cash_back_amount")
+    var cashback: Long? = null,
+
     @SerializedName("changed_at")
     val changedAt: String?,
 
