@@ -17,7 +17,6 @@ open class UseCase(private val errorsMapper: ErrorsMapper) {
     protected suspend fun <T : Any> callApi(
         call: suspend () -> Response<T>,
         errorClass: Class<out CoreException>? = null
-
     ): Result<Optional<T>> =
         try {
             val response = call.invoke()

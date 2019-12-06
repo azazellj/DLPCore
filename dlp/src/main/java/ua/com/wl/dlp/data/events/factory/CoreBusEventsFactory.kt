@@ -5,6 +5,7 @@ import ua.com.wl.dlp.data.events.prefs.ProfileBusEvent
 import ua.com.wl.dlp.data.events.session.SessionBusEvent
 import ua.com.wl.dlp.data.events.shop.offer.OfferBusEvent
 import ua.com.wl.dlp.data.events.shop.order.OrderCounterBusEvent
+import ua.com.wl.dlp.data.events.shop.order.OrderRateBusEvent
 import ua.com.wl.dlp.data.events.shop.order.OrdersPriceBusEvent
 
 /**
@@ -29,10 +30,19 @@ object CoreBusEventsFactory {
         Bus.send(event)
     }
 
+    fun orderRate(
+        shopId: Int,
+        orderId: Int,
+        orderRate: Int = 0
+    ) {
+        Bus.send(OrderRateBusEvent(shopId, orderId, orderRate))
+    }
+
     fun ordersPrice(
         shopId: Int,
         count: Int = 0,
-        price: Double = 0.0) {
+        price: Double = 0.0
+    ) {
         Bus.send(OrdersPriceBusEvent(shopId, count, price))
     }
 
