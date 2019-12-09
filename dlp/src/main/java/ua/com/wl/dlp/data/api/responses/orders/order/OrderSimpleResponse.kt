@@ -9,6 +9,9 @@ import ua.com.wl.dlp.data.api.responses.models.shop.order.ConsumerOrder
  */
 
 data class OrderSimpleResponse(
+    @SerializedName("shop_name")
+    val shopName: String,
+
     @SerializedName("shop_address")
     val shopAddress: String,
 
