@@ -30,18 +30,18 @@ import ua.com.wl.dlp.data.api.errors.ErrorsMapper
 val apiModule = module {
     // - Host url and app id from manifest meta data
     factory(qualifier = named(Constants.KOIN_NAMED_URL)) {
-        val key = when(DLPCore.mode) {
-            DLPCore.Mode.DEBUG -> Constants.META_STAGING_URL
-            DLPCore.Mode.PRODUCTION -> Constants.META_PRODUCTION_URL
+        val key = when(DLPCore.environment) {
+            DLPCore.Environment.DEVELOPING -> Constants.META_STAGING_URL
+            DLPCore.Environment.PRODUCTION -> Constants.META_PRODUCTION_URL
         }
         androidContext()
             .packageManager.getApplicationInfo(androidContext().packageName, PackageManager.GET_META_DATA)
             .metaData?.get(key)?.toString() ?: throw IllegalStateException("Server url was not found")
     }
     factory(qualifier = named(Constants.KOIN_NAMED_APP_ID)) {
-        val key = when(DLPCore.mode) {
-            DLPCore.Mode.DEBUG -> Constants.META_STAGING_APP_ID
-            DLPCore.Mode.PRODUCTION -> Constants.META_PRODUCTION_APP_ID
+        val key = when(DLPCore.environment) {
+            DLPCore.Environment.DEVELOPING -> Constants.META_STAGING_APP_ID
+            DLPCore.Environment.PRODUCTION -> Constants.META_PRODUCTION_APP_ID
         }
         androidContext()
             .packageManager.getApplicationInfo(androidContext().packageName, PackageManager.GET_META_DATA)
@@ -55,9 +55,10 @@ val apiModule = module {
     }
     factory {
         HttpLoggingInterceptor().apply {
-            level = when(DLPCore.mode) {
-                DLPCore.Mode.DEBUG -> HttpLoggingInterceptor.Level.BODY
-                DLPCore.Mode.PRODUCTION -> HttpLoggingInterceptor.Level.NONE
+            level = if(DLPCore.debuggable) {
+                HttpLoggingInterceptor.Level.BODY
+            } else {
+                HttpLoggingInterceptor.Level.NONE
             }
         }
     }
@@ -71,7 +72,7 @@ val apiModule = module {
             .addInterceptor(interceptor = get<AuthInterceptor>())
             .addInterceptor(interceptor = get<HttpLoggingInterceptor>())
             .apply {
-                if (DLPCore.mode == DLPCore.Mode.DEBUG) {
+                if (DLPCore.debuggable) {
                     addInterceptor(interceptor = ChuckerInterceptor(androidContext()))
                 }
             }
@@ -103,7 +104,7 @@ val apiModule = module {
             .addInterceptor(interceptor = get<HttpLoggingInterceptor>())
             .authenticator(authenticator = get<SessionAuthenticator>())
             .apply {
-                if (DLPCore.mode == DLPCore.Mode.DEBUG) {
+                if (DLPCore.debuggable) {
                     addInterceptor(interceptor = ChuckerInterceptor(androidContext()))
                 }
             }

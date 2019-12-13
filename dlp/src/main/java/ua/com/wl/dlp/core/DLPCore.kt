@@ -14,12 +14,13 @@ import ua.com.wl.dlp.core.di.*
 
 object DLPCore {
 
-    enum class Mode {
-        DEBUG,
+    enum class Environment {
+        DEVELOPING,
         PRODUCTION
     }
 
-    var mode: Mode = Mode.DEBUG
+    var debuggable = true
+    var environment = Environment.DEVELOPING
 
     var koinApp: KoinApplication? = null
         private set
