@@ -6,4 +6,4 @@ import com.google.gson.annotations.SerializedName
  * @author Denis Makovskyi
  */
 
-data class OrderTransactionDetails(@SerializedName("order_number") val number: Int)
+data class OrderTransactionDetails(@SerializedName("order_number") val number: String)
