@@ -41,31 +41,26 @@ class ShopInteractorImpl(
     private val offersInteractor: OffersInteractor
 ) : UseCase(errorsMapper), ShopInteractor, OffersInteractor by offersInteractor {
 
-    override suspend fun getCityShops(
-        page: Int?,
-        count: Int?
-    ): Result<PagedResponse<CityShopsResponse>> =
+    override suspend fun getCityShops(page: Int?, count: Int?): Result<PagedResponse<CityShopsResponse>> =
         callApi(call = { apiV1.getCityShops(page, count) })
-            .flatMap { response ->
-                response.ifPresentOrDefault(
+            .flatMap { responseOpt ->
+                responseOpt.ifPresentOrDefault(
                     { Result.Success(it) },
                     { Result.Failure(ApiException()) })
             }
 
     override suspend fun getShop(shopId: Int): Result<ShopResponse> =
         callApi(call = { apiV1.getShop(shopId) })
-            .flatMap { response ->
-                response.ifPresentOrDefault(
+            .flatMap { responseOpt ->
+                responseOpt.ifPresentOrDefault(
                     { Result.Success(it) },
                     { Result.Failure(ApiException()) })
             }
 
-    override suspend fun getRubrics(
-        shopId: Int,
-        language: String): Result<CollectionResponse<RubricResponse>> =
+    override suspend fun getRubrics(shopId: Int, language: String): Result<CollectionResponse<RubricResponse>> =
         callApi(call = { apiV2.getRubrics(shopId, language) })
-            .flatMap { dataResponse ->
-                dataResponse.ifPresentOrDefault(
+            .flatMap { dataResponseOpt ->
+                dataResponseOpt.ifPresentOrDefault(
                     { Result.Success(it.payload) },
                     { Result.Failure(ApiException()) })
             }
@@ -77,29 +72,21 @@ class ShopInteractorImpl(
         rubricId: String?
     ): Result<PagedResponse<BaseOfferResponse>> =
         callApi(call = { apiV1.getOffers(shopId, page, count, rubricId) })
-            .flatMap { response ->
-                response.ifPresentOrDefault(
+            .flatMap { responseOpt ->
+                responseOpt.ifPresentOrDefault(
                     { Result.Success(it) },
                     { Result.Failure(ApiException()) })
             }
 
-    override suspend fun getPromoOffers(
-        shopId: Int,
-        page: Int?,
-        count: Int?
-    ): Result<PagedResponse<BaseOfferResponse>> =
+    override suspend fun getPromoOffers(shopId: Int, page: Int?, count: Int?): Result<PagedResponse<BaseOfferResponse>> =
         callApi(call = { apiV1.getPromoOffers(shopId, page, count) })
-            .flatMap { response ->
-                response.ifPresentOrDefault(
+            .flatMap { responseOpt ->
+                responseOpt.ifPresentOrDefault(
                     { Result.Success(it) },
                     { Result.Failure(ApiException()) })
             }
 
-    override suspend fun getNoveltyOffers(
-        shopId: Int,
-        page: Int?,
-        count: Int?
-    ): Result<PagedResponse<BaseOfferResponse>> =
+    override suspend fun getNoveltyOffers(shopId: Int, page: Int?, count: Int?): Result<PagedResponse<BaseOfferResponse>> =
         callApi(call = { apiV1.getNoveltyOffers(shopId, page, count) })
             .flatMap { response ->
                 response.ifPresentOrDefault(
@@ -107,14 +94,10 @@ class ShopInteractorImpl(
                     { Result.Failure(ApiException()) })
             }
 
-    override suspend fun getFavouriteOffers(
-        shopId: Int,
-        page: Int?,
-        count: Int?
-    ): Result<PagedResponse<BaseOfferResponse>> =
+    override suspend fun getFavouriteOffers(shopId: Int, page: Int?, count: Int?): Result<PagedResponse<BaseOfferResponse>> =
         callApi(call = { apiV1.getFavouriteOffers(shopId, page, count) })
-            .flatMap { response ->
-                response.ifPresentOrDefault(
+            .flatMap { responseOpt ->
+                responseOpt.ifPresentOrDefault(
                     { Result.Success(it) },
                     { Result.Failure(ApiException()) })
             }
@@ -122,16 +105,16 @@ class ShopInteractorImpl(
     override suspend fun persistShop(shop: ShopEntity): Result<Boolean> =
         callQuery(call = { shopDataSource.insertShop(shop) })
 
+    override suspend fun getPersistedShop(shopId: Int): Result<Optional<ShopEntity>> =
+        callQuery(call = { shopDataSource.getShop(shopId) })
+
     override suspend fun updatePersistedShop(shop: ShopEntity): Result<Boolean> =
         callQuery(call = { shopDataSource.updateShop(shop) })
             .sOnSuccess { isSuccess ->
                 if (isSuccess) {
-                    populatePersistedPreOrdersPrice(shop.id)
+                    populatePersistedOffersPrice(shop.id)
                 }
             }
-
-    override suspend fun getPersistedShop(shopId: Int): Result<Optional<ShopEntity>> =
-        callQuery(call = { shopDataSource.getShop(shopId) })
 
     override suspend fun deletePersistedShop(shop: ShopEntity): Result<Boolean> =
         callQuery(call = { shopDataSource.deleteShop(shop) })
@@ -145,7 +128,13 @@ class ShopInteractorImpl(
     override suspend fun deletePersistedShops(): Result<Boolean> =
         callQuery(call = { shopDataSource.deleteShops() })
 
-    override suspend fun updateOrder(shopId: Int, offer: BaseOfferResponse): Result<Boolean> =
+    override suspend fun getPersistedOffer(shopId: Int, offerId: Int): Result<Optional<OfferEntity>> =
+        callQuery(call = { shopDataSource.getOrder(offerId, shopId) })
+
+    override suspend fun getPersistedOffers(shopId: Int): Result<List<OfferEntity>> =
+        callQuery(call = { shopDataSource.getOrders(shopId) })
+
+    override suspend fun updatePersistedOffer(shopId: Int, offer: BaseOfferResponse): Result<Boolean> =
         callQuery(call = { shopDataSource.getOrder(offer.id, shopId) })
             .sFlatMap { orderEntityOpt ->
                 orderEntityOpt.sIfPresentOrDefault(
@@ -161,7 +150,7 @@ class ShopInteractorImpl(
                     })
             }
 
-    override suspend fun incrementPersistedPreOrderCounter(shopId: Int, offerId: Int): Result<OfferEntity> =
+    override suspend fun incrementPreOrderCounter(shopId: Int, offerId: Int): Result<OfferEntity> =
         callQuery(call = { shopDataSource.getOrder(offerId, shopId) })
             .sFlatMap { orderEntityOpt ->
                 orderEntityOpt.sIfPresentOrDefault(
@@ -182,14 +171,14 @@ class ShopInteractorImpl(
                         Result.Failure(DbQueryException(DbErrorKeys.ENTITY_IS_NOT_EXISTS))
                     })
             }.sOnSuccess { orderEntity ->
-                populatePersistedPreOrdersPrice(orderEntity.shopId)
+                populatePersistedOffersPrice(orderEntity.shopId)
                 CoreBusEventsFactory.orderCounter(
                     shopId = orderEntity.shopId,
                     tradeId = orderEntity.tradeItem,
                     counter = orderEntity.preOrdersCount)
             }
 
-    override suspend fun incrementPersistedPreOrderCounter(shopId: Int, offer: BaseOfferResponse): Result<OfferEntity> =
+    override suspend fun incrementPreOrderCounter(shopId: Int, offer: BaseOfferResponse): Result<OfferEntity> =
         callQuery(call = { shopDataSource.getShop(shopId) })
             .sFlatMap { shopEntityOpt ->
                 shopEntityOpt.sIfPresentOrDefault(
@@ -265,14 +254,14 @@ class ShopInteractorImpl(
                     is Result.Failure -> selectOfferQueryRes
                 }
             }.sOnSuccess { offerEntity ->
-                populatePersistedPreOrdersPrice(offerEntity.shopId)
+                populatePersistedOffersPrice(offerEntity.shopId)
                 CoreBusEventsFactory.orderCounter(
                     shopId = offerEntity.shopId,
                     tradeId = offerEntity.tradeItem,
                     counter = offerEntity.preOrdersCount)
             }
 
-    override suspend fun decrementPersistedPreOrderCounter(shopId: Int, offerId: Int, tradeItem: Int): Result<OfferEntity> =
+    override suspend fun decrementPreOrderCounter(shopId: Int, offerId: Int, tradeItem: Int): Result<OfferEntity> =
         callQuery(call = { shopDataSource.getOrder(offerId, shopId) })
             .sFlatMap { orderEntityOpt ->
                 orderEntityOpt.sIfPresentOrDefault(
@@ -297,19 +286,19 @@ class ShopInteractorImpl(
                         Result.Failure(DbQueryException(DbErrorKeys.ENTITY_IS_NOT_EXISTS))
                     })
             }.sOnSuccess { orderEntity ->
-                populatePersistedPreOrdersPrice(orderEntity.shopId)
+                populatePersistedOffersPrice(orderEntity.shopId)
                 CoreBusEventsFactory.orderCounter(
                     shopId = orderEntity.shopId,
                     tradeId = orderEntity.tradeItem,
                     counter = orderEntity.preOrdersCount)
             }.sOnFailure { error ->
                 if (error.message == DbErrorKeys.ENTITY_IS_NOT_EXISTS_ANYMORE) {
-                    populatePersistedPreOrdersPrice(shopId)
+                    populatePersistedOffersPrice(shopId)
                     CoreBusEventsFactory.orderCounter(shopId = shopId, tradeId = tradeItem)
                 }
             }
 
-    override suspend fun decrementPersistedPreOrderCounter(shopId: Int, offer: BaseOfferResponse): Result<OfferEntity> =
+    override suspend fun decrementPreOrderCounter(shopId: Int, offer: BaseOfferResponse): Result<OfferEntity> =
         callQuery(call = { shopDataSource.getShop(shopId) })
             .sFlatMap { shopEntityOpt ->
                 shopEntityOpt.ifPresentOrDefault(
@@ -344,19 +333,19 @@ class ShopInteractorImpl(
                     is Result.Failure -> selectOfferQueryRes
                 }
             }.sOnSuccess { offerEntity ->
-                populatePersistedPreOrdersPrice(offerEntity.shopId)
+                populatePersistedOffersPrice(offerEntity.shopId)
                 CoreBusEventsFactory.orderCounter(
                     shopId = offerEntity.shopId,
                     tradeId = offerEntity.tradeItem,
                     counter = offerEntity.preOrdersCount)
             }.sOnFailure { error ->
                 if (error.message == DbErrorKeys.ENTITY_IS_NOT_EXISTS_ANYMORE) {
-                    populatePersistedPreOrdersPrice(shopId)
+                    populatePersistedOffersPrice(shopId)
                     CoreBusEventsFactory.orderCounter(shopId = shopId, tradeId = offer.tradeItem)
                 }
             }
 
-    override suspend fun populatePersistedPreOrdersPrice(shopId: Int) {
+    override suspend fun populatePersistedOffersPrice(shopId: Int) {
         val selectOffersQueryRes = callQuery(call = { shopDataSource.getOrders(shopId) })
         if (selectOffersQueryRes is Result.Success) {
             selectOffersQueryRes.data.only { offers ->
@@ -401,10 +390,4 @@ class ShopInteractorImpl(
             CoreBusEventsFactory.ordersPrice(shopId)
         }
     }
-
-    override suspend fun getPersistedOffer(shopId: Int, offerId: Int): Result<Optional<OfferEntity>> =
-        callQuery(call = { shopDataSource.getOrder(offerId, shopId) })
-
-    override suspend fun getPersistedOffers(shopId: Int): Result<List<OfferEntity>> =
-        callQuery(call = { shopDataSource.getOrders(shopId) })
 }

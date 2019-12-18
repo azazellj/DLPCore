@@ -24,20 +24,11 @@ interface ConsumerInteractor : OffersInteractor {
 
     suspend fun useInviteCode(code: String): Result<InvitationResponse>
 
-    suspend fun getPromoOffers(
-        page: Int? = null,
-        count: Int? = null
-    ): Result<PagedResponse<BaseOfferResponse>>
+    suspend fun getPromoOffers(page: Int? = null, count: Int? = null): Result<PagedResponse<BaseOfferResponse>>
 
-    suspend fun getNoveltyOffers(
-        page: Int? = null,
-        count: Int? = null
-    ): Result<PagedResponse<BaseOfferResponse>>
+    suspend fun getNoveltyOffers(page: Int? = null, count: Int? = null): Result<PagedResponse<BaseOfferResponse>>
 
-    suspend fun getTransactionsHistory(
-        page: Int? = null,
-        count: Int? = null
-    ): Result<PagedResponse<TransactionResponse>>
+    suspend fun getTransactionsHistory(page: Int? = null, count: Int? = null): Result<PagedResponse<TransactionResponse>>
 
     suspend fun feedback(
         message: String,

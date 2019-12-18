@@ -23,4 +23,5 @@ data class ShopResponse(
     val facebookLink: String,
 
     @SerializedName("insta_link")
-    val instagramLink: String) : BaseShopResponse()
+    val instagramLink: String
+) : BaseShopResponse()

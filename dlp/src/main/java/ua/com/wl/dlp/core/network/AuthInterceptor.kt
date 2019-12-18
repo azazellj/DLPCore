@@ -14,7 +14,8 @@ import ua.com.wl.dlp.utils.toJwt
 
 class AuthInterceptor(
     private val appId: String,
-    private val corePreferences: CorePreferences) : Interceptor {
+    private val corePreferences: CorePreferences
+) : Interceptor {
 
     override fun intercept(chain: Interceptor.Chain): Response =
         chain.request().let { request ->

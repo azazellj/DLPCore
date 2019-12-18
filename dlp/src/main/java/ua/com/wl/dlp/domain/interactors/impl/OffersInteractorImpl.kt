@@ -18,12 +18,13 @@ import ua.com.wl.dlp.domain.interactors.OffersInteractor
 
 class OffersInteractorImpl(
     errorsMapper: ErrorsMapper,
-    private val apiV1: OffersApiV1): UseCase(errorsMapper), OffersInteractor {
+    private val apiV1: OffersApiV1
+) : UseCase(errorsMapper), OffersInteractor {
 
     override suspend fun addOfferToFavourites(offerId: Int): Result<Boolean> =
         callApi(call = { apiV1.addOfferToFavourite(offerId) })
-            .map { response ->
-                response.ifPresentOrDefault(
+            .map { responseOpt ->
+                responseOpt.ifPresentOrDefault(
                     { it.isSuccessfully() },
                     { false })
             }.sOnSuccess { isSuccess ->
@@ -31,16 +32,15 @@ class OffersInteractorImpl(
                     withContext(Dispatchers.Main.immediate) {
                         CoreBusEventsFactory.offerFavouriteStatus(
                             offerId = offerId,
-                            isFavourite = true
-                        )
+                            isFavourite = true)
                     }
                 }
             }
 
     override suspend fun removeOfferFromFavourites(offerId: Int): Result<Boolean> =
         callApi(call = { apiV1.removeOfferFromFavourite(offerId) })
-            .map { response ->
-                response.ifPresentOrDefault(
+            .map { responseOpt ->
+                responseOpt.ifPresentOrDefault(
                     { it.isSuccessfully() },
                     { false })
             }.sOnSuccess { isSuccess ->
@@ -48,8 +48,7 @@ class OffersInteractorImpl(
                     withContext(Dispatchers.Main.immediate) {
                         CoreBusEventsFactory.offerFavouriteStatus(
                             offerId = offerId,
-                            isFavourite = false
-                        )
+                            isFavourite = false)
                     }
                 }
             }

@@ -10,4 +10,5 @@ data class OrderCounterBusEvent(
     val shopId: Int,
     val tradeId: Int? = null,
     val counter: Int = 0,
-    val resetAllCounters: Boolean = false) : BusEvent()
+    val resetAllCounters: Boolean = false
+) : BusEvent()

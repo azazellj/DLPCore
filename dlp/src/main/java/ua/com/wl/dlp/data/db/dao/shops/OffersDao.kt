@@ -12,7 +12,7 @@ import ua.com.wl.dlp.data.db.entities.shops.OfferEntity
 interface OffersDao {
 
     @Query("SELECT COUNT(*) FROM ${OfferEntity.TABLE_NAME} WHERE id= :id")
-    suspend fun getOffersCount(id: Int): Int
+    suspend fun getCount(id: Int): Int
 
     @Query("SELECT * FROM ${OfferEntity.TABLE_NAME} WHERE id= :id")
     suspend fun getOffer(id: Int): OfferEntity?

@@ -14,7 +14,10 @@ import ua.com.wl.dlp.domain.exeptions.CoreRuntimeException
  * @author Denis Makovskyi
  */
 
-open class ApiException(message: String? = null, cause: Throwable? = null) : CoreRuntimeException(message, cause) {
+open class ApiException(
+    message: String? = null,
+    cause: Throwable? = null
+) : CoreRuntimeException(message, cause) {
 
     override fun getLocalizedMessage(context: Context): String =
         when (cause) {

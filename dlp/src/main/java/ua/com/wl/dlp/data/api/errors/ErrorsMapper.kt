@@ -1,6 +1,12 @@
 package ua.com.wl.dlp.data.api.errors
 
+import kotlin.reflect.KClass
+import kotlin.reflect.full.primaryConstructor
+
+import org.koin.ext.getFullName
+
 import com.google.gson.Gson
+
 import okhttp3.ResponseBody
 
 import ua.com.wl.dlp.domain.exeptions.CoreException
@@ -12,25 +18,47 @@ import ua.com.wl.dlp.domain.exeptions.CoreRuntimeException
 
 class ErrorsMapper(private val gson: Gson) {
 
-    fun createExceptionFromBody(errorBody: ResponseBody?, errorClass: Class<out CoreException>): Throwable =
-        errorBody?.let { body ->
-            createErrorFromBody(body)?.let { error ->
-                try {
-                    errorClass.getConstructor(String::class.java).newInstance(error.type)
+    fun createExceptionFromResponseBody(
+        errorBody: ResponseBody,
+        errorClass: KClass<out CoreException>
+    ): Throwable {
 
-                } catch (e: Exception) {
-                    CoreRuntimeException("${javaClass.name}: could not instantiate class ${errorClass.name}")
+        fun constructorArgs(argsSize: Int, message: String?): Array<Any?> {
+            return Array(argsSize) { index ->
+                if (index == 0) message else null
+            }
+        }
+
+        val error = createErrorFromBody(errorBody)
+        return if (error != null) {
+            try {
+                val constructor = requireNotNull(errorClass.primaryConstructor) {
+                    "Primary constructor was not defined"
+                }
+                return when(val size = constructor.parameters.size) {
+                    1 -> constructor.call(error.type)
+                    in 2..Int.MAX_VALUE -> constructor.call(*constructorArgs(size, error.type))
+                    else -> throw IllegalStateException("There is something wrong with constructor arguments")
                 }
 
-            } ?: CoreRuntimeException("${javaClass.name}: could not unmarshall response error body to structure")
+            } catch (e: Exception) {
+                CoreRuntimeException(
+                    createDetailMessage("could not instantiate class ${errorClass.getFullName()}"), e)
+            }
 
-        } ?: CoreRuntimeException("${javaClass.name}: response error body is empty")
+        } else {
+            CoreRuntimeException(
+                createDetailMessage("could not unmarshall response error body to structure"))
+        }
+    }
 
-    private fun createErrorFromBody(errorBody: ResponseBody): ApiError? =
+    private fun createErrorFromBody(body: ResponseBody): ApiError? =
         try {
-            gson.fromJson(errorBody.string(), ApiError::class.java)
+            gson.fromJson(body.string(), ApiError::class.java)
 
-        } catch (e: Exception) {
+        } catch (ignored: Exception) {
             null
         }
+
+    private fun createDetailMessage(message: String): String = "${javaClass.name}: $message"
 }

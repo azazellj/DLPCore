@@ -22,20 +22,16 @@ class ConsumerPreferences(
         const val KEY_PROFILE_PREFS = "profile_prefs"
     }
 
-    var profilePrefs: ProfilePrefs = ProfilePrefs()
+    var profilePrefs: ProfilePrefs
         set(value) {
-            field = value
-            save(KEY_PROFILE_PREFS, gson.toJson(field))
+            save(KEY_PROFILE_PREFS, gson.toJson(value))
         }
         get() {
             val json = getString(KEY_PROFILE_PREFS)
             return if (json.isNonNullOrEmpty()) {
-                field = gson.fromJson(json, ProfilePrefs::class.java)
-                field
-
+                gson.fromJson(json, ProfilePrefs::class.java)
             } else {
-                field = ProfilePrefs()
-                field
+                ProfilePrefs()
             }
         }
 

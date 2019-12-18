@@ -28,7 +28,8 @@ import ua.com.wl.dlp.utils.toJwt
 class SessionAuthenticator(
     retrofit: Retrofit,
     private val appId: String,
-    private val corePreferences: CorePreferences) : Authenticator {
+    private val corePreferences: CorePreferences
+) : Authenticator {
 
     private val api: SessionApi = retrofit.create(SessionApi::class.java)
 

@@ -16,33 +16,30 @@ import ua.com.wl.dlp.domain.interactors.NewsFeedInteractor
 
 class NewsFeedInteractorImpl(
     errorsMapper: ErrorsMapper,
-    private val apiV1: NewsApiV1) : UseCase(errorsMapper), NewsFeedInteractor {
+    private val apiV1: NewsApiV1
+) : UseCase(errorsMapper), NewsFeedInteractor {
 
-    override suspend fun getCityNewsFeed(
-        page: Int?,
-        count: Int?
-    ): Result<PagedResponse<BaseArticleResponse>> =
-        callApi(call = { apiV1.getCityNewsFeed(page, count) }).flatMap { response ->
-            response.ifPresentOrDefault(
-                { Result.Success(it) },
-                { Result.Failure(ApiException()) })
-        }
+    override suspend fun getCityNewsFeed(page: Int?, count: Int?): Result<PagedResponse<BaseArticleResponse>> =
+        callApi(call = { apiV1.getCityNewsFeed(page, count) })
+            .flatMap { responseOpt ->
+                responseOpt.ifPresentOrDefault(
+                    { Result.Success(it) },
+                    { Result.Failure(ApiException()) })
+            }
 
-    override suspend fun getShopNewsFeed(
-        shopId: Int,
-        page: Int?,
-        count: Int?
-    ): Result<PagedResponse<BaseArticleResponse>> =
-        callApi(call = { apiV1.getShopNewsFeed(shopId, page, count) }).flatMap { response ->
-            response.ifPresentOrDefault(
-                { Result.Success(it) },
-                { Result.Failure(ApiException()) })
-        }
+    override suspend fun getShopNewsFeed(shopId: Int, page: Int?, count: Int?): Result<PagedResponse<BaseArticleResponse>> =
+        callApi(call = { apiV1.getShopNewsFeed(shopId, page, count) })
+            .flatMap { responseOpt ->
+                responseOpt.ifPresentOrDefault(
+                    { Result.Success(it) },
+                    { Result.Failure(ApiException()) })
+            }
 
-    override suspend fun getNewsItem(id: Int): Result<ArticleResponse> =
-        callApi(call = { apiV1.getNewsItem(id) }).flatMap { response ->
-            response.ifPresentOrDefault(
-                { Result.Success(it) },
-                { Result.Failure(ApiException()) })
-        }
+    override suspend fun getArticle(id: Int): Result<ArticleResponse> =
+        callApi(call = { apiV1.getNewsItem(id) })
+            .flatMap { responseOpt ->
+                responseOpt.ifPresentOrDefault(
+                    { Result.Success(it) },
+                    { Result.Failure(ApiException()) })
+            }
 }

@@ -22,20 +22,16 @@ class CorePreferences(
         const val KEY_AUTH_PREFS = "auth_prefs"
     }
 
-    var authPrefs: AuthPrefs = AuthPrefs()
+    var authPrefs: AuthPrefs
         set(value) {
-            field = value
-            save(KEY_AUTH_PREFS, gson.toJson(field))
+            save(KEY_AUTH_PREFS, gson.toJson(value))
         }
         get() {
             val json = getString(KEY_AUTH_PREFS)
             return if (json.isNonNullOrEmpty()) {
-                field = gson.fromJson(json, AuthPrefs::class.java)
-                field
-
+                gson.fromJson(json, AuthPrefs::class.java)
             } else {
-                field = AuthPrefs()
-                field
+                AuthPrefs()
             }
         }
 

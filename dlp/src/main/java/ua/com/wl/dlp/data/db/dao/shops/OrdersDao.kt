@@ -19,7 +19,7 @@ interface OrdersDao {
         WHERE OrdersTable.shop_id= :shopId
         AND OffersTable.id= :offerId
         """)
-    suspend fun getOfferForShop(shopId: Int, offerId: Int): OfferEntity?
+    suspend fun getOffer(shopId: Int, offerId: Int): OfferEntity?
 
     @Query(
         """
@@ -28,10 +28,10 @@ interface OrdersDao {
         ON OffersTable.id=OrdersTable.offer_id
         WHERE OrdersTable.shop_id= :shopId
         """)
-    suspend fun getOffersForShop(shopId: Int): List<OfferEntity>
+    suspend fun getOffers(shopId: Int): List<OfferEntity>
 
     @Query("SELECT COUNT(offer_id) FROM ${OrderEntity.TABLE_NAME} WHERE offer_id= :offerId")
-    suspend fun getOrdersCount(offerId: Int): Int
+    suspend fun getCount(offerId: Int): Int
 
     @Query("SELECT * FROM ${OrderEntity.TABLE_NAME} WHERE shop_id= :shopId AND offer_id= :offerId")
     suspend fun getOrder(shopId: Int, offerId: Int): OrderEntity?

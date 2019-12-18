@@ -2,12 +2,12 @@ package ua.com.wl.dlp.domain.workers
 
 import java.util.*
 
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+
 import android.content.Context
 
 import androidx.work.*
-
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 
 import org.koin.core.inject
 
@@ -80,23 +80,23 @@ class ShopOffersSyncWork(
     }
 
     private suspend fun launch() {
-        when(val shopResult = shopInteractor.getPersistedShop(shopId)) {
-            is Success -> {
-                shopResult.data.sIfPresentOrElse(
+        shopInteractor.getPersistedShop(shopId)
+            .sOnSuccess { shopEntityOpt ->
+                shopEntityOpt.sIfPresentOrElse(
                     { getPreOrders(it) },
                     { outputs.putBoolean(ERROR_KEY_WHEN_READ_SHOP, true) })
-            }
-            is Failure -> {
+            }.onFailure {
                 outputs.putBoolean(ERROR_KEY_WHEN_READ_SHOP, true)
             }
-        }
     }
 
     private suspend fun getPreOrders(shop: ShopEntity) {
-        when(val preOrdersResult = shopInteractor.getPersistedOffers(shop.id)) {
-            is Success -> getOffers(shop.id, preOrdersResult.data)
-            is Failure -> outputs.putBoolean(ERROR_KEY_WHEN_READ_ORDERS, true)
-        }
+        shopInteractor.getPersistedOffers(shop.id)
+            .sOnSuccess { offers ->
+                getOffers(shop.id, offers)
+            }.onFailure {
+                outputs.putBoolean(ERROR_KEY_WHEN_READ_ORDERS, true)
+            }
     }
 
     private suspend fun getOffers(shopId: Int, preOrders: List<OfferEntity>) {
@@ -106,13 +106,13 @@ class ShopOffersSyncWork(
                 is Failure -> outputs.putBoolean(ERROR_KEY_WHEN_LOAD_OFFERS, true)
             }
         }
-        shopInteractor.populatePersistedPreOrdersPrice(shopId)
+        shopInteractor.populatePersistedOffersPrice(shopId)
     }
 
     private suspend fun updatePreOrder(shopId: Int, offer: BaseOfferResponse) {
-        val upsertResult = shopInteractor.updateOrder(shopId, offer)
-        if (upsertResult is Failure) {
-            outputs.putBoolean(ERROR_KEY_WHEN_WRITE_IN_DB, true)
-        }
+        shopInteractor.updatePersistedOffer(shopId, offer)
+            .onFailure {
+                outputs.putBoolean(ERROR_KEY_WHEN_WRITE_IN_DB, true)
+            }
     }
 }

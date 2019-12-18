@@ -43,11 +43,7 @@ class OrdersInteractorImpl(
                     { Result.Failure(ApiException()) })
             }
 
-    override suspend fun rateOrder(
-        orderId: Int,
-        value: Int,
-        comment: String
-    ): Result<BaseOrderRateResponse> =
+    override suspend fun rateOrder(orderId: Int, value: Int, comment: String): Result<BaseOrderRateResponse> =
         callApi(call = { apiV1.rateOrder(orderId, RateOrderRequest(value, comment)) })
             .flatMap { responseOpt ->
                 responseOpt.ifPresentOrDefault(
@@ -87,10 +83,7 @@ class OrdersInteractorImpl(
                     { Result.Failure(ApiException()) })
             }
 
-    override suspend fun getPreOrders(
-        page: Int?,
-        count: Int?
-    ): Result<PagedResponse<BasePreOrderResponse>> =
+    override suspend fun getPreOrders(page: Int?, count: Int?): Result<PagedResponse<BasePreOrderResponse>> =
         callApi(call = { apiV1.getPreOrders(page, count) })
             .flatMap { responseOpt ->
                 responseOpt.ifPresentOrDefault(
@@ -114,10 +107,7 @@ class OrdersInteractorImpl(
                     { Result.Failure(ApiException()) })
             }
 
-    override suspend fun getTablesReservations(
-        page: Int?,
-        count: Int?
-    ): Result<PagedResponse<TableReservationResponse>> =
+    override suspend fun getTablesReservations(page: Int?, count: Int?): Result<PagedResponse<TableReservationResponse>> =
         callApi(call = { apiV1.getTablesReservations(page, count) })
             .flatMap { responseOpt ->
                 responseOpt.ifPresentOrDefault(

@@ -78,7 +78,7 @@ val apiModule = module {
             }
             .build()
     }
-    // - Session retrofit - for session api, such as refresh token api
+    // - Session retrofit - for anonymous api calls
     factory(qualifier = named(Constants.KOIN_NAMED_SESSION_RETROFIT)) {
         Retrofit.Builder()
             .baseUrl(get<String>(qualifier = named(Constants.KOIN_NAMED_URL)))

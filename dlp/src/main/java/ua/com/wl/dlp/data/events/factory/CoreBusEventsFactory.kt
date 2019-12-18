@@ -14,49 +14,36 @@ import ua.com.wl.dlp.data.events.shop.order.OrdersPriceBusEvent
 
 object CoreBusEventsFactory {
 
-    fun profileChanges(changes: List<ProfileBusEvent.Change>) {
-        Bus.send(ProfileBusEvent(changes))
-    }
+    fun profileChanges(changes: List<ProfileBusEvent.Change>) = Bus.send(ProfileBusEvent(changes))
 
     fun offerFavouriteStatus(
         offerId: Int,
         tradeId: Int? = null,
         isFavourite: Boolean?
-    ) {
-        val event = OfferBusEvent(
+    ) = Bus.send(
+        OfferBusEvent(
             offerId, tradeId,
             OfferBusEvent.Field.IS_FAVOURITE,
-            OfferBusEvent.FieldValue.BooleanValue(isFavourite))
-        Bus.send(event)
-    }
+            OfferBusEvent.FieldValue.BooleanValue(isFavourite)))
 
     fun orderRate(
         shopId: Int,
         orderId: Int,
         orderRate: Int = 0
-    ) {
-        Bus.send(OrderRateBusEvent(shopId, orderId, orderRate))
-    }
+    ) = Bus.send(OrderRateBusEvent(shopId, orderId, orderRate))
 
     fun ordersPrice(
         shopId: Int,
         count: Int = 0,
         price: Double = 0.0
-    ) {
-        Bus.send(OrdersPriceBusEvent(shopId, count, price))
-    }
+    ) = Bus.send(OrdersPriceBusEvent(shopId, count, price))
 
     fun orderCounter(
         shopId: Int,
         tradeId: Int? = null,
         counter: Int = 0,
         resetAll: Boolean = false
-    ) {
-        val event = OrderCounterBusEvent(shopId, tradeId, counter, resetAll)
-        Bus.send(event)
-    }
+    ) = Bus.send(OrderCounterBusEvent(shopId, tradeId, counter, resetAll))
 
-    fun session(fallbackType: SessionBusEvent.FallbackType) {
-        Bus.send(SessionBusEvent(fallbackType))
-    }
+    fun session(fallbackType: SessionBusEvent.FallbackType) = Bus.send(SessionBusEvent(fallbackType))
 }

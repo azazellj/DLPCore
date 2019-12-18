@@ -10,5 +10,5 @@ enum class DeliveryType(val value: String) {
     @SerializedName("DELIVERY")
     DELIVERY("DELIVERY"),
     @SerializedName("TAKEAWAY")
-    TAKEAEAY("TAKEAWAY")
+    TAKEAWAY("TAKEAWAY")
 }

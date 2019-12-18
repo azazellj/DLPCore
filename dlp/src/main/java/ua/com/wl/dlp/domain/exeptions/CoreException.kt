@@ -6,7 +6,10 @@ import android.content.Context
  * @author Denis Makovskyi
  */
 
-abstract class CoreException(message: String? = null, cause: Throwable? = null) : Exception(message, cause) {
+abstract class CoreException(
+    message: String? = null,
+    cause: Throwable? = null
+) : Exception(message, cause) {
 
     abstract fun getLocalizedMessage(context: Context): String
 }

@@ -18,4 +18,5 @@ data class TableReservationResponse(
     val shop: TableReservationShop,
 
     @SerializedName("status")
-    val status: TableReservationStatus) : TableReservationRequest()
+    val status: TableReservationStatus
+) : TableReservationRequest()

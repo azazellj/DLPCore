@@ -40,4 +40,5 @@ data class OfferResponse(
     val sharingSocialNetwork: List<SocialNetwork>,
 
     @SerializedName("payed_for_sharing_social_networks")
-    val sharedSocialNetwork: List<SocialNetwork>) : BaseOfferResponse()
+    val sharedSocialNetwork: List<SocialNetwork>
+) : BaseOfferResponse()

@@ -11,16 +11,9 @@ import ua.com.wl.dlp.domain.Result
 
 interface NewsFeedInteractor {
 
-    suspend fun getCityNewsFeed(
-        page: Int? = null,
-        count: Int? = null
-    ): Result<PagedResponse<BaseArticleResponse>>
+    suspend fun getCityNewsFeed(page: Int? = null, count: Int? = null): Result<PagedResponse<BaseArticleResponse>>
 
-    suspend fun getShopNewsFeed(
-        shopId: Int,
-        page: Int? = null,
-        count: Int? = null
-    ): Result<PagedResponse<BaseArticleResponse>>
+    suspend fun getShopNewsFeed(shopId: Int, page: Int? = null, count: Int? = null): Result<PagedResponse<BaseArticleResponse>>
 
-    suspend fun getNewsItem(id: Int): Result<ArticleResponse>
+    suspend fun getArticle(id: Int): Result<ArticleResponse>
 }

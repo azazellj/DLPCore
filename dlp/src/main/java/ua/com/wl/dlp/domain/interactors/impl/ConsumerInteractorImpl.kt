@@ -48,8 +48,8 @@ class ConsumerInteractorImpl(
 
     override suspend fun getProfile(): Result<ProfileResponse> =
         callApi(call = { apiV2.getProfile() })
-            .flatMap { dataResponse ->
-                dataResponse.ifPresentOrDefault(
+            .flatMap { dataResponseOpt ->
+                dataResponseOpt.ifPresentOrDefault(
                     { Result.Success(it.payload) },
                     { Result.Failure(ApiException()) })
             }.sOnSuccess { profileResponse ->
@@ -64,8 +64,8 @@ class ConsumerInteractorImpl(
 
     override suspend fun updateProfile(profile: ProfileRequest): Result<ProfileResponse> =
         callApi(call = { apiV2.updateProfile(profile) })
-            .flatMap { dataResponse ->
-                dataResponse.ifPresentOrDefault(
+            .flatMap { dataResponseOpt ->
+                dataResponseOpt.ifPresentOrDefault(
                     { Result.Success(it.payload) },
                     { Result.Failure(ApiException()) })
             }.sOnSuccess { profileResponse ->
@@ -80,8 +80,8 @@ class ConsumerInteractorImpl(
 
     override suspend fun getQrCode(): Result<QrCodeResponse> =
         callApi(call = { apiV2.getQrCode() })
-            .flatMap { dataResponse ->
-                dataResponse.ifPresentOrDefault(
+            .flatMap { dataResponseOpt ->
+                dataResponseOpt.ifPresentOrDefault(
                     { Result.Success(it.payload) },
                     { Result.Failure(ApiException()) })
             }.sOnSuccess { qrResponse ->
@@ -97,9 +97,9 @@ class ConsumerInteractorImpl(
     override suspend fun useInviteCode(code: String): Result<InvitationResponse> =
         callApi(
             call = { apiV2.useInviteCode(InvitationRequest(code)) },
-            errorClass = ReferralException::class.java
-        ).flatMap { dataResponse ->
-            dataResponse.ifPresentOrDefault(
+            errorClass = ReferralException::class
+        ).flatMap { dataResponseOpt ->
+            dataResponseOpt.ifPresentOrDefault(
                 { Result.Success(it.payload) },
                 { Result.Failure(ApiException()) })
         }.sOnSuccess { inviteResponse ->
@@ -114,34 +114,29 @@ class ConsumerInteractorImpl(
             }
         }
 
-    override suspend fun getPromoOffers(
-        page: Int?,
-        count: Int?
-    ): Result<PagedResponse<BaseOfferResponse>> =
+    override suspend fun getPromoOffers(page: Int?, count: Int?): Result<PagedResponse<BaseOfferResponse>> =
         callApi(call = { apiV1.getPromoOffers(page, count) })
-            .flatMap { response ->
-                response.ifPresentOrDefault(
+            .flatMap { responseOpt ->
+                responseOpt.ifPresentOrDefault(
                     { Result.Success(it) },
                     { Result.Failure(ApiException()) })
             }
 
-    override suspend fun getNoveltyOffers(
-        page: Int?,
-        count: Int?
-    ): Result<PagedResponse<BaseOfferResponse>> =
+    override suspend fun getNoveltyOffers(page: Int?, count: Int?): Result<PagedResponse<BaseOfferResponse>> =
         callApi(call = { apiV1.getNoveltyOffers(page, count) })
-            .flatMap { response ->
-                response.ifPresentOrDefault(
+            .flatMap { responseOpt ->
+                responseOpt.ifPresentOrDefault(
                     { Result.Success(it) },
                     { Result.Failure(ApiException()) })
             }
 
     override suspend fun getTransactionsHistory(page: Int?, count: Int?): Result<PagedResponse<TransactionResponse>> =
-        callApi(call = { apiV2.loadTransactionsHistory(page, count) }).flatMap { dataResponse ->
-            dataResponse.ifPresentOrDefault(
-                { Result.Success(it.payload) },
-                { Result.Failure(ApiException()) })
-        }
+        callApi(call = { apiV2.loadTransactionsHistory(page, count) })
+            .flatMap { dataResponseOpt ->
+                dataResponseOpt.ifPresentOrDefault(
+                    { Result.Success(it.payload) },
+                    { Result.Failure(ApiException()) })
+            }
 
     override suspend fun feedback(
         message: String,
@@ -162,11 +157,12 @@ class ConsumerInteractorImpl(
             this.email = email ?: consumerPreferences.profilePrefs.email
 
         }.let {
-            callApi(call = { apiV1.feedback(it) }).flatMap { response ->
-                response.ifPresentOrDefault(
-                    { Result.Success(it) },
-                    { Result.Failure(ApiException()) })
-            }
+            callApi(call = { apiV1.feedback(it) })
+                .flatMap { responseOpt ->
+                    responseOpt.ifPresentOrDefault(
+                        { Result.Success(it) },
+                        { Result.Failure(ApiException()) })
+                }
         }
 
 

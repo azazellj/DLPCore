@@ -22,4 +22,5 @@ data class PreOrderResponse(
     val readinessTime: String?,
 
     @SerializedName("pre_order_trade_items")
-    val tradeItems: List<PreOrderTradeItem>) : BasePreOrderResponse()
+    val tradeItems: List<PreOrderTradeItem>
+) : BasePreOrderResponse()

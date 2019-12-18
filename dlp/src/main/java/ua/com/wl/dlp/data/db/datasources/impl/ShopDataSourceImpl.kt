@@ -13,6 +13,9 @@ import ua.com.wl.dlp.data.db.entities.shops.OfferEntity
 import ua.com.wl.dlp.data.db.entities.shops.ShopEntity
 import ua.com.wl.dlp.data.db.entities.shops.OrderEntity
 import ua.com.wl.dlp.domain.exeptions.db.DbQueryException
+import ua.com.wl.dlp.utils.isEqualsTo
+import ua.com.wl.dlp.utils.isGreaterThan
+import ua.com.wl.dlp.utils.only
 
 /**
  * @author Denis Makovskyi
@@ -37,7 +40,7 @@ class ShopDataSourceImpl(
     override suspend fun insertShop(shop: ShopEntity): Boolean =
         try {
             withContext(Dispatchers.IO) {
-                shopsDao.insertShop(shop) > 0
+                shopsDao.insertShop(shop) isGreaterThan 0
             }
 
         } catch (e: Exception) {
@@ -47,7 +50,7 @@ class ShopDataSourceImpl(
     override suspend fun updateShop(shop: ShopEntity): Boolean =
         try {
             withContext(Dispatchers.IO) {
-                shopsDao.updateShop(shop) > 0
+                shopsDao.updateShop(shop) isGreaterThan 0
             }
 
         } catch (e: Exception) {
@@ -57,13 +60,14 @@ class ShopDataSourceImpl(
     override suspend fun deleteShop(shop: ShopEntity): Boolean =
         try {
             withContext(Dispatchers.IO) {
-                for (offer in ordersDao.getOffersForShop(shop.id)) {
-                    val isOrderDeleted = ordersDao.deleteOrder(OrderEntity(shop.id, offer.id)) > 0
-                    if (isOrderDeleted && ordersDao.getOrdersCount(offer.id) == 0) {
+                for (offer in ordersDao.getOffers(shop.id)) {
+                    val isOrderDeleted = ordersDao.deleteOrder(OrderEntity(shop.id, offer.id)) isGreaterThan 0
+                    val areOrdersEmpty = ordersDao.getCount(offer.id) isEqualsTo 0
+                    if (isOrderDeleted && areOrdersEmpty) {
                         offersDao.deleteOffer(offer)
                     }
                 }
-                shopsDao.deleteShop(shop) > 0
+                shopsDao.deleteShop(shop) isGreaterThan 0
             }
 
         } catch (e: Exception) {
@@ -75,7 +79,7 @@ class ShopDataSourceImpl(
             try {
                 ordersDao.deleteOrders()
                 offersDao.deleteOffers()
-                shopsDao.deleteShops() > 0
+                shopsDao.deleteShops() isGreaterThan 0
 
             } catch (e: Exception) {
                 throw DbQueryException(DbErrorKeys.DELETE_QUERY_ERROR)
@@ -96,7 +100,7 @@ class ShopDataSourceImpl(
         try {
             withContext(Dispatchers.IO) {
                 ordersDao.getOrder(shopId, id)?.let { order ->
-                    Optional.ofNullable(ordersDao.getOfferForShop(shopId, id)?.apply {
+                    Optional.ofNullable(ordersDao.getOffer(order.shopId, order.offerId)?.apply {
                         this.shopId = order.shopId
                         this.preOrdersCount = order.preOrdersCount
                     })
@@ -110,9 +114,9 @@ class ShopDataSourceImpl(
     override suspend fun getOrders(shopId: Int): List<OfferEntity> =
         try {
             withContext(Dispatchers.IO) {
-                ordersDao.getOffersForShop(shopId).also { offers ->
+                ordersDao.getOffers(shopId).also { offers ->
                     for (offer in offers) {
-                        ordersDao.getOrder(shopId, offer.id)?.let { order ->
+                        ordersDao.getOrder(shopId, offer.id)?.only { order ->
                             offer.shopId = order.shopId
                             offer.preOrdersCount = order.preOrdersCount
                         } ?: throw IllegalStateException("Order was not found")
@@ -127,13 +131,13 @@ class ShopDataSourceImpl(
     override suspend fun insertOrder(offer: OfferEntity): Boolean =
         try {
             withContext(Dispatchers.IO) {
-                val isOfferInserted = if (offersDao.getOffersCount(offer.id) > 0) {
-                    offersDao.updateOffer(offer) > 0
+                val isOfferInserted = if (offersDao.getCount(offer.id) isGreaterThan 0) {
+                    offersDao.updateOffer(offer) isGreaterThan 0
                 } else {
-                    offersDao.insertOffer(offer) > 0
+                    offersDao.insertOffer(offer) isGreaterThan 0
                 }
                 OrderEntity(offer.shopId, offer.id, offer.preOrdersCount).let {
-                    isOfferInserted && ordersDao.insertOrder(it) > 0
+                    isOfferInserted && ordersDao.insertOrder(it) isGreaterThan 0
                 }
             }
 
@@ -145,7 +149,8 @@ class ShopDataSourceImpl(
         try {
             withContext(Dispatchers.IO) {
                 OrderEntity(offer.shopId, offer.id, offer.preOrdersCount).let {
-                    offersDao.updateOffer(offer) > 0 && ordersDao.updateOrder(it) > 0
+                    offersDao.updateOffer(offer) isGreaterThan 0
+                        && ordersDao.updateOrder(it) isGreaterThan 0
                 }
             }
 
@@ -156,11 +161,12 @@ class ShopDataSourceImpl(
     override suspend fun deleteOrder(offer: OfferEntity): Boolean =
         try {
             withContext(Dispatchers.IO) {
-                var isDeleted = ordersDao.deleteOrder(OrderEntity(offer.shopId, offer.id)) > 0
-                if (isDeleted && (ordersDao.getOrdersCount(offer.id) == 0)) {
-                    isDeleted = offersDao.deleteOffer(offer) > 0
+                var isOrderDeleted = ordersDao.deleteOrder(OrderEntity(offer.shopId, offer.id)) isGreaterThan 0
+                val areOrdersEmpty = ordersDao.getCount(offer.id) isEqualsTo 0
+                if (isOrderDeleted && areOrdersEmpty) {
+                    isOrderDeleted = offersDao.deleteOffer(offer) isGreaterThan 0
                 }
-                isDeleted
+                isOrderDeleted
             }
 
         } catch (e: Exception) {

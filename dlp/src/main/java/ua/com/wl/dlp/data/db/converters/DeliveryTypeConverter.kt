@@ -11,7 +11,7 @@ import ua.com.wl.dlp.data.api.models.order.DeliveryType
 class DeliveryTypeConverter {
 
     @TypeConverter
-    fun devileryTypeToString(deliveryType: DeliveryType?): String? = deliveryType?.name
+    fun deliveryTypeToString(deliveryType: DeliveryType?): String? = deliveryType?.name
 
     @TypeConverter
     fun stringTypeToString(deliveryType: String?): DeliveryType? = deliveryType?.let { DeliveryType.valueOf(it) }

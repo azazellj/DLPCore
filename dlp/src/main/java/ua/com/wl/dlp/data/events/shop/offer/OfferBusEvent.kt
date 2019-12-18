@@ -10,7 +10,8 @@ data class OfferBusEvent(
     val offerId: Int,
     val tradeId: Int?,
     val field: Field,
-    val value: FieldValue) : BusEvent() {
+    val value: FieldValue
+) : BusEvent() {
 
     enum class Field {
         IS_FAVOURITE

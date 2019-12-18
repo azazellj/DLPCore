@@ -1,5 +1,7 @@
 package ua.com.wl.dlp.domain
 
+import kotlin.reflect.KClass
+
 import retrofit2.Response
 
 import ua.com.wl.archetype.utils.Optional
@@ -16,7 +18,7 @@ open class UseCase(private val errorsMapper: ErrorsMapper) {
 
     protected suspend fun <T : Any> callApi(
         call: suspend () -> Response<T>,
-        errorClass: Class<out CoreException>? = null
+        errorClass: KClass<out CoreException>? = null
     ): Result<Optional<T>> =
         try {
             val response = call.invoke()
@@ -24,12 +26,13 @@ open class UseCase(private val errorsMapper: ErrorsMapper) {
                 Result.Success(Optional.ofNullable(response.body()))
 
             } else {
-                val error = if (response.errorBody() != null && errorClass != null) {
-                    errorsMapper.createExceptionFromBody(response.errorBody(), errorClass)
+                val errorBody = response.errorBody()
+                val throwable = if (errorBody != null && errorClass != null) {
+                    errorsMapper.createExceptionFromResponseBody(errorBody, errorClass)
                 } else {
                     ApiException()
                 }
-                Result.Failure(error)
+                Result.Failure(throwable)
             }
 
         } catch (e: Exception) {

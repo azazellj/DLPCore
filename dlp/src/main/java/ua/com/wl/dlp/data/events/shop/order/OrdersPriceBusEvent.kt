@@ -9,4 +9,5 @@ import ua.com.wl.archetype.core.android.bus.BusEvent
 data class OrdersPriceBusEvent(
     val shopId: Int,
     val count: Int = 0,
-    val price: Double = 0.0) : BusEvent()
+    val price: Double = 0.0
+) : BusEvent()
