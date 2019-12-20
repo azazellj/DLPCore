@@ -290,7 +290,7 @@ class ShopInteractorImpl constructor(
             }.sOnFailure { error ->
                 if (error.message == DbErrorKeys.ENTITY_IS_NOT_EXISTS_ANYMORE) {
                     populatePersistedOffersPrice()
-                    CoreBusEventsFactory.orderCounter(shopId = shopId, offerId = tradeItem)
+                    CoreBusEventsFactory.orderCounter(shopId = shopId, offerId = offerId)
                 }
             }
 
@@ -339,7 +339,7 @@ class ShopInteractorImpl constructor(
             }.sOnFailure { error ->
                 if (error.message == DbErrorKeys.ENTITY_IS_NOT_EXISTS_ANYMORE) {
                     populatePersistedOffersPrice()
-                    CoreBusEventsFactory.orderCounter(shopId = shopId, offerId = offer.tradeItem)
+                    CoreBusEventsFactory.orderCounter(shopId = shopId, offerId = offer.id)
                 }
             }
 

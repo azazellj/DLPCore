@@ -22,6 +22,10 @@ fun getQueryParam(url: String, key: String): String? {
     return null
 }
 
+fun calculatePersistedOffersCount(offers: List<OfferEntity>): Int {
+    return offers.sumBy { offer -> offer.preOrdersCount }
+}
+
 fun calculatePersistedOffersPrice(offers: List<OfferEntity>): Double {
     return offers.sumByDouble { offer ->
         val price = if (offer.isPromoOffer) {
