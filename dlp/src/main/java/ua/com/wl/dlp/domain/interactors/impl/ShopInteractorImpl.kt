@@ -25,6 +25,7 @@ import ua.com.wl.dlp.domain.exeptions.db.DatabaseException
 import ua.com.wl.dlp.domain.exeptions.db.DbQueryException
 import ua.com.wl.dlp.domain.interactors.OffersInteractor
 import ua.com.wl.dlp.domain.interactors.ShopInteractor
+import ua.com.wl.dlp.utils.calculatePersistedOffersCount
 import ua.com.wl.dlp.utils.calculatePersistedOffersPrice
 import ua.com.wl.dlp.utils.toOfferEntity
 
@@ -114,6 +115,7 @@ class ShopInteractorImpl constructor(
         callQuery(call = { shopDataSource.deleteShop(shop) })
             .sOnSuccess {
                 withContext(Dispatchers.Main.immediate) {
+                    CoreBusEventsFactory.ordersPrice(shop.id)
                     populatePersistedOffersPrice()
                 }
             }
@@ -350,7 +352,7 @@ class ShopInteractorImpl constructor(
                     var totalCount = 0
                     var totalPrice = 0.0
                     shops.forEach { shop ->
-                        val count = shop.offers.size
+                        val count = calculatePersistedOffersCount(shop.offers)
                         val price = calculatePersistedOffersPrice(shop.offers)
                         CoreBusEventsFactory.ordersPrice(shop.id, count, price)
                         totalCount += count
