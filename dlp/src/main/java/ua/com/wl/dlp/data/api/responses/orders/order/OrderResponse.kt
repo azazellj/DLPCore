@@ -10,7 +10,7 @@ import ua.com.wl.dlp.data.api.responses.models.shop.order.OrderTradeItem
  * @author Denis Makovskyi
  */
 
-data class OrderResponse(
+data class OrderResponse constructor(
     @SerializedName("shop")
     val shop: BaseOrderShop,
 

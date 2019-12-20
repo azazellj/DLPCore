@@ -9,7 +9,10 @@ import ua.com.wl.dlp.data.db.DbErrorKeys
  * @author Denis Makovskyi
  */
 
-class DbQueryException(message: String): DatabaseException(message) {
+class DbQueryException constructor(
+    message: String,
+    cause: Throwable? = null
+): DatabaseException(message, cause) {
 
     override fun getLocalizedMessage(context: Context): String = when(message) {
         DbErrorKeys.QUERY_ERROR -> context.getString(R.string.dlp_error_db_query)

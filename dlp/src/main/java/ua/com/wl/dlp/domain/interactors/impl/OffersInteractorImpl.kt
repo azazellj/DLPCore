@@ -16,7 +16,7 @@ import ua.com.wl.dlp.domain.interactors.OffersInteractor
  * @author Denis Makovskyi
  */
 
-class OffersInteractorImpl(
+class OffersInteractorImpl constructor(
     errorsMapper: ErrorsMapper,
     private val apiV1: OffersApiV1
 ) : UseCase(errorsMapper), OffersInteractor {

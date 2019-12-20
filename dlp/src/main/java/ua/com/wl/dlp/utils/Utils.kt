@@ -4,6 +4,9 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 
+import ua.com.wl.dlp.data.api.responses.models.shop.offer.promo.PromoType
+import ua.com.wl.dlp.data.db.entities.shops.OfferEntity
+
 /**
  * @author Denis Makovskyi
  */
@@ -17,6 +20,35 @@ fun getQueryParam(url: String, key: String): String? {
         }
     }
     return null
+}
+
+fun calculatePersistedOffersPrice(offers: List<OfferEntity>): Double {
+    return offers.sumByDouble { offer ->
+        val price = if (offer.isPromoOffer) {
+            when(offer.promoSettings?.promoType) {
+                PromoType.SALE -> {
+                    offer.promoSettings
+                        ?.promoParams
+                        ?.salePrice
+                }
+                PromoType.EVENT -> {
+                    offer.promoSettings
+                        ?.promoParams
+                        ?.eventPrice
+                }
+                PromoType.DISCOUNT -> {
+                    offer.promoSettings
+                        ?.promoParams
+                        ?.discountPrice
+                }
+                else -> offer.priceInCurrency
+            }
+
+        } else {
+            offer.priceInCurrency
+        }
+        price mulAsDouble offer.preOrdersCount
+    }
 }
 
 internal fun sendBroadcastMessage(context: Context, action: String, extras: Bundle? = null) {

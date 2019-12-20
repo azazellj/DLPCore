@@ -6,4 +6,6 @@ import com.google.gson.annotations.SerializedName
  * @author Denis Makovskyi
  */
 
-data class QrCodeResponse(@SerializedName("qr_code") val qrCode: String)
+data class QrCodeResponse constructor(
+    @SerializedName("qr_code")
+    val qrCode: String)

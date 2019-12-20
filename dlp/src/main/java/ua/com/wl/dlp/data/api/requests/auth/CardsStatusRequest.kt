@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName
  * @author Denis Makovskyi
  */
 
-data class CardsStatusRequest(
+data class CardsStatusRequest constructor(
     @SerializedName("mobile_phone")
     val phone: String,
     

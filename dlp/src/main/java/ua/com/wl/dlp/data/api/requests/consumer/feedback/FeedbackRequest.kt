@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName
  * @author Denis Makovskyi
  */
 
-data class FeedbackRequest(
+data class FeedbackRequest constructor(
     @SerializedName("message")
     val message: String?,
 

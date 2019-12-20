@@ -25,7 +25,7 @@ import ua.com.wl.dlp.utils.toJwt
  * @author Denis Makovskyi
  */
 
-class SessionAuthenticator(
+class SessionAuthenticator constructor(
     retrofit: Retrofit,
     private val appId: String,
     private val corePreferences: CorePreferences
@@ -50,7 +50,7 @@ class SessionAuthenticator(
                                 .build()
 
                         } else {
-                            CoreBusEventsFactory.session(SessionBusEvent.FallbackType.TOKEN_EXPIRED)
+                            CoreBusEventsFactory.sessionExpired(SessionBusEvent.FallbackType.TOKEN_EXPIRED)
                         }
                     }
                     null

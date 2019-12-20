@@ -14,13 +14,15 @@ fun PagedResponse<*>.previousPage(): Int? =
 fun PagedResponse<*>.nextPage(): Int? =
     nextPage?.let { getQueryParam(it, "page") }?.toInt()
 
+internal inline fun <T> T.only(block: (T) -> Unit) = block(this)
+
 internal infix fun Int.isEqualsTo(another: Int): Boolean = this == another
 
 internal infix fun Int.isGreaterThan(another: Int): Boolean = this > another
 
 internal infix fun Long.isGreaterThan(another: Int): Boolean = this > another
 
-internal inline fun <T> T.only(block: (T) -> Unit) = block(this)
+internal infix fun String?.mulAsDouble(multiplier: Int): Double = this?.toDouble()?.times(multiplier) ?: 0.0
 
 internal fun CharSequence?.isNonNullOrEmpty(): Boolean = this != null && this.isNotEmpty()
 

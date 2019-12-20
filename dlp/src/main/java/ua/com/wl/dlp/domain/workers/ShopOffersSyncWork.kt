@@ -83,33 +83,33 @@ class ShopOffersSyncWork(
         shopInteractor.getPersistedShop(shopId)
             .sOnSuccess { shopEntityOpt ->
                 shopEntityOpt.sIfPresentOrElse(
-                    { getPreOrders(it) },
+                    { getPersistedOffers(it) },
                     { outputs.putBoolean(ERROR_KEY_WHEN_READ_SHOP, true) })
             }.onFailure {
                 outputs.putBoolean(ERROR_KEY_WHEN_READ_SHOP, true)
             }
     }
 
-    private suspend fun getPreOrders(shop: ShopEntity) {
+    private suspend fun getPersistedOffers(shop: ShopEntity) {
         shopInteractor.getPersistedOffers(shop.id)
             .sOnSuccess { offers ->
-                getOffers(shop.id, offers)
+                loadOffers(shop.id, offers)
             }.onFailure {
                 outputs.putBoolean(ERROR_KEY_WHEN_READ_ORDERS, true)
             }
     }
 
-    private suspend fun getOffers(shopId: Int, preOrders: List<OfferEntity>) {
+    private suspend fun loadOffers(shopId: Int, preOrders: List<OfferEntity>) {
         for (preOrder in preOrders) {
             when(val offerResult = shopInteractor.getOffer(preOrder.id)) {
-                is Success -> updatePreOrder(shopId, offerResult.data)
+                is Success -> updatePersistedOffer(shopId, offerResult.data)
                 is Failure -> outputs.putBoolean(ERROR_KEY_WHEN_LOAD_OFFERS, true)
             }
         }
         shopInteractor.populatePersistedOffersPrice(shopId)
     }
 
-    private suspend fun updatePreOrder(shopId: Int, offer: BaseOfferResponse) {
+    private suspend fun updatePersistedOffer(shopId: Int, offer: BaseOfferResponse) {
         shopInteractor.updatePersistedOffer(shopId, offer)
             .onFailure {
                 outputs.putBoolean(ERROR_KEY_WHEN_WRITE_IN_DB, true)

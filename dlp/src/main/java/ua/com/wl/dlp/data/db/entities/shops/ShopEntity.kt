@@ -1,9 +1,6 @@
 package ua.com.wl.dlp.data.db.entities.shops
 
-import androidx.room.ColumnInfo
-import androidx.room.Embedded
-import androidx.room.Entity
-import androidx.room.PrimaryKey
+import androidx.room.*
 
 import ua.com.wl.dlp.data.db.entities.shops.embedded.shop.PreOrderParams
 
@@ -12,7 +9,7 @@ import ua.com.wl.dlp.data.db.entities.shops.embedded.shop.PreOrderParams
  */
 
 @Entity(tableName = ShopEntity.TABLE_NAME)
-data class ShopEntity(
+data class ShopEntity constructor(
     @PrimaryKey
     @ColumnInfo(name = "id")
     val id: Int,
@@ -25,4 +22,7 @@ data class ShopEntity(
 
         const val TABLE_NAME = "shops"
     }
+
+    @Ignore
+    var offers: List<OfferEntity> = emptyList()
 }

@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName
  * @author Denis Makovskyi
  */
 
-data class AuthPrefs(
+data class AuthPrefs constructor(
     @SerializedName("auth_token")
     val authToken: String? = null,
 

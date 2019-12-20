@@ -6,7 +6,6 @@ import retrofit2.Response
 
 import ua.com.wl.archetype.utils.Optional
 import ua.com.wl.dlp.data.api.errors.ErrorsMapper
-import ua.com.wl.dlp.domain.exeptions.CoreException
 import ua.com.wl.dlp.domain.exeptions.api.ApiException
 import ua.com.wl.dlp.domain.exeptions.db.DatabaseException
 
@@ -14,11 +13,11 @@ import ua.com.wl.dlp.domain.exeptions.db.DatabaseException
  * @author Denis Makovskyi
  */
 
-open class UseCase(private val errorsMapper: ErrorsMapper) {
+open class UseCase constructor(private val errorsMapper: ErrorsMapper) {
 
     protected suspend fun <T : Any> callApi(
         call: suspend () -> Response<T>,
-        errorClass: KClass<out CoreException>? = null
+        errorClass: KClass<out ApiException>? = null
     ): Result<Optional<T>> =
         try {
             val response = call.invoke()

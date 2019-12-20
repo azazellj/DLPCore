@@ -24,6 +24,8 @@ interface ShopDataSource {
 
     suspend fun getOrder(id: Int, shopId: Int): Optional<OfferEntity>
 
+    suspend fun getOrders(): List<ShopEntity>
+
     suspend fun getOrders(shopId: Int): List<OfferEntity>
 
     suspend fun insertOrder(offer: OfferEntity): Boolean

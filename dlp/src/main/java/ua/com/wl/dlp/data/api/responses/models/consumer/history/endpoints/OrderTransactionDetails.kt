@@ -6,4 +6,6 @@ import com.google.gson.annotations.SerializedName
  * @author Denis Makovskyi
  */
 
-data class OrderTransactionDetails(@SerializedName("order_number") val number: String)
+data class OrderTransactionDetails constructor(
+    @SerializedName("order_number") 
+    val number: String)

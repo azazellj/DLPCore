@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName
  * @author Denis Makovskyi
  */
 
-data class NewsItemTransactionDetails(
+data class NewsItemTransactionDetails constructor(
     @SerializedName("id") 
     val id: Int,
     

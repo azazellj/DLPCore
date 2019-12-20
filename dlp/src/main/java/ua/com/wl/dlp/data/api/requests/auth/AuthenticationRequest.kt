@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName
  * @author Denis Makovskyi
  */
 
-data class AuthenticationRequest(
+data class AuthenticationRequest constructor(
     @SerializedName("send_sms") 
     val sendSms: Boolean = true,
     

@@ -6,4 +6,6 @@ import com.google.gson.annotations.SerializedName
  * @author Denis Makovskyi
  */
 
-data class SocialNetwork(@SerializedName("code") val code: SocialNetworkCode)
+data class SocialNetwork constructor(
+    @SerializedName("code")
+    val code: SocialNetworkCode)

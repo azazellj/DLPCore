@@ -8,7 +8,7 @@ import ua.com.wl.dlp.data.api.responses.models.shop.order.PreOrderTradeItem
  * @author Denis Makovskyi
  */
 
-data class PreOrderResponse(
+data class PreOrderResponse constructor(
     @SerializedName("pay_with_bonuses")
     val usedBonuses: Boolean,
 

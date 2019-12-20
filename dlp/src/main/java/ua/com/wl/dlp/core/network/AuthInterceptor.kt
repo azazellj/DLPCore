@@ -12,7 +12,7 @@ import ua.com.wl.dlp.utils.toJwt
  * @author Denis Makovskyi
  */
 
-class AuthInterceptor(
+class AuthInterceptor constructor(
     private val appId: String,
     private val corePreferences: CorePreferences
 ) : Interceptor {

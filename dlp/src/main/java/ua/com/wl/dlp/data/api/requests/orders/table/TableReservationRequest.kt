@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName
  * @author Denis Makovskyi
  */
 
-open class TableReservationRequest(
+open class TableReservationRequest constructor(
     @SerializedName("shop")
     var shopId: Int = 0,
 

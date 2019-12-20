@@ -9,18 +9,18 @@ import com.google.gson.Gson
 
 import okhttp3.ResponseBody
 
-import ua.com.wl.dlp.domain.exeptions.CoreException
 import ua.com.wl.dlp.domain.exeptions.CoreRuntimeException
+import ua.com.wl.dlp.domain.exeptions.api.ApiException
 
 /**
  * @author Denis Makovskyi
  */
 
-class ErrorsMapper(private val gson: Gson) {
+class ErrorsMapper constructor(private val gson: Gson) {
 
     fun createExceptionFromResponseBody(
         errorBody: ResponseBody,
-        errorClass: KClass<out CoreException>
+        errorClass: KClass<out ApiException>
     ): Throwable {
 
         fun constructorArgs(argsSize: Int, message: String?): Array<Any?> {
@@ -48,7 +48,7 @@ class ErrorsMapper(private val gson: Gson) {
 
         } else {
             CoreRuntimeException(
-                createDetailMessage("could not unmarshall response error body to structure"))
+                createDetailMessage("could not unmarshall response error body"))
         }
     }
 

@@ -8,7 +8,7 @@ import ua.com.wl.dlp.data.api.responses.models.auth.AuthWay
  * @author Denis Makovskyi
  */
 
-data class AuthenticationResponse(
+data class AuthenticationResponse constructor(
     @SerializedName("is_registered")
     val isRegistered: Boolean,
 

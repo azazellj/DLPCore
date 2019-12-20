@@ -10,7 +10,7 @@ import ua.com.wl.dlp.domain.exeptions.api.ApiException
  * @author Denis Makovskyi
  */
 
-class AuthException(message: String) : ApiException(message) {
+class AuthException constructor(message: String) : ApiException(message) {
 
     override fun getLocalizedMessage(context: Context): String = when (message) {
         ResponseType.TOKEN_REQUIRED -> context.getString(R.string.dlp_error_token_required)

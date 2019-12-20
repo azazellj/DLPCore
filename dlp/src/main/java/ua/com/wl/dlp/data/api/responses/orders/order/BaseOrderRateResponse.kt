@@ -7,7 +7,7 @@ import ua.com.wl.dlp.data.api.responses.models.shop.order.Order
  * @author Denis Makovskyi
  */
 
-open class BaseOrderRateResponse(
+open class BaseOrderRateResponse constructor(
     @SerializedName("value")
     var value: Int = 0,
 

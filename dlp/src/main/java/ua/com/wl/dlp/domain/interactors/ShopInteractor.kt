@@ -51,6 +51,8 @@ interface ShopInteractor : OffersInteractor {
 
     suspend fun getPersistedOffer(shopId: Int, offerId: Int): Result<Optional<OfferEntity>>
 
+    suspend fun getPersistedOffers(): Result<List<ShopEntity>>
+
     suspend fun getPersistedOffers(shopId: Int): Result<List<OfferEntity>>
 
     suspend fun updatePersistedOffer(shopId: Int, offer: BaseOfferResponse): Result<Boolean>
@@ -63,5 +65,5 @@ interface ShopInteractor : OffersInteractor {
 
     suspend fun decrementPreOrderCounter(shopId: Int, offer: BaseOfferResponse): Result<OfferEntity>
 
-    suspend fun populatePersistedOffersPrice(shopId: Int)
+    suspend fun populatePersistedOffersPrice(shopId: Int? = null)
 }

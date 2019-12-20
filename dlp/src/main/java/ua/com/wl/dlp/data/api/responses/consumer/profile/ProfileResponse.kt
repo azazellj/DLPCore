@@ -10,7 +10,7 @@ import ua.com.wl.dlp.data.api.responses.models.consumer.profile.Gender
  * @author Denis Makovskyi
  */
 
-data class ProfileResponse(
+data class ProfileResponse constructor(
     @SerializedName("first_name")
     val firstName: String,
 

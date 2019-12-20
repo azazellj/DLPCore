@@ -9,7 +9,7 @@ import ua.com.wl.dlp.data.api.responses.models.consumer.history.TransactionDetai
  * @author Denis Makovskyi
  */
 
-data class TransactionResponse(
+data class TransactionResponse constructor(
     @SerializedName("accounting_type")
     val accountingType: AccountingType,
 

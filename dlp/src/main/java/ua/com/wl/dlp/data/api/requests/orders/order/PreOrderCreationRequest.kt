@@ -10,7 +10,7 @@ import ua.com.wl.dlp.data.api.models.order.BasePreOrderTradeItem
  * @author Denis Makovskyi
  */
 
-open class PreOrderCreationRequest(
+open class PreOrderCreationRequest constructor(
     @SerializedName("shop")
     var shopId: Int = 0,
 

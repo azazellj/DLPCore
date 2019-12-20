@@ -12,7 +12,7 @@ import ua.com.wl.dlp.utils.isNonNullOrEmpty
  * @author Denis Makovskyi
  */
 
-class ConsumerPreferences(
+class ConsumerPreferences constructor(
     context: Context,
     private val gson: Gson
 ) : BasePreferences(context, ConsumerPreferences::class.java.simpleName) {

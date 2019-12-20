@@ -22,7 +22,7 @@ import ua.com.wl.dlp.utils.only
  * @author Denis Makovskyi
  */
 
-class OrdersInteractorImpl(
+class OrdersInteractorImpl constructor(
     errorsMapper: ErrorsMapper,
     private val apiV1: OrdersApiV1
 ) : UseCase(errorsMapper), OrdersInteractor {

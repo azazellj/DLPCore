@@ -8,7 +8,7 @@ import ua.com.wl.dlp.data.api.responses.models.social.SocialNetwork
  * @author Denis Makovskyi
  */
 
-data class ArticleResponse(
+data class ArticleResponse constructor(
     @SerializedName("description")
     val description: String,
 

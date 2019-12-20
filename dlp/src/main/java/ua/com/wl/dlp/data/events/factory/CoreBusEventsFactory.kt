@@ -7,6 +7,7 @@ import ua.com.wl.dlp.data.events.shop.offer.OfferBusEvent
 import ua.com.wl.dlp.data.events.shop.order.OrderCounterBusEvent
 import ua.com.wl.dlp.data.events.shop.order.OrderRateBusEvent
 import ua.com.wl.dlp.data.events.shop.order.OrdersPriceBusEvent
+import ua.com.wl.dlp.data.events.shop.order.OrdersTotalPriceBusEvent
 
 /**
  * @author Denis Makovskyi
@@ -14,9 +15,10 @@ import ua.com.wl.dlp.data.events.shop.order.OrdersPriceBusEvent
 
 object CoreBusEventsFactory {
 
-    fun profileChanges(changes: List<ProfileBusEvent.Change>) = Bus.send(ProfileBusEvent(changes))
+    internal fun profileChanges(
+        changes: List<ProfileBusEvent.Change>) = Bus.send(ProfileBusEvent(changes))
 
-    fun offerFavouriteStatus(
+    internal fun offerFavouriteStatus(
         offerId: Int,
         tradeId: Int? = null,
         isFavourite: Boolean?
@@ -26,24 +28,29 @@ object CoreBusEventsFactory {
             OfferBusEvent.Field.IS_FAVOURITE,
             OfferBusEvent.FieldValue.BooleanValue(isFavourite)))
 
-    fun orderRate(
+    internal fun orderRate(
         shopId: Int,
         orderId: Int,
         orderRate: Int = 0
     ) = Bus.send(OrderRateBusEvent(shopId, orderId, orderRate))
 
-    fun ordersPrice(
+    internal fun orderCounter(
+        shopId: Int,
+        offerId: Int,
+        counter: Int = 0
+    ) = Bus.send(OrderCounterBusEvent(shopId, offerId, counter))
+
+    internal fun ordersPrice(
         shopId: Int,
         count: Int = 0,
         price: Double = 0.0
     ) = Bus.send(OrdersPriceBusEvent(shopId, count, price))
 
-    fun orderCounter(
-        shopId: Int,
-        tradeId: Int? = null,
-        counter: Int = 0,
-        resetAll: Boolean = false
-    ) = Bus.send(OrderCounterBusEvent(shopId, tradeId, counter, resetAll))
+    internal fun ordersTotalPrice(
+        count: Int = 0,
+        price: Double = 0.0
+    ) = Bus.send(OrdersTotalPriceBusEvent(count, price))
 
-    fun session(fallbackType: SessionBusEvent.FallbackType) = Bus.send(SessionBusEvent(fallbackType))
+    internal fun sessionExpired(
+        fallbackType: SessionBusEvent.FallbackType) = Bus.send(SessionBusEvent(fallbackType))
 }

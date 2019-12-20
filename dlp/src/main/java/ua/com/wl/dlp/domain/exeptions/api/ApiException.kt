@@ -14,7 +14,7 @@ import ua.com.wl.dlp.domain.exeptions.CoreRuntimeException
  * @author Denis Makovskyi
  */
 
-open class ApiException(
+open class ApiException constructor(
     message: String? = null,
     cause: Throwable? = null
 ) : CoreRuntimeException(message, cause) {

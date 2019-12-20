@@ -8,7 +8,7 @@ import ua.com.wl.dlp.data.api.responses.models.shop.service.ShopService
  * @author Denis Makovskyi
  */
 
-open class BaseShopResponse(
+open class BaseShopResponse constructor(
     @SerializedName("id")
     var id: Int = 0,
 

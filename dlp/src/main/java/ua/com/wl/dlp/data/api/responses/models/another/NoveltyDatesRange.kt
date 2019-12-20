@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName
  * @author Denis Makovskyi
  */
 
-data class NoveltyDatesRange(
+data class NoveltyDatesRange constructor(
     @SerializedName("lower")
     val lower: String,
 

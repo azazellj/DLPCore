@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName
  * @author Denis Makovskyi
  */
 
-data class PromoParams(
+data class PromoParams constructor(
     @SerializedName("gift_name")
     val giftName: String?,
 

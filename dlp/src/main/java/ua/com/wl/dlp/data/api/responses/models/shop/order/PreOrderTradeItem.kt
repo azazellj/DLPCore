@@ -8,7 +8,7 @@ import ua.com.wl.dlp.data.api.models.order.BasePreOrderTradeItem
  * @author Denis Makovskyi
  */
 
-data class PreOrderTradeItem(
+data class PreOrderTradeItem constructor(
     @SerializedName("price")
     val price: String,
 

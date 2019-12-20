@@ -21,7 +21,7 @@ import ua.com.wl.dlp.utils.only
  * @author Denis Makovskyi
  */
 
-class ShopDataSourceImpl(
+class ShopDataSourceImpl constructor(
     private val shopsDao: ShopsDao,
     private val offersDao: OffersDao,
     private val ordersDao: OrdersDao
@@ -34,7 +34,7 @@ class ShopDataSourceImpl(
             }
 
         } catch (e: Exception) {
-            throw DbQueryException(DbErrorKeys.SELECT_QUERY_ERROR)
+            throw DbQueryException(DbErrorKeys.SELECT_QUERY_ERROR, e)
         }
 
     override suspend fun insertShop(shop: ShopEntity): Boolean =
@@ -44,7 +44,7 @@ class ShopDataSourceImpl(
             }
 
         } catch (e: Exception) {
-            throw DbQueryException(DbErrorKeys.INSERT_QUERY_ERROR)
+            throw DbQueryException(DbErrorKeys.INSERT_QUERY_ERROR, e)
         }
 
     override suspend fun updateShop(shop: ShopEntity): Boolean =
@@ -54,14 +54,15 @@ class ShopDataSourceImpl(
             }
 
         } catch (e: Exception) {
-            throw DbQueryException(DbErrorKeys.UPDATE_QUERY_ERROR)
+            throw DbQueryException(DbErrorKeys.UPDATE_QUERY_ERROR, e)
         }
 
     override suspend fun deleteShop(shop: ShopEntity): Boolean =
         try {
             withContext(Dispatchers.IO) {
                 for (offer in ordersDao.getOffers(shop.id)) {
-                    val isOrderDeleted = ordersDao.deleteOrder(OrderEntity(shop.id, offer.id)) isGreaterThan 0
+                    val isOrderDeleted =
+                        ordersDao.deleteOrder(OrderEntity(shop.id, offer.id)) isGreaterThan 0
                     val areOrdersEmpty = ordersDao.getCount(offer.id) isEqualsTo 0
                     if (isOrderDeleted && areOrdersEmpty) {
                         offersDao.deleteOffer(offer)
@@ -71,7 +72,7 @@ class ShopDataSourceImpl(
             }
 
         } catch (e: Exception) {
-            throw DbQueryException(DbErrorKeys.DELETE_QUERY_ERROR)
+            throw DbQueryException(DbErrorKeys.DELETE_QUERY_ERROR, e)
         }
 
     override suspend fun deleteShops(): Boolean =
@@ -82,7 +83,7 @@ class ShopDataSourceImpl(
                 shopsDao.deleteShops() isGreaterThan 0
 
             } catch (e: Exception) {
-                throw DbQueryException(DbErrorKeys.DELETE_QUERY_ERROR)
+                throw DbQueryException(DbErrorKeys.DELETE_QUERY_ERROR, e)
             }
         }
 
@@ -93,7 +94,7 @@ class ShopDataSourceImpl(
             }
 
         } catch (e: Exception) {
-            throw DbQueryException(DbErrorKeys.SELECT_QUERY_ERROR)
+            throw DbQueryException(DbErrorKeys.SELECT_QUERY_ERROR, e)
         }
 
     override suspend fun getOrder(id: Int, shopId: Int): Optional<OfferEntity> =
@@ -108,7 +109,21 @@ class ShopDataSourceImpl(
             }
 
         } catch (e: Exception) {
-            throw DbQueryException(DbErrorKeys.SELECT_QUERY_ERROR)
+            throw DbQueryException(DbErrorKeys.SELECT_QUERY_ERROR, e)
+        }
+
+    override suspend fun getOrders(): List<ShopEntity> =
+        try {
+            withContext(Dispatchers.IO) {
+                shopsDao.getShops().also { shops ->
+                    for (shop in shops) {
+                        shop.offers = ordersDao.getOffers(shop.id)
+                    }
+                }
+            }
+
+        } catch (e: Exception) {
+            throw DbQueryException(DbErrorKeys.SELECT_QUERY_ERROR, e)
         }
 
     override suspend fun getOrders(shopId: Int): List<OfferEntity> =
@@ -125,7 +140,7 @@ class ShopDataSourceImpl(
             }
 
         } catch (e: Exception) {
-            throw DbQueryException(DbErrorKeys.SELECT_QUERY_ERROR)
+            throw DbQueryException(DbErrorKeys.SELECT_QUERY_ERROR, e)
         }
 
     override suspend fun insertOrder(offer: OfferEntity): Boolean =
@@ -142,7 +157,7 @@ class ShopDataSourceImpl(
             }
 
         } catch (e: Exception) {
-            throw DbQueryException(DbErrorKeys.INSERT_QUERY_ERROR)
+            throw DbQueryException(DbErrorKeys.INSERT_QUERY_ERROR, e)
         }
 
     override suspend fun updateOrder(offer: OfferEntity): Boolean =
@@ -150,18 +165,19 @@ class ShopDataSourceImpl(
             withContext(Dispatchers.IO) {
                 OrderEntity(offer.shopId, offer.id, offer.preOrdersCount).let {
                     offersDao.updateOffer(offer) isGreaterThan 0
-                        && ordersDao.updateOrder(it) isGreaterThan 0
+                            && ordersDao.updateOrder(it) isGreaterThan 0
                 }
             }
 
         } catch (e: Exception) {
-            throw DbQueryException(DbErrorKeys.UPDATE_QUERY_ERROR)
+            throw DbQueryException(DbErrorKeys.UPDATE_QUERY_ERROR, e)
         }
 
     override suspend fun deleteOrder(offer: OfferEntity): Boolean =
         try {
             withContext(Dispatchers.IO) {
-                var isOrderDeleted = ordersDao.deleteOrder(OrderEntity(offer.shopId, offer.id)) isGreaterThan 0
+                var isOrderDeleted =
+                    ordersDao.deleteOrder(OrderEntity(offer.shopId, offer.id)) isGreaterThan 0
                 val areOrdersEmpty = ordersDao.getCount(offer.id) isEqualsTo 0
                 if (isOrderDeleted && areOrdersEmpty) {
                     isOrderDeleted = offersDao.deleteOffer(offer) isGreaterThan 0
@@ -170,6 +186,6 @@ class ShopDataSourceImpl(
             }
 
         } catch (e: Exception) {
-            throw DbQueryException(DbErrorKeys.DELETE_QUERY_ERROR)
+            throw DbQueryException(DbErrorKeys.DELETE_QUERY_ERROR, e)
         }
 }

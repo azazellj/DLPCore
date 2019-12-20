@@ -14,7 +14,7 @@ import ua.com.wl.dlp.domain.interactors.NewsFeedInteractor
  * @author Denis Makovskyi
  */
 
-class NewsFeedInteractorImpl(
+class NewsFeedInteractorImpl constructor(
     errorsMapper: ErrorsMapper,
     private val apiV1: NewsApiV1
 ) : UseCase(errorsMapper), NewsFeedInteractor {

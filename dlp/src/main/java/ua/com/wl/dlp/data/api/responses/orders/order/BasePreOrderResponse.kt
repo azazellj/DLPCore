@@ -9,7 +9,7 @@ import ua.com.wl.dlp.data.api.responses.models.shop.order.PreOrderStatus
  * @author Denis Makovskyi
  */
 
-open class BasePreOrderResponse(
+open class BasePreOrderResponse constructor(
     @SerializedName("number")
     var number: Int = 0,
 

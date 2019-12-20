@@ -10,7 +10,7 @@ import ua.com.wl.dlp.data.api.responses.models.shop.table.TableReservationStatus
  * @author Denis Makovskyi
  */
 
-data class TableReservationResponse(
+data class TableReservationResponse constructor(
     @SerializedName("id")
     val id: Int,
 

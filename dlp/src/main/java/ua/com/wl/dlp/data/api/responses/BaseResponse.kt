@@ -6,7 +6,10 @@ import com.google.gson.annotations.SerializedName
  * @author Denis Makovskyi
  */
 
-open class BaseResponse(@SerializedName(value = "type", alternate = ["status"]) val type: String) {
+open class BaseResponse constructor(
+    @SerializedName(value = "type", alternate = ["status"])
+    val type: String
+) {
 
     fun isSuccessfully() = type.equals(ResponseType.OK, true)
 }

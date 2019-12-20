@@ -9,7 +9,7 @@ import ua.com.wl.dlp.data.api.responses.models.consumer.profile.Gender
  * @author Denis Makovskyi
  */
 
-data class ProfilePrefs(
+data class ProfilePrefs constructor(
     @SerializedName("first_name")
     val firstName: String? = null,
 

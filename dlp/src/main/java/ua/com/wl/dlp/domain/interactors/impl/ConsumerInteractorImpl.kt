@@ -37,7 +37,7 @@ import ua.com.wl.dlp.utils.toPrefs
  * @author Denis Makovskyi
  */
 
-class ConsumerInteractorImpl(
+class ConsumerInteractorImpl constructor(
     errorsMapper: ErrorsMapper,
     private val app: Application,
     private val apiV1: ConsumerApiV1,

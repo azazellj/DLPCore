@@ -12,7 +12,7 @@ import ua.com.wl.dlp.utils.isNonNullOrEmpty
  * @author Denis Makovskyi
  */
 
-class CorePreferences(
+class CorePreferences constructor(
     context: Context,
     private val gson: Gson
 ) : BasePreferences(context, CorePreferences::class.java.simpleName) {

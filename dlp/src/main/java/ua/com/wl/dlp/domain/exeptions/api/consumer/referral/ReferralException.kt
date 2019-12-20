@@ -10,7 +10,7 @@ import ua.com.wl.dlp.domain.exeptions.api.ApiException
  * @author Denis Makovskyi
  */
 
-class ReferralException(message: String) : ApiException(message) {
+class ReferralException constructor(message: String) : ApiException(message) {
 
     override fun getLocalizedMessage(context: Context): String = when (message) {
         ResponseType.INVITE_CODE_REQUIRED -> context.getString(R.string.dlp_error_invite_code_required)

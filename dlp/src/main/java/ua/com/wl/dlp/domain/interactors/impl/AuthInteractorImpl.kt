@@ -27,7 +27,7 @@ import ua.com.wl.dlp.domain.interactors.AuthInteractor
  * @author Denis Makovskyi
  */
 
-class AuthInteractorImpl(
+class AuthInteractorImpl constructor(
     errorsMapper: ErrorsMapper,
     private val apiV1: AuthApiV1,
     private val apiV2: AuthApiV2,
@@ -134,7 +134,7 @@ class AuthInteractorImpl(
                 corePreferences.removeAuthPrefs()
                 consumerPreferences.removeProfilePrefs()
             }
-            CoreBusEventsFactory.session(SessionBusEvent.FallbackType.SIGNED_OUT)
+            CoreBusEventsFactory.sessionExpired(SessionBusEvent.FallbackType.SIGNED_OUT)
         }
 
     override suspend fun requestSmsCode(phone: String): Result<Boolean> =

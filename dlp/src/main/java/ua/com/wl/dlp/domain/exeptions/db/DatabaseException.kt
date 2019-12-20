@@ -10,7 +10,7 @@ import ua.com.wl.dlp.domain.exeptions.CoreRuntimeException
  * @author Denis Makovskyi
  */
 
-open class DatabaseException(
+open class DatabaseException constructor(
     message: String? = null,
     cause: Throwable? = null
 ) : CoreRuntimeException(message, cause) {

@@ -11,7 +11,7 @@ import ua.com.wl.dlp.data.api.responses.models.consumer.history.types.Transactio
  * @author Denis Makovskyi
  */
 
-data class TransactionDetails(
+data class TransactionDetails constructor(
     @SerializedName("operation_type") 
     val transactionType: TransactionType,
     
