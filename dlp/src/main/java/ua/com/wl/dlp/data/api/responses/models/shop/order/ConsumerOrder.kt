@@ -8,7 +8,7 @@ import com.google.gson.annotations.SerializedName
 
 data class ConsumerOrder constructor(
     @SerializedName("rs_order_id")
-    val id: Int,
+    val id: String,
 
     @SerializedName("rs_price_in_money")
     val amount: String?,
