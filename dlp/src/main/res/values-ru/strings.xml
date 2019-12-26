@@ -28,7 +28,7 @@
     <string name="dlp_error_phone_registered">Номер телефона уже привязан к другой учетной записи</string>
 
     <string name="dlp_error_sms_delivery_failure">Не удалось отослать смс</string>
-    <string name="dlp_error_sms_retrieval_attempts_exceeded">Количество попыток исперпано</string>
+    <string name="dlp_error_sms_retrieval_attempts_exceeded">Количество попыток исчерпано</string>
     <string name="dlp_error_sms_auth_not_supported_for_business">Аутентификация через смс не поддерживается</string>
 
     <string name="dlp_error_password_required">Необходимо ввести пароль</string>

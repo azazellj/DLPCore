@@ -35,7 +35,7 @@ android {
 
 dependencies {
     def core_version = '1.2.0-rc01'
-    def room_version = '2.2.2'
+    def room_version = '2.2.3'
     def work_version = "2.2.0"
     def koin_version = "2.0.1"
     def gson_version = '2.8.6'
@@ -82,5 +82,5 @@ dependencies {
     // Unit test
     testImplementation 'junit:junit:4.12'
     testImplementation 'androidx.test:core:1.2.0'
-    testImplementation 'org.mockito:mockito-core:1.10.19'
+    testImplementation 'org.mockito:mockito-core:2.23.0'
 }
