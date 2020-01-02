@@ -48,6 +48,7 @@ val interactorsModule = module {
     single<OrdersInteractor> {
         OrdersInteractorImpl(
             errorsMapper = get(),
-            apiV1 = get())
+            apiV1 = get(),
+            apiV2 = get())
     }
 }

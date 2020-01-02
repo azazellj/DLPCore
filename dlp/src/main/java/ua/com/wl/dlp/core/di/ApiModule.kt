@@ -158,4 +158,8 @@ val apiModule = module {
         get<Retrofit>(qualifier = named(Constants.KOIN_NAMED_API_RETROFIT))
             .create(OrdersApiV1::class.java)
     }
+    factory {
+        get<Retrofit>(qualifier = named(Constants.KOIN_NAMED_API_RETROFIT))
+            .create(OrdersApiV2::class.java)
+    }
 }

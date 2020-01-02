@@ -65,7 +65,7 @@ class ShopOffersSyncWork(
     private val shopId = inputData.getInt(INPUT_KEY_SHOP_ID, 0)
     private val shopInteractor: ShopInteractor by inject()
 
-    private var outputs: Data.Builder = Data.Builder()
+    private val outputs: Data.Builder = Data.Builder()
 
     override suspend fun doWork(): Result {
         withContext(Dispatchers.IO) {

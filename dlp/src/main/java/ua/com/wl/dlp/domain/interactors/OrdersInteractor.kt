@@ -1,8 +1,11 @@
 package ua.com.wl.dlp.domain.interactors
 
+import ua.com.wl.dlp.data.api.requests.orders.order.GeneralPreOrderCreationRequest
 import ua.com.wl.dlp.data.api.requests.orders.order.PreOrderCreationRequest
 import ua.com.wl.dlp.data.api.requests.orders.table.TableReservationRequest
+import ua.com.wl.dlp.data.api.responses.CollectionResponse
 import ua.com.wl.dlp.data.api.responses.PagedResponse
+import ua.com.wl.dlp.data.api.responses.models.orders.order.GeneralPreOrderItem
 import ua.com.wl.dlp.data.api.responses.orders.order.*
 import ua.com.wl.dlp.data.api.responses.orders.table.TableReservationResponse
 import ua.com.wl.dlp.domain.Result
@@ -24,6 +27,8 @@ interface OrdersInteractor {
     suspend fun getLastOrderRate(): Result<OrderRateResponse>
 
     suspend fun createPreOrder(request: PreOrderCreationRequest): Result<PreOrderCreationResponse>
+
+    suspend fun createGeneralPreOrder(request: GeneralPreOrderCreationRequest): Result<CollectionResponse<GeneralPreOrderItem>>
 
     suspend fun getPreOrders(page: Int? = null, count: Int? = null): Result<PagedResponse<BasePreOrderResponse>>
 

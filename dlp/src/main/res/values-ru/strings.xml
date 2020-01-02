@@ -50,6 +50,13 @@
     <string name="dlp_error_invite_code_required">Необходимо ввести реферальный код</string>
     <string name="dlp_error_invite_code_not_found">Реферальный код не найден</string>
 
+    <string name="dlp_error_shop_required">Не указан уникальный идентификатор заведения</string>
+
+    <string name="dlp_error_pre_order_invalid_trade_items">Одно или несколько предложений не связанные с указанным заведением, неактивны, или заведение не связано с потребителем</string>
+    <string name="dlp_error_pre_order_invalid_delivery_type">Тип доставки указан неверно</string>
+    <string name="dlp_error_pre_order_illegal_flag_use_bonuses">Конфликт с опцией \"Оплатить бонусами\"</string>
+    <string name="dlp_error_pre_order_incorrect_readiness_time">Время готовности меньше или равно текущему времени</string>
+
     <string name="dlp_error_server_unreachable">Отдаленный сервер недоступен</string>
     <string name="dlp_error_server_database">Ошибка базы данных на отдаленном сервере</string>
 

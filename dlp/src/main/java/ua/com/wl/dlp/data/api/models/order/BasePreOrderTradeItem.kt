@@ -11,4 +11,18 @@ open class BasePreOrderTradeItem constructor(
     var count: Int = 0,
 
     @SerializedName("trade_item")
-    var tradeItem: Int = 0)
+    var tradeItem: Int = 0
+) {
+
+    fun count(init: () -> Int) {
+        count = init()
+    }
+
+    fun tradeItem(init: () -> Int) {
+        tradeItem = init()
+    }
+}
+
+fun tradeItem(
+    init: BasePreOrderTradeItem.() -> Unit
+): BasePreOrderTradeItem = BasePreOrderTradeItem().apply(init)

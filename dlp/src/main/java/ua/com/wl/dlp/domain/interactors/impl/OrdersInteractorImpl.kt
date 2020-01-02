@@ -4,17 +4,22 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 import ua.com.wl.dlp.data.api.OrdersApiV1
+import ua.com.wl.dlp.data.api.OrdersApiV2
 import ua.com.wl.dlp.data.api.errors.ErrorsMapper
+import ua.com.wl.dlp.data.api.requests.orders.order.GeneralPreOrderCreationRequest
 import ua.com.wl.dlp.data.api.requests.orders.order.PreOrderCreationRequest
 import ua.com.wl.dlp.data.api.requests.orders.order.RateOrderRequest
 import ua.com.wl.dlp.data.api.requests.orders.table.TableReservationRequest
+import ua.com.wl.dlp.data.api.responses.CollectionResponse
 import ua.com.wl.dlp.data.api.responses.PagedResponse
+import ua.com.wl.dlp.data.api.responses.models.orders.order.GeneralPreOrderItem
 import ua.com.wl.dlp.data.api.responses.orders.order.*
 import ua.com.wl.dlp.data.api.responses.orders.table.TableReservationResponse
 import ua.com.wl.dlp.data.events.factory.CoreBusEventsFactory
 import ua.com.wl.dlp.domain.Result
 import ua.com.wl.dlp.domain.UseCase
 import ua.com.wl.dlp.domain.exeptions.api.ApiException
+import ua.com.wl.dlp.domain.exeptions.api.orders.order.GeneralPreOrderException
 import ua.com.wl.dlp.domain.interactors.OrdersInteractor
 import ua.com.wl.dlp.utils.only
 
@@ -24,7 +29,8 @@ import ua.com.wl.dlp.utils.only
 
 class OrdersInteractorImpl constructor(
     errorsMapper: ErrorsMapper,
-    private val apiV1: OrdersApiV1
+    private val apiV1: OrdersApiV1,
+    private val apiV2: OrdersApiV2
 ) : UseCase(errorsMapper), OrdersInteractor {
 
     override suspend fun getOrders(page: Int?, count: Int?): Result<PagedResponse<OrderSimpleResponse>> =
@@ -82,6 +88,16 @@ class OrdersInteractorImpl constructor(
                     { Result.Success(it) },
                     { Result.Failure(ApiException()) })
             }
+
+    override suspend fun createGeneralPreOrder(request: GeneralPreOrderCreationRequest): Result<CollectionResponse<GeneralPreOrderItem>> =
+        callApi(
+            call = { apiV2.createGeneralPreOrder(request) },
+            errorClass = GeneralPreOrderException::class
+        ).flatMap { responseOpt ->
+            responseOpt.ifPresentOrDefault(
+                { Result.Success(it) },
+                { Result.Failure(ApiException()) })
+        }
 
     override suspend fun getPreOrders(page: Int?, count: Int?): Result<PagedResponse<BasePreOrderResponse>> =
         callApi(call = { apiV1.getPreOrders(page, count) })
