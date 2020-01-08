@@ -183,8 +183,7 @@ class ShopDataSourceImpl constructor(
     override suspend fun deleteOrder(offer: OfferEntity): Boolean =
         try {
             withContext(Dispatchers.IO) {
-                var isOrderDeleted =
-                    ordersDao.deleteOrder(OrderEntity(offer.shopId, offer.id)) isGreaterThan 0
+                var isOrderDeleted = ordersDao.deleteOrder(OrderEntity(offer.shopId, offer.id)) isGreaterThan 0
                 val areOrdersEmpty = ordersDao.getCount(offer.id) isEqualsTo 0
                 if (isOrderDeleted && areOrdersEmpty) {
                     isOrderDeleted = offersDao.deleteOffer(offer) isGreaterThan 0

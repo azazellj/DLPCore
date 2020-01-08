@@ -23,16 +23,14 @@ import ua.com.wl.dlp.utils.isEmpty
  * @author Denis Makovskyi
  */
 
-class ShopOffersSyncWork(
+class ShopsOffersSyncWork(
     context: Context,
-    workerParams: WorkerParameters
-) : CoroutineWorker(context, workerParams), DLPCoreComponent {
+    workerParameters: WorkerParameters
+) : CoroutineWorker(context, workerParameters), DLPCoreComponent {
 
     companion object {
 
-        val TAG = ShopOffersSyncWork::class.java.name
-
-        const val INPUT_KEY_SHOP_ID = "shop_id"
+        val TAG = ShopsOffersSyncWork::class.java.name
 
         const val ERROR_KEY_WHEN_READ_ORDERS = "error_when_read_orders"
         const val ERROR_KEY_WHEN_LOAD_OFFERS = "error_when_load_offers"
@@ -41,10 +39,6 @@ class ShopOffersSyncWork(
         fun schedule(context: Context, shopId: Int): UUID {
             val request = OneTimeWorkRequestBuilder<ShopOffersSyncWork>()
                 .addTag(TAG)
-                .setInputData(
-                    Data.Builder()
-                        .putInt(INPUT_KEY_SHOP_ID, shopId)
-                        .build())
                 .setConstraints(
                     Constraints.Builder()
                         .setRequiredNetworkType(NetworkType.CONNECTED)
@@ -55,18 +49,8 @@ class ShopOffersSyncWork(
                 .enqueue()
             return request.id
         }
-
-        @Deprecated(
-            message = "Use general function for androidx.work.Data",
-            replaceWith = ReplaceWith(
-                expression = "containsBool(key: String)",
-                imports = ["ua.com.wl.dlp.utils.Extensions"])
-        )
-        fun containsError(key: String, data: Data): Boolean =
-            data.keyValueMap.containsKey(key) && data.getBoolean(key, false)
     }
 
-    private val shopId = inputData.getInt(INPUT_KEY_SHOP_ID, 0)
     private val shopInteractor: ShopInteractor by inject()
 
     private val outputs: Data.Builder = Data.Builder()
@@ -84,25 +68,27 @@ class ShopOffersSyncWork(
     }
 
     private suspend fun launch() {
-        shopInteractor.getPersistedOffers(shopId)
-            .sOnSuccess { persistedOffers ->
-                loadOffers(persistedOffers)
+        shopInteractor.getPersistedOffers()
+            .sOnSuccess { shops ->
+                for (shop in shops) {
+                    loadOffers(shop.id, shop.offers)
+                }
             }.onFailure {
                 outputs.putBoolean(ERROR_KEY_WHEN_READ_ORDERS, true)
             }
     }
 
-    private suspend fun loadOffers(persistedOffers: List<OfferEntity>) {
+    private suspend fun loadOffers(shopId: Int, persistedOffers: List<OfferEntity>) {
         for (persistedOffer in persistedOffers) {
             when(val offerResult = shopInteractor.getOffer(persistedOffer.id)) {
-                is Success -> updatePersistedOffer(offerResult.data)
+                is Success -> updatePersistedOffer(shopId, offerResult.data)
                 is Failure -> outputs.putBoolean(ERROR_KEY_WHEN_LOAD_OFFERS, true)
             }
         }
         shopInteractor.populatePersistedOffersPrice(shopId)
     }
 
-    private suspend fun updatePersistedOffer(offer: BaseOfferResponse) {
+    private suspend fun updatePersistedOffer(shopId: Int, offer: BaseOfferResponse) {
         shopInteractor.updatePersistedOffer(shopId, offer)
             .onFailure {
                 outputs.putBoolean(ERROR_KEY_WHEN_WRITE_IN_DB, true)
