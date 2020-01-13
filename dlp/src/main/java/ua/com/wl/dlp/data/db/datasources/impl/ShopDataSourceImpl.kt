@@ -62,8 +62,8 @@ class ShopDataSourceImpl constructor(
             withContext(Dispatchers.IO) {
                 for (offer in ordersDao.getOffers(shop.id)) {
                     val isOrderDeleted = ordersDao.deleteOrder(OrderEntity(shop.id, offer.id)) isGreaterThan 0
-                    val areOrdersEmpty = ordersDao.getCount(offer.id) isEqualsTo 0
-                    if (isOrderDeleted && areOrdersEmpty) {
+                    val isRelationNotExists = ordersDao.getCount(offer.id) isEqualsTo 0
+                    if (isOrderDeleted && isRelationNotExists) {
                         offersDao.deleteOffer(offer)
                     }
                 }
@@ -184,8 +184,8 @@ class ShopDataSourceImpl constructor(
         try {
             withContext(Dispatchers.IO) {
                 var isOrderDeleted = ordersDao.deleteOrder(OrderEntity(offer.shopId, offer.id)) isGreaterThan 0
-                val areOrdersEmpty = ordersDao.getCount(offer.id) isEqualsTo 0
-                if (isOrderDeleted && areOrdersEmpty) {
+                val isRelationNotExists = ordersDao.getCount(offer.id) isEqualsTo 0
+                if (isOrderDeleted && isRelationNotExists) {
                     isOrderDeleted = offersDao.deleteOffer(offer) isGreaterThan 0
                 }
                 isOrderDeleted

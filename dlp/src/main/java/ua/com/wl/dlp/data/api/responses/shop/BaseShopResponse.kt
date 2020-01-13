@@ -27,6 +27,9 @@ open class BaseShopResponse constructor(
     @SerializedName("address")
     var address: String = "",
 
+    @SerializedName("phone_number")
+    var phoneNumber: String? = null,
+
     @SerializedName("schedule")
     var schedule: String = "",
 
