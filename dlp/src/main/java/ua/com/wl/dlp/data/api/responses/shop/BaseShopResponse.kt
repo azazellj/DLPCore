@@ -24,11 +24,11 @@ open class BaseShopResponse constructor(
     @SerializedName("thumb_photos")
     var thumbPhotos: List<String>? = null,
 
+    @SerializedName("phone")
+    val phone: String? = null,
+
     @SerializedName("address")
     var address: String = "",
-
-    @SerializedName("phone_number")
-    var phoneNumber: String? = null,
 
     @SerializedName("schedule")
     var schedule: String = "",
