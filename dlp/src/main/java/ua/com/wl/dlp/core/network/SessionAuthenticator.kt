@@ -27,7 +27,7 @@ import ua.com.wl.dlp.utils.toJwt
 
 class SessionAuthenticator constructor(
     retrofit: Retrofit,
-    private val appId: String,
+    private val authInterceptor: AuthInterceptor,
     private val corePreferences: CorePreferences
 ) : Authenticator {
 
@@ -45,7 +45,7 @@ class SessionAuthenticator constructor(
                                 corePreferences.authPrefs = corePreferences.authPrefs.copy(authToken = tokenResponse.token)
                             }
                             response.request.newBuilder()
-                                .header(Constants.HEADER_APP_ID, appId)
+                                .header(Constants.HEADER_APP_ID, authInterceptor.appId)
                                 .header(Constants.HEADER_AUTHORIZATION, corePreferences.authPrefs.authToken.toJwt())
                                 .build()
 

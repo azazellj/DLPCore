@@ -36,26 +36,31 @@ val apiModule = module {
         }
         androidContext()
             .packageManager.getApplicationInfo(androidContext().packageName, PackageManager.GET_META_DATA)
-            .metaData?.get(key)?.toString() ?: throw IllegalStateException("Server url was not found")
+            .metaData?.getString(key) ?: throw IllegalStateException("Server url was not found")
     }
-    factory(qualifier = named(Constants.KOIN_NAMED_APP_ID)) {
+    factory(qualifier = named(Constants.KOIN_NAMED_APP_IDS)) {
         val key = when(DLPCore.environment) {
-            DLPCore.Environment.DEVELOPING -> Constants.META_STAGING_APP_ID
-            DLPCore.Environment.PRODUCTION -> Constants.META_PRODUCTION_APP_ID
+            DLPCore.Environment.DEVELOPING -> Constants.META_STAGING_APP_IDS
+            DLPCore.Environment.PRODUCTION -> Constants.META_PRODUCTION_APP_IDS
         }
-        androidContext()
+        val metaValue = androidContext()
             .packageManager.getApplicationInfo(androidContext().packageName, PackageManager.GET_META_DATA)
-            .metaData?.get(key)?.toString() ?: throw IllegalStateException("Application id was not found")
+            .metaData.get(key)
+        when(metaValue) {
+            is Int -> androidContext().resources.getStringArray(metaValue).toList()
+            is String -> listOf(metaValue)
+            else -> throw IllegalStateException("Application id was not found")
+        }
     }
     // - Interceptors
-    factory {
+    single {
         AuthInterceptor(
-            appId = get(qualifier = named(Constants.KOIN_NAMED_APP_ID)),
+            appIds = get(qualifier = named(Constants.KOIN_NAMED_APP_IDS)),
             corePreferences = get())
     }
     factory {
         HttpLoggingInterceptor().apply {
-            level = if(DLPCore.debuggable) {
+            level = if (DLPCore.debuggable) {
                 HttpLoggingInterceptor.Level.BODY
             } else {
                 HttpLoggingInterceptor.Level.NONE
@@ -90,7 +95,7 @@ val apiModule = module {
     factory {
         SessionAuthenticator(
             retrofit = get(qualifier = named(Constants.KOIN_NAMED_SESSION_RETROFIT)),
-            appId = get(qualifier = named(Constants.KOIN_NAMED_APP_ID)),
+            authInterceptor = get(),
             corePreferences = get())
     }
     // - OKHTTP client for api retrofit

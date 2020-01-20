@@ -13,9 +13,11 @@ import ua.com.wl.dlp.utils.toJwt
  */
 
 class AuthInterceptor constructor(
-    private val appId: String,
+    val appIds: List<String>,
     private val corePreferences: CorePreferences
 ) : Interceptor {
+
+    var appId: String = appIds[0]
 
     override fun intercept(chain: Interceptor.Chain): Response =
         chain.request().let { request ->

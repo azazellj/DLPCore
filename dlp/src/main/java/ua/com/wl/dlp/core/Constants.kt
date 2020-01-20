@@ -8,11 +8,11 @@ object Constants {
 
     const val META_STAGING_URL = "ua.com.wl.dlp.staging.url"
     const val META_PRODUCTION_URL = "ua.com.wl.dlp.production.url"
-    const val META_STAGING_APP_ID = "ua.com.wl.dlp.staging.app_id"
-    const val META_PRODUCTION_APP_ID = "ua.com.wl.dlp.production.app_id"
+    const val META_STAGING_APP_IDS = "ua.com.wl.dlp.staging.app_ids"
+    const val META_PRODUCTION_APP_IDS = "ua.com.wl.dlp.production.app_ids"
 
     const val KOIN_NAMED_URL = "url"
-    const val KOIN_NAMED_APP_ID = "app_id"
+    const val KOIN_NAMED_APP_IDS = "app_ids"
 
     const val KOIN_NAMED_SESSION_OKHTTP = "SESSION_OKHTTP"
     const val KOIN_NAMED_SESSION_RETROFIT = "SESSION_RETROFIT"
