@@ -26,6 +26,6 @@ interface OffersApiV1 {
     @GET("api/mobile/v1/consumer/offers/{offer_id}/")
     suspend fun getOffer(@Path("offer_id") offerId: Int): Response<OfferResponse>
 
-    @POST("api/v1/consumer/offers/{offer_id}/view/")
+    @POST("api/mobile/v1/consumer/offers/{offer_id}/view/")
     suspend fun collectBonusesPerView(@Path("offer_id") offerId: Int): Response<BalanceChangeResponse>
 }

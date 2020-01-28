@@ -34,6 +34,6 @@ interface NewsApiV1 {
     @GET("api/mobile/v1/consumer/news/{item_id}/")
     suspend fun getArticle(@Path("item_id") id: Int): Response<ArticleResponse>
 
-    @POST("api/v1/consumer/consumer/{item_id}/view/")
+    @POST("api/mobile/v1/consumer/{item_id}/view/")
     suspend fun collectBonusesPerView(@Path("item_id") id: Int): Response<BalanceChangeResponse>
 }
