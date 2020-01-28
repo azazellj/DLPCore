@@ -49,6 +49,9 @@ data class ProfilePrefs constructor(
     @SerializedName("balance")
     val balance: Long? = null,
 
+    @SerializedName("money_amount")
+    val moneyAmount: String? = null,
+
     @SerializedName("qr_code")
     val qrCode: String? = null,
 

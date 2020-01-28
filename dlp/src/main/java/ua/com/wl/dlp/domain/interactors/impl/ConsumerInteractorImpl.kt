@@ -225,6 +225,12 @@ class ConsumerInteractorImpl constructor(
                 ProfileBusEvent.FieldValue.LongValue(consumerPreferences.profilePrefs.balance)
             ).only { changes.add(it) }
         }
+        if (snapshot.moneyAmount != consumerPreferences.profilePrefs.moneyAmount) {
+            ProfileBusEvent.Change(
+                true, ProfileBusEvent.Field.MONEY_AMOUNT,
+                ProfileBusEvent.FieldValue.StringValue(consumerPreferences.profilePrefs.moneyAmount)
+            ).only { changes.add(it) }
+        }
         if (snapshot.qrCode != consumerPreferences.profilePrefs.qrCode) {
             ProfileBusEvent.Change(
                 true, ProfileBusEvent.Field.QR_CODE,

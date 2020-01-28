@@ -1,11 +1,17 @@
 package ua.com.wl.dlp.utils
 
+import kotlinx.coroutines.withContext
+import kotlinx.coroutines.CoroutineDispatcher
+
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 
+import ua.com.wl.dlp.data.api.responses.models.consumer.history.BalanceChange
 import ua.com.wl.dlp.data.api.responses.models.shop.offer.promo.PromoType
 import ua.com.wl.dlp.data.db.entities.shops.OfferEntity
+import ua.com.wl.dlp.data.events.prefs.ProfileBusEvent
+import ua.com.wl.dlp.data.prefereces.ConsumerPreferences
 
 /**
  * @author Denis Makovskyi
@@ -55,10 +61,42 @@ fun calculatePersistedOffersPrice(offers: List<OfferEntity>): Double {
     }
 }
 
+suspend fun notifyBalanceChanges(
+    ioDispatcher: CoroutineDispatcher,
+    balanceChange: BalanceChange,
+    consumerPreferences: ConsumerPreferences
+): List<ProfileBusEvent.Change> {
+    return mutableListOf<ProfileBusEvent.Change>().also { changes ->
+        val profile = withContext(ioDispatcher) { consumerPreferences.profilePrefs }
+        if (profile.balance != balanceChange.resultingBalance) {
+            withContext(ioDispatcher) {
+                consumerPreferences.profilePrefs = consumerPreferences
+                    .profilePrefs
+                    .copy(balance = balanceChange.resultingBalance)
+            }
+            ProfileBusEvent.Change(
+                true, ProfileBusEvent.Field.BALANCE,
+                ProfileBusEvent.FieldValue.LongValue(consumerPreferences.profilePrefs.balance)
+            ).let { changes.add(it) }
+        }
+        if (profile.moneyAmount != balanceChange.resultingMoneyAmount) {
+            withContext(ioDispatcher) {
+                consumerPreferences.profilePrefs = consumerPreferences
+                    .profilePrefs
+                    .copy(moneyAmount = balanceChange.resultingMoneyAmount)
+            }
+            ProfileBusEvent.Change(
+                true, ProfileBusEvent.Field.MONEY_AMOUNT,
+                ProfileBusEvent.FieldValue.StringValue(consumerPreferences.profilePrefs.moneyAmount)
+            ).let { changes.add(it) }
+        }
+    }
+}
+
 internal fun sendBroadcastMessage(context: Context, action: String, extras: Bundle? = null) {
     val intent = Intent().apply {
         setAction(action)
-        extras?.only { putExtras(it) }
+        extras?.let { putExtras(it) }
     }
     context.sendBroadcast(intent)
 }

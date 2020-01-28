@@ -7,6 +7,7 @@ import retrofit2.http.POST
 import retrofit2.http.Path
 
 import ua.com.wl.dlp.data.api.responses.BaseResponse
+import ua.com.wl.dlp.data.api.responses.consumer.history.BalanceChangeResponse
 import ua.com.wl.dlp.data.api.responses.shop.offer.OfferResponse
 
 /**
@@ -24,4 +25,7 @@ interface OffersApiV1 {
 
     @GET("api/mobile/v1/consumer/offers/{offer_id}/")
     suspend fun getOffer(@Path("offer_id") offerId: Int): Response<OfferResponse>
+
+    @POST("api/v1/consumer/offers/{offer_id}/view/")
+    suspend fun collectBonusesPerView(offerId: Int): Response<BalanceChangeResponse>
 }

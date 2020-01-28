@@ -30,7 +30,9 @@ val interactorsModule = module {
     single<NewsFeedInteractor> {
         NewsFeedInteractorImpl(
             errorsMapper = get(),
-            apiV1 = get())
+            app = get(),
+            apiV1 = get(),
+            consumerPreferences = get())
     }
     single<ShopInteractor> {
         ShopInteractorImpl(
@@ -43,7 +45,9 @@ val interactorsModule = module {
     single<OffersInteractor> {
         OffersInteractorImpl(
             errorsMapper = get(),
-            apiV1 = get())
+            app = get(),
+            apiV1 = get(),
+            consumerPreferences = get())
     }
     single<OrdersInteractor> {
         OrdersInteractorImpl(

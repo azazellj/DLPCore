@@ -2,10 +2,12 @@ package ua.com.wl.dlp.data.api
 
 import retrofit2.Response
 import retrofit2.http.GET
+import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.Query
 
 import ua.com.wl.dlp.data.api.responses.PagedResponse
+import ua.com.wl.dlp.data.api.responses.consumer.history.BalanceChangeResponse
 import ua.com.wl.dlp.data.api.responses.news.BaseArticleResponse
 import ua.com.wl.dlp.data.api.responses.news.ArticleResponse
 
@@ -30,5 +32,8 @@ interface NewsApiV1 {
     ): Response<PagedResponse<BaseArticleResponse>>
 
     @GET("api/mobile/v1/consumer/news/{item_id}/")
-    suspend fun getNewsItem(@Path("item_id")id: Int): Response<ArticleResponse>
+    suspend fun getArticle(@Path("item_id")id: Int): Response<ArticleResponse>
+
+    @POST("api/v1/consumer/consumer/{item_id}/view/")
+    suspend fun collectBonusesPerView(id: Int): Response<BalanceChangeResponse>
 }

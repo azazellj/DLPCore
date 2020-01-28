@@ -19,6 +19,12 @@ data class TransactionResponse constructor(
     @SerializedName("resulting_value")
     val resultingValue: Long,
 
+    @SerializedName("initial_value_money")
+    val initialMoneyAmount: String,
+
+    @SerializedName("resulting_value_money")
+    val resultingMoneyAmount: String,
+
     @SerializedName("created_at")
     val createdAt: String,
 

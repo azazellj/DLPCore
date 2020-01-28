@@ -20,6 +20,7 @@ class ProfileBusEvent constructor(val changes: List<Change>) : BusEvent() {
         GENDER,
         BIRTH_DATE,
         BALANCE,
+        MONEY_AMOUNT,
         QR_CODE,
         INVITE_CODE,
         REFERRAL_CODE

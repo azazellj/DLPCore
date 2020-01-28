@@ -2,7 +2,7 @@ package ua.com.wl.dlp.data.api.responses.models.consumer.history
 
 import com.google.gson.annotations.SerializedName
 
-import ua.com.wl.dlp.data.api.responses.models.consumer.history.endpoints.NewsItemTransactionDetails
+import ua.com.wl.dlp.data.api.responses.models.consumer.history.endpoints.ArticleTransactionDetails
 import ua.com.wl.dlp.data.api.responses.models.consumer.history.endpoints.OfferTransactionDetails
 import ua.com.wl.dlp.data.api.responses.models.consumer.history.endpoints.OrderTransactionDetails
 import ua.com.wl.dlp.data.api.responses.models.consumer.history.endpoints.ShopTransactionsDetails
@@ -35,4 +35,4 @@ data class TransactionDetails constructor(
     val orderDetails: OrderTransactionDetails?,
     
     @SerializedName("news_item") 
-    val newsItemDetails: NewsItemTransactionDetails?)
+    val articleDetails: ArticleTransactionDetails?)

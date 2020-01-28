@@ -50,6 +50,9 @@ data class ProfileResponse constructor(
     @SerializedName("balance")
     val balance: Long,
 
+    @SerializedName("balance_money")
+    val moneyAmount: String,
+
     @SerializedName("invite_code")
     val inviteCode: String,
 
