@@ -32,8 +32,8 @@ interface NewsApiV1 {
     ): Response<PagedResponse<BaseArticleResponse>>
 
     @GET("api/mobile/v1/consumer/news/{item_id}/")
-    suspend fun getArticle(@Path("item_id")id: Int): Response<ArticleResponse>
+    suspend fun getArticle(@Path("item_id") id: Int): Response<ArticleResponse>
 
     @POST("api/v1/consumer/consumer/{item_id}/view/")
-    suspend fun collectBonusesPerView(id: Int): Response<BalanceChangeResponse>
+    suspend fun collectBonusesPerView(@Path("item_id") id: Int): Response<BalanceChangeResponse>
 }

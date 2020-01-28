@@ -27,5 +27,5 @@ interface OffersApiV1 {
     suspend fun getOffer(@Path("offer_id") offerId: Int): Response<OfferResponse>
 
     @POST("api/v1/consumer/offers/{offer_id}/view/")
-    suspend fun collectBonusesPerView(offerId: Int): Response<BalanceChangeResponse>
+    suspend fun collectBonusesPerView(@Path("offer_id") offerId: Int): Response<BalanceChangeResponse>
 }
