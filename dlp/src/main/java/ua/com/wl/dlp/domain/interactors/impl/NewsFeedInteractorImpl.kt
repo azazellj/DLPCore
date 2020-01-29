@@ -18,7 +18,7 @@ import ua.com.wl.dlp.domain.Result
 import ua.com.wl.dlp.domain.UseCase
 import ua.com.wl.dlp.domain.exeptions.api.ApiException
 import ua.com.wl.dlp.domain.interactors.NewsFeedInteractor
-import ua.com.wl.dlp.utils.notifyBalanceChanges
+import ua.com.wl.dlp.utils.processBalanceChanges
 import ua.com.wl.dlp.utils.sendBroadcastMessage
 
 /**
@@ -63,11 +63,14 @@ class NewsFeedInteractorImpl constructor(
                     { Result.Success(it) },
                     { Result.Failure(ApiException()) })
             }.sOnSuccess { changeResponse ->
-                val changes = notifyBalanceChanges(Dispatchers.IO, changeResponse.change, consumerPreferences)
-                if (changes.isNotEmpty()) {
-                    withContext(Dispatchers.Main.immediate) {
-                        CoreBusEventsFactory.profileChanges(changes)
-                        sendBroadcastMessage(app, Constants.RECEIVER_ACTION_SOUND_BONUSES)
+                val change = changeResponse.change
+                if (change != null) {
+                    val changes = processBalanceChanges(Dispatchers.IO, changeResponse.change, consumerPreferences)
+                    if (changes.isNotEmpty()) {
+                        withContext(Dispatchers.Main.immediate) {
+                            CoreBusEventsFactory.profileChanges(changes)
+                            sendBroadcastMessage(app, Constants.RECEIVER_ACTION_SOUND_BONUSES)
+                        }
                     }
                 }
             }

@@ -10,4 +10,4 @@ import ua.com.wl.dlp.data.api.responses.models.consumer.history.BalanceChange
 
 data class BalanceChangeResponse constructor(
     @SerializedName("balance_change")
-    val change: BalanceChange)
+    val change: BalanceChange?)

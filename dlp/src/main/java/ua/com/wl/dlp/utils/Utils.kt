@@ -61,7 +61,7 @@ fun calculatePersistedOffersPrice(offers: List<OfferEntity>): Double {
     }
 }
 
-suspend fun notifyBalanceChanges(
+suspend fun processBalanceChanges(
     ioDispatcher: CoroutineDispatcher,
     balanceChange: BalanceChange,
     consumerPreferences: ConsumerPreferences
