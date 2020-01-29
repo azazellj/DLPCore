@@ -60,7 +60,14 @@ class NewsFeedInteractorImpl constructor(
         callApi(call = { apiV1.collectBonusesPerView(id) })
             .flatMap { responseOpt ->
                 responseOpt.ifPresentOrDefault(
-                    { Result.Success(it) },
+                    {
+                        if (it.change != null) {
+                            Result.Success(it)
+                        } else {
+                            Result.Failure(ApiException())
+                        }
+
+                    },
                     { Result.Failure(ApiException()) })
             }.sOnSuccess { changeResponse ->
                 val change = changeResponse.change
