@@ -37,6 +37,9 @@ open class BaseOfferResponse constructor(
     @SerializedName("outcome")
     var outcome: String = "",
 
+    @SerializedName("hide_price")
+    var isPriceHidden: Boolean = false,
+
     @SerializedName("price_in_uah")
     var priceInCurrency: String? = null,
 
