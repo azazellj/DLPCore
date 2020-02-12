@@ -1,10 +1,7 @@
 package ua.com.wl.dlp.data.api
 
 import retrofit2.Response
-import retrofit2.http.POST
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.Headers
+import retrofit2.http.*
 
 import ua.com.wl.dlp.core.Constants
 import ua.com.wl.dlp.data.api.requests.auth.*
@@ -46,6 +43,9 @@ interface AuthApiV2 {
     @Headers("${Constants.HEADER_UNAUTHORIZED}: ${Constants.VALUE_PERMIT}")
     @POST("api/mobile/v2/consumer/registration/")
     suspend fun signUp(@Body request: SignUpRequest): Response<DataResponse<SignResponse>>
+
+    @PATCH("api/mobile/v2/consumer/device/")
+    suspend fun deviceInfo(@Body request: DeviceInfoRequest): Response<BaseResponse>
 
     @POST("api/mobile/v2/consumer/auth/log-out/")
     suspend fun signOut(): Response<BaseResponse>

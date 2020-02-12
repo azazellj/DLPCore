@@ -20,7 +20,7 @@ interface AuthInteractor {
 
     suspend fun authentication(phone: String, sendSms: Boolean = true): Result<AuthenticationResponse>
 
-    suspend fun signIn(phone: String, password: String): Result<SignResponse>
+    suspend fun signIn(phone: String, password: String, appVersion: String? = null): Result<SignResponse>
 
     suspend fun cardsStatus(phone: String, password: String): Result<CardsStatus>
 
@@ -28,7 +28,8 @@ interface AuthInteractor {
         city: Int,
         phone: String,
         password: String,
-        barcode: String? = null
+        barcode: String? = null,
+        appVersion: String? = null
     ): Result<SignResponse>
 
     suspend fun signOut(): Result<Boolean>

@@ -76,7 +76,7 @@ class AuthInteractorImpl constructor(
                 { Result.Failure(ApiException()) })
         }
 
-    override suspend fun signIn(phone: String, password: String): Result<SignResponse> =
+    override suspend fun signIn(phone: String, password: String, appVersion: String?): Result<SignResponse> =
         callApi(
             call = { apiV2.signIn(SignInRequest(phone, password)) },
             errorClass = AuthException::class
@@ -89,6 +89,7 @@ class AuthInteractorImpl constructor(
                 corePreferences.authPrefs = corePreferences.authPrefs.copy(
                     authToken = tokenResponse.token,
                     refreshToken = tokenResponse.refreshToken)
+                callApi(call = { apiV2.deviceInfo(DeviceInfoRequest(appVersion = appVersion)) })
             }
         }
 
@@ -106,7 +107,8 @@ class AuthInteractorImpl constructor(
         city: Int,
         phone: String,
         password: String,
-        barcode: String?
+        barcode: String?,
+        appVersion: String?
     ): Result<SignResponse> =
         callApi(
             call = { apiV2.signUp(SignUpRequest(city, phone, password, barcode)) },
@@ -120,6 +122,7 @@ class AuthInteractorImpl constructor(
                 corePreferences.authPrefs = corePreferences.authPrefs.copy(
                     authToken = tokenResponse.token,
                     refreshToken = tokenResponse.refreshToken)
+                callApi(call = { apiV2.deviceInfo(DeviceInfoRequest(appVersion = appVersion)) })
             }
         }
 
