@@ -18,9 +18,16 @@ interface AuthInteractor {
 
     suspend fun refreshToken(): Result<TokenResponse>
 
-    suspend fun authentication(phone: String, sendSms: Boolean = true): Result<AuthenticationResponse>
+    suspend fun authentication(
+        phone: String,
+        sendSms: Boolean = true
+    ): Result<AuthenticationResponse>
 
-    suspend fun signIn(phone: String, password: String, appVersion: String? = null): Result<SignResponse>
+    suspend fun signIn(
+        phone: String,
+        password: String,
+        appVersion: String? = null
+    ): Result<SignResponse>
 
     suspend fun cardsStatus(phone: String, password: String): Result<CardsStatus>
 

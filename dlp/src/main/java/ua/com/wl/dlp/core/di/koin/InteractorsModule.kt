@@ -1,4 +1,4 @@
-package ua.com.wl.dlp.core.di
+package ua.com.wl.dlp.core.di.koin
 
 import org.koin.dsl.module
 
@@ -39,7 +39,7 @@ val interactorsModule = module {
             errorsMapper = get(),
             apiV1 = get(),
             apiV2 = get(),
-            shopDataSource = get(),
+            shopsDataSource = get(),
             offersInteractor = get())
     }
     single<OffersInteractor> {

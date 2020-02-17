@@ -1,4 +1,4 @@
-package ua.com.wl.dlp.core.di
+package ua.com.wl.dlp.core.di.koin
 
 import org.koin.dsl.module
 

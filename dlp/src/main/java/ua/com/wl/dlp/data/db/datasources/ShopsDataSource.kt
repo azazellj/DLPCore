@@ -8,7 +8,7 @@ import ua.com.wl.dlp.data.db.entities.shops.ShopEntity
  * @author Denis Makovskyi
  */
 
-interface ShopDataSource {
+interface ShopsDataSource {
 
     suspend fun getShop(id: Int): Optional<ShopEntity>
 

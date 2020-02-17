@@ -11,7 +11,7 @@ import androidx.work.*
 
 import org.koin.core.inject
 
-import ua.com.wl.dlp.core.DLPCoreComponent
+import ua.com.wl.dlp.core.di.koin.DLPCoreComponent
 import ua.com.wl.dlp.data.api.responses.shop.offer.BaseOfferResponse
 import ua.com.wl.dlp.data.db.entities.shops.OfferEntity
 import ua.com.wl.dlp.domain.interactors.ShopInteractor
@@ -26,7 +26,8 @@ import ua.com.wl.dlp.utils.isEmpty
 class ShopsOffersSyncWork(
     context: Context,
     workerParameters: WorkerParameters
-) : CoroutineWorker(context, workerParameters), DLPCoreComponent {
+) : CoroutineWorker(context, workerParameters),
+    DLPCoreComponent {
 
     companion object {
 

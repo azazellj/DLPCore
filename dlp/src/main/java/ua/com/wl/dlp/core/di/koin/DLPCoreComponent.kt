@@ -1,7 +1,8 @@
-package ua.com.wl.dlp.core
+package ua.com.wl.dlp.core.di.koin
 
 import org.koin.core.Koin
 import org.koin.core.KoinComponent
+import ua.com.wl.dlp.core.DLPCore
 
 /**
  * @author Denis Makovskyi

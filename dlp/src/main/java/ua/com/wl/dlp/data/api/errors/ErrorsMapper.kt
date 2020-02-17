@@ -3,8 +3,6 @@ package ua.com.wl.dlp.data.api.errors
 import kotlin.reflect.KClass
 import kotlin.reflect.full.primaryConstructor
 
-import org.koin.ext.getFullName
-
 import com.google.gson.Gson
 
 import okhttp3.ResponseBody
@@ -43,7 +41,7 @@ class ErrorsMapper constructor(private val gson: Gson) {
 
             } catch (e: Exception) {
                 CoreRuntimeException(
-                    createDetailMessage("could not instantiate class ${errorClass.getFullName()}"), e)
+                    createDetailMessage("could not instantiate class ${errorClass.java.name}"), e)
             }
 
         } else {

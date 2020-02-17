@@ -32,32 +32,42 @@ class NewsFeedInteractorImpl constructor(
     private val consumerPreferences: ConsumerPreferences
 ) : UseCase(errorsMapper), NewsFeedInteractor {
 
-    override suspend fun getCityNewsFeed(page: Int?, count: Int?): Result<PagedResponse<BaseArticleResponse>> =
-        callApi(call = { apiV1.getCityNewsFeed(page, count) })
+    override suspend fun getCityNewsFeed(
+        page: Int?,
+        count: Int?
+    ): Result<PagedResponse<BaseArticleResponse>> {
+        return callApi(call = { apiV1.getCityNewsFeed(page, count) })
             .flatMap { responseOpt ->
                 responseOpt.ifPresentOrDefault(
                     { Result.Success(it) },
                     { Result.Failure(ApiException()) })
             }
+    }
 
-    override suspend fun getShopNewsFeed(shopId: Int, page: Int?, count: Int?): Result<PagedResponse<BaseArticleResponse>> =
-        callApi(call = { apiV1.getShopNewsFeed(shopId, page, count) })
+    override suspend fun getShopNewsFeed(
+        shopId: Int,
+        page: Int?,
+        count: Int?
+    ): Result<PagedResponse<BaseArticleResponse>> {
+        return callApi(call = { apiV1.getShopNewsFeed(shopId, page, count) })
             .flatMap { responseOpt ->
                 responseOpt.ifPresentOrDefault(
                     { Result.Success(it) },
                     { Result.Failure(ApiException()) })
             }
+    }
 
-    override suspend fun getArticle(id: Int): Result<ArticleResponse> =
-        callApi(call = { apiV1.getArticle(id) })
+    override suspend fun getArticle(id: Int): Result<ArticleResponse> {
+        return callApi(call = { apiV1.getArticle(id) })
             .flatMap { responseOpt ->
                 responseOpt.ifPresentOrDefault(
                     { Result.Success(it) },
                     { Result.Failure(ApiException()) })
             }
+    }
 
-    override suspend fun collectBonusesPerArticleView(id: Int): Result<BalanceChangeResponse> =
-        callApi(call = { apiV1.collectBonusesPerView(id) })
+    override suspend fun collectBonusesPerArticleView(id: Int): Result<BalanceChangeResponse> {
+        return callApi(call = { apiV1.collectBonusesPerView(id) })
             .flatMap { responseOpt ->
                 responseOpt.ifPresentOrDefault(
                     {
@@ -66,7 +76,6 @@ class NewsFeedInteractorImpl constructor(
                         } else {
                             Result.Failure(ApiException())
                         }
-
                     },
                     { Result.Failure(ApiException()) })
             }.sOnSuccess { changeResponse ->
@@ -81,4 +90,5 @@ class NewsFeedInteractorImpl constructor(
                     }
                 }
             }
+    }
 }

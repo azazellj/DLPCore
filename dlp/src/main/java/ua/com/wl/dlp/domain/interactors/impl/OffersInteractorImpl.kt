@@ -30,8 +30,8 @@ class OffersInteractorImpl constructor(
     private val consumerPreferences: ConsumerPreferences
 ) : UseCase(errorsMapper), OffersInteractor {
 
-    override suspend fun addOfferToFavourites(offerId: Int): Result<Boolean> =
-        callApi(call = { apiV1.addOfferToFavourite(offerId) })
+    override suspend fun addOfferToFavourites(offerId: Int): Result<Boolean> {
+        return callApi(call = { apiV1.addOfferToFavourite(offerId) })
             .map { responseOpt ->
                 responseOpt.ifPresentOrDefault(
                     { it.isSuccessfully() },
@@ -45,9 +45,10 @@ class OffersInteractorImpl constructor(
                     }
                 }
             }
+    }
 
-    override suspend fun removeOfferFromFavourites(offerId: Int): Result<Boolean> =
-        callApi(call = { apiV1.removeOfferFromFavourite(offerId) })
+    override suspend fun removeOfferFromFavourites(offerId: Int): Result<Boolean> {
+        return callApi(call = { apiV1.removeOfferFromFavourite(offerId) })
             .map { responseOpt ->
                 responseOpt.ifPresentOrDefault(
                     { it.isSuccessfully() },
@@ -61,17 +62,19 @@ class OffersInteractorImpl constructor(
                     }
                 }
             }
+    }
 
-    override suspend fun getOffer(offerId: Int): Result<OfferResponse> =
-        callApi(call = { apiV1.getOffer(offerId) })
+    override suspend fun getOffer(offerId: Int): Result<OfferResponse> {
+        return callApi(call = { apiV1.getOffer(offerId) })
             .flatMap { response ->
                 response.ifPresentOrDefault(
                     { Result.Success(it) },
                     { Result.Failure(ApiException()) })
             }
+    }
 
-    override suspend fun collectBonusesPerOfferView(offerId: Int): Result<BalanceChangeResponse> =
-        callApi(call = { apiV1.collectBonusesPerView(offerId) })
+    override suspend fun collectBonusesPerOfferView(offerId: Int): Result<BalanceChangeResponse> {
+        return callApi(call = { apiV1.collectBonusesPerView(offerId) })
             .flatMap { responseOpt ->
                 responseOpt.ifPresentOrDefault(
                     {
@@ -80,7 +83,6 @@ class OffersInteractorImpl constructor(
                         } else {
                             Result.Failure(ApiException())
                         }
-
                     },
                     { Result.Failure(ApiException()) })
             }.sOnSuccess { changeResponse ->
@@ -95,4 +97,5 @@ class OffersInteractorImpl constructor(
                     }
                 }
             }
+    }
 }

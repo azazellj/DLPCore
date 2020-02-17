@@ -20,11 +20,17 @@ import ua.com.wl.dlp.domain.Result
 
 interface ShopInteractor : OffersInteractor {
 
-    suspend fun getCityShops(page: Int? = null, count: Int? = null): Result<PagedResponse<CityShopsResponse>>
+    suspend fun getCityShops(
+        page: Int? = null,
+        count: Int? = null
+    ): Result<PagedResponse<CityShopsResponse>>
 
     suspend fun getShop(shopId: Int): Result<ShopResponse>
 
-    suspend fun getRubrics(shopId: Int, language: String = Locale.getDefault().language): Result<CollectionResponse<RubricResponse>>
+    suspend fun getRubrics(
+        shopId: Int,
+        language: String = Locale.getDefault().language
+    ): Result<CollectionResponse<RubricResponse>>
 
     suspend fun getOffers(
         shopId: Int,
@@ -33,11 +39,23 @@ interface ShopInteractor : OffersInteractor {
         rubricId: String? = null
     ): Result<PagedResponse<BaseOfferResponse>>
 
-    suspend fun getPromoOffers(shopId: Int, page: Int? = null, count: Int? = null): Result<PagedResponse<BaseOfferResponse>>
+    suspend fun getPromoOffers(
+        shopId: Int,
+        page: Int? = null,
+        count: Int? = null
+    ): Result<PagedResponse<BaseOfferResponse>>
 
-    suspend fun getNoveltyOffers(shopId: Int, page: Int? = null, count: Int? = null): Result<PagedResponse<BaseOfferResponse>>
+    suspend fun getNoveltyOffers(
+        shopId: Int,
+        page: Int? = null,
+        count: Int? = null
+    ): Result<PagedResponse<BaseOfferResponse>>
 
-    suspend fun getFavouriteOffers(shopId: Int, page: Int? = null, count: Int? = null): Result<PagedResponse<BaseOfferResponse>>
+    suspend fun getFavouriteOffers(
+        shopId: Int,
+        page: Int? = null,
+        count: Int? = null
+    ): Result<PagedResponse<BaseOfferResponse>>
 
     suspend fun persistShop(shop: ShopEntity): Result<Boolean>
 
@@ -61,7 +79,11 @@ interface ShopInteractor : OffersInteractor {
 
     suspend fun incrementPreOrderCounter(shopId: Int, offer: BaseOfferResponse): Result<OfferEntity>
 
-    suspend fun decrementPreOrderCounter(shopId: Int, offerId: Int, tradeItem: Int): Result<OfferEntity>
+    suspend fun decrementPreOrderCounter(
+        shopId: Int,
+        offerId: Int,
+        tradeItem: Int
+    ): Result<OfferEntity>
 
     suspend fun decrementPreOrderCounter(shopId: Int, offer: BaseOfferResponse): Result<OfferEntity>
 

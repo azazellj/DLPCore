@@ -8,24 +8,23 @@ import ua.com.wl.dlp.data.db.DbErrorKeys
 import ua.com.wl.dlp.data.db.dao.shops.OffersDao
 import ua.com.wl.dlp.data.db.dao.shops.ShopsDao
 import ua.com.wl.dlp.data.db.dao.shops.OrdersDao
-import ua.com.wl.dlp.data.db.datasources.ShopDataSource
+import ua.com.wl.dlp.data.db.datasources.ShopsDataSource
 import ua.com.wl.dlp.data.db.entities.shops.OfferEntity
 import ua.com.wl.dlp.data.db.entities.shops.ShopEntity
 import ua.com.wl.dlp.data.db.entities.shops.OrderEntity
 import ua.com.wl.dlp.domain.exeptions.db.DbQueryException
 import ua.com.wl.dlp.utils.isEqualsTo
 import ua.com.wl.dlp.utils.isGreaterThan
-import ua.com.wl.dlp.utils.only
 
 /**
  * @author Denis Makovskyi
  */
 
-class ShopDataSourceImpl constructor(
+class ShopsDataSourceImpl constructor(
     private val shopsDao: ShopsDao,
     private val offersDao: OffersDao,
     private val ordersDao: OrdersDao
-) : ShopDataSource {
+) : ShopsDataSource {
 
     override suspend fun getShop(id: Int): Optional<ShopEntity> =
         try {
@@ -119,7 +118,7 @@ class ShopDataSourceImpl constructor(
                         shop.offers = ordersDao.getOffers(shop.id)
                             .map { offer ->
                                 offer.apply {
-                                    ordersDao.getOrder(shop.id, offer.id)?.only { order ->
+                                    ordersDao.getOrder(shop.id, offer.id)?.let { order ->
                                         this.shopId = order.shopId
                                         this.preOrdersCount = order.preOrdersCount
                                     }
@@ -138,7 +137,7 @@ class ShopDataSourceImpl constructor(
             withContext(Dispatchers.IO) {
                 ordersDao.getOffers(shopId).also { offers ->
                     for (offer in offers) {
-                        ordersDao.getOrder(shopId, offer.id)?.only { order ->
+                        ordersDao.getOrder(shopId, offer.id)?.let { order ->
                             offer.shopId = order.shopId
                             offer.preOrdersCount = order.preOrdersCount
                         } ?: throw IllegalStateException("Order was not found")

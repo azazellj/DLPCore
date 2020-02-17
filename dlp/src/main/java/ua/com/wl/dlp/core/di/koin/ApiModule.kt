@@ -1,4 +1,4 @@
-package ua.com.wl.dlp.core.di
+package ua.com.wl.dlp.core.di.koin
 
 import java.util.concurrent.TimeUnit
 
@@ -29,7 +29,7 @@ import ua.com.wl.dlp.data.api.errors.ErrorsMapper
 
 val apiModule = module {
     // - Host url and app id from manifest meta data
-    factory(qualifier = named(Constants.KOIN_NAMED_URL)) {
+    factory(qualifier = named(Constants.DI_NAMED_URL)) {
         val key = when(DLPCore.environment) {
             DLPCore.Environment.DEVELOPING -> Constants.META_STAGING_URL
             DLPCore.Environment.PRODUCTION -> Constants.META_PRODUCTION_URL
@@ -38,7 +38,7 @@ val apiModule = module {
             .packageManager.getApplicationInfo(androidContext().packageName, PackageManager.GET_META_DATA)
             .metaData?.getString(key) ?: throw IllegalStateException("Server url was not found")
     }
-    factory(qualifier = named(Constants.KOIN_NAMED_APP_IDS)) {
+    factory(qualifier = named(Constants.DI_NAMED_APP_IDS)) {
         val key = when(DLPCore.environment) {
             DLPCore.Environment.DEVELOPING -> Constants.META_STAGING_APP_IDS
             DLPCore.Environment.PRODUCTION -> Constants.META_PRODUCTION_APP_IDS
@@ -55,7 +55,7 @@ val apiModule = module {
     // - Interceptors
     single {
         AuthInterceptor(
-            appIds = get(qualifier = named(Constants.KOIN_NAMED_APP_IDS)),
+            appIds = get(qualifier = named(Constants.DI_NAMED_APP_IDS)),
             corePreferences = get())
     }
     factory {
@@ -68,7 +68,7 @@ val apiModule = module {
         }
     }
     // - OKHTTP client for session retrofit
-    factory(qualifier = named(Constants.KOIN_NAMED_SESSION_OKHTTP)) {
+    factory(qualifier = named(Constants.DI_NAMED_SESSION_OKHTTP)) {
         OkHttpClient.Builder()
             .connectTimeout(TimeUnit.SECONDS.toMillis(10), TimeUnit.SECONDS)
             .readTimeout(TimeUnit.SECONDS.toMillis(10), TimeUnit.SECONDS)
@@ -84,22 +84,22 @@ val apiModule = module {
             .build()
     }
     // - Session retrofit - for anonymous api calls
-    factory(qualifier = named(Constants.KOIN_NAMED_SESSION_RETROFIT)) {
+    factory(qualifier = named(Constants.DI_NAMED_SESSION_RETROFIT)) {
         Retrofit.Builder()
-            .baseUrl(get<String>(qualifier = named(Constants.KOIN_NAMED_URL)))
-            .client(get<OkHttpClient>(qualifier = named(Constants.KOIN_NAMED_SESSION_OKHTTP)))
+            .baseUrl(get<String>(qualifier = named(Constants.DI_NAMED_URL)))
+            .client(get<OkHttpClient>(qualifier = named(Constants.DI_NAMED_SESSION_OKHTTP)))
             .addConverterFactory(GsonConverterFactory.create(get()))
             .build()
     }
     // - Authenticator
     factory {
         SessionAuthenticator(
-            retrofit = get(qualifier = named(Constants.KOIN_NAMED_SESSION_RETROFIT)),
+            retrofit = get(qualifier = named(Constants.DI_NAMED_SESSION_RETROFIT)),
             authInterceptor = get(),
             corePreferences = get())
     }
     // - OKHTTP client for api retrofit
-    factory(qualifier = named(Constants.KOIN_NAMED_API_OKHTTP)) {
+    factory(qualifier = named(Constants.DI_NAMED_API_OKHTTP)) {
         OkHttpClient.Builder()
             .connectTimeout(TimeUnit.SECONDS.toMillis(30), TimeUnit.SECONDS)
             .readTimeout(TimeUnit.SECONDS.toMillis(30), TimeUnit.SECONDS)
@@ -116,10 +116,10 @@ val apiModule = module {
             .build()
     }
     // - Api retrofit - for regular apis
-    single(qualifier = named(Constants.KOIN_NAMED_API_RETROFIT)) {
+    single(qualifier = named(Constants.DI_NAMED_API_RETROFIT)) {
         Retrofit.Builder()
-            .baseUrl(get<String>(qualifier = named(Constants.KOIN_NAMED_URL)))
-            .client(get<OkHttpClient>(qualifier = named(Constants.KOIN_NAMED_API_OKHTTP)))
+            .baseUrl(get<String>(qualifier = named(Constants.DI_NAMED_URL)))
+            .client(get<OkHttpClient>(qualifier = named(Constants.DI_NAMED_API_OKHTTP)))
             .addConverterFactory(GsonConverterFactory.create(get()))
             .build()
     }
@@ -128,43 +128,43 @@ val apiModule = module {
         ErrorsMapper(gson = get())
     }
     factory {
-        get<Retrofit>(qualifier = named(Constants.KOIN_NAMED_API_RETROFIT))
+        get<Retrofit>(qualifier = named(Constants.DI_NAMED_API_RETROFIT))
             .create(AuthApiV1::class.java)
     }
     factory {
-        get<Retrofit>(qualifier = named(Constants.KOIN_NAMED_API_RETROFIT))
+        get<Retrofit>(qualifier = named(Constants.DI_NAMED_API_RETROFIT))
             .create(AuthApiV2::class.java)
     }
     factory {
-        get<Retrofit>(qualifier = named(Constants.KOIN_NAMED_API_RETROFIT))
+        get<Retrofit>(qualifier = named(Constants.DI_NAMED_API_RETROFIT))
             .create(ConsumerApiV1::class.java)
     }
     factory {
-        get<Retrofit>(qualifier = named(Constants.KOIN_NAMED_API_RETROFIT))
+        get<Retrofit>(qualifier = named(Constants.DI_NAMED_API_RETROFIT))
             .create(ConsumerApiV2::class.java)
     }
     factory {
-        get<Retrofit>(qualifier = named(Constants.KOIN_NAMED_API_RETROFIT))
+        get<Retrofit>(qualifier = named(Constants.DI_NAMED_API_RETROFIT))
             .create(NewsApiV1::class.java)
     }
     factory {
-        get<Retrofit>(qualifier = named(Constants.KOIN_NAMED_API_RETROFIT))
+        get<Retrofit>(qualifier = named(Constants.DI_NAMED_API_RETROFIT))
             .create(ShopApiV1::class.java)
     }
     factory {
-        get<Retrofit>(qualifier = named(Constants.KOIN_NAMED_API_RETROFIT))
+        get<Retrofit>(qualifier = named(Constants.DI_NAMED_API_RETROFIT))
             .create(ShopApiV2::class.java)
     }
     factory {
-        get<Retrofit>(qualifier = named(Constants.KOIN_NAMED_API_RETROFIT))
+        get<Retrofit>(qualifier = named(Constants.DI_NAMED_API_RETROFIT))
             .create(OffersApiV1::class.java)
     }
     factory {
-        get<Retrofit>(qualifier = named(Constants.KOIN_NAMED_API_RETROFIT))
+        get<Retrofit>(qualifier = named(Constants.DI_NAMED_API_RETROFIT))
             .create(OrdersApiV1::class.java)
     }
     factory {
-        get<Retrofit>(qualifier = named(Constants.KOIN_NAMED_API_RETROFIT))
+        get<Retrofit>(qualifier = named(Constants.DI_NAMED_API_RETROFIT))
             .create(OrdersApiV2::class.java)
     }
 }

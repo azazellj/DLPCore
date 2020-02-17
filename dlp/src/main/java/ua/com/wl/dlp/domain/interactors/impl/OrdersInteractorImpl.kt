@@ -21,7 +21,6 @@ import ua.com.wl.dlp.domain.UseCase
 import ua.com.wl.dlp.domain.exeptions.api.ApiException
 import ua.com.wl.dlp.domain.exeptions.api.orders.order.GeneralPreOrderException
 import ua.com.wl.dlp.domain.interactors.OrdersInteractor
-import ua.com.wl.dlp.utils.only
 
 /**
  * @author Denis Makovskyi
@@ -33,24 +32,33 @@ class OrdersInteractorImpl constructor(
     private val apiV2: OrdersApiV2
 ) : UseCase(errorsMapper), OrdersInteractor {
 
-    override suspend fun getOrders(page: Int?, count: Int?): Result<PagedResponse<OrderSimpleResponse>> =
-        callApi(call = { apiV1.getOrders(page, count) })
+    override suspend fun getOrders(
+        page: Int?,
+        count: Int?
+    ): Result<PagedResponse<OrderSimpleResponse>> {
+        return callApi(call = { apiV1.getOrders(page, count) })
             .flatMap { responseOpt ->
                 responseOpt.ifPresentOrDefault(
                     { Result.Success(it) },
                     { Result.Failure(ApiException()) })
             }
+    }
 
-    override suspend fun getOrder(orderId: Int): Result<OrderResponse> =
-        callApi(call = { apiV1.getOrder(orderId) })
+    override suspend fun getOrder(orderId: Int): Result<OrderResponse> {
+        return callApi(call = { apiV1.getOrder(orderId) })
             .flatMap { responseOpt ->
                 responseOpt.ifPresentOrDefault(
                     { Result.Success(it) },
                     { Result.Failure(ApiException()) })
             }
+    }
 
-    override suspend fun rateOrder(orderId: Int, value: Int, comment: String): Result<BaseOrderRateResponse> =
-        callApi(call = { apiV1.rateOrder(orderId, RateOrderRequest(value, comment)) })
+    override suspend fun rateOrder(
+        orderId: Int,
+        value: Int,
+        comment: String
+    ): Result<BaseOrderRateResponse> {
+        return callApi(call = { apiV1.rateOrder(orderId, RateOrderRequest(value, comment)) })
             .flatMap { responseOpt ->
                 responseOpt.ifPresentOrDefault(
                     { Result.Success(it) },
@@ -58,39 +66,43 @@ class OrdersInteractorImpl constructor(
             }
             .sOnSuccess { response ->
                 withContext(Dispatchers.Main.immediate) {
-                    response.order?.only { order ->
+                    response.order?.let { order ->
                         CoreBusEventsFactory.orderRate(
                             order.shop.id, order.id, response.value)
                     }
                 }
             }
+    }
 
-    override suspend fun getOrderRate(orderId: Int): Result<OrderRateResponse> =
-        callApi(call = { apiV1.getOrderRate(orderId) })
+    override suspend fun getOrderRate(orderId: Int): Result<OrderRateResponse> {
+        return callApi(call = { apiV1.getOrderRate(orderId) })
             .flatMap { responseOpt ->
                 responseOpt.ifPresentOrDefault(
                     { Result.Success(it) },
                     { Result.Failure(ApiException()) })
             }
+    }
 
-    override suspend fun getLastOrderRate(): Result<OrderRateResponse> =
-        callApi(call = { apiV1.getLastOrderRate() })
+    override suspend fun getLastOrderRate(): Result<OrderRateResponse> {
+        return callApi(call = { apiV1.getLastOrderRate() })
             .flatMap { responseOpt ->
                 responseOpt.ifPresentOrDefault(
                     { Result.Success(it) },
                     { Result.Failure(ApiException()) })
             }
+    }
 
-    override suspend fun createPreOrder(request: PreOrderCreationRequest): Result<PreOrderCreationResponse> =
-        callApi(call = { apiV1.createPreOrder(request) })
+    override suspend fun createPreOrder(request: PreOrderCreationRequest): Result<PreOrderCreationResponse> {
+        return callApi(call = { apiV1.createPreOrder(request) })
             .flatMap { responseOpt ->
                 responseOpt.ifPresentOrDefault(
                     { Result.Success(it) },
                     { Result.Failure(ApiException()) })
             }
+    }
 
-    override suspend fun createGeneralPreOrder(request: GeneralPreOrderCreationRequest): Result<CollectionResponse<GeneralPreOrderItem>> =
-        callApi(
+    override suspend fun createGeneralPreOrder(request: GeneralPreOrderCreationRequest): Result<CollectionResponse<GeneralPreOrderItem>> {
+        return callApi(
             call = { apiV2.createGeneralPreOrder(request) },
             errorClass = GeneralPreOrderException::class
         ).flatMap { responseOpt ->
@@ -98,52 +110,62 @@ class OrdersInteractorImpl constructor(
                 { Result.Success(it) },
                 { Result.Failure(ApiException()) })
         }
+    }
 
-    override suspend fun getPreOrders(page: Int?, count: Int?): Result<PagedResponse<BasePreOrderResponse>> =
-        callApi(call = { apiV1.getPreOrders(page, count) })
+    override suspend fun getPreOrders(
+        page: Int?,
+        count: Int?
+    ): Result<PagedResponse<BasePreOrderResponse>> {
+        return callApi(call = { apiV1.getPreOrders(page, count) })
             .flatMap { responseOpt ->
                 responseOpt.ifPresentOrDefault(
                     { Result.Success(it) },
                     { Result.Failure(ApiException()) })
             }
+    }
 
-    override suspend fun getPreOrder(preOrderId: Int): Result<PreOrderResponse> =
-        callApi(call = { apiV1.getPreOrder(preOrderId) })
+    override suspend fun getPreOrder(preOrderId: Int): Result<PreOrderResponse> {
+        return callApi(call = { apiV1.getPreOrder(preOrderId) })
             .flatMap { responseOpt ->
                 responseOpt.ifPresentOrDefault(
                     { Result.Success(it) },
                     { Result.Failure(ApiException()) })
             }
+    }
 
-    override suspend fun createTableReservation(request: TableReservationRequest): Result<TableReservationResponse> =
-        callApi(call = { apiV1.createTableReservation(request) })
+    override suspend fun createTableReservation(request: TableReservationRequest): Result<TableReservationResponse> {
+        return callApi(call = { apiV1.createTableReservation(request) })
             .flatMap { responseOpt ->
                 responseOpt.ifPresentOrDefault(
                     { Result.Success(it) },
                     { Result.Failure(ApiException()) })
             }
+    }
 
-    override suspend fun getTablesReservations(page: Int?, count: Int?): Result<PagedResponse<TableReservationResponse>> =
-        callApi(call = { apiV1.getTablesReservations(page, count) })
+    override suspend fun getTablesReservations(page: Int?, count: Int?): Result<PagedResponse<TableReservationResponse>> {
+        return callApi(call = { apiV1.getTablesReservations(page, count) })
             .flatMap { responseOpt ->
                 responseOpt.ifPresentOrDefault(
                     { Result.Success(it) },
                     { Result.Failure(ApiException()) })
             }
+    }
 
-    override suspend fun getTableReservation(reservationId: Int): Result<TableReservationResponse> =
-        callApi(call = { apiV1.getTableReservation(reservationId) })
+    override suspend fun getTableReservation(reservationId: Int): Result<TableReservationResponse> {
+        return callApi(call = { apiV1.getTableReservation(reservationId) })
             .flatMap { responseOpt ->
                 responseOpt.ifPresentOrDefault(
                     { Result.Success(it) },
                     { Result.Failure(ApiException()) })
             }
+    }
 
-    override suspend fun cancelTableReservation(reservationId: Int): Result<Boolean> =
-        callApi(call = { apiV1.cancelTableReservation(reservationId) })
+    override suspend fun cancelTableReservation(reservationId: Int): Result<Boolean> {
+        return callApi(call = { apiV1.cancelTableReservation(reservationId) })
             .map { responseOpt ->
                 responseOpt.ifPresentOrDefault(
                     { it.isSuccessfully() },
                     { false })
             }
+    }
 }

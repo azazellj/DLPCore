@@ -16,11 +16,18 @@ import ua.com.wl.dlp.domain.Result
 
 interface OrdersInteractor {
 
-    suspend fun getOrders(page: Int? = null, count: Int? = null): Result<PagedResponse<OrderSimpleResponse>>
+    suspend fun getOrders(
+        page: Int? = null,
+        count: Int? = null
+    ): Result<PagedResponse<OrderSimpleResponse>>
 
     suspend fun getOrder(orderId: Int): Result<OrderResponse>
 
-    suspend fun rateOrder(orderId: Int, value: Int, comment: String = ""): Result<BaseOrderRateResponse>
+    suspend fun rateOrder(
+        orderId: Int,
+        value: Int,
+        comment: String = ""
+    ): Result<BaseOrderRateResponse>
 
     suspend fun getOrderRate(orderId: Int): Result<OrderRateResponse>
 
@@ -30,13 +37,19 @@ interface OrdersInteractor {
 
     suspend fun createGeneralPreOrder(request: GeneralPreOrderCreationRequest): Result<CollectionResponse<GeneralPreOrderItem>>
 
-    suspend fun getPreOrders(page: Int? = null, count: Int? = null): Result<PagedResponse<BasePreOrderResponse>>
+    suspend fun getPreOrders(
+        page: Int? = null,
+        count: Int? = null
+    ): Result<PagedResponse<BasePreOrderResponse>>
 
     suspend fun getPreOrder(preOrderId: Int): Result<PreOrderResponse>
 
     suspend fun createTableReservation(request: TableReservationRequest): Result<TableReservationResponse>
 
-    suspend fun getTablesReservations(page: Int? = null, count: Int? = null): Result<PagedResponse<TableReservationResponse>>
+    suspend fun getTablesReservations(
+        page: Int? = null,
+        count: Int? = null
+    ): Result<PagedResponse<TableReservationResponse>>
 
     suspend fun getTableReservation(reservationId: Int): Result<TableReservationResponse>
 

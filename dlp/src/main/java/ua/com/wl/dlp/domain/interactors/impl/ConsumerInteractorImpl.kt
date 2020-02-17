@@ -30,7 +30,6 @@ import ua.com.wl.dlp.domain.exeptions.api.consumer.referral.ReferralException
 import ua.com.wl.dlp.domain.interactors.ConsumerInteractor
 import ua.com.wl.dlp.domain.interactors.OffersInteractor
 import ua.com.wl.dlp.utils.sendBroadcastMessage
-import ua.com.wl.dlp.utils.only
 import ua.com.wl.dlp.utils.toPrefs
 
 /**
@@ -46,8 +45,8 @@ class ConsumerInteractorImpl constructor(
     private val consumerPreferences: ConsumerPreferences
 ) : UseCase(errorsMapper), ConsumerInteractor, OffersInteractor by offersInteractor {
 
-    override suspend fun getProfile(): Result<ProfileResponse> =
-        callApi(call = { apiV2.getProfile() })
+    override suspend fun getProfile(): Result<ProfileResponse> {
+        return callApi(call = { apiV2.getProfile() })
             .flatMap { dataResponseOpt ->
                 dataResponseOpt.ifPresentOrDefault(
                     { Result.Success(it.payload) },
@@ -61,9 +60,10 @@ class ConsumerInteractorImpl constructor(
                     }
                 }
             }
+    }
 
-    override suspend fun updateProfile(profile: ProfileRequest): Result<ProfileResponse> =
-        callApi(call = { apiV2.updateProfile(profile) })
+    override suspend fun updateProfile(profile: ProfileRequest): Result<ProfileResponse> {
+        return callApi(call = { apiV2.updateProfile(profile) })
             .flatMap { dataResponseOpt ->
                 dataResponseOpt.ifPresentOrDefault(
                     { Result.Success(it.payload) },
@@ -77,9 +77,10 @@ class ConsumerInteractorImpl constructor(
                     }
                 }
             }
+    }
 
-    override suspend fun getQrCode(): Result<QrCodeResponse> =
-        callApi(call = { apiV2.getQrCode() })
+    override suspend fun getQrCode(): Result<QrCodeResponse> {
+        return callApi(call = { apiV2.getQrCode() })
             .flatMap { dataResponseOpt ->
                 dataResponseOpt.ifPresentOrDefault(
                     { Result.Success(it.payload) },
@@ -93,9 +94,10 @@ class ConsumerInteractorImpl constructor(
                     }
                 }
             }
+    }
 
-    override suspend fun useInviteCode(code: String): Result<InvitationResponse> =
-        callApi(
+    override suspend fun useInviteCode(code: String): Result<InvitationResponse> {
+        return callApi(
             call = { apiV2.useInviteCode(InvitationRequest(code)) },
             errorClass = ReferralException::class
         ).flatMap { dataResponseOpt ->
@@ -113,30 +115,34 @@ class ConsumerInteractorImpl constructor(
                 }
             }
         }
+    }
 
-    override suspend fun getPromoOffers(page: Int?, count: Int?): Result<PagedResponse<BaseOfferResponse>> =
-        callApi(call = { apiV1.getPromoOffers(page, count) })
+    override suspend fun getPromoOffers(page: Int?, count: Int?): Result<PagedResponse<BaseOfferResponse>> {
+        return callApi(call = { apiV1.getPromoOffers(page, count) })
             .flatMap { responseOpt ->
                 responseOpt.ifPresentOrDefault(
                     { Result.Success(it) },
                     { Result.Failure(ApiException()) })
             }
+    }
 
-    override suspend fun getNoveltyOffers(page: Int?, count: Int?): Result<PagedResponse<BaseOfferResponse>> =
-        callApi(call = { apiV1.getNoveltyOffers(page, count) })
+    override suspend fun getNoveltyOffers(page: Int?, count: Int?): Result<PagedResponse<BaseOfferResponse>> {
+        return callApi(call = { apiV1.getNoveltyOffers(page, count) })
             .flatMap { responseOpt ->
                 responseOpt.ifPresentOrDefault(
                     { Result.Success(it) },
                     { Result.Failure(ApiException()) })
             }
+    }
 
-    override suspend fun getTransactionsHistory(page: Int?, count: Int?): Result<PagedResponse<TransactionResponse>> =
-        callApi(call = { apiV2.loadTransactionsHistory(page, count) })
+    override suspend fun getTransactionsHistory(page: Int?, count: Int?): Result<PagedResponse<TransactionResponse>> {
+        return callApi(call = { apiV2.loadTransactionsHistory(page, count) })
             .flatMap { dataResponseOpt ->
                 dataResponseOpt.ifPresentOrDefault(
                     { Result.Success(it.payload) },
                     { Result.Failure(ApiException()) })
             }
+    }
 
     override suspend fun feedback(
         message: String,
@@ -144,8 +150,8 @@ class ConsumerInteractorImpl constructor(
         callback: Boolean,
         phone: String?,
         email: String?
-    ): Result<FeedbackResponse> =
-        feedback {
+    ): Result<FeedbackResponse> {
+        val request = feedback {
             val answer = if (callback) {
                 app.getString(R.string.dlp_feedback_callback_agree)
             } else {
@@ -156,15 +162,13 @@ class ConsumerInteractorImpl constructor(
             this.phone = phone ?: consumerPreferences.profilePrefs.phone
             this.email = email ?: consumerPreferences.profilePrefs.email
 
-        }.let {
-            callApi(call = { apiV1.feedback(it) })
-                .flatMap { responseOpt ->
-                    responseOpt.ifPresentOrDefault(
-                        { Result.Success(it) },
-                        { Result.Failure(ApiException()) })
-                }
         }
-
+        return callApi(call = { apiV1.feedback(request) }).flatMap { responseOpt ->
+                responseOpt.ifPresentOrDefault(
+                    { Result.Success(it) },
+                    { Result.Failure(ApiException()) })
+        }
+    }
 
     private fun notifyProfileChanges(snapshot: ProfilePrefs) {
         val changes: MutableList<ProfileBusEvent.Change> = mutableListOf()
@@ -172,49 +176,49 @@ class ConsumerInteractorImpl constructor(
             ProfileBusEvent.Change(
                 true, ProfileBusEvent.Field.FIRST_NAME,
                 ProfileBusEvent.FieldValue.StringValue(consumerPreferences.profilePrefs.firstName)
-            ).only { changes.add(it) }
+            ).let { changes.add(it) }
         }
         if (snapshot.patronymic != consumerPreferences.profilePrefs.patronymic) {
             ProfileBusEvent.Change(
                 true, ProfileBusEvent.Field.PATRONYMIC,
                 ProfileBusEvent.FieldValue.StringValue(consumerPreferences.profilePrefs.patronymic)
-            ).only { changes.add(it) }
+            ).let { changes.add(it) }
         }
         if (snapshot.lastName != consumerPreferences.profilePrefs.lastName) {
             ProfileBusEvent.Change(
                 true, ProfileBusEvent.Field.LAST_NAME,
                 ProfileBusEvent.FieldValue.StringValue(consumerPreferences.profilePrefs.lastName)
-            ).only { changes.add(it) }
+            ).let { changes.add(it) }
         }
         if (snapshot.city != consumerPreferences.profilePrefs.city) {
             ProfileBusEvent.Change(
                 true, ProfileBusEvent.Field.CITY,
                 ProfileBusEvent.FieldValue.CityObjectValue(consumerPreferences.profilePrefs.city)
-            ).only { changes.add(it) }
+            ).let { changes.add(it) }
         }
         if (snapshot.phone != consumerPreferences.profilePrefs.phone) {
             ProfileBusEvent.Change(
                 true, ProfileBusEvent.Field.PHONE,
                 ProfileBusEvent.FieldValue.StringValue(consumerPreferences.profilePrefs.phone)
-            ).only { changes.add(it) }
+            ).let { changes.add(it) }
         }
         if (snapshot.email != consumerPreferences.profilePrefs.email) {
             ProfileBusEvent.Change(
                 true, ProfileBusEvent.Field.EMAIL,
                 ProfileBusEvent.FieldValue.StringValue(consumerPreferences.profilePrefs.email)
-            ).only { changes.add(it) }
+            ).let { changes.add(it) }
         }
         if (snapshot.gender != consumerPreferences.profilePrefs.gender) {
             ProfileBusEvent.Change(
                 true, ProfileBusEvent.Field.GENDER,
                 ProfileBusEvent.FieldValue.GenderObjectValue(consumerPreferences.profilePrefs.gender)
-            ).only { changes.add(it) }
+            ).let { changes.add(it) }
         }
         if (snapshot.birthDate != consumerPreferences.profilePrefs.birthDate) {
             ProfileBusEvent.Change(
                 true, ProfileBusEvent.Field.BIRTH_DATE,
                 ProfileBusEvent.FieldValue.StringValue(consumerPreferences.profilePrefs.birthDate)
-            ).only { changes.add(it) }
+            ).let { changes.add(it) }
         }
         if (snapshot.balance != consumerPreferences.profilePrefs.balance) {
             if (snapshot.balance != null) {
@@ -223,31 +227,31 @@ class ConsumerInteractorImpl constructor(
             ProfileBusEvent.Change(
                 true, ProfileBusEvent.Field.BALANCE,
                 ProfileBusEvent.FieldValue.LongValue(consumerPreferences.profilePrefs.balance)
-            ).only { changes.add(it) }
+            ).let { changes.add(it) }
         }
         if (snapshot.moneyAmount != consumerPreferences.profilePrefs.moneyAmount) {
             ProfileBusEvent.Change(
                 true, ProfileBusEvent.Field.MONEY_AMOUNT,
                 ProfileBusEvent.FieldValue.StringValue(consumerPreferences.profilePrefs.moneyAmount)
-            ).only { changes.add(it) }
+            ).let { changes.add(it) }
         }
         if (snapshot.qrCode != consumerPreferences.profilePrefs.qrCode) {
             ProfileBusEvent.Change(
                 true, ProfileBusEvent.Field.QR_CODE,
                 ProfileBusEvent.FieldValue.StringValue(consumerPreferences.profilePrefs.qrCode)
-            ).only { changes.add(it) }
+            ).let { changes.add(it) }
         }
         if (snapshot.inviteCode != consumerPreferences.profilePrefs.inviteCode) {
             ProfileBusEvent.Change(
                 true, ProfileBusEvent.Field.INVITE_CODE,
                 ProfileBusEvent.FieldValue.StringValue(consumerPreferences.profilePrefs.inviteCode)
-            ).only { changes.add(it) }
+            ).let { changes.add(it) }
         }
         if (snapshot.referralCode != consumerPreferences.profilePrefs.referralCode) {
             ProfileBusEvent.Change(
                 true, ProfileBusEvent.Field.REFERRAL_CODE,
                 ProfileBusEvent.FieldValue.StringValue(consumerPreferences.profilePrefs.referralCode)
-            ).only { changes.add(it) }
+            ).let { changes.add(it) }
         }
         CoreBusEventsFactory.profileChanges(changes)
     }
