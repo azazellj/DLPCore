@@ -2,13 +2,13 @@ package ua.com.wl.dlp.data.api.responses.orders.order
 
 import com.google.gson.annotations.SerializedName
 
-import ua.com.wl.dlp.data.api.responses.models.shop.order.ConsumerOrder
+import ua.com.wl.dlp.data.api.responses.models.orders.order.ConsumerOrder
 
 /**
  * @author Denis Makovskyi
  */
 
-data class OrderSimpleResponse constructor(
+data class OrderSimpleResponse(
     @SerializedName("shop_name")
     val shopName: String,
 

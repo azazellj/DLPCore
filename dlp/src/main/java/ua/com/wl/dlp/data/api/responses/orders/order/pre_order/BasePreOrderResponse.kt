@@ -1,15 +1,15 @@
-package ua.com.wl.dlp.data.api.responses.orders.order
+package ua.com.wl.dlp.data.api.responses.orders.order.pre_order
 
 import com.google.gson.annotations.SerializedName
 
-import ua.com.wl.dlp.data.api.responses.models.shop.order.PreOrderShop
-import ua.com.wl.dlp.data.api.responses.models.shop.order.PreOrderStatus
+import ua.com.wl.dlp.data.api.responses.models.orders.order.pre_order.PreOrderShop
+import ua.com.wl.dlp.data.api.responses.models.orders.order.pre_order.PreOrderStatus
 
 /**
  * @author Denis Makovskyi
  */
 
-open class BasePreOrderResponse constructor(
+open class BasePreOrderResponse(
     @SerializedName("number")
     var number: Int = 0,
 

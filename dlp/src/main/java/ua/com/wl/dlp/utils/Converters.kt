@@ -11,14 +11,15 @@ import ua.com.wl.dlp.data.prefereces.models.ProfilePrefs
  * @author Denis Makovskyi
  */
 
-fun ProfileResponse.toPrefs(): ProfilePrefs =
-    ProfilePrefs(
+fun ProfileResponse.toPrefs(): ProfilePrefs {
+    return ProfilePrefs(
         this.firstName, this.patronymic, this.lastName,
-        this.gender, this.email, this.phone,
-        this.address, this.city, this.birthDate,
-        this.isMarried, this.language, this.timezone,
+        this.gender, this.birthDate, this.isMarried,
+        this.city, this.address, this.email,
+        this.phone, this.language, this.timezone,
         this.balance, this.moneyAmount, null,
         this.inviteCode, this.referralCode, this.comment)
+}
 
 fun BaseOfferResponse.toOfferEntity(shopId: Int, count: Int = 0): OfferEntity {
     val entityPromoParams = OfferEntityPromoParams(

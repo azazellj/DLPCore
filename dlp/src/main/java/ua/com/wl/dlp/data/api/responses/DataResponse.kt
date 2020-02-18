@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName
  * @author Denis Makovskyi
  */
 
-class DataResponse<T> constructor(
+class DataResponse<T>(
     type: String,
 
     @SerializedName("results")

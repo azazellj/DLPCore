@@ -1,4 +1,4 @@
-package ua.com.wl.dlp.data.api.responses.models.shop.table
+package ua.com.wl.dlp.data.api.responses.models.orders.table
 
 import com.google.gson.annotations.SerializedName
 
@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName
  * @author Denis Makovskyi
  */
 
-data class TableReservationShop constructor(
+data class TableReservationDetailedShop(
     @SerializedName("id")
     val id: Int,
 

@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName
  * @author Denis Makovskyi
  */
 
-open class BaseResponse constructor(
+open class BaseResponse(
     @SerializedName(value = "type", alternate = ["status"])
     val type: String
 ) {

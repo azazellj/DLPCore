@@ -3,13 +3,19 @@ package ua.com.wl.dlp.data.api
 import retrofit2.Response
 import retrofit2.http.*
 
-import ua.com.wl.dlp.data.api.requests.orders.order.PreOrderCreationRequest
+import ua.com.wl.dlp.data.api.requests.orders.order.PreOrderRequest
 import ua.com.wl.dlp.data.api.requests.orders.order.RateOrderRequest
 import ua.com.wl.dlp.data.api.requests.orders.table.TableReservationRequest
 import ua.com.wl.dlp.data.api.responses.BaseResponse
 import ua.com.wl.dlp.data.api.responses.PagedResponse
 import ua.com.wl.dlp.data.api.responses.orders.order.*
-import ua.com.wl.dlp.data.api.responses.orders.table.TableReservationResponse
+import ua.com.wl.dlp.data.api.responses.orders.order.pre_order.BasePreOrderResponse
+import ua.com.wl.dlp.data.api.responses.orders.order.pre_order.PreOrderCreationResponse
+import ua.com.wl.dlp.data.api.responses.orders.order.pre_order.PreOrderResponse
+import ua.com.wl.dlp.data.api.responses.orders.order.rate.BaseOrderRateResponse
+import ua.com.wl.dlp.data.api.responses.orders.order.rate.OrderRateResponse
+import ua.com.wl.dlp.data.api.responses.orders.table.TableReservationDetailedResponse
+import ua.com.wl.dlp.data.api.responses.orders.table.TableReservationItemResponse
 
 /**
  * @author Denis Makovskyi
@@ -40,7 +46,7 @@ interface OrdersApiV1 {
     suspend fun getLastOrderRate(): Response<OrderRateResponse>
 
     @POST("api/mobile/v1/consumer/pre-orders/")
-    suspend fun createPreOrder(@Body request: PreOrderCreationRequest): Response<PreOrderCreationResponse>
+    suspend fun createPreOrder(@Body request: PreOrderRequest): Response<PreOrderCreationResponse>
 
     @GET("api/mobile/v1/consumer/pre-orders/")
     suspend fun getPreOrders(
@@ -52,16 +58,16 @@ interface OrdersApiV1 {
     suspend fun getPreOrder(@Path("pre_order_id") preOrderId: Int): Response<PreOrderResponse>
 
     @POST("api/mobile/v1/consumer/table-reservations/")
-    suspend fun createTableReservation(@Body request: TableReservationRequest): Response<TableReservationResponse>
+    suspend fun createTableReservation(@Body request: TableReservationRequest): Response<TableReservationItemResponse>
 
     @GET("api/mobile/v1/consumer/table-reservations/")
     suspend fun getTablesReservations(
         @Query("page") page: Int? = null,
         @Query("page_size") count: Int? = null
-    ): Response<PagedResponse<TableReservationResponse>>
+    ): Response<PagedResponse<TableReservationItemResponse>>
 
     @GET("api/mobile/v1/consumer/table-reservation/{reservation_id}/")
-    suspend fun getTableReservation(@Path("reservation_id") reservationId: Int): Response<TableReservationResponse>
+    suspend fun getTableReservation(@Path("reservation_id") reservationId: Int): Response<TableReservationDetailedResponse>
 
     @PATCH("api/mobile/v1/consumer/table-reservation/{reservation_id}/reject/")
     suspend fun cancelTableReservation(@Path("reservation_id") reservationId: Int): Response<BaseResponse>

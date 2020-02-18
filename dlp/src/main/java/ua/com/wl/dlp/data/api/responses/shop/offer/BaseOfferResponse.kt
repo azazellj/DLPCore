@@ -9,7 +9,7 @@ import ua.com.wl.dlp.data.api.responses.models.shop.offer.promo.PromoSettings
  * @author Denis Makovskyi
  */
 
-open class BaseOfferResponse constructor(
+open class BaseOfferResponse(
     @SerializedName("id")
     var id: Int = 0,
 

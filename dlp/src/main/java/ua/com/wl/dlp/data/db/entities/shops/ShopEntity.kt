@@ -9,7 +9,7 @@ import ua.com.wl.dlp.data.db.entities.shops.embedded.shop.PreOrderParams
  */
 
 @Entity(tableName = ShopEntity.TABLE_NAME)
-data class ShopEntity constructor(
+data class ShopEntity(
     @PrimaryKey
     @ColumnInfo(name = "id")
     val id: Int,

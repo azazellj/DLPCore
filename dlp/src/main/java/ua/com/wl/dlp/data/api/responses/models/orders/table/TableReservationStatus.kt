@@ -1,4 +1,4 @@
-package ua.com.wl.dlp.data.api.responses.models.shop.table
+package ua.com.wl.dlp.data.api.responses.models.orders.table
 
 import com.google.gson.annotations.SerializedName
 

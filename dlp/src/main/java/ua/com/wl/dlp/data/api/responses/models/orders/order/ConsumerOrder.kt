@@ -1,4 +1,4 @@
-package ua.com.wl.dlp.data.api.responses.models.shop.order
+package ua.com.wl.dlp.data.api.responses.models.orders.order
 
 import com.google.gson.annotations.SerializedName
 
@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName
  * @author Denis Makovskyi
  */
 
-data class ConsumerOrder constructor(
+data class ConsumerOrder(
     @SerializedName("rs_order_id")
     val id: String,
 

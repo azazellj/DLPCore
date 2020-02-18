@@ -6,6 +6,25 @@ import com.google.gson.annotations.SerializedName
  * @author Denis Makovskyi
  */
 
-data class InvitationRequest constructor(
+data class InvitationRequest(
     @SerializedName("invite_code")
-    val code: String)
+    val code: String
+) {
+
+    class Builder {
+
+        private var code: String = ""
+
+        fun code(init: () -> String) {
+            code = init()
+        }
+
+        fun build(init: Builder.() -> Unit): InvitationRequest {
+            return InvitationRequest(code)
+        }
+    }
+}
+
+fun invitationRequest(init: InvitationRequest.Builder.() -> Unit): InvitationRequest {
+    return InvitationRequest.Builder().build(init)
+}

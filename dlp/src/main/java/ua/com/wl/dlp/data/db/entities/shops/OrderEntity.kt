@@ -24,7 +24,7 @@ import androidx.room.*
         )
     ]
 )
-data class OrderEntity constructor(
+data class OrderEntity(
     @ColumnInfo(name = "shop_id")
     val shopId: Int,
 

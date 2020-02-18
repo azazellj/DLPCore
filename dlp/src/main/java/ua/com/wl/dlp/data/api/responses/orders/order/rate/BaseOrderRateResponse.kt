@@ -1,13 +1,13 @@
-package ua.com.wl.dlp.data.api.responses.orders.order
+package ua.com.wl.dlp.data.api.responses.orders.order.rate
 
 import com.google.gson.annotations.SerializedName
-import ua.com.wl.dlp.data.api.responses.models.shop.order.Order
+import ua.com.wl.dlp.data.api.responses.models.orders.order.Order
 
 /**
  * @author Denis Makovskyi
  */
 
-open class BaseOrderRateResponse constructor(
+open class BaseOrderRateResponse(
     @SerializedName("value")
     var value: Int = 0,
 

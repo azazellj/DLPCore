@@ -8,7 +8,7 @@ import ua.com.wl.dlp.data.api.responses.models.social.SocialNetwork
  * @author Denis Makovskyi
  */
 
-data class OfferResponse constructor(
+data class OfferResponse(
     @SerializedName("tags")
     val tags: String,
 

@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName
  * @author Denis Makovskyi
  */
 
-data class InvitationResponse constructor(
+data class InvitationResponse(
     @SerializedName("consumer_balance")
     val balance: Long,
 

@@ -6,7 +6,7 @@ import androidx.room.ColumnInfo
  * @author Denis Makovskyi
  */
 
-data class OfferEntityPromoParams constructor(
+data class OfferEntityPromoParams(
     @ColumnInfo(name = "gift_name")
     val giftName: String? = null,
 

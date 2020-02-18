@@ -1,6 +1,7 @@
 package ua.com.wl.dlp.domain.interactors
 
 import ua.com.wl.dlp.data.api.requests.consumer.profile.ProfileRequest
+import ua.com.wl.dlp.data.api.requests.consumer.referral.InvitationRequest
 import ua.com.wl.dlp.data.api.responses.PagedResponse
 import ua.com.wl.dlp.data.api.responses.consumer.feedback.FeedbackResponse
 import ua.com.wl.dlp.data.api.responses.consumer.history.TransactionResponse
@@ -22,19 +23,28 @@ interface ConsumerInteractor : OffersInteractor {
 
     suspend fun getQrCode(): Result<QrCodeResponse>
 
-    suspend fun useInviteCode(code: String): Result<InvitationResponse>
+    suspend fun activateInviteCode(request: InvitationRequest): Result<InvitationResponse>
 
-    suspend fun getPromoOffers(page: Int? = null, count: Int? = null): Result<PagedResponse<BaseOfferResponse>>
+    suspend fun getPromoOffers(
+        page: Int? = null, 
+        count: Int? = null
+    ): Result<PagedResponse<BaseOfferResponse>>
 
-    suspend fun getNoveltyOffers(page: Int? = null, count: Int? = null): Result<PagedResponse<BaseOfferResponse>>
+    suspend fun getNoveltyOffers(
+        page: Int? = null, 
+        count: Int? = null
+    ): Result<PagedResponse<BaseOfferResponse>>
 
-    suspend fun getTransactionsHistory(page: Int? = null, count: Int? = null): Result<PagedResponse<TransactionResponse>>
+    suspend fun getTransactionsHistory(
+        page: Int? = null, 
+        count: Int? = null
+    ): Result<PagedResponse<TransactionResponse>>
 
     suspend fun feedback(
-        message: String,
-        appVersion: String,
-        callback: Boolean,
         phone: String? = null,
-        email: String? = null
+        email: String? = null,
+        message: String,
+        callback: Boolean,
+        appVersion: String
     ): Result<FeedbackResponse>
 }

@@ -6,15 +6,21 @@ import kotlinx.coroutines.withContext
 import ua.com.wl.dlp.data.api.OrdersApiV1
 import ua.com.wl.dlp.data.api.OrdersApiV2
 import ua.com.wl.dlp.data.api.errors.ErrorsMapper
-import ua.com.wl.dlp.data.api.requests.orders.order.GeneralPreOrderCreationRequest
-import ua.com.wl.dlp.data.api.requests.orders.order.PreOrderCreationRequest
+import ua.com.wl.dlp.data.api.requests.orders.order.GeneralPreOrderRequest
+import ua.com.wl.dlp.data.api.requests.orders.order.PreOrderRequest
 import ua.com.wl.dlp.data.api.requests.orders.order.RateOrderRequest
 import ua.com.wl.dlp.data.api.requests.orders.table.TableReservationRequest
 import ua.com.wl.dlp.data.api.responses.CollectionResponse
 import ua.com.wl.dlp.data.api.responses.PagedResponse
-import ua.com.wl.dlp.data.api.responses.models.orders.order.GeneralPreOrderItem
+import ua.com.wl.dlp.data.api.responses.models.orders.order.pre_order.GeneralPreOrderItem
 import ua.com.wl.dlp.data.api.responses.orders.order.*
-import ua.com.wl.dlp.data.api.responses.orders.table.TableReservationResponse
+import ua.com.wl.dlp.data.api.responses.orders.order.pre_order.BasePreOrderResponse
+import ua.com.wl.dlp.data.api.responses.orders.order.pre_order.PreOrderCreationResponse
+import ua.com.wl.dlp.data.api.responses.orders.order.pre_order.PreOrderResponse
+import ua.com.wl.dlp.data.api.responses.orders.order.rate.BaseOrderRateResponse
+import ua.com.wl.dlp.data.api.responses.orders.order.rate.OrderRateResponse
+import ua.com.wl.dlp.data.api.responses.orders.table.TableReservationDetailedResponse
+import ua.com.wl.dlp.data.api.responses.orders.table.TableReservationItemResponse
 import ua.com.wl.dlp.data.events.factory.CoreBusEventsFactory
 import ua.com.wl.dlp.domain.Result
 import ua.com.wl.dlp.domain.UseCase
@@ -53,12 +59,8 @@ class OrdersInteractorImpl constructor(
             }
     }
 
-    override suspend fun rateOrder(
-        orderId: Int,
-        value: Int,
-        comment: String
-    ): Result<BaseOrderRateResponse> {
-        return callApi(call = { apiV1.rateOrder(orderId, RateOrderRequest(value, comment)) })
+    override suspend fun rateOrder(orderId: Int, request: RateOrderRequest): Result<BaseOrderRateResponse> {
+        return callApi(call = { apiV1.rateOrder(orderId, request) })
             .flatMap { responseOpt ->
                 responseOpt.ifPresentOrDefault(
                     { Result.Success(it) },
@@ -92,7 +94,7 @@ class OrdersInteractorImpl constructor(
             }
     }
 
-    override suspend fun createPreOrder(request: PreOrderCreationRequest): Result<PreOrderCreationResponse> {
+    override suspend fun createPreOrder(request: PreOrderRequest): Result<PreOrderCreationResponse> {
         return callApi(call = { apiV1.createPreOrder(request) })
             .flatMap { responseOpt ->
                 responseOpt.ifPresentOrDefault(
@@ -101,7 +103,7 @@ class OrdersInteractorImpl constructor(
             }
     }
 
-    override suspend fun createGeneralPreOrder(request: GeneralPreOrderCreationRequest): Result<CollectionResponse<GeneralPreOrderItem>> {
+    override suspend fun createGeneralPreOrder(request: GeneralPreOrderRequest): Result<CollectionResponse<GeneralPreOrderItem>> {
         return callApi(
             call = { apiV2.createGeneralPreOrder(request) },
             errorClass = GeneralPreOrderException::class
@@ -133,7 +135,7 @@ class OrdersInteractorImpl constructor(
             }
     }
 
-    override suspend fun createTableReservation(request: TableReservationRequest): Result<TableReservationResponse> {
+    override suspend fun createTableReservation(request: TableReservationRequest): Result<TableReservationItemResponse> {
         return callApi(call = { apiV1.createTableReservation(request) })
             .flatMap { responseOpt ->
                 responseOpt.ifPresentOrDefault(
@@ -142,7 +144,7 @@ class OrdersInteractorImpl constructor(
             }
     }
 
-    override suspend fun getTablesReservations(page: Int?, count: Int?): Result<PagedResponse<TableReservationResponse>> {
+    override suspend fun getTablesReservations(page: Int?, count: Int?): Result<PagedResponse<TableReservationItemResponse>> {
         return callApi(call = { apiV1.getTablesReservations(page, count) })
             .flatMap { responseOpt ->
                 responseOpt.ifPresentOrDefault(
@@ -151,7 +153,7 @@ class OrdersInteractorImpl constructor(
             }
     }
 
-    override suspend fun getTableReservation(reservationId: Int): Result<TableReservationResponse> {
+    override suspend fun getTableReservation(reservationId: Int): Result<TableReservationDetailedResponse> {
         return callApi(call = { apiV1.getTableReservation(reservationId) })
             .flatMap { responseOpt ->
                 responseOpt.ifPresentOrDefault(

@@ -8,7 +8,7 @@ import ua.com.wl.dlp.data.api.responses.models.consumer.profile.Gender
  * @author Denis Makovskyi
  */
 
-class ProfileBusEvent constructor(val changes: List<Change>) : BusEvent() {
+class ProfileBusEvent(val changes: List<Change>) : BusEvent() {
 
     enum class Field {
         FIRST_NAME,

@@ -9,7 +9,7 @@ import ua.com.wl.dlp.core.Constants
 import ua.com.wl.dlp.data.api.ConsumerApiV1
 import ua.com.wl.dlp.data.api.ConsumerApiV2
 import ua.com.wl.dlp.data.api.errors.ErrorsMapper
-import ua.com.wl.dlp.data.api.requests.consumer.feedback.feedback
+import ua.com.wl.dlp.data.api.requests.consumer.feedback.feedbackRequest
 import ua.com.wl.dlp.data.api.requests.consumer.profile.ProfileRequest
 import ua.com.wl.dlp.data.api.requests.consumer.referral.InvitationRequest
 import ua.com.wl.dlp.data.api.responses.PagedResponse
@@ -96,9 +96,9 @@ class ConsumerInteractorImpl constructor(
             }
     }
 
-    override suspend fun useInviteCode(code: String): Result<InvitationResponse> {
+    override suspend fun activateInviteCode(request: InvitationRequest): Result<InvitationResponse> {
         return callApi(
-            call = { apiV2.useInviteCode(InvitationRequest(code)) },
+            call = { apiV2.useInviteCode(request) },
             errorClass = ReferralException::class
         ).flatMap { dataResponseOpt ->
             dataResponseOpt.ifPresentOrDefault(
@@ -117,25 +117,34 @@ class ConsumerInteractorImpl constructor(
         }
     }
 
-    override suspend fun getPromoOffers(page: Int?, count: Int?): Result<PagedResponse<BaseOfferResponse>> {
+    override suspend fun getPromoOffers(
+        page: Int?,
+        count: Int?
+    ): Result<PagedResponse<BaseOfferResponse>> {
         return callApi(call = { apiV1.getPromoOffers(page, count) })
-            .flatMap { responseOpt ->
-                responseOpt.ifPresentOrDefault(
+            .flatMap { pagedResponseOpt ->
+                pagedResponseOpt.ifPresentOrDefault(
                     { Result.Success(it) },
                     { Result.Failure(ApiException()) })
             }
     }
 
-    override suspend fun getNoveltyOffers(page: Int?, count: Int?): Result<PagedResponse<BaseOfferResponse>> {
+    override suspend fun getNoveltyOffers(
+        page: Int?,
+        count: Int?
+    ): Result<PagedResponse<BaseOfferResponse>> {
         return callApi(call = { apiV1.getNoveltyOffers(page, count) })
-            .flatMap { responseOpt ->
-                responseOpt.ifPresentOrDefault(
+            .flatMap { pagedResponseOpt ->
+                pagedResponseOpt.ifPresentOrDefault(
                     { Result.Success(it) },
                     { Result.Failure(ApiException()) })
             }
     }
 
-    override suspend fun getTransactionsHistory(page: Int?, count: Int?): Result<PagedResponse<TransactionResponse>> {
+    override suspend fun getTransactionsHistory(
+        page: Int?,
+        count: Int?
+    ): Result<PagedResponse<TransactionResponse>> {
         return callApi(call = { apiV2.loadTransactionsHistory(page, count) })
             .flatMap { dataResponseOpt ->
                 dataResponseOpt.ifPresentOrDefault(
@@ -145,23 +154,22 @@ class ConsumerInteractorImpl constructor(
     }
 
     override suspend fun feedback(
-        message: String,
-        appVersion: String,
-        callback: Boolean,
         phone: String?,
-        email: String?
+        email: String?,
+        message: String,
+        callback: Boolean,
+        appVersion: String
     ): Result<FeedbackResponse> {
-        val request = feedback {
+        val request = feedbackRequest {
             val answer = if (callback) {
                 app.getString(R.string.dlp_feedback_callback_agree)
             } else {
                 app.getString(R.string.dlp_feedback_callback_disagree)
             }
-            this.message = "$message\n\n${app.getString(R.string.dlp_feedback_callback_prefix)}: $answer"
-            this.appVersion = "${app.getString(R.string.dlp_feedback_app_version)}$appVersion"
-            this.phone = phone ?: consumerPreferences.profilePrefs.phone
-            this.email = email ?: consumerPreferences.profilePrefs.email
-
+            phone { phone ?: consumerPreferences.profilePrefs.phone }
+            email { email ?: consumerPreferences.profilePrefs.email }
+            message { "$message\n\n${app.getString(R.string.dlp_feedback_callback_prefix)}: $answer" }
+            appVersion { "${app.getString(R.string.dlp_feedback_app_version)}$appVersion" }
         }
         return callApi(call = { apiV1.feedback(request) }).flatMap { responseOpt ->
                 responseOpt.ifPresentOrDefault(
@@ -171,87 +179,87 @@ class ConsumerInteractorImpl constructor(
     }
 
     private fun notifyProfileChanges(snapshot: ProfilePrefs) {
-        val changes: MutableList<ProfileBusEvent.Change> = mutableListOf()
+        val changes = mutableListOf<ProfileBusEvent.Change>()
         if (snapshot.firstName != consumerPreferences.profilePrefs.firstName) {
-            ProfileBusEvent.Change(
+            val change = ProfileBusEvent.Change(
                 true, ProfileBusEvent.Field.FIRST_NAME,
-                ProfileBusEvent.FieldValue.StringValue(consumerPreferences.profilePrefs.firstName)
-            ).let { changes.add(it) }
+                ProfileBusEvent.FieldValue.StringValue(consumerPreferences.profilePrefs.firstName))
+            changes.add(change)
         }
         if (snapshot.patronymic != consumerPreferences.profilePrefs.patronymic) {
-            ProfileBusEvent.Change(
+            val change = ProfileBusEvent.Change(
                 true, ProfileBusEvent.Field.PATRONYMIC,
-                ProfileBusEvent.FieldValue.StringValue(consumerPreferences.profilePrefs.patronymic)
-            ).let { changes.add(it) }
+                ProfileBusEvent.FieldValue.StringValue(consumerPreferences.profilePrefs.patronymic))
+            changes.add(change)
         }
         if (snapshot.lastName != consumerPreferences.profilePrefs.lastName) {
-            ProfileBusEvent.Change(
+            val change = ProfileBusEvent.Change(
                 true, ProfileBusEvent.Field.LAST_NAME,
-                ProfileBusEvent.FieldValue.StringValue(consumerPreferences.profilePrefs.lastName)
-            ).let { changes.add(it) }
+                ProfileBusEvent.FieldValue.StringValue(consumerPreferences.profilePrefs.lastName))
+            changes.add(change)
         }
         if (snapshot.city != consumerPreferences.profilePrefs.city) {
-            ProfileBusEvent.Change(
+            val change = ProfileBusEvent.Change(
                 true, ProfileBusEvent.Field.CITY,
-                ProfileBusEvent.FieldValue.CityObjectValue(consumerPreferences.profilePrefs.city)
-            ).let { changes.add(it) }
+                ProfileBusEvent.FieldValue.CityObjectValue(consumerPreferences.profilePrefs.city))
+            changes.add(change)
         }
         if (snapshot.phone != consumerPreferences.profilePrefs.phone) {
-            ProfileBusEvent.Change(
+            val change = ProfileBusEvent.Change(
                 true, ProfileBusEvent.Field.PHONE,
-                ProfileBusEvent.FieldValue.StringValue(consumerPreferences.profilePrefs.phone)
-            ).let { changes.add(it) }
+                ProfileBusEvent.FieldValue.StringValue(consumerPreferences.profilePrefs.phone))
+            changes.add(change)
         }
         if (snapshot.email != consumerPreferences.profilePrefs.email) {
-            ProfileBusEvent.Change(
+            val change = ProfileBusEvent.Change(
                 true, ProfileBusEvent.Field.EMAIL,
-                ProfileBusEvent.FieldValue.StringValue(consumerPreferences.profilePrefs.email)
-            ).let { changes.add(it) }
+                ProfileBusEvent.FieldValue.StringValue(consumerPreferences.profilePrefs.email))
+            changes.add(change)
         }
         if (snapshot.gender != consumerPreferences.profilePrefs.gender) {
-            ProfileBusEvent.Change(
+            val change = ProfileBusEvent.Change(
                 true, ProfileBusEvent.Field.GENDER,
-                ProfileBusEvent.FieldValue.GenderObjectValue(consumerPreferences.profilePrefs.gender)
-            ).let { changes.add(it) }
+                ProfileBusEvent.FieldValue.GenderObjectValue(consumerPreferences.profilePrefs.gender))
+            changes.add(change)
         }
         if (snapshot.birthDate != consumerPreferences.profilePrefs.birthDate) {
-            ProfileBusEvent.Change(
+            val change = ProfileBusEvent.Change(
                 true, ProfileBusEvent.Field.BIRTH_DATE,
-                ProfileBusEvent.FieldValue.StringValue(consumerPreferences.profilePrefs.birthDate)
-            ).let { changes.add(it) }
+                ProfileBusEvent.FieldValue.StringValue(consumerPreferences.profilePrefs.birthDate))
+            changes.add(change)
         }
         if (snapshot.balance != consumerPreferences.profilePrefs.balance) {
             if (snapshot.balance != null) {
                 sendBroadcastMessage(app, Constants.RECEIVER_ACTION_SOUND_BONUSES)
             }
-            ProfileBusEvent.Change(
+            val change = ProfileBusEvent.Change(
                 true, ProfileBusEvent.Field.BALANCE,
-                ProfileBusEvent.FieldValue.LongValue(consumerPreferences.profilePrefs.balance)
-            ).let { changes.add(it) }
+                ProfileBusEvent.FieldValue.LongValue(consumerPreferences.profilePrefs.balance))
+            changes.add(change)
         }
         if (snapshot.moneyAmount != consumerPreferences.profilePrefs.moneyAmount) {
-            ProfileBusEvent.Change(
+            val change = ProfileBusEvent.Change(
                 true, ProfileBusEvent.Field.MONEY_AMOUNT,
-                ProfileBusEvent.FieldValue.StringValue(consumerPreferences.profilePrefs.moneyAmount)
-            ).let { changes.add(it) }
+                ProfileBusEvent.FieldValue.StringValue(consumerPreferences.profilePrefs.moneyAmount))
+            changes.add(change)
         }
         if (snapshot.qrCode != consumerPreferences.profilePrefs.qrCode) {
-            ProfileBusEvent.Change(
+            val change = ProfileBusEvent.Change(
                 true, ProfileBusEvent.Field.QR_CODE,
-                ProfileBusEvent.FieldValue.StringValue(consumerPreferences.profilePrefs.qrCode)
-            ).let { changes.add(it) }
+                ProfileBusEvent.FieldValue.StringValue(consumerPreferences.profilePrefs.qrCode))
+            changes.add(change)
         }
         if (snapshot.inviteCode != consumerPreferences.profilePrefs.inviteCode) {
-            ProfileBusEvent.Change(
+            val change = ProfileBusEvent.Change(
                 true, ProfileBusEvent.Field.INVITE_CODE,
-                ProfileBusEvent.FieldValue.StringValue(consumerPreferences.profilePrefs.inviteCode)
-            ).let { changes.add(it) }
+                ProfileBusEvent.FieldValue.StringValue(consumerPreferences.profilePrefs.inviteCode))
+            changes.add(change)
         }
         if (snapshot.referralCode != consumerPreferences.profilePrefs.referralCode) {
-            ProfileBusEvent.Change(
+            val change = ProfileBusEvent.Change(
                 true, ProfileBusEvent.Field.REFERRAL_CODE,
-                ProfileBusEvent.FieldValue.StringValue(consumerPreferences.profilePrefs.referralCode)
-            ).let { changes.add(it) }
+                ProfileBusEvent.FieldValue.StringValue(consumerPreferences.profilePrefs.referralCode))
+            changes.add(change)
         }
         CoreBusEventsFactory.profileChanges(changes)
     }

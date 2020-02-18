@@ -65,12 +65,9 @@ class AuthInteractorImpl constructor(
         }
     }
 
-    override suspend fun authentication(
-        phone: String,
-        sendSms: Boolean
-    ): Result<AuthenticationResponse> {
+    override suspend fun authentication(request: AuthenticationRequest): Result<AuthenticationResponse> {
         return callApi(
-            call = { apiV2.authentication(AuthenticationRequest(sendSms, phone)) },
+            call = { apiV2.authentication(request) },
             errorClass = AuthException::class
         ).flatMap { dataResponseOpt ->
             dataResponseOpt.ifPresentOrDefault(
@@ -79,13 +76,9 @@ class AuthInteractorImpl constructor(
         }
     }
 
-    override suspend fun signIn(
-        phone: String,
-        password: String,
-        appVersion: String?
-    ): Result<SignResponse> {
+    override suspend fun signIn(request: SignInRequest, appVersion: String?): Result<SignResponse> {
         return callApi(
-            call = { apiV2.signIn(SignInRequest(phone, password)) },
+            call = { apiV2.signIn(request) },
             errorClass = AuthException::class
         ).flatMap { dataResponseOpt ->
             dataResponseOpt.ifPresentOrDefault(
@@ -101,9 +94,9 @@ class AuthInteractorImpl constructor(
         }
     }
 
-    override suspend fun cardsStatus(phone: String, password: String): Result<CardsStatus> {
+    override suspend fun cardsStatus(request: CardsStatusRequest): Result<CardsStatus> {
         return callApi(
-            call = { apiV2.cardsStatus(CardsStatusRequest(phone, password)) },
+            call = { apiV2.cardsStatus(request) },
             errorClass = AuthException::class
         ).flatMap { dataResponseOpt ->
             dataResponseOpt.ifPresentOrDefault(
@@ -112,11 +105,9 @@ class AuthInteractorImpl constructor(
         }
     }
 
-    override suspend fun signUp(
-        city: Int, phone: String, password: String, barcode: String?, appVersion: String?
-    ): Result<SignResponse> {
+    override suspend fun signUp(request: SignUpRequest, appVersion: String?): Result<SignResponse> {
         return callApi(
-            call = { apiV2.signUp(SignUpRequest(city, phone, password, barcode)) },
+            call = { apiV2.signUp(request) },
             errorClass = AuthException::class
         ).flatMap { dataResponseOpt ->
             dataResponseOpt.ifPresentOrDefault(
@@ -147,17 +138,17 @@ class AuthInteractorImpl constructor(
         }
     }
 
-    override suspend fun requestSmsCode(phone: String): Result<Boolean> {
+    override suspend fun requestSmsCode(request: SmsCodeRequest): Result<Boolean> {
         return callApi(
-            call = { apiV2.requestSmsCode(SmsCodeRequest(phone)) },
+            call = { apiV2.requestSmsCode(request) },
             errorClass = AuthException::class
         ).map { baseResponseOpt ->
             baseResponseOpt.getUnsafe()?.isSuccessfully() ?: false
         }
     }
 
-    override suspend fun restorePassword(phone: String): Result<Boolean> {
-        return callApi(call = { apiV1.restorePassword(SmsCodeRequest(phone)) }).map { baseResponseOpt ->
+    override suspend fun restorePassword(request: SmsCodeRequest): Result<Boolean> {
+        return callApi(call = { apiV1.restorePassword(request) }).map { baseResponseOpt ->
             baseResponseOpt.getUnsafe()?.isSuccessfully() ?: false
         }
     }

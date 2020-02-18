@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName
  * @author Denis Makovskyi
  */
 
-data class PagedResponse<T> constructor(
+data class PagedResponse<T>(
     @SerializedName("page_number")
     val page: Int,
 

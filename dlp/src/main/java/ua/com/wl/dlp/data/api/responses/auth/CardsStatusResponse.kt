@@ -8,6 +8,6 @@ import ua.com.wl.dlp.data.api.responses.models.auth.CardsStatus
  * @author Denis Makovskyi
  */
 
-data class CardsStatusResponse constructor(
+data class CardsStatusResponse(
     @SerializedName(value = "card_status", alternate = ["cards_status"])
     val cardsStatus: CardsStatus)

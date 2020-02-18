@@ -10,7 +10,7 @@ import ua.com.wl.dlp.data.api.responses.models.consumer.history.types.OperationT
  * @author Denis Makovskyi
  */
 
-data class BalanceChange constructor(
+data class BalanceChange(
     @SerializedName("operation_type")
     val type: OperationType,
 

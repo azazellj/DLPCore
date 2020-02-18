@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName
  * @author Denis Makovskyi
  */
 
-open class BaseArticleResponse constructor(
+open class BaseArticleResponse(
     @SerializedName("id")
     var id: Int = 0,
 

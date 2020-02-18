@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName
  * @author Denis Makovskyi
  */
 
-open class BasePreOrderTradeItem constructor(
+open class BasePreOrderTradeItem(
     @SerializedName("count")
     var count: Int = 0,
 
@@ -22,7 +22,3 @@ open class BasePreOrderTradeItem constructor(
         tradeId = init()
     }
 }
-
-fun tradeItem(
-    init: BasePreOrderTradeItem.() -> Unit
-): BasePreOrderTradeItem = BasePreOrderTradeItem().apply(init)

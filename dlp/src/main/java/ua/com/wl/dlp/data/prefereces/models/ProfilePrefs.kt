@@ -9,7 +9,7 @@ import ua.com.wl.dlp.data.api.responses.models.consumer.profile.Gender
  * @author Denis Makovskyi
  */
 
-data class ProfilePrefs constructor(
+data class ProfilePrefs(
     @SerializedName("first_name")
     val firstName: String? = null,
 
@@ -22,23 +22,23 @@ data class ProfilePrefs constructor(
     @SerializedName("gender")
     val gender: Gender? = null,
 
-    @SerializedName("email")
-    val email: String? = null,
-
-    @SerializedName("mobile_phone")
-    val phone: String? = null,
-
-    @SerializedName("address")
-    val address: String? = null,
-
-    @SerializedName("city")
-    val city: City? = null,
-
     @SerializedName("birth_date")
     val birthDate: String? = null,
 
     @SerializedName("is_married")
     val isMarried: Boolean? = null,
+
+    @SerializedName("city")
+    val city: City? = null,
+
+    @SerializedName("address")
+    val address: String? = null,
+
+    @SerializedName("email")
+    val email: String? = null,
+
+    @SerializedName("mobile_phone")
+    val phone: String? = null,
 
     @SerializedName("language")
     val language: String? = null,

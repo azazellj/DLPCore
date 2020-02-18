@@ -9,7 +9,7 @@ import ua.com.wl.dlp.data.api.models.order.PaymentMethod
  * @author Denis Makovskyi
  */
 
-data class PreOrderParams constructor(
+data class PreOrderParams(
     @ColumnInfo(name = "time")
     val time: String? = null,
 

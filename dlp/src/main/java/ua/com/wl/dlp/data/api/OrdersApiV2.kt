@@ -4,9 +4,9 @@ import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.POST
 
-import ua.com.wl.dlp.data.api.requests.orders.order.GeneralPreOrderCreationRequest
+import ua.com.wl.dlp.data.api.requests.orders.order.GeneralPreOrderRequest
 import ua.com.wl.dlp.data.api.responses.CollectionResponse
-import ua.com.wl.dlp.data.api.responses.models.orders.order.GeneralPreOrderItem
+import ua.com.wl.dlp.data.api.responses.models.orders.order.pre_order.GeneralPreOrderItem
 
 /**
  * @author Denis Makovskyi
@@ -15,5 +15,5 @@ import ua.com.wl.dlp.data.api.responses.models.orders.order.GeneralPreOrderItem
 interface OrdersApiV2 {
 
     @POST("api/mobile/v2/basket/")
-    suspend fun createGeneralPreOrder(@Body request: GeneralPreOrderCreationRequest): Response<CollectionResponse<GeneralPreOrderItem>>
+    suspend fun createGeneralPreOrder(@Body request: GeneralPreOrderRequest): Response<CollectionResponse<GeneralPreOrderItem>>
 }

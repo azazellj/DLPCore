@@ -6,7 +6,7 @@ import ua.com.wl.archetype.core.android.bus.BusEvent
  * @author Denis Makovskyi
  */
 
-data class OrderCounterBusEvent constructor(
+data class OrderCounterBusEvent(
     val shopId: Int,
     val offerId: Int,
     val counter: Int = 0
