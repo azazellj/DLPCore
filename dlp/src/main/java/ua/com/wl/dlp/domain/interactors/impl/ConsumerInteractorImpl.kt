@@ -16,6 +16,8 @@ import ua.com.wl.dlp.data.api.responses.PagedResponse
 import ua.com.wl.dlp.data.api.responses.consumer.feedback.FeedbackResponse
 import ua.com.wl.dlp.data.api.responses.consumer.history.TransactionResponse
 import ua.com.wl.dlp.data.api.responses.consumer.profile.ProfileResponse
+import ua.com.wl.dlp.data.api.responses.consumer.ranks.BaseRankResponse
+import ua.com.wl.dlp.data.api.responses.consumer.ranks.RankResponse
 import ua.com.wl.dlp.data.api.responses.consumer.referral.QrCodeResponse
 import ua.com.wl.dlp.data.api.responses.consumer.referral.InvitationResponse
 import ua.com.wl.dlp.data.api.responses.shop.offer.BaseOfferResponse
@@ -74,6 +76,43 @@ class ConsumerInteractorImpl constructor(
                     consumerPreferences.profilePrefs = profileResponse.toPrefs()
                     withContext(Dispatchers.Main.immediate) {
                         notifyProfileChanges(snapshot)
+                    }
+                }
+            }
+    }
+
+    override suspend fun getRanks(language: String): Result<PagedResponse<BaseRankResponse>> {
+        return callApi(call = { apiV1.getRanks(language) })
+            .flatMap { pagedResponseOpt ->
+                pagedResponseOpt.ifPresentOrDefault(
+                    { Result.Success(it) },
+                    { Result.Failure(ApiException()) })
+            }
+    }
+
+    override suspend fun getRank(
+        rankId: Int,
+        language: String
+    ): Result<RankResponse> {
+        return callApi(call = { apiV1.getRank(rankId, language) })
+            .flatMap { responseOpt ->
+                responseOpt.ifPresentOrDefault(
+                    { Result.Success(it) },
+                    { Result.Failure(ApiException()) })
+            }.sOnSuccess { rankResponse ->
+                withContext(Dispatchers.IO) {
+                    val currentRankId = rankResponse.id
+                    val previousRankId = consumerPreferences.rankPrefs.id
+                    consumerPreferences.rankPrefs = consumerPreferences.rankPrefs.copy(
+                        id = currentRankId,
+                        name = rankResponse.name,
+                        hint = rankResponse.description,
+                        iconUrl = rankResponse.iconUrl,
+                        colorHex = rankResponse.colorHex)
+                    if (previousRankId != currentRankId) {
+                        withContext(Dispatchers.Main.immediate) {
+                            CoreBusEventsFactory.rankChanged(currentRankId)
+                        }
                     }
                 }
             }

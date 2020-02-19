@@ -2,6 +2,7 @@ package ua.com.wl.dlp.data.events.factory
 
 import ua.com.wl.archetype.core.android.bus.Bus
 import ua.com.wl.dlp.data.events.prefs.ProfileBusEvent
+import ua.com.wl.dlp.data.events.prefs.RankBusEvent
 import ua.com.wl.dlp.data.events.session.SessionBusEvent
 import ua.com.wl.dlp.data.events.shop.offer.OfferBusEvent
 import ua.com.wl.dlp.data.events.shop.order.OrderCounterBusEvent
@@ -17,6 +18,10 @@ object CoreBusEventsFactory {
 
     internal fun profileChanges(changes: List<ProfileBusEvent.Change>) {
         Bus.send(ProfileBusEvent(changes))
+    }
+
+    internal fun rankChanged(rankId: Int) {
+        Bus.send(RankBusEvent(rankId))
     }
 
     internal fun offerFavouriteStatus(

@@ -8,16 +8,16 @@ import com.google.gson.annotations.SerializedName
 
 data class PagedResponse<T>(
     @SerializedName("page_number")
-    val page: Int,
+    val page: Int?,
 
     @SerializedName(value = "per_page", alternate = ["count"])
-    val count: Int,
+    val count: Int?,
 
     @SerializedName("total_pages_count")
-    val pagesCount: Int,
+    val pagesCount: Int?,
 
     @SerializedName("total_items_count")
-    val itemsCount: Int,
+    val itemsCount: Int?,
 
     @SerializedName("next")
     val nextPage: String?,

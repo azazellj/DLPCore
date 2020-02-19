@@ -1,11 +1,15 @@
 package ua.com.wl.dlp.domain.interactors
 
+import java.util.*
+
 import ua.com.wl.dlp.data.api.requests.consumer.profile.ProfileRequest
 import ua.com.wl.dlp.data.api.requests.consumer.referral.InvitationRequest
 import ua.com.wl.dlp.data.api.responses.PagedResponse
 import ua.com.wl.dlp.data.api.responses.consumer.feedback.FeedbackResponse
 import ua.com.wl.dlp.data.api.responses.consumer.history.TransactionResponse
 import ua.com.wl.dlp.data.api.responses.consumer.profile.ProfileResponse
+import ua.com.wl.dlp.data.api.responses.consumer.ranks.BaseRankResponse
+import ua.com.wl.dlp.data.api.responses.consumer.ranks.RankResponse
 import ua.com.wl.dlp.data.api.responses.consumer.referral.QrCodeResponse
 import ua.com.wl.dlp.data.api.responses.consumer.referral.InvitationResponse
 import ua.com.wl.dlp.data.api.responses.shop.offer.BaseOfferResponse
@@ -20,6 +24,13 @@ interface ConsumerInteractor : OffersInteractor {
     suspend fun getProfile(): Result<ProfileResponse>
 
     suspend fun updateProfile(profile: ProfileRequest): Result<ProfileResponse>
+
+    suspend fun getRanks(language: String = Locale.getDefault().language): Result<PagedResponse<BaseRankResponse>>
+
+    suspend fun getRank(
+        rankId: Int,
+        language: String = Locale.getDefault().language
+    ): Result<RankResponse>
 
     suspend fun getQrCode(): Result<QrCodeResponse>
 

@@ -132,6 +132,7 @@ class AuthInteractorImpl constructor(
         }.sOnEach {
             withContext(Dispatchers.IO) {
                 corePreferences.removeAuthPrefs()
+                consumerPreferences.removeRankPrefs()
                 consumerPreferences.removeProfilePrefs()
             }
             CoreBusEventsFactory.sessionExpired(SessionBusEvent.FallbackType.SIGNED_OUT)
