@@ -1,4 +1,4 @@
-package ua.com.wl.dlp.data.api.responses.models.consumer.rank
+package ua.com.wl.dlp.data.prefereces.models
 
 import com.google.gson.annotations.SerializedName
 
@@ -8,7 +8,23 @@ import ua.com.wl.dlp.data.api.models.consumer.ranks.RankSelectionCriteriaValue
  * @author Denis Makovskyi
  */
 
-data class RankSelectionCriteria(
+data class RankPrefs(
+    @SerializedName("id")
+    val id: Int? = null,
+
+    @SerializedName("name")
+    val name: String? = null,
+
+    @SerializedName("icon_url")
+    val iconUrl: String? = null,
+
+    @SerializedName("color_hex")
+    val colorHex: String? = null,
+
+    @SerializedName("next_rank_criteria")
+    val nextRankCriteria: RankCriteriaPrefs? = null)
+
+data class RankCriteriaPrefs(
     @SerializedName("referral_count")
     val referralCount: RankSelectionCriteriaValue<Int, Int>? = null,
 

@@ -5,8 +5,9 @@ import android.content.Context
 import com.google.gson.Gson
 
 import ua.com.wl.archetype.core.android.preferences.BasePreferences
+
 import ua.com.wl.dlp.data.prefereces.models.ProfilePrefs
-import ua.com.wl.dlp.data.prefereces.models.RanksPrefs
+import ua.com.wl.dlp.data.prefereces.models.RankPrefs
 import ua.com.wl.dlp.utils.isNonNullOrEmpty
 
 /**
@@ -24,16 +25,16 @@ class ConsumerPreferences(
         const val KEY_PROFILE_PREFS = "profile_prefs"
     }
 
-    var rankPrefs: RanksPrefs
+    var rankPrefs: RankPrefs
         set(value) {
             save(KEY_RANK_PREFS, gson.toJson(value))
         }
         get() {
             val json = getString(KEY_RANK_PREFS)
             return if (json.isNonNullOrEmpty()) {
-                gson.fromJson(json, RanksPrefs::class.java)
+                gson.fromJson(json, RankPrefs::class.java)
             } else {
-                RanksPrefs()
+                RankPrefs()
             }
         }
 

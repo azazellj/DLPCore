@@ -27,6 +27,7 @@ import ua.com.wl.dlp.data.events.factory.CoreBusEventsFactory
 import ua.com.wl.dlp.data.events.prefs.ProfileBusEvent
 import ua.com.wl.dlp.data.prefereces.ConsumerPreferences
 import ua.com.wl.dlp.data.prefereces.models.ProfilePrefs
+import ua.com.wl.dlp.data.prefereces.models.RankCriteriaPrefs
 import ua.com.wl.dlp.domain.Result
 import ua.com.wl.dlp.domain.UseCase
 import ua.com.wl.dlp.domain.exeptions.api.ApiException
@@ -93,10 +94,43 @@ class ConsumerInteractorImpl constructor(
     }
 
     override suspend fun getCurrentRank(language: String): Result<Optional<BaseRankResponse>> {
-        return getRanks(language).flatMap { pagedResponse ->
-            val current = pagedResponse.items.find { rank -> rank.isCurrent }
-            Result.Success(Optional.ofNullable(current))
-        }
+        return getRanks(language)
+            .flatMap { pagedResponse ->
+                val currentRank = pagedResponse.items.find { rank -> rank.isCurrent }
+                val currentRankIndex = pagedResponse.items.indexOf(currentRank)
+                val nextRank = if (currentRankIndex > -1) pagedResponse.items[currentRankIndex + 1] else null
+                Result.Success(
+                    (Optional.ofNullable(currentRank) to
+                            Optional.ofNullable(nextRank)))
+            }.sOnSuccess { ranksOptPair ->
+                ranksOptPair.first.sIfPresent { currentRank ->
+                    val nextRank = ranksOptPair.second.getUnsafe()
+                    val nextRankCriteria = RankCriteriaPrefs(
+                        referralCount = nextRank?.selectionCriteria?.referralCount?.copy(),
+                        daysRegistered = nextRank?.selectionCriteria?.daysRegistered?.copy(),
+                        profileDataFilled = nextRank?.selectionCriteria?.profileDataFilled?.copy(),
+                        sharingCount = nextRank?.selectionCriteria?.sharingCount?.copy(),
+                        commentsCount = nextRank?.selectionCriteria?.commentsCount?.copy(),
+                        paymentsCount = nextRank?.selectionCriteria?.paymentsCount?.copy(),
+                        spentMoney = nextRank?.selectionCriteria?.spentMoney?.copy(),
+                        spentBonuses = nextRank?.selectionCriteria?.spentBonuses?.copy(),
+                        collectedBonuses = nextRank?.selectionCriteria?.collectedBonuses?.copy())
+                    withContext(Dispatchers.IO) {
+                        val previousRankId = consumerPreferences.rankPrefs.id
+                        consumerPreferences.rankPrefs = consumerPreferences.rankPrefs.copy(
+                            id = currentRank.id,
+                            name = currentRank.name,
+                            iconUrl = currentRank.iconUrl,
+                            colorHex = currentRank.colorHex,
+                            nextRankCriteria = nextRankCriteria)
+                        if (previousRankId != currentRank.id) {
+                            withContext(Dispatchers.Main.immediate) {
+                                CoreBusEventsFactory.rankChanged(currentRank.id)
+                            }
+                        }
+                    }
+                }
+            }.map { ranksOptPair -> ranksOptPair.first }
     }
 
     override suspend fun getRank(
@@ -108,22 +142,6 @@ class ConsumerInteractorImpl constructor(
                 responseOpt.ifPresentOrDefault(
                     { Result.Success(it) },
                     { Result.Failure(ApiException()) })
-            }.sOnSuccess { rankResponse ->
-                withContext(Dispatchers.IO) {
-                    val currentRankId = rankResponse.id
-                    val previousRankId = consumerPreferences.rankPrefs.id
-                    consumerPreferences.rankPrefs = consumerPreferences.rankPrefs.copy(
-                        id = currentRankId,
-                        name = rankResponse.name,
-                        hint = rankResponse.description,
-                        iconUrl = rankResponse.iconUrl,
-                        colorHex = rankResponse.colorHex)
-                    if (previousRankId != currentRankId) {
-                        withContext(Dispatchers.Main.immediate) {
-                            CoreBusEventsFactory.rankChanged(currentRankId)
-                        }
-                    }
-                }
             }
     }
 
@@ -219,7 +237,8 @@ class ConsumerInteractorImpl constructor(
             message { "$message\n\n${app.getString(R.string.dlp_feedback_callback_prefix)}: $answer" }
             appVersion { "${app.getString(R.string.dlp_feedback_app_version)}$appVersion" }
         }
-        return callApi(call = { apiV1.feedback(request) }).flatMap { responseOpt ->
+        return callApi(call = { apiV1.feedback(request) })
+            .flatMap { responseOpt ->
                 responseOpt.ifPresentOrDefault(
                     { Result.Success(it) },
                     { Result.Failure(ApiException()) })

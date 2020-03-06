@@ -1,7 +1,8 @@
 package ua.com.wl.dlp.domain.interactors
 
-import ua.com.wl.archetype.utils.Optional
 import java.util.*
+
+import ua.com.wl.archetype.utils.Optional
 
 import ua.com.wl.dlp.data.api.requests.consumer.profile.ProfileRequest
 import ua.com.wl.dlp.data.api.requests.consumer.referral.InvitationRequest
