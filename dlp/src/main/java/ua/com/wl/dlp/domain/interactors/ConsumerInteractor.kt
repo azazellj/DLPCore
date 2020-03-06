@@ -1,5 +1,6 @@
 package ua.com.wl.dlp.domain.interactors
 
+import ua.com.wl.archetype.utils.Optional
 import java.util.*
 
 import ua.com.wl.dlp.data.api.requests.consumer.profile.ProfileRequest
@@ -26,6 +27,8 @@ interface ConsumerInteractor : OffersInteractor {
     suspend fun updateProfile(profile: ProfileRequest): Result<ProfileResponse>
 
     suspend fun getRanks(language: String = Locale.getDefault().language): Result<PagedResponse<BaseRankResponse>>
+
+    suspend fun getCurrentRank(language: String = Locale.getDefault().language): Result<Optional<BaseRankResponse>>
 
     suspend fun getRank(
         rankId: Int,

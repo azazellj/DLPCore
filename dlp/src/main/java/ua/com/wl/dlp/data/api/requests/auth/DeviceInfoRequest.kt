@@ -14,7 +14,7 @@ data class DeviceInfoRequest constructor(
     val appVersion: String? = null,
 
     @SerializedName("operation_system")
-    val operationSystem: String? = "Android",
+    val operationSystem: String? = "ANDROID",
 
     @SerializedName("os_version")
     val operationSystemVersion: String? = "SDK level: ${android.os.Build.VERSION.SDK_INT} (${android.os.Build.VERSION.RELEASE})")

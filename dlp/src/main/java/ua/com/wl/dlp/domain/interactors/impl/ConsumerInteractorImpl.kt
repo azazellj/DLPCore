@@ -4,6 +4,8 @@ import kotlinx.coroutines.*
 
 import android.app.Application
 
+import ua.com.wl.archetype.utils.Optional
+
 import ua.com.wl.dlp.R
 import ua.com.wl.dlp.core.Constants
 import ua.com.wl.dlp.data.api.ConsumerApiV1
@@ -88,6 +90,13 @@ class ConsumerInteractorImpl constructor(
                     { Result.Success(it) },
                     { Result.Failure(ApiException()) })
             }
+    }
+
+    override suspend fun getCurrentRank(language: String): Result<Optional<BaseRankResponse>> {
+        return getRanks(language).flatMap { pagedResponse ->
+            val current = pagedResponse.items.find { rank -> rank.isCurrent }
+            Result.Success(Optional.ofNullable(current))
+        }
     }
 
     override suspend fun getRank(

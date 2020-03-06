@@ -34,6 +34,6 @@ data class SignInRequest(
     }
 }
 
-fun signInRequest(init: AuthenticationRequest.Builder.() -> Unit): AuthenticationRequest {
-    return AuthenticationRequest.Builder().build(init)
+fun signInRequest(init: SignInRequest.Builder.() -> Unit): SignInRequest {
+    return SignInRequest.Builder().build(init)
 }

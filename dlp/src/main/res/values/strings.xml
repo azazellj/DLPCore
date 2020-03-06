@@ -1,6 +1,4 @@
 <resources>
-    <string name="app_name">dlp</string>
-
     <string name="dlp_feedback_app_version">Android_app_v</string>
     <string name="dlp_feedback_callback_prefix">I don\'t mind callback</string>
     <string name="dlp_feedback_callback_agree">YES</string>
