@@ -14,7 +14,7 @@ import ua.com.wl.dlp.data.api.responses.models.consumer.history.types.Transactio
 
 data class TransactionDetails(
     @SerializedName("operation_type") 
-    val transactionType: TransactionType,
+    val transactionType: TransactionType?,
     
     @SerializedName("amount") 
     val amount: Int,
