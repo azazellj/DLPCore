@@ -34,6 +34,7 @@ import ua.com.wl.dlp.domain.exeptions.api.ApiException
 import ua.com.wl.dlp.domain.exeptions.api.consumer.referral.ReferralException
 import ua.com.wl.dlp.domain.interactors.ConsumerInteractor
 import ua.com.wl.dlp.domain.interactors.OffersInteractor
+import ua.com.wl.dlp.utils.nge
 import ua.com.wl.dlp.utils.sendBroadcastMessage
 import ua.com.wl.dlp.utils.toPrefs
 
@@ -95,26 +96,28 @@ class ConsumerInteractorImpl constructor(
 
     override suspend fun getCurrentRank(language: String): Result<Optional<BaseRankResponse>> {
         return getRanks(language)
-            .flatMap { pagedResponse ->
-                val currentRank = pagedResponse.items.find { rank -> rank.isCurrent }
-                val currentRankIndex = pagedResponse.items.indexOf(currentRank)
-                val nextRank = if (currentRankIndex > -1) pagedResponse.items[currentRankIndex + 1] else null
+            .flatMap { pager ->
+                val currentRank = pager.items.find { rank -> rank.isCurrent }
+                val nextRankPriority = pager.items.map { rank -> rank.priority }.nge(currentRank?.priority)
+                val nextRank = if (nextRankPriority != null) pager.items.find { rank -> rank.priority == nextRankPriority} else null
                 Result.Success(
                     (Optional.ofNullable(currentRank) to
                             Optional.ofNullable(nextRank)))
             }.sOnSuccess { ranksOptPair ->
                 ranksOptPair.first.sIfPresent { currentRank ->
                     val nextRank = ranksOptPair.second.getUnsafe()
-                    val nextRankCriteria = RankCriteriaPrefs(
-                        referralCount = nextRank?.selectionCriteria?.referralCount?.copy(),
-                        daysRegistered = nextRank?.selectionCriteria?.daysRegistered?.copy(),
-                        profileDataFilled = nextRank?.selectionCriteria?.profileDataFilled?.copy(),
-                        sharingCount = nextRank?.selectionCriteria?.sharingCount?.copy(),
-                        commentsCount = nextRank?.selectionCriteria?.commentsCount?.copy(),
-                        paymentsCount = nextRank?.selectionCriteria?.paymentsCount?.copy(),
-                        spentMoney = nextRank?.selectionCriteria?.spentMoney?.copy(),
-                        spentBonuses = nextRank?.selectionCriteria?.spentBonuses?.copy(),
-                        collectedBonuses = nextRank?.selectionCriteria?.collectedBonuses?.copy())
+                    val nextRankCriteria = if (nextRank != null) {
+                        RankCriteriaPrefs(
+                            referralCount = nextRank.selectionCriteria?.referralCount?.copy(),
+                            daysRegistered = nextRank.selectionCriteria?.daysRegistered?.copy(),
+                            profileDataFilled = nextRank.selectionCriteria?.profileDataFilled?.copy(),
+                            sharingCount = nextRank.selectionCriteria?.sharingCount?.copy(),
+                            commentsCount = nextRank.selectionCriteria?.commentsCount?.copy(),
+                            paymentsCount = nextRank.selectionCriteria?.paymentsCount?.copy(),
+                            spentMoney = nextRank.selectionCriteria?.spentMoney?.copy(),
+                            spentBonuses = nextRank.selectionCriteria?.spentBonuses?.copy(),
+                            collectedBonuses = nextRank.selectionCriteria?.collectedBonuses?.copy())
+                    } else null
                     withContext(Dispatchers.IO) {
                         val previousRankId = consumerPreferences.rankPrefs.id
                         consumerPreferences.rankPrefs = consumerPreferences.rankPrefs.copy(

@@ -37,3 +37,12 @@ internal infix fun String?.mulAsDouble(multiplier: Int): Double = this?.toDouble
 internal fun Data.isEmpty(): Boolean = keyValueMap.isEmpty()
 
 internal fun Request.hasHeader(name: String, value: String): Boolean = header(name)?.let { it -> it.isNotEmpty() && it == value } ?: false
+
+internal fun List<Int>.nge(element: Int?): Int? {
+    this.sorted()
+    val eIndex = this.indexOf(element)
+    if (eIndex in 0 until this.lastIndex) {
+        return this[eIndex] + 1
+    }
+    return null
+}
