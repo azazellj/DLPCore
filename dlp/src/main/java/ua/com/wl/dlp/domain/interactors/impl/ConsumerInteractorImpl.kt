@@ -97,15 +97,17 @@ class ConsumerInteractorImpl constructor(
     override suspend fun getCurrentRank(language: String): Result<Optional<BaseRankResponse>> {
         return getRanks(language)
             .flatMap { pager ->
-                val currentRank = pager.items.find { rank -> rank.isCurrent }
-                val nextRankPriority = pager.items.map { rank -> rank.priority }.nge(currentRank?.priority)
-                val nextRank = if (nextRankPriority != null) pager.items.find { rank -> rank.priority == nextRankPriority} else null
+                val currRank = pager.items.find { rank -> rank.isCurrent }
+                val priority = pager.items.map { rank -> rank.priority }.nge(currRank?.priority)
+                val nextRank = if (priority != null) {
+                    pager.items.find { rank -> rank.priority == priority}
+                } else null
                 Result.Success(
-                    (Optional.ofNullable(currentRank) to
-                            Optional.ofNullable(nextRank)))
-            }.sOnSuccess { ranksOptPair ->
-                ranksOptPair.first.sIfPresent { currentRank ->
-                    val nextRank = ranksOptPair.second.getUnsafe()
+                    Optional.ofNullable(currRank) to
+                            Optional.ofNullable(nextRank))
+            }.sOnSuccess { (currRankOpt, nextRankOpt) ->
+                currRankOpt.sIfPresent { currRank ->
+                    val nextRank = nextRankOpt.getUnsafe()
                     val nextRankCriteria = if (nextRank != null) {
                         RankCriteriaPrefs(
                             referralCount = nextRank.selectionCriteria?.referralCount?.copy(),
@@ -119,21 +121,21 @@ class ConsumerInteractorImpl constructor(
                             collectedBonuses = nextRank.selectionCriteria?.collectedBonuses?.copy())
                     } else null
                     withContext(Dispatchers.IO) {
-                        val previousRankId = consumerPreferences.rankPrefs.id
+                        val prevRankId = consumerPreferences.rankPrefs.id
                         consumerPreferences.rankPrefs = consumerPreferences.rankPrefs.copy(
-                            id = currentRank.id,
-                            name = currentRank.name,
-                            iconUrl = currentRank.iconUrl,
-                            colorHex = currentRank.colorHex,
+                            id = currRank.id,
+                            name = currRank.name,
+                            iconUrl = currRank.iconUrl,
+                            colorHex = currRank.colorHex,
                             nextRankCriteria = nextRankCriteria)
-                        if (previousRankId != currentRank.id) {
+                        if (prevRankId != currRank.id) {
                             withContext(Dispatchers.Main.immediate) {
-                                CoreBusEventsFactory.rankChanged(currentRank.id)
+                                CoreBusEventsFactory.rankChanged(currRank.id)
                             }
                         }
                     }
                 }
-            }.map { ranksOptPair -> ranksOptPair.first }
+            }.map { (currRankOpt, _) -> currRankOpt }
     }
 
     override suspend fun getRank(

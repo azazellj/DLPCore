@@ -2,8 +2,8 @@ package ua.com.wl.dlp.data.api.responses.consumer.profile
 
 import com.google.gson.annotations.SerializedName
 
+import ua.com.wl.dlp.data.api.models.consumer.profile.ProfileOperation
 import ua.com.wl.dlp.data.api.responses.models.auth.City
-import ua.com.wl.dlp.data.api.responses.consumer.history.TransactionResponse
 import ua.com.wl.dlp.data.api.responses.models.consumer.profile.Gender
 
 /**
@@ -69,4 +69,4 @@ data class ProfileResponse(
     val notificationToken: String,
 
     @SerializedName("balance_changes")
-    val transactions: List<TransactionResponse>)
+    val transactions: List<ProfileOperation>)
