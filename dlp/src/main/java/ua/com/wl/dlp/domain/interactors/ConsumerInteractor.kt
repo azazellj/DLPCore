@@ -9,7 +9,6 @@ import ua.com.wl.dlp.data.api.requests.consumer.referral.InvitationRequest
 import ua.com.wl.dlp.data.api.responses.PagedResponse
 import ua.com.wl.dlp.data.api.responses.CollectionResponse
 import ua.com.wl.dlp.data.api.responses.consumer.ranks.RankResponse
-import ua.com.wl.dlp.data.api.responses.consumer.ranks.BaseRankResponse
 import ua.com.wl.dlp.data.api.responses.consumer.groups.GroupResponse
 import ua.com.wl.dlp.data.api.responses.consumer.coupons.CouponResponse
 import ua.com.wl.dlp.data.api.responses.consumer.profile.ProfileResponse
@@ -30,9 +29,9 @@ interface ConsumerInteractor : OffersInteractor {
 
     suspend fun updateProfile(profile: ProfileRequest): Result<ProfileResponse>
 
-    suspend fun getRanks(language: String = Locale.getDefault().language): Result<PagedResponse<BaseRankResponse>>
+    suspend fun getRanks(language: String = Locale.getDefault().language): Result<PagedResponse<RankResponse>>
 
-    suspend fun getCurrentRank(language: String = Locale.getDefault().language): Result<Optional<BaseRankResponse>>
+    suspend fun getCurrentRank(language: String = Locale.getDefault().language): Result<Optional<RankResponse>>
 
     suspend fun getRank(
         rankId: Int,

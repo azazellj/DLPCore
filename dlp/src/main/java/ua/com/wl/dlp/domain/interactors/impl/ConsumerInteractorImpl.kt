@@ -17,7 +17,6 @@ import ua.com.wl.dlp.data.api.requests.consumer.feedback.feedbackRequest
 import ua.com.wl.dlp.data.api.responses.PagedResponse
 import ua.com.wl.dlp.data.api.responses.CollectionResponse
 import ua.com.wl.dlp.data.api.responses.consumer.ranks.RankResponse
-import ua.com.wl.dlp.data.api.responses.consumer.ranks.BaseRankResponse
 import ua.com.wl.dlp.data.api.responses.consumer.groups.GroupResponse
 import ua.com.wl.dlp.data.api.responses.consumer.coupons.CouponResponse
 import ua.com.wl.dlp.data.api.responses.consumer.profile.ProfileResponse
@@ -88,7 +87,7 @@ class ConsumerInteractorImpl(
             }
     }
 
-    override suspend fun getRanks(language: String): Result<PagedResponse<BaseRankResponse>> {
+    override suspend fun getRanks(language: String): Result<PagedResponse<RankResponse>> {
         return callApi(call = { apiV1.getRanks(language) })
             .flatMap { pagedResponseOpt ->
                 pagedResponseOpt.ifPresentOrDefault(
@@ -97,7 +96,7 @@ class ConsumerInteractorImpl(
             }
     }
 
-    override suspend fun getCurrentRank(language: String): Result<Optional<BaseRankResponse>> {
+    override suspend fun getCurrentRank(language: String): Result<Optional<RankResponse>> {
         return getRanks(language)
             .flatMap { pager ->
                 val currRank = pager.items.find { rank -> rank.isCurrent }
