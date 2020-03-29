@@ -10,17 +10,17 @@ import ua.com.wl.dlp.data.api.requests.orders.order.GeneralPreOrderRequest
 import ua.com.wl.dlp.data.api.requests.orders.order.PreOrderRequest
 import ua.com.wl.dlp.data.api.requests.orders.order.RateOrderRequest
 import ua.com.wl.dlp.data.api.requests.orders.table.TableReservationRequest
-import ua.com.wl.dlp.data.api.responses.CollectionResponse
 import ua.com.wl.dlp.data.api.responses.PagedResponse
-import ua.com.wl.dlp.data.api.responses.models.orders.order.pre_order.GeneralPreOrderItem
+import ua.com.wl.dlp.data.api.responses.CollectionResponse
 import ua.com.wl.dlp.data.api.responses.orders.order.*
+import ua.com.wl.dlp.data.api.responses.orders.order.pre_order.PreOrderResponse
 import ua.com.wl.dlp.data.api.responses.orders.order.pre_order.BasePreOrderResponse
 import ua.com.wl.dlp.data.api.responses.orders.order.pre_order.PreOrderCreationResponse
-import ua.com.wl.dlp.data.api.responses.orders.order.pre_order.PreOrderResponse
-import ua.com.wl.dlp.data.api.responses.orders.order.rate.BaseOrderRateResponse
 import ua.com.wl.dlp.data.api.responses.orders.order.rate.OrderRateResponse
-import ua.com.wl.dlp.data.api.responses.orders.table.TableReservationDetailedResponse
+import ua.com.wl.dlp.data.api.responses.orders.order.rate.BaseOrderRateResponse
 import ua.com.wl.dlp.data.api.responses.orders.table.TableReservationItemResponse
+import ua.com.wl.dlp.data.api.responses.orders.table.TableReservationDetailedResponse
+import ua.com.wl.dlp.data.api.responses.models.orders.order.pre_order.GeneralPreOrderItem
 import ua.com.wl.dlp.data.events.factory.CoreBusEventsFactory
 import ua.com.wl.dlp.domain.Result
 import ua.com.wl.dlp.domain.UseCase
@@ -41,20 +41,20 @@ class OrdersInteractorImpl constructor(
     override suspend fun getOrders(
         page: Int?,
         count: Int?
-    ): Result<PagedResponse<OrderSimpleResponse>> {
-        return callApi(call = { apiV1.getOrders(page, count) })
+    ): Result<PagedResponse<BaseOrderResponse>> {
+        return callApi(call = { apiV2.getOrders(page, count) })
             .flatMap { responseOpt ->
                 responseOpt.ifPresentOrDefault(
-                    { Result.Success(it) },
+                    { Result.Success(it.payload) },
                     { Result.Failure(ApiException()) })
             }
     }
 
     override suspend fun getOrder(orderId: Int): Result<OrderResponse> {
-        return callApi(call = { apiV1.getOrder(orderId) })
+        return callApi(call = { apiV2.getOrder(orderId) })
             .flatMap { responseOpt ->
                 responseOpt.ifPresentOrDefault(
-                    { Result.Success(it) },
+                    { Result.Success(it.payload) },
                     { Result.Failure(ApiException()) })
             }
     }

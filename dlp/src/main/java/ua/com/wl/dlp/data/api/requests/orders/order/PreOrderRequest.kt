@@ -2,7 +2,8 @@ package ua.com.wl.dlp.data.api.requests.orders.order
 
 import com.google.gson.annotations.SerializedName
 
-import ua.com.wl.dlp.data.api.models.order.*
+import ua.com.wl.dlp.data.api.models.orders.order.pre_order.PreOrderInfo
+import ua.com.wl.dlp.data.api.models.orders.order.pre_order.BasePreOrderTradeItem
 
 /**
  * @author Denis Makovskyi
@@ -66,7 +67,8 @@ data class PreOrderRequest(
         }
 
         fun tradeItem(init: BasePreOrderTradeItem.() -> Unit) {
-            val tradeItem = BasePreOrderTradeItem().apply(init)
+            val tradeItem = BasePreOrderTradeItem()
+                .apply(init)
             tradeItems.add(tradeItem)
         }
 

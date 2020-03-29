@@ -10,7 +10,7 @@ data class PagedResponse<T>(
     @SerializedName("page_number")
     val page: Int?,
 
-    @SerializedName(value = "per_page", alternate = ["count"])
+    @SerializedName(value = "count", alternate = ["per_page"])
     val count: Int?,
 
     @SerializedName("total_pages_count")

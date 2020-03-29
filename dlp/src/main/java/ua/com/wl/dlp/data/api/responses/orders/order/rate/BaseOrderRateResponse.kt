@@ -1,7 +1,8 @@
 package ua.com.wl.dlp.data.api.responses.orders.order.rate
 
 import com.google.gson.annotations.SerializedName
-import ua.com.wl.dlp.data.api.responses.models.orders.order.Order
+
+import ua.com.wl.dlp.data.api.responses.models.orders.order.rate.Order
 
 /**
  * @author Denis Makovskyi

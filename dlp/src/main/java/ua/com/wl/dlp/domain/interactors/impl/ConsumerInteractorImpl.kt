@@ -11,20 +11,22 @@ import ua.com.wl.dlp.core.Constants
 import ua.com.wl.dlp.data.api.ConsumerApiV1
 import ua.com.wl.dlp.data.api.ConsumerApiV2
 import ua.com.wl.dlp.data.api.errors.ErrorsMapper
-import ua.com.wl.dlp.data.api.requests.consumer.feedback.feedbackRequest
 import ua.com.wl.dlp.data.api.requests.consumer.profile.ProfileRequest
 import ua.com.wl.dlp.data.api.requests.consumer.referral.InvitationRequest
+import ua.com.wl.dlp.data.api.requests.consumer.feedback.feedbackRequest
 import ua.com.wl.dlp.data.api.responses.PagedResponse
-import ua.com.wl.dlp.data.api.responses.consumer.feedback.FeedbackResponse
-import ua.com.wl.dlp.data.api.responses.consumer.history.TransactionResponse
-import ua.com.wl.dlp.data.api.responses.consumer.profile.ProfileResponse
-import ua.com.wl.dlp.data.api.responses.consumer.ranks.BaseRankResponse
+import ua.com.wl.dlp.data.api.responses.CollectionResponse
 import ua.com.wl.dlp.data.api.responses.consumer.ranks.RankResponse
+import ua.com.wl.dlp.data.api.responses.consumer.ranks.BaseRankResponse
+import ua.com.wl.dlp.data.api.responses.consumer.groups.GroupResponse
+import ua.com.wl.dlp.data.api.responses.consumer.profile.ProfileResponse
 import ua.com.wl.dlp.data.api.responses.consumer.referral.QrCodeResponse
 import ua.com.wl.dlp.data.api.responses.consumer.referral.InvitationResponse
+import ua.com.wl.dlp.data.api.responses.consumer.history.TransactionResponse
+import ua.com.wl.dlp.data.api.responses.consumer.feedback.FeedbackResponse
 import ua.com.wl.dlp.data.api.responses.shop.offer.BaseOfferResponse
-import ua.com.wl.dlp.data.events.factory.CoreBusEventsFactory
 import ua.com.wl.dlp.data.events.prefs.ProfileBusEvent
+import ua.com.wl.dlp.data.events.factory.CoreBusEventsFactory
 import ua.com.wl.dlp.data.prefereces.ConsumerPreferences
 import ua.com.wl.dlp.data.prefereces.models.ProfilePrefs
 import ua.com.wl.dlp.data.prefereces.models.RankCriteriaPrefs
@@ -32,11 +34,11 @@ import ua.com.wl.dlp.domain.Result
 import ua.com.wl.dlp.domain.UseCase
 import ua.com.wl.dlp.domain.exeptions.api.ApiException
 import ua.com.wl.dlp.domain.exeptions.api.consumer.referral.ReferralException
-import ua.com.wl.dlp.domain.interactors.ConsumerInteractor
 import ua.com.wl.dlp.domain.interactors.OffersInteractor
+import ua.com.wl.dlp.domain.interactors.ConsumerInteractor
 import ua.com.wl.dlp.utils.nge
-import ua.com.wl.dlp.utils.sendBroadcastMessage
 import ua.com.wl.dlp.utils.toPrefs
+import ua.com.wl.dlp.utils.sendBroadcastMessage
 
 /**
  * @author Denis Makovskyi
@@ -150,6 +152,15 @@ class ConsumerInteractorImpl constructor(
             }
     }
 
+    override suspend fun getGroups(): Result<CollectionResponse<GroupResponse>> {
+        return callApi(call = { apiV2.getGroups() })
+            .flatMap { responseOpt ->
+                responseOpt.ifPresentOrDefault(
+                    { Result.Success(it) },
+                    { Result.Failure(ApiException()) })
+            }
+    }
+
     override suspend fun getQrCode(): Result<QrCodeResponse> {
         return callApi(call = { apiV2.getQrCode() })
             .flatMap { dataResponseOpt ->
@@ -188,35 +199,11 @@ class ConsumerInteractorImpl constructor(
         }
     }
 
-    override suspend fun getPromoOffers(
-        page: Int?,
-        count: Int?
-    ): Result<PagedResponse<BaseOfferResponse>> {
-        return callApi(call = { apiV1.getPromoOffers(page, count) })
-            .flatMap { pagedResponseOpt ->
-                pagedResponseOpt.ifPresentOrDefault(
-                    { Result.Success(it) },
-                    { Result.Failure(ApiException()) })
-            }
-    }
-
-    override suspend fun getNoveltyOffers(
-        page: Int?,
-        count: Int?
-    ): Result<PagedResponse<BaseOfferResponse>> {
-        return callApi(call = { apiV1.getNoveltyOffers(page, count) })
-            .flatMap { pagedResponseOpt ->
-                pagedResponseOpt.ifPresentOrDefault(
-                    { Result.Success(it) },
-                    { Result.Failure(ApiException()) })
-            }
-    }
-
     override suspend fun getTransactionsHistory(
         page: Int?,
         count: Int?
     ): Result<PagedResponse<TransactionResponse>> {
-        return callApi(call = { apiV2.loadTransactionsHistory(page, count) })
+        return callApi(call = { apiV2.getTransactionsHistory(page, count) })
             .flatMap { dataResponseOpt ->
                 dataResponseOpt.ifPresentOrDefault(
                     { Result.Success(it.payload) },
@@ -247,7 +234,31 @@ class ConsumerInteractorImpl constructor(
                 responseOpt.ifPresentOrDefault(
                     { Result.Success(it) },
                     { Result.Failure(ApiException()) })
-        }
+            }
+    }
+
+    override suspend fun getPromoOffers(
+        page: Int?,
+        count: Int?
+    ): Result<PagedResponse<BaseOfferResponse>> {
+        return callApi(call = { apiV1.getPromoOffers(page, count) })
+            .flatMap { pagedResponseOpt ->
+                pagedResponseOpt.ifPresentOrDefault(
+                    { Result.Success(it) },
+                    { Result.Failure(ApiException()) })
+            }
+    }
+
+    override suspend fun getNoveltyOffers(
+        page: Int?,
+        count: Int?
+    ): Result<PagedResponse<BaseOfferResponse>> {
+        return callApi(call = { apiV1.getNoveltyOffers(page, count) })
+            .flatMap { pagedResponseOpt ->
+                pagedResponseOpt.ifPresentOrDefault(
+                    { Result.Success(it) },
+                    { Result.Failure(ApiException()) })
+            }
     }
 
     private fun notifyProfileChanges(snapshot: ProfilePrefs) {

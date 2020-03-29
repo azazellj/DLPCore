@@ -1,9 +1,9 @@
 package ua.com.wl.dlp.data.api
 
 import retrofit2.Response
+import retrofit2.http.POST
 import retrofit2.http.Body
 import retrofit2.http.Headers
-import retrofit2.http.POST
 
 import ua.com.wl.dlp.core.Constants
 import ua.com.wl.dlp.data.api.requests.auth.TokenRequest

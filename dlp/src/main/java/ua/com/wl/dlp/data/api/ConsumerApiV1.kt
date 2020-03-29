@@ -5,9 +5,9 @@ import retrofit2.http.*
 
 import ua.com.wl.dlp.data.api.requests.consumer.feedback.FeedbackRequest
 import ua.com.wl.dlp.data.api.responses.PagedResponse
-import ua.com.wl.dlp.data.api.responses.consumer.feedback.FeedbackResponse
-import ua.com.wl.dlp.data.api.responses.consumer.ranks.BaseRankResponse
 import ua.com.wl.dlp.data.api.responses.consumer.ranks.RankResponse
+import ua.com.wl.dlp.data.api.responses.consumer.ranks.BaseRankResponse
+import ua.com.wl.dlp.data.api.responses.consumer.feedback.FeedbackResponse
 import ua.com.wl.dlp.data.api.responses.shop.offer.BaseOfferResponse
 
 /**
@@ -26,6 +26,9 @@ interface ConsumerApiV1 {
         @Path("locale") locale: String
     ): Response<RankResponse>
 
+    @POST("api/mobile/v1/consumer/feedback/")
+    suspend fun feedback(@Body request: FeedbackRequest): Response<FeedbackResponse>
+
     @GET("api/mobile/v1/consumer/promo-offers/")
     suspend fun getPromoOffers(
         @Query("page") page: Int? = null,
@@ -37,7 +40,4 @@ interface ConsumerApiV1 {
         @Query("page") page: Int? = null,
         @Query("page_size") count: Int? = null
     ): Response<PagedResponse<BaseOfferResponse>>
-
-    @POST("api/mobile/v1/consumer/feedback/")
-    suspend fun feedback(@Body request: FeedbackRequest): Response<FeedbackResponse>
 }

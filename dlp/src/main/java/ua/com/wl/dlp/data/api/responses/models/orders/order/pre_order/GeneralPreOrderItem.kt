@@ -2,9 +2,9 @@ package ua.com.wl.dlp.data.api.responses.models.orders.order.pre_order
 
 import com.google.gson.annotations.SerializedName
 
-import ua.com.wl.dlp.data.api.models.order.BasePreOrderTradeItem
-import ua.com.wl.dlp.data.api.models.order.DeliveryType
-import ua.com.wl.dlp.data.api.models.order.PaymentMethod
+import ua.com.wl.dlp.data.api.models.orders.order.pre_order.DeliveryType
+import ua.com.wl.dlp.data.api.models.orders.order.pre_order.PaymentMethod
+import ua.com.wl.dlp.data.api.models.orders.order.pre_order.BasePreOrderTradeItem
 
 data class GeneralPreOrderItem(
     @SerializedName("shop")

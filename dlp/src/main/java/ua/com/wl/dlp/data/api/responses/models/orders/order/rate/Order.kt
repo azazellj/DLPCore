@@ -1,6 +1,8 @@
-package ua.com.wl.dlp.data.api.responses.models.orders.order
+package ua.com.wl.dlp.data.api.responses.models.orders.order.rate
 
 import com.google.gson.annotations.SerializedName
+
+import ua.com.wl.dlp.data.api.models.shop.SimpleShop
 
 /**
  * @author Denis Makovskyi
@@ -23,4 +25,4 @@ data class Order(
     val priceInBonuses: Long?,
 
     @SerializedName("shop")
-    val shop: OrderShop)
+    val shop: SimpleShop)

@@ -1,4 +1,4 @@
-package ua.com.wl.dlp.data.api.responses.models.orders.order
+package ua.com.wl.dlp.data.api.models.shop
 
 import com.google.gson.annotations.SerializedName
 
@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName
  * @author Denis Makovskyi
  */
 
-data class OrderShopCity(
+data class SimpleShopCity(
     @SerializedName("id")
     val id: Int,
 

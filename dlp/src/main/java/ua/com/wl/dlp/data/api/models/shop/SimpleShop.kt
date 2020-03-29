@@ -1,4 +1,4 @@
-package ua.com.wl.dlp.data.api.responses.models.orders.order
+package ua.com.wl.dlp.data.api.models.shop
 
 import com.google.gson.annotations.SerializedName
 
@@ -6,10 +6,10 @@ import com.google.gson.annotations.SerializedName
  * @author Denis Makovskyi
  */
 
-data class OrderShop(
+data class SimpleShop(
     @SerializedName("name")
     val name: String,
 
     @SerializedName("city")
-    val city: OrderShopCity
-): BaseOrderShop()
+    val city: SimpleShopCity
+): BaseSimpleShop()

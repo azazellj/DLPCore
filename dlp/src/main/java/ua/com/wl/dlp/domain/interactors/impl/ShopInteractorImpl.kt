@@ -4,30 +4,31 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 import ua.com.wl.archetype.utils.Optional
+
 import ua.com.wl.dlp.data.api.ShopApiV1
 import ua.com.wl.dlp.data.api.ShopApiV2
 import ua.com.wl.dlp.data.api.errors.ErrorsMapper
-import ua.com.wl.dlp.data.api.responses.CollectionResponse
 import ua.com.wl.dlp.data.api.responses.PagedResponse
-import ua.com.wl.dlp.data.api.responses.shop.CityShopsResponse
+import ua.com.wl.dlp.data.api.responses.CollectionResponse
 import ua.com.wl.dlp.data.api.responses.shop.ShopResponse
-import ua.com.wl.dlp.data.api.responses.shop.offer.BaseOfferResponse
+import ua.com.wl.dlp.data.api.responses.shop.CityShopsResponse
 import ua.com.wl.dlp.data.api.responses.shop.rubric.RubricResponse
+import ua.com.wl.dlp.data.api.responses.shop.offer.BaseOfferResponse
 import ua.com.wl.dlp.data.db.DbErrorKeys
-import ua.com.wl.dlp.data.db.datasources.ShopsDataSource
-import ua.com.wl.dlp.data.db.entities.shops.OfferEntity
 import ua.com.wl.dlp.data.db.entities.shops.ShopEntity
+import ua.com.wl.dlp.data.db.entities.shops.OfferEntity
+import ua.com.wl.dlp.data.db.datasources.ShopsDataSource
 import ua.com.wl.dlp.data.events.factory.CoreBusEventsFactory
 import ua.com.wl.dlp.domain.Result
 import ua.com.wl.dlp.domain.UseCase
 import ua.com.wl.dlp.domain.exeptions.api.ApiException
-import ua.com.wl.dlp.domain.exeptions.db.DatabaseException
 import ua.com.wl.dlp.domain.exeptions.db.DbQueryException
-import ua.com.wl.dlp.domain.interactors.OffersInteractor
+import ua.com.wl.dlp.domain.exeptions.db.DatabaseException
 import ua.com.wl.dlp.domain.interactors.ShopInteractor
+import ua.com.wl.dlp.domain.interactors.OffersInteractor
+import ua.com.wl.dlp.utils.toOfferEntity
 import ua.com.wl.dlp.utils.calculatePersistedOffersCount
 import ua.com.wl.dlp.utils.calculatePersistedOffersPrice
-import ua.com.wl.dlp.utils.toOfferEntity
 
 /**
  * @author Denis Makovskyi

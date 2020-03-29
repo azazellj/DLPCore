@@ -1,4 +1,4 @@
-package ua.com.wl.dlp.data.api.models.order
+package ua.com.wl.dlp.data.api.models.orders.order.pre_order
 
 import com.google.gson.annotations.SerializedName
 
@@ -45,11 +45,14 @@ data class PreOrderInfo(
         private var intercomCode: String? = null
         private var floorNumber: Int? = null
         private var officeNumber: String? = null
-        private var deliveryType: DeliveryType = DeliveryType.DELIVERY
+        private var deliveryType: DeliveryType =
+            DeliveryType.DELIVERY
         private var personsQuantity: Int = 1
         private var paymentBanknote: String? = null
-        private var paymentMethod: PaymentMethod = PaymentMethod.CASH
-        private var operatorCall: OperatorCall = OperatorCall.WAITING
+        private var paymentMethod: PaymentMethod =
+            PaymentMethod.CASH
+        private var operatorCall: OperatorCall =
+            OperatorCall.WAITING
 
         fun streetName(init: () -> String?) {
             streetName = init() ?: return
@@ -100,7 +103,8 @@ data class PreOrderInfo(
             return PreOrderInfo(
                 streetName, houseNumber, houseEntrance,
                 intercomCode, floorNumber, officeNumber,
-                deliveryType, personsQuantity, paymentBanknote, paymentMethod, operatorCall)
+                deliveryType, personsQuantity, paymentBanknote, paymentMethod, operatorCall
+            )
         }
     }
 }

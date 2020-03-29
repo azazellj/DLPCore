@@ -2,21 +2,20 @@ package ua.com.wl.dlp.data.api.responses.orders.order
 
 import com.google.gson.annotations.SerializedName
 
-import ua.com.wl.dlp.data.api.responses.models.orders.order.BaseOrderShop
-import ua.com.wl.dlp.data.api.responses.models.orders.order.ConsumerOrder
-import ua.com.wl.dlp.data.api.responses.models.orders.order.OrderTradeItem
+import ua.com.wl.dlp.data.api.responses.models.orders.order.trading.OrderReceipt
+import ua.com.wl.dlp.data.api.responses.models.orders.order.trading.OrderStaffMember
 
 /**
  * @author Denis Makovskyi
  */
 
 data class OrderResponse(
-    @SerializedName("shop")
-    val shop: BaseOrderShop,
+    @SerializedName("comment")
+    val comment: String,
 
-    @SerializedName("rs_order")
-    val consumerOrder: ConsumerOrder?,
+    @SerializedName("receipt")
+    val receipt: OrderReceipt,
 
-    @SerializedName("order_trade_items")
-    val tradeItems: List<OrderTradeItem>
+    @SerializedName("staff_member")
+    val staffMember: OrderStaffMember?
 ): BaseOrderResponse()

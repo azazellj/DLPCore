@@ -2,11 +2,11 @@ package ua.com.wl.dlp.domain.interactors
 
 import ua.com.wl.dlp.data.api.requests.auth.*
 import ua.com.wl.dlp.data.api.responses.PagedResponse
+import ua.com.wl.dlp.data.api.responses.auth.SignResponse
 import ua.com.wl.dlp.data.api.responses.auth.TokenResponse
 import ua.com.wl.dlp.data.api.responses.auth.AuthenticationResponse
-import ua.com.wl.dlp.data.api.responses.auth.SignResponse
-import ua.com.wl.dlp.data.api.responses.models.auth.CardsStatus
 import ua.com.wl.dlp.data.api.responses.models.auth.City
+import ua.com.wl.dlp.data.api.responses.models.auth.CardsStatus
 import ua.com.wl.dlp.domain.Result
 
 /**

@@ -24,15 +24,6 @@ import ua.com.wl.dlp.data.api.responses.orders.table.TableReservationItemRespons
 @Deprecated(message = "Needs further refactoring for api/mobile/v2")
 interface OrdersApiV1 {
 
-    @GET("api/mobile/v1/consumer/orders/")
-    suspend fun getOrders(
-        @Query("page") page: Int? = null,
-        @Query("page_size") count: Int? = null
-    ): Response<PagedResponse<OrderSimpleResponse>>
-
-    @GET("api/mobile/v1/consumer/orders/{order_id}/")
-    suspend fun getOrder(@Path("order_id") orderId: Int): Response<OrderResponse>
-
     @PATCH("api/mobile/v1/consumer/order-rates/{order_id}/")
     suspend fun rateOrder(
         @Path("order_id") orderId: Int,

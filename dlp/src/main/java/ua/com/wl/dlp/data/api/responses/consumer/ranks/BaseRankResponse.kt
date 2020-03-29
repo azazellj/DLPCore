@@ -15,6 +15,9 @@ open class BaseRankResponse(
     @SerializedName("name")
     var name: String = "",
 
+    @SerializedName("description")
+    var description: String = "",
+
     @SerializedName("thumb_icon")
     var iconUrl: String = "",
 
@@ -24,8 +27,14 @@ open class BaseRankResponse(
     @SerializedName("rank_priority_number")
     var priority: Int = 0,
 
+    @SerializedName("is_next_rank")
+    var isNext: Boolean = false,
+
     @SerializedName("is_current_rank")
     var isCurrent: Boolean = true,
+
+    @SerializedName("is_previous_rank")
+    var isPrevious: Boolean = false,
 
     @SerializedName("selection_criteria")
     var selectionCriteria: RankSelectionCriteria? = null)

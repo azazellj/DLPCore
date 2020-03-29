@@ -7,8 +7,10 @@ import ua.com.wl.dlp.data.api.requests.consumer.profile.ProfileRequest
 import ua.com.wl.dlp.data.api.requests.consumer.referral.InvitationRequest
 import ua.com.wl.dlp.data.api.responses.DataResponse
 import ua.com.wl.dlp.data.api.responses.PagedResponse
-import ua.com.wl.dlp.data.api.responses.consumer.history.TransactionResponse
+import ua.com.wl.dlp.data.api.responses.CollectionResponse
+import ua.com.wl.dlp.data.api.responses.consumer.groups.GroupResponse
 import ua.com.wl.dlp.data.api.responses.consumer.profile.ProfileResponse
+import ua.com.wl.dlp.data.api.responses.consumer.history.TransactionResponse
 import ua.com.wl.dlp.data.api.responses.consumer.referral.QrCodeResponse
 import ua.com.wl.dlp.data.api.responses.consumer.referral.InvitationResponse
 
@@ -24,6 +26,9 @@ interface ConsumerApiV2 {
     @PATCH("api/mobile/v2/consumer/profile/")
     suspend fun updateProfile(@Body request: ProfileRequest): Response<DataResponse<ProfileResponse>>
 
+    @GET("api/mobile/v2/consumer/group/")
+    suspend fun getGroups(): Response<CollectionResponse<GroupResponse>>
+
     @GET("api/mobile/v2/consumer/qr-code/")
     suspend fun getQrCode(): Response<DataResponse<QrCodeResponse>>
 
@@ -31,7 +36,7 @@ interface ConsumerApiV2 {
     suspend fun useInviteCode(@Body request: InvitationRequest): Response<DataResponse<InvitationResponse>>
 
     @GET("api/mobile/v2/consumer/balance/history/")
-    suspend fun loadTransactionsHistory(
+    suspend fun getTransactionsHistory(
         @Query("page") page: Int? = null,
         @Query("page_size") count: Int? = null
     ): Response<DataResponse<PagedResponse<TransactionResponse>>>
