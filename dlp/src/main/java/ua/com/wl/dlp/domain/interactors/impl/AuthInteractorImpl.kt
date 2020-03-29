@@ -27,7 +27,7 @@ import ua.com.wl.dlp.domain.interactors.AuthInteractor
  * @author Denis Makovskyi
  */
 
-class AuthInteractorImpl constructor(
+class AuthInteractorImpl(
     errorsMapper: ErrorsMapper,
     private val apiV1: AuthApiV1,
     private val apiV2: AuthApiV2,

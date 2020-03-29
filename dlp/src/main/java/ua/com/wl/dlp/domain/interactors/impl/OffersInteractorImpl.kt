@@ -23,7 +23,7 @@ import ua.com.wl.dlp.utils.processBalanceChanges
  * @author Denis Makovskyi
  */
 
-class OffersInteractorImpl constructor(
+class OffersInteractorImpl(
     errorsMapper: ErrorsMapper,
     private val app: Application,
     private val apiV1: OffersApiV1,

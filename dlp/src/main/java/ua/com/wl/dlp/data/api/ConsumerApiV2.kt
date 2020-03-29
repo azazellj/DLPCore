@@ -9,10 +9,11 @@ import ua.com.wl.dlp.data.api.responses.DataResponse
 import ua.com.wl.dlp.data.api.responses.PagedResponse
 import ua.com.wl.dlp.data.api.responses.CollectionResponse
 import ua.com.wl.dlp.data.api.responses.consumer.groups.GroupResponse
+import ua.com.wl.dlp.data.api.responses.consumer.coupons.CouponResponse
 import ua.com.wl.dlp.data.api.responses.consumer.profile.ProfileResponse
-import ua.com.wl.dlp.data.api.responses.consumer.history.TransactionResponse
 import ua.com.wl.dlp.data.api.responses.consumer.referral.QrCodeResponse
 import ua.com.wl.dlp.data.api.responses.consumer.referral.InvitationResponse
+import ua.com.wl.dlp.data.api.responses.consumer.history.TransactionResponse
 
 /**
  * @author Denis Makovskyi
@@ -28,6 +29,12 @@ interface ConsumerApiV2 {
 
     @GET("api/mobile/v2/consumer/group/")
     suspend fun getGroups(): Response<CollectionResponse<GroupResponse>>
+
+    @GET("api/mobile/v2/coupon/")
+    suspend fun getCoupons(): Response<CollectionResponse<CouponResponse>>
+
+    @GET("api/mobile/v2/coupon/{coupon_id}/")
+    suspend fun getCoupon(@Path("coupon_id") id: Int): Response<DataResponse<CouponResponse>>
 
     @GET("api/mobile/v2/consumer/qr-code/")
     suspend fun getQrCode(): Response<DataResponse<QrCodeResponse>>

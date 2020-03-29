@@ -34,7 +34,7 @@ import ua.com.wl.dlp.utils.calculatePersistedOffersPrice
  * @author Denis Makovskyi
  */
 
-class ShopInteractorImpl constructor(
+class ShopInteractorImpl(
     errorsMapper: ErrorsMapper,
     private val apiV1: ShopApiV1,
     private val apiV2: ShopApiV2,

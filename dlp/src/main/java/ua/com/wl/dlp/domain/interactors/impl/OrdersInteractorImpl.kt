@@ -32,7 +32,7 @@ import ua.com.wl.dlp.domain.interactors.OrdersInteractor
  * @author Denis Makovskyi
  */
 
-class OrdersInteractorImpl constructor(
+class OrdersInteractorImpl(
     errorsMapper: ErrorsMapper,
     private val apiV1: OrdersApiV1,
     private val apiV2: OrdersApiV2

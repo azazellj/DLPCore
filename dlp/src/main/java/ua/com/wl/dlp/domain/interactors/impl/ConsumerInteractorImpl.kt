@@ -19,6 +19,7 @@ import ua.com.wl.dlp.data.api.responses.CollectionResponse
 import ua.com.wl.dlp.data.api.responses.consumer.ranks.RankResponse
 import ua.com.wl.dlp.data.api.responses.consumer.ranks.BaseRankResponse
 import ua.com.wl.dlp.data.api.responses.consumer.groups.GroupResponse
+import ua.com.wl.dlp.data.api.responses.consumer.coupons.CouponResponse
 import ua.com.wl.dlp.data.api.responses.consumer.profile.ProfileResponse
 import ua.com.wl.dlp.data.api.responses.consumer.referral.QrCodeResponse
 import ua.com.wl.dlp.data.api.responses.consumer.referral.InvitationResponse
@@ -44,7 +45,7 @@ import ua.com.wl.dlp.utils.sendBroadcastMessage
  * @author Denis Makovskyi
  */
 
-class ConsumerInteractorImpl constructor(
+class ConsumerInteractorImpl(
     errorsMapper: ErrorsMapper,
     private val app: Application,
     private val apiV1: ConsumerApiV1,
@@ -157,6 +158,24 @@ class ConsumerInteractorImpl constructor(
             .flatMap { responseOpt ->
                 responseOpt.ifPresentOrDefault(
                     { Result.Success(it) },
+                    { Result.Failure(ApiException()) })
+            }
+    }
+
+    override suspend fun getCoupons(): Result<CollectionResponse<CouponResponse>> {
+        return callApi(call = { apiV2.getCoupons() })
+            .flatMap { responseOpt ->
+                responseOpt.ifPresentOrDefault(
+                    { Result.Success(it) },
+                    { Result.Failure(ApiException()) })
+            }
+    }
+
+    override suspend fun getCoupon(id: Int): Result<CouponResponse> {
+        return callApi(call = { apiV2.getCoupon(id) })
+            .flatMap { dataResponseOpt ->
+                dataResponseOpt.ifPresentOrDefault(
+                    { Result.Success(it.payload) },
                     { Result.Failure(ApiException()) })
             }
     }

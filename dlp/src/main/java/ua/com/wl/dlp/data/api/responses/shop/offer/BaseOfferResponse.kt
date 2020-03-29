@@ -40,11 +40,11 @@ open class BaseOfferResponse(
     @SerializedName("hide_price")
     var isPriceHidden: Boolean = false,
 
-    @SerializedName("price_in_uah")
-    var priceInCurrency: String? = null,
-
     @SerializedName("price_in_bonuses")
     var priceInBonuses: Long? = null,
+
+    @SerializedName("price_in_uah")
+    var priceInCurrency: String? = null,
 
     @SerializedName("cash_back_percentage")
     var cashBackPercentage: Int? = null,
