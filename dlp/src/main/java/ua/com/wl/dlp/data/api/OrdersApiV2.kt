@@ -17,7 +17,7 @@ import ua.com.wl.dlp.data.api.responses.models.orders.order.pre_order.GeneralPre
 
 interface OrdersApiV2 {
 
-    @GET("api/mobile/v2/orders/")
+    @GET("api/mobile/v2/order/")
     suspend fun getOrders(
         @Query("page") page: Int? = null,
         @Query("page_size") count: Int? = null
