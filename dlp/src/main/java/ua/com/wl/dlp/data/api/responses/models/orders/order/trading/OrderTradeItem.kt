@@ -16,7 +16,7 @@ data class OrderTradeItem(
     @SerializedName("price_in_bonuses")
     val priceInBonuses: Long?,
 
-    @SerializedName("price_in_money")
+    @SerializedName("products_qty_in_money")
     val productsQtyInMoney: String?,
 
     @SerializedName("products_qty_in_bonuses")

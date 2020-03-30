@@ -17,5 +17,4 @@ data class OrderItem(
     val totalPrice: String,
 
     @SerializedName("product")
-    val product: OrderProduct
-)
+    val product: OrderProduct)
