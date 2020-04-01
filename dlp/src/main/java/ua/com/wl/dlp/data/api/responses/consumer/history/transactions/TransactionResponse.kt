@@ -1,9 +1,9 @@
-package ua.com.wl.dlp.data.api.responses.consumer.history
+package ua.com.wl.dlp.data.api.responses.consumer.history.transactions
 
 import com.google.gson.annotations.SerializedName
 
-import ua.com.wl.dlp.data.api.responses.models.consumer.history.types.AccountingType
-import ua.com.wl.dlp.data.api.responses.models.consumer.history.TransactionDetails
+import ua.com.wl.dlp.data.api.responses.models.consumer.history.transactions.TransactionDetails
+import ua.com.wl.dlp.data.api.responses.models.consumer.history.transactions.types.AccountingType
 
 /**
  * @author Denis Makovskyi
@@ -29,4 +29,5 @@ data class TransactionResponse(
     val createdAt: String,
 
     @SerializedName("detail")
-    val details: TransactionDetails)
+    val details: TransactionDetails
+)

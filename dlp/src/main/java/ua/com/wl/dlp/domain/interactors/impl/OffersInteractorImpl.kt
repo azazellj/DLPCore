@@ -9,7 +9,7 @@ import ua.com.wl.dlp.core.Constants
 import ua.com.wl.dlp.data.api.OffersApiV1
 import ua.com.wl.dlp.data.api.errors.ErrorsMapper
 import ua.com.wl.dlp.data.api.responses.shop.offer.OfferResponse
-import ua.com.wl.dlp.data.api.responses.consumer.history.BalanceChangeResponse
+import ua.com.wl.dlp.data.api.responses.consumer.history.transactions.BalanceChangeResponse
 import ua.com.wl.dlp.data.prefereces.ConsumerPreferences
 import ua.com.wl.dlp.data.events.factory.CoreBusEventsFactory
 import ua.com.wl.dlp.domain.Result

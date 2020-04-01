@@ -13,7 +13,8 @@ import ua.com.wl.dlp.data.api.responses.consumer.coupons.CouponResponse
 import ua.com.wl.dlp.data.api.responses.consumer.profile.ProfileResponse
 import ua.com.wl.dlp.data.api.responses.consumer.referral.QrCodeResponse
 import ua.com.wl.dlp.data.api.responses.consumer.referral.InvitationResponse
-import ua.com.wl.dlp.data.api.responses.consumer.history.TransactionResponse
+import ua.com.wl.dlp.data.api.responses.consumer.history.transactions.TransactionResponse
+import ua.com.wl.dlp.data.api.responses.consumer.history.notifications.NotificationsResponse
 
 /**
  * @author Denis Makovskyi
@@ -50,4 +51,10 @@ interface ConsumerApiV2 {
         @Query("page") page: Int? = null,
         @Query("page_size") count: Int? = null
     ): Response<DataResponse<PagedResponse<TransactionResponse>>>
+
+    @GET("api/mobile/v2/notification/")
+    suspend fun getNotificationsHistory(
+        @Query("page") page: Int? = null,
+        @Query("page_size") count: Int? = null
+    ): Response<DataResponse<NotificationsResponse>>
 }

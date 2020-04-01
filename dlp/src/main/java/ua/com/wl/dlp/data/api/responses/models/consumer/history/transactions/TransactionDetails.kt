@@ -1,12 +1,12 @@
-package ua.com.wl.dlp.data.api.responses.models.consumer.history
+package ua.com.wl.dlp.data.api.responses.models.consumer.history.transactions
 
 import com.google.gson.annotations.SerializedName
 
-import ua.com.wl.dlp.data.api.responses.models.consumer.history.endpoints.ArticleTransactionDetails
-import ua.com.wl.dlp.data.api.responses.models.consumer.history.endpoints.OfferTransactionDetails
-import ua.com.wl.dlp.data.api.responses.models.consumer.history.endpoints.OrderTransactionDetails
-import ua.com.wl.dlp.data.api.responses.models.consumer.history.endpoints.ShopTransactionsDetails
-import ua.com.wl.dlp.data.api.responses.models.consumer.history.types.TransactionType
+import ua.com.wl.dlp.data.api.responses.models.consumer.history.transactions.types.TransactionType
+import ua.com.wl.dlp.data.api.responses.models.consumer.history.transactions.endpoints.ShopTransactionsDetails
+import ua.com.wl.dlp.data.api.responses.models.consumer.history.transactions.endpoints.OfferTransactionDetails
+import ua.com.wl.dlp.data.api.responses.models.consumer.history.transactions.endpoints.OrderTransactionDetails
+import ua.com.wl.dlp.data.api.responses.models.consumer.history.transactions.endpoints.ArticleTransactionDetails
 
 /**
  * @author Denis Makovskyi

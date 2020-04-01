@@ -7,7 +7,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 
-import ua.com.wl.dlp.data.api.responses.models.consumer.history.BalanceChange
+import ua.com.wl.dlp.data.api.responses.models.consumer.history.transactions.BalanceChange
 import ua.com.wl.dlp.data.api.responses.models.shop.offer.promo.PromoType
 import ua.com.wl.dlp.data.db.entities.shops.OfferEntity
 import ua.com.wl.dlp.data.events.prefs.ProfileBusEvent

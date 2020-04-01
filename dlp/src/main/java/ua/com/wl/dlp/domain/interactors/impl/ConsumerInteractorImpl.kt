@@ -16,15 +16,16 @@ import ua.com.wl.dlp.data.api.requests.consumer.referral.InvitationRequest
 import ua.com.wl.dlp.data.api.requests.consumer.feedback.feedbackRequest
 import ua.com.wl.dlp.data.api.responses.PagedResponse
 import ua.com.wl.dlp.data.api.responses.CollectionResponse
+import ua.com.wl.dlp.data.api.responses.shop.offer.BaseOfferResponse
 import ua.com.wl.dlp.data.api.responses.consumer.ranks.RankResponse
 import ua.com.wl.dlp.data.api.responses.consumer.groups.GroupResponse
 import ua.com.wl.dlp.data.api.responses.consumer.coupons.CouponResponse
 import ua.com.wl.dlp.data.api.responses.consumer.profile.ProfileResponse
 import ua.com.wl.dlp.data.api.responses.consumer.referral.QrCodeResponse
 import ua.com.wl.dlp.data.api.responses.consumer.referral.InvitationResponse
-import ua.com.wl.dlp.data.api.responses.consumer.history.TransactionResponse
 import ua.com.wl.dlp.data.api.responses.consumer.feedback.FeedbackResponse
-import ua.com.wl.dlp.data.api.responses.shop.offer.BaseOfferResponse
+import ua.com.wl.dlp.data.api.responses.consumer.history.transactions.TransactionResponse
+import ua.com.wl.dlp.data.api.responses.consumer.history.notifications.NotificationsResponse
 import ua.com.wl.dlp.data.events.prefs.ProfileBusEvent
 import ua.com.wl.dlp.data.events.factory.CoreBusEventsFactory
 import ua.com.wl.dlp.data.prefereces.ConsumerPreferences
@@ -257,6 +258,18 @@ class ConsumerInteractorImpl(
         count: Int?
     ): Result<PagedResponse<TransactionResponse>> {
         return callApi(call = { apiV2.getTransactionsHistory(page, count) })
+            .flatMap { dataResponseOpt ->
+                dataResponseOpt.ifPresentOrDefault(
+                    { Result.Success(it.payload) },
+                    { Result.Failure(ApiException()) })
+            }
+    }
+
+    override suspend fun getNotificationsHistory(
+        page: Int?,
+        count: Int?
+    ): Result<NotificationsResponse> {
+        return callApi(call = { apiV2.getNotificationsHistory(page, count) })
             .flatMap { dataResponseOpt ->
                 dataResponseOpt.ifPresentOrDefault(
                     { Result.Success(it.payload) },

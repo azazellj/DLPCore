@@ -1,4 +1,4 @@
-package ua.com.wl.dlp.data.api.responses.models.consumer.history.endpoints
+package ua.com.wl.dlp.data.api.responses.models.consumer.history.transactions.endpoints
 
 import com.google.gson.annotations.SerializedName
 

@@ -8,15 +8,16 @@ import ua.com.wl.dlp.data.api.requests.consumer.profile.ProfileRequest
 import ua.com.wl.dlp.data.api.requests.consumer.referral.InvitationRequest
 import ua.com.wl.dlp.data.api.responses.PagedResponse
 import ua.com.wl.dlp.data.api.responses.CollectionResponse
+import ua.com.wl.dlp.data.api.responses.shop.offer.BaseOfferResponse
 import ua.com.wl.dlp.data.api.responses.consumer.ranks.RankResponse
 import ua.com.wl.dlp.data.api.responses.consumer.groups.GroupResponse
 import ua.com.wl.dlp.data.api.responses.consumer.coupons.CouponResponse
 import ua.com.wl.dlp.data.api.responses.consumer.profile.ProfileResponse
 import ua.com.wl.dlp.data.api.responses.consumer.referral.QrCodeResponse
 import ua.com.wl.dlp.data.api.responses.consumer.referral.InvitationResponse
-import ua.com.wl.dlp.data.api.responses.consumer.history.TransactionResponse
 import ua.com.wl.dlp.data.api.responses.consumer.feedback.FeedbackResponse
-import ua.com.wl.dlp.data.api.responses.shop.offer.BaseOfferResponse
+import ua.com.wl.dlp.data.api.responses.consumer.history.transactions.TransactionResponse
+import ua.com.wl.dlp.data.api.responses.consumer.history.notifications.NotificationsResponse
 import ua.com.wl.dlp.domain.Result
 
 /**
@@ -60,6 +61,11 @@ interface ConsumerInteractor : OffersInteractor {
         page: Int? = null,
         count: Int? = null
     ): Result<PagedResponse<TransactionResponse>>
+
+    suspend fun getNotificationsHistory(
+        page: Int? = null,
+        count: Int? = null
+    ): Result<NotificationsResponse>
 
     suspend fun getPromoOffers(
         page: Int? = null, 

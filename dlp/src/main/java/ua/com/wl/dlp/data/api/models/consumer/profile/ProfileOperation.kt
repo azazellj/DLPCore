@@ -2,8 +2,8 @@ package ua.com.wl.dlp.data.api.models.consumer.profile
 
 import com.google.gson.annotations.SerializedName
 
-import ua.com.wl.dlp.data.api.responses.models.consumer.history.types.AccountingType
-import ua.com.wl.dlp.data.api.responses.models.consumer.history.types.TransactionType
+import ua.com.wl.dlp.data.api.responses.models.consumer.history.transactions.types.AccountingType
+import ua.com.wl.dlp.data.api.responses.models.consumer.history.transactions.types.TransactionType
 
 /**
  * @author Denis Makovskyi
