@@ -167,8 +167,11 @@ class ConsumerInteractorImpl(
             }
     }
 
-    override suspend fun getCoupons(): Result<PagedResponse<CouponResponse>> {
-        return callApi(call = { apiV2.getCoupons() })
+    override suspend fun getCoupons(
+        page: Int? = null,
+        count: Int? = null
+    ): Result<PagedResponse<CouponResponse>> {
+        return callApi(call = { apiV2.getCoupons(page, count) })
             .flatMap { responseOpt ->
                 responseOpt.ifPresentOrDefault(
                     { Result.Success(it.payload) },

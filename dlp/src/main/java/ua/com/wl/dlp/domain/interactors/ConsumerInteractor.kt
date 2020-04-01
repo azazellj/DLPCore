@@ -37,7 +37,10 @@ interface ConsumerInteractor : OffersInteractor {
 
     suspend fun getGroups(): Result<CollectionResponse<GroupResponse>>
 
-    suspend fun getCoupons(): Result<PagedResponse<CouponResponse>>
+    suspend fun getCoupons(
+        page: Int? = null,
+        count: Int? = null
+    ): Result<PagedResponse<CouponResponse>>
 
     suspend fun getCoupon(id: Int): Result<CouponResponse>
 

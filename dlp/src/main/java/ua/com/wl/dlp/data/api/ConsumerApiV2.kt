@@ -31,7 +31,10 @@ interface ConsumerApiV2 {
     suspend fun getGroups(): Response<CollectionResponse<GroupResponse>>
 
     @GET("api/mobile/v2/coupon/")
-    suspend fun getCoupons(): Response<DataResponse<PagedResponse<CouponResponse>>>
+    suspend fun getCoupons(
+        @Query("page") page: Int? = null,
+        @Query("page_size") count: Int? = null
+    ): Response<DataResponse<PagedResponse<CouponResponse>>>
 
     @GET("api/mobile/v2/coupon/{coupon_id}/")
     suspend fun getCoupon(@Path("coupon_id") id: Int): Response<DataResponse<CouponResponse>>
