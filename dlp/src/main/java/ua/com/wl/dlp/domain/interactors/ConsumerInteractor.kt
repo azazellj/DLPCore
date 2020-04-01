@@ -33,25 +33,17 @@ interface ConsumerInteractor : OffersInteractor {
 
     suspend fun getCurrentRank(language: String = Locale.getDefault().language): Result<Optional<RankResponse>>
 
-    suspend fun getRank(
-        rankId: Int,
-        language: String = Locale.getDefault().language
-    ): Result<RankResponse>
+    suspend fun getRank(rankId: Int, language: String = Locale.getDefault().language): Result<RankResponse>
 
     suspend fun getGroups(): Result<CollectionResponse<GroupResponse>>
 
-    suspend fun getCoupons(): Result<CollectionResponse<CouponResponse>>
+    suspend fun getCoupons(): Result<PagedResponse<CouponResponse>>
 
     suspend fun getCoupon(id: Int): Result<CouponResponse>
 
     suspend fun getQrCode(): Result<QrCodeResponse>
 
     suspend fun activateInviteCode(request: InvitationRequest): Result<InvitationResponse>
-
-    suspend fun getTransactionsHistory(
-        page: Int? = null,
-        count: Int? = null
-    ): Result<PagedResponse<TransactionResponse>>
 
     suspend fun feedback(
         phone: String? = null,
@@ -60,6 +52,11 @@ interface ConsumerInteractor : OffersInteractor {
         callback: Boolean,
         appVersion: String
     ): Result<FeedbackResponse>
+
+    suspend fun getTransactionsHistory(
+        page: Int? = null,
+        count: Int? = null
+    ): Result<PagedResponse<TransactionResponse>>
 
     suspend fun getPromoOffers(
         page: Int? = null, 

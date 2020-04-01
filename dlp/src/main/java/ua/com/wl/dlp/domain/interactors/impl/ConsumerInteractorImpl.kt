@@ -30,6 +30,7 @@ import ua.com.wl.dlp.data.events.factory.CoreBusEventsFactory
 import ua.com.wl.dlp.data.prefereces.ConsumerPreferences
 import ua.com.wl.dlp.data.prefereces.models.ProfilePrefs
 import ua.com.wl.dlp.data.prefereces.models.RankCriteriaPrefs
+import ua.com.wl.dlp.data.prefereces.models.RankPermissionsPrefs
 import ua.com.wl.dlp.domain.Result
 import ua.com.wl.dlp.domain.UseCase
 import ua.com.wl.dlp.domain.exeptions.api.ApiException
@@ -122,6 +123,13 @@ class ConsumerInteractorImpl(
                             spentBonuses = nextRank.selectionCriteria?.spentBonuses?.copy(),
                             collectedBonuses = nextRank.selectionCriteria?.collectedBonuses?.copy())
                     } else null
+                    val currRankPermissions = RankPermissionsPrefs(
+                        cashbackPercentage = currRank.permissions.cashbackPercentage,
+                        isOfferViewAllowed = currRank.permissions.isOfferViewAllowed,
+                        isOfferSharingAllowed = currRank.permissions.isOfferSharingAllowed,
+                        isArticleSharingAllowed = currRank.permissions.isArticleSharingAllowed,
+                        isPreOrderAllowed = currRank.permissions.isPreOrderAllowed,
+                        isTableReservationAllowed = currRank.permissions.isTableReservationAllowed)
                     withContext(Dispatchers.IO) {
                         val prevRankId = consumerPreferences.rankPrefs.id
                         consumerPreferences.rankPrefs = consumerPreferences.rankPrefs.copy(
@@ -129,7 +137,8 @@ class ConsumerInteractorImpl(
                             name = currRank.name,
                             iconUrl = currRank.iconUrl,
                             colorHex = currRank.colorHex,
-                            nextRankCriteria = nextRankCriteria)
+                            nextRankCriteria = nextRankCriteria,
+                            currRankPermissions = currRankPermissions)
                         if (prevRankId != currRank.id) {
                             withContext(Dispatchers.Main.immediate) {
                                 CoreBusEventsFactory.rankChanged(currRank.id)
@@ -140,10 +149,7 @@ class ConsumerInteractorImpl(
             }.map { (currRankOpt, _) -> currRankOpt }
     }
 
-    override suspend fun getRank(
-        rankId: Int,
-        language: String
-    ): Result<RankResponse> {
+    override suspend fun getRank(rankId: Int, language: String): Result<RankResponse> {
         return callApi(call = { apiV1.getRank(rankId, language) })
             .flatMap { responseOpt ->
                 responseOpt.ifPresentOrDefault(
@@ -161,11 +167,11 @@ class ConsumerInteractorImpl(
             }
     }
 
-    override suspend fun getCoupons(): Result<CollectionResponse<CouponResponse>> {
+    override suspend fun getCoupons(): Result<PagedResponse<CouponResponse>> {
         return callApi(call = { apiV2.getCoupons() })
             .flatMap { responseOpt ->
                 responseOpt.ifPresentOrDefault(
-                    { Result.Success(it) },
+                    { Result.Success(it.payload) },
                     { Result.Failure(ApiException()) })
             }
     }
@@ -217,18 +223,6 @@ class ConsumerInteractorImpl(
         }
     }
 
-    override suspend fun getTransactionsHistory(
-        page: Int?,
-        count: Int?
-    ): Result<PagedResponse<TransactionResponse>> {
-        return callApi(call = { apiV2.getTransactionsHistory(page, count) })
-            .flatMap { dataResponseOpt ->
-                dataResponseOpt.ifPresentOrDefault(
-                    { Result.Success(it.payload) },
-                    { Result.Failure(ApiException()) })
-            }
-    }
-
     override suspend fun feedback(
         phone: String?,
         email: String?,
@@ -251,6 +245,18 @@ class ConsumerInteractorImpl(
             .flatMap { responseOpt ->
                 responseOpt.ifPresentOrDefault(
                     { Result.Success(it) },
+                    { Result.Failure(ApiException()) })
+            }
+    }
+
+    override suspend fun getTransactionsHistory(
+        page: Int?,
+        count: Int?
+    ): Result<PagedResponse<TransactionResponse>> {
+        return callApi(call = { apiV2.getTransactionsHistory(page, count) })
+            .flatMap { dataResponseOpt ->
+                dataResponseOpt.ifPresentOrDefault(
+                    { Result.Success(it.payload) },
                     { Result.Failure(ApiException()) })
             }
     }

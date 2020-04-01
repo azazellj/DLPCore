@@ -22,7 +22,10 @@ data class RankPrefs(
     val colorHex: String? = null,
 
     @SerializedName("next_rank_criteria")
-    val nextRankCriteria: RankCriteriaPrefs? = null)
+    val nextRankCriteria: RankCriteriaPrefs? = null,
+
+    @SerializedName("current_rank_permissions")
+    val currRankPermissions: RankPermissionsPrefs? = null)
 
 data class RankCriteriaPrefs(
     @SerializedName("referral_count")
@@ -51,3 +54,22 @@ data class RankCriteriaPrefs(
 
     @SerializedName("accumulated_bonuses_amount")
     val collectedBonuses: RankSelectionCriteriaValue<Long, Long>? = null)
+
+data class RankPermissionsPrefs(
+    @SerializedName("cash_back_percentage")
+    val cashbackPercentage: Int? = null,
+
+    @SerializedName("offer_view_allowed")
+    val isOfferViewAllowed: Boolean? = null,
+
+    @SerializedName("offer_sharing_allowed")
+    val isOfferSharingAllowed: Boolean? = null,
+
+    @SerializedName("article_sharing_allowed")
+    val isArticleSharingAllowed: Boolean? = null,
+
+    @SerializedName("pre_order_allowed")
+    val isPreOrderAllowed: Boolean? = null,
+
+    @SerializedName("table_reservation_allowed")
+    val isTableReservationAllowed: Boolean? = null)
