@@ -14,6 +14,7 @@ import ua.com.wl.dlp.data.api.errors.ErrorsMapper
 import ua.com.wl.dlp.data.api.requests.consumer.profile.ProfileRequest
 import ua.com.wl.dlp.data.api.requests.consumer.referral.InvitationRequest
 import ua.com.wl.dlp.data.api.requests.consumer.feedback.feedbackRequest
+import ua.com.wl.dlp.data.api.requests.consumer.history.notifications.NotificationsReadRequest
 import ua.com.wl.dlp.data.api.responses.PagedResponse
 import ua.com.wl.dlp.data.api.responses.CollectionResponse
 import ua.com.wl.dlp.data.api.responses.shop.offer.BaseOfferResponse
@@ -225,6 +226,15 @@ class ConsumerInteractorImpl(
                 }
             }
         }
+    }
+
+    override suspend fun markNotificationsAsRead(request: NotificationsReadRequest): Result<Boolean> {
+        return callApi(call = { apiV2.markNotificationsAsRead(request) })
+            .flatMap { responseOpt ->
+                responseOpt.ifPresentOrDefault(
+                    { Result.Success(it.isSuccessfully()) },
+                    { Result.Failure(ApiException()) })
+            }
     }
 
     override suspend fun feedback(

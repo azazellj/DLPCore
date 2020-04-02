@@ -3,6 +3,7 @@ package ua.com.wl.dlp.domain
 import kotlin.reflect.KClass
 
 import retrofit2.Response
+import retrofit2.HttpException
 
 import ua.com.wl.archetype.utils.Optional
 
@@ -14,7 +15,7 @@ import ua.com.wl.dlp.domain.exeptions.db.DatabaseException
  * @author Denis Makovskyi
  */
 
-open class UseCase constructor(private val errorsMapper: ErrorsMapper) {
+open class UseCase(private val errorsMapper: ErrorsMapper) {
 
     protected suspend fun <T : Any> callApi(
         call: suspend () -> Response<T>,
@@ -26,11 +27,10 @@ open class UseCase constructor(private val errorsMapper: ErrorsMapper) {
                 Result.Success(Optional.ofNullable(response.body()))
 
             } else {
-                val errorBody = response.errorBody()
-                val throwable = if (errorBody != null && errorClass != null) {
-                    errorsMapper.createExceptionFromResponseBody(errorBody, errorClass)
+                val throwable = if (errorClass != null) {
+                    errorsMapper.createExceptionFromResponse(response, errorClass)
                 } else {
-                    ApiException()
+                    ApiException(cause = HttpException(response))
                 }
                 Result.Failure(throwable)
             }

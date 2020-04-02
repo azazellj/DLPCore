@@ -6,6 +6,7 @@ import ua.com.wl.archetype.utils.Optional
 
 import ua.com.wl.dlp.data.api.requests.consumer.profile.ProfileRequest
 import ua.com.wl.dlp.data.api.requests.consumer.referral.InvitationRequest
+import ua.com.wl.dlp.data.api.requests.consumer.history.notifications.NotificationsReadRequest
 import ua.com.wl.dlp.data.api.responses.PagedResponse
 import ua.com.wl.dlp.data.api.responses.CollectionResponse
 import ua.com.wl.dlp.data.api.responses.shop.offer.BaseOfferResponse
@@ -48,6 +49,8 @@ interface ConsumerInteractor : OffersInteractor {
     suspend fun getQrCode(): Result<QrCodeResponse>
 
     suspend fun activateInviteCode(request: InvitationRequest): Result<InvitationResponse>
+
+    suspend fun markNotificationsAsRead(request: NotificationsReadRequest): Result<Boolean>
 
     suspend fun feedback(
         phone: String? = null,

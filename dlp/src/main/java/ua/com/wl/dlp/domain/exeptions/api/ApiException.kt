@@ -1,29 +1,30 @@
 package ua.com.wl.dlp.domain.exeptions.api
 
-import java.io.IOException
-import javax.net.ssl.SSLException
-
 import android.content.Context
 
-import com.google.gson.JsonParseException
-
 import ua.com.wl.dlp.R
+import ua.com.wl.dlp.domain.exeptions.api.ApiErrorType.*
 import ua.com.wl.dlp.domain.exeptions.CoreRuntimeException
+import ua.com.wl.dlp.utils.getApiErrorType
+
 
 /**
  * @author Denis Makovskyi
  */
 
 open class ApiException constructor(
-    message: String? = null,
+    type: String? = null,
     cause: Throwable? = null
-) : CoreRuntimeException(message, cause) {
+) : CoreRuntimeException(type, cause) {
 
-    override fun getLocalizedMessage(context: Context): String =
-        when (cause) {
-            is IOException -> context.getString(R.string.dlp_error_network_io)
-            is SSLException -> context.getString(R.string.dlp_error_network_ssl)
-            is JsonParseException -> context.getString(R.string.dlp_error_network_json)
+    override fun getLocalizedMessage(context: Context): String {
+        return when(getApiErrorType(cause)) {
+            SSL_CERTIFICATE -> context.getString(R.string.dlp_error_network_ssl)
+            RESPONSE_PARSING -> context.getString(R.string.dlp_error_network_json)
+            NETWORK_CONNECTION -> context.getString(R.string.dlp_error_network_io)
+            SERVER_UNREACHABLE -> context.getString(R.string.dlp_error_server_unreachable)
+            INTERNAL_SERVER_ERROR -> context.getString(R.string.dlp_error_server)
             else -> super.getLocalizedMessage(context)
         }
+    }
 }

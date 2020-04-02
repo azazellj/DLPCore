@@ -13,5 +13,7 @@ open class CoreRuntimeException constructor(
     cause: Throwable? = null
 ) : CoreException(message, cause) {
 
-    override fun getLocalizedMessage(context: Context): String = context.getString(R.string.dlp_error_runtime)
+    override fun getLocalizedMessage(context: Context): String {
+        return context.getString(R.string.dlp_error_runtime)
+    }
 }

@@ -1,31 +1,28 @@
 package ua.com.wl.dlp.utils
 
+import java.util.*
+import java.text.SimpleDateFormat
+
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.CoroutineDispatcher
 
-import android.content.Context
-import android.content.Intent
 import android.os.Bundle
+import android.content.Intent
+import android.content.Context
 
-import ua.com.wl.dlp.data.api.responses.models.consumer.history.transactions.BalanceChange
 import ua.com.wl.dlp.data.api.responses.models.shop.offer.promo.PromoType
-import ua.com.wl.dlp.data.db.entities.shops.OfferEntity
+import ua.com.wl.dlp.data.api.responses.models.consumer.history.transactions.BalanceChange
 import ua.com.wl.dlp.data.events.prefs.ProfileBusEvent
+import ua.com.wl.dlp.data.db.entities.shops.OfferEntity
 import ua.com.wl.dlp.data.prefereces.ConsumerPreferences
 
 /**
  * @author Denis Makovskyi
  */
 
-fun getQueryParam(url: String, key: String): String? {
-    if (url.contains("?")) {
-        val params = url.substring(url.indexOf("?") + 1).split("&")
-        for (param in params) {
-            val keyVal = param.split("=")
-            if (keyVal[0] == key) return keyVal[1]
-        }
-    }
-    return null
+internal fun now(pattern: String, locale: Locale = Locale.getDefault()): String {
+    val dateFormat = SimpleDateFormat(pattern, locale)
+    return dateFormat.format(Date(System.currentTimeMillis()))
 }
 
 fun calculatePersistedOffersCount(offers: List<OfferEntity>): Int {

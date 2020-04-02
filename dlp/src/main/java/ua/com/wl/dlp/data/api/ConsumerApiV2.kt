@@ -5,6 +5,8 @@ import retrofit2.http.*
 
 import ua.com.wl.dlp.data.api.requests.consumer.profile.ProfileRequest
 import ua.com.wl.dlp.data.api.requests.consumer.referral.InvitationRequest
+import ua.com.wl.dlp.data.api.requests.consumer.history.notifications.NotificationsReadRequest
+import ua.com.wl.dlp.data.api.responses.BaseResponse
 import ua.com.wl.dlp.data.api.responses.DataResponse
 import ua.com.wl.dlp.data.api.responses.PagedResponse
 import ua.com.wl.dlp.data.api.responses.CollectionResponse
@@ -45,6 +47,9 @@ interface ConsumerApiV2 {
 
     @POST("api/mobile/v2/consumer/refer-lead/")
     suspend fun useInviteCode(@Body request: InvitationRequest): Response<DataResponse<InvitationResponse>>
+
+    @POST("api/mobile/v2/notification/read/")
+    suspend fun markNotificationsAsRead(@Body request: NotificationsReadRequest): Response<BaseResponse>
 
     @GET("api/mobile/v2/consumer/balance/history/")
     suspend fun getTransactionsHistory(

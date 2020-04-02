@@ -17,6 +17,10 @@
     <string name="dlp_error_network_ssl">Ошибка SSL сертификата</string>
     <string name="dlp_error_network_json">Неожиданный ответ от сервера</string>
 
+    <string name="dlp_error_server">Ошибка сервера</string>
+    <string name="dlp_error_server_database">Ошибка базы данных на сервере</string>
+    <string name="dlp_error_server_unreachable">Сервер недоступен</string>
+
     <string name="dlp_error_token_required">Отсутствует токен доступа</string>
     <string name="dlp_error_token_invalid">Неверный токен доступа</string>
     <string name="dlp_error_token_expired">Сроки действия токена доступа истекли</string>
@@ -54,9 +58,6 @@
     <string name="dlp_error_pre_order_invalid_delivery_type">Тип доставки указан неверно</string>
     <string name="dlp_error_pre_order_illegal_flag_use_bonuses">Конфликт с опцией \"Оплатить бонусами\"</string>
     <string name="dlp_error_pre_order_incorrect_readiness_time">Время готовности меньше или равно текущему времени</string>
-
-    <string name="dlp_error_server_unreachable">Отдаленный сервер недоступен</string>
-    <string name="dlp_error_server_database">Ошибка базы данных на отдаленном сервере</string>
 
     <string name="dlp_error_runtime">Ошибка исполнения. Пожалуйста, попробуйте еще раз</string>
 </resources>
