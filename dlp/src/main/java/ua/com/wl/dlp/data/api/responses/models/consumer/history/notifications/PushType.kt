@@ -25,6 +25,9 @@ enum class PushType(val value: String) {
     @SerializedName("show_pre_order")
     PRE_ORDER("show_pre_order"),
 
+    @SerializedName("shop_reward")
+    SHOP_REWARD("shop_reward"),
+
     @SerializedName("bonuses_reward")
     BONUSES_REWARD("bonuses_reward"),
 
