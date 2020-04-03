@@ -50,7 +50,7 @@ data class NotificationData(
     val preOrderId: Int?,
 
     @SerializedName("shop")
-    val relatedShop: String?,
+    val relatedShop: String?
 
-    @SerializedName("shops")
-    val relatedShops: List<String>?)
+    /*@SerializedName("shops")
+    val relatedShops: List<String>?*/)
