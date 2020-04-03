@@ -49,7 +49,7 @@ data class NotificationResponse(
     val clickAction: String,
 
     @SerializedName("is_read")
-    val isRead: Boolean,
+    var isRead: Boolean,
 
     @SerializedName("created_at")
     val createdAt: String,
