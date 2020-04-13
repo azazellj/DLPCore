@@ -6,8 +6,9 @@ import com.google.gson.Gson
 
 import ua.com.wl.archetype.core.android.preferences.BasePreferences
 
-import ua.com.wl.dlp.data.prefereces.models.ProfilePrefs
 import ua.com.wl.dlp.data.prefereces.models.RankPrefs
+import ua.com.wl.dlp.data.prefereces.models.ProfilePrefs
+import ua.com.wl.dlp.data.prefereces.models.BusinessPrefs
 import ua.com.wl.dlp.utils.isNonNullOrEmpty
 
 /**
@@ -23,6 +24,7 @@ class ConsumerPreferences(
 
         const val KEY_RANK_PREFS = "rank_prefs"
         const val KEY_PROFILE_PREFS = "profile_prefs"
+        const val KEY_BUSINESS_PREFS = "business_prefs"
     }
 
     var rankPrefs: RankPrefs
@@ -51,7 +53,22 @@ class ConsumerPreferences(
             }
         }
 
+    var businessPrefs: BusinessPrefs
+        set(value) {
+            save(KEY_BUSINESS_PREFS, gson.toJson(value))
+        }
+        get() {
+            val json = getString(KEY_BUSINESS_PREFS)
+            return if (json.isNonNullOrEmpty()) {
+                gson.fromJson(json, BusinessPrefs::class.java)
+            } else {
+                BusinessPrefs()
+            }
+        }
+
     fun removeRankPrefs() = remove(KEY_RANK_PREFS)
 
     fun removeProfilePrefs() = remove(KEY_PROFILE_PREFS)
+
+    fun removeBusinessPrefs() = remove(KEY_BUSINESS_PREFS)
 }

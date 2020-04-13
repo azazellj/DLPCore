@@ -12,6 +12,7 @@ import ua.com.wl.dlp.data.api.responses.CollectionResponse
 import ua.com.wl.dlp.data.api.responses.shop.offer.BaseOfferResponse
 import ua.com.wl.dlp.data.api.responses.consumer.ranks.RankResponse
 import ua.com.wl.dlp.data.api.responses.consumer.groups.GroupResponse
+import ua.com.wl.dlp.data.api.responses.consumer.info.BusinessResponse
 import ua.com.wl.dlp.data.api.responses.consumer.coupons.CouponResponse
 import ua.com.wl.dlp.data.api.responses.consumer.profile.ProfileResponse
 import ua.com.wl.dlp.data.api.responses.consumer.referral.QrCodeResponse
@@ -26,6 +27,8 @@ import ua.com.wl.dlp.domain.Result
  */
 
 interface ConsumerInteractor : OffersInteractor {
+
+    suspend fun getInfo(): Result<BusinessResponse>
 
     suspend fun getProfile(): Result<ProfileResponse>
 

@@ -20,6 +20,7 @@ import ua.com.wl.dlp.data.api.responses.CollectionResponse
 import ua.com.wl.dlp.data.api.responses.shop.offer.BaseOfferResponse
 import ua.com.wl.dlp.data.api.responses.consumer.ranks.RankResponse
 import ua.com.wl.dlp.data.api.responses.consumer.groups.GroupResponse
+import ua.com.wl.dlp.data.api.responses.consumer.info.BusinessResponse
 import ua.com.wl.dlp.data.api.responses.consumer.coupons.CouponResponse
 import ua.com.wl.dlp.data.api.responses.consumer.profile.ProfileResponse
 import ua.com.wl.dlp.data.api.responses.consumer.referral.QrCodeResponse
@@ -55,6 +56,19 @@ class ConsumerInteractorImpl(
     private val offersInteractor: OffersInteractor,
     private val consumerPreferences: ConsumerPreferences
 ) : UseCase(errorsMapper), ConsumerInteractor, OffersInteractor by offersInteractor {
+
+    override suspend fun getInfo(): Result<BusinessResponse> {
+        return callApi(call = { apiV2.getInfo() })
+            .flatMap { dataResponseOpt ->
+                dataResponseOpt.ifPresentOrDefault(
+                    { Result.Success(it.payload) },
+                    { Result.Failure(ApiException()) })
+            }.sOnSuccess { businessResponse ->
+                withContext(Dispatchers.IO) {
+                    consumerPreferences.businessPrefs = businessResponse.toPrefs()
+                }
+            }
+    }
 
     override suspend fun getProfile(): Result<ProfileResponse> {
         return callApi(call = { apiV2.getProfile() })

@@ -11,6 +11,7 @@ import ua.com.wl.dlp.data.api.responses.DataResponse
 import ua.com.wl.dlp.data.api.responses.PagedResponse
 import ua.com.wl.dlp.data.api.responses.CollectionResponse
 import ua.com.wl.dlp.data.api.responses.consumer.groups.GroupResponse
+import ua.com.wl.dlp.data.api.responses.consumer.info.BusinessResponse
 import ua.com.wl.dlp.data.api.responses.consumer.coupons.CouponResponse
 import ua.com.wl.dlp.data.api.responses.consumer.profile.ProfileResponse
 import ua.com.wl.dlp.data.api.responses.consumer.referral.QrCodeResponse
@@ -23,6 +24,9 @@ import ua.com.wl.dlp.data.api.responses.consumer.history.notifications.Notificat
  */
 
 interface ConsumerApiV2 {
+
+    @GET("api/mobile/v2/business/info/")
+    suspend fun getInfo(): Response<DataResponse<BusinessResponse>>
 
     @GET("api/mobile/v2/consumer/profile/")
     suspend fun getProfile(): Response<DataResponse<ProfileResponse>>

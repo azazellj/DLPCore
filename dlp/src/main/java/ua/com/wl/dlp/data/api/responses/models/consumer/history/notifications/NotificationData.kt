@@ -14,13 +14,13 @@ data class NotificationData(
     val titleLocKey: String?,
 
     @SerializedName("title_loc_args")
-    val titleLocArgs: List<String>?,
+    val titleLocArgs: String?,
 
     @SerializedName("body_loc_key")
     val bodyLocKey: String?,
 
     @SerializedName("body_loc_args")
-    val bodyLocArgs: List<String>?,
+    val bodyLocArgs: String?,
 
     @SerializedName("badge")
     val badge: String,

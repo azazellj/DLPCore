@@ -31,6 +31,9 @@ enum class PushType(val value: String) {
     @SerializedName("bonuses_reward")
     BONUSES_REWARD("bonuses_reward"),
 
+    @SerializedName("show_qr_code")
+    BIRTHDAY_REWARD("show_qr_code"),
+
     @SerializedName("cash_back")
     CASH_BACK_ACCRUED("cash_back")
 }

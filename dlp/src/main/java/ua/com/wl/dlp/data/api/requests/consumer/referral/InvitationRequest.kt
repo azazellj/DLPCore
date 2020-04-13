@@ -20,6 +20,7 @@ data class InvitationRequest(
         }
 
         fun build(init: Builder.() -> Unit): InvitationRequest {
+            init()
             return InvitationRequest(code)
         }
     }
