@@ -25,5 +25,5 @@ data class BusinessResponse(
     @SerializedName("feedback_email")
     val feedbackEmail: String?,
 
-    @SerializedName("address")
+    @SerializedName("app_link")
     val applicationLink: String?)

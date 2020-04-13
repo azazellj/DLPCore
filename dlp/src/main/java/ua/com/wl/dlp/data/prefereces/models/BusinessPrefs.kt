@@ -25,5 +25,5 @@ data class BusinessPrefs(
     @SerializedName("feedback_email")
     val feedbackEmail: String? = null,
 
-    @SerializedName("address")
+    @SerializedName("app_link")
     val applicationLink: String? = null)
