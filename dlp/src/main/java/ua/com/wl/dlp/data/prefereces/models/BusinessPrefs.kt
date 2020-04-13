@@ -19,7 +19,7 @@ data class BusinessPrefs(
     @SerializedName("address")
     val address: String? = null,
 
-    @SerializedName("address")
+    @SerializedName("home_page")
     val homePage: String? = null,
 
     @SerializedName("feedback_email")

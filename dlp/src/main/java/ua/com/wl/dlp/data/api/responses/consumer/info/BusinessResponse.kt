@@ -19,7 +19,7 @@ data class BusinessResponse(
     @SerializedName("address")
     val address: String?,
 
-    @SerializedName("address")
+    @SerializedName("home_page")
     val homePage: String?,
 
     @SerializedName("feedback_email")
