@@ -3,6 +3,7 @@ package ua.com.wl.dlp.data.api
 import retrofit2.Response
 import retrofit2.http.*
 
+import ua.com.wl.dlp.core.Constants
 import ua.com.wl.dlp.data.api.requests.consumer.profile.ProfileRequest
 import ua.com.wl.dlp.data.api.requests.consumer.referral.InvitationRequest
 import ua.com.wl.dlp.data.api.requests.consumer.history.notifications.NotificationsReadRequest
@@ -25,6 +26,7 @@ import ua.com.wl.dlp.data.api.responses.consumer.history.notifications.Notificat
 
 interface ConsumerApiV2 {
 
+    @Headers("${Constants.HEADER_UNAUTHORIZED}: ${Constants.VALUE_PERMIT}")
     @GET("api/mobile/v2/business/info/")
     suspend fun getInfo(): Response<DataResponse<BusinessResponse>>
 
