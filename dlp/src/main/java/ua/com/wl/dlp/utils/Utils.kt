@@ -1,8 +1,5 @@
 package ua.com.wl.dlp.utils
 
-import java.util.*
-import java.text.SimpleDateFormat
-
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.CoroutineDispatcher
 
@@ -19,11 +16,6 @@ import ua.com.wl.dlp.data.prefereces.ConsumerPreferences
 /**
  * @author Denis Makovskyi
  */
-
-internal fun now(pattern: String, locale: Locale = Locale.getDefault()): String {
-    val dateFormat = SimpleDateFormat(pattern, locale)
-    return dateFormat.format(Date(System.currentTimeMillis()))
-}
 
 fun calculatePersistedOffersCount(offers: List<OfferEntity>): Int {
     return offers.sumBy { offer -> offer.preOrdersCount }

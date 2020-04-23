@@ -40,7 +40,6 @@ import ua.com.wl.dlp.domain.exeptions.api.ApiException
 import ua.com.wl.dlp.domain.exeptions.api.consumer.referral.ReferralException
 import ua.com.wl.dlp.domain.interactors.OffersInteractor
 import ua.com.wl.dlp.domain.interactors.ConsumerInteractor
-import ua.com.wl.dlp.utils.nge
 import ua.com.wl.dlp.utils.toPrefs
 import ua.com.wl.dlp.utils.sendBroadcastMessage
 
@@ -117,10 +116,7 @@ class ConsumerInteractorImpl(
         return getRanks(language)
             .flatMap { pager ->
                 val currRank = pager.items.find { rank -> rank.isCurrent }
-                val priority = pager.items.map { rank -> rank.priority }.nge(currRank?.priority)
-                val nextRank = if (priority != null) {
-                    pager.items.find { rank -> rank.priority == priority}
-                } else null
+                val nextRank = pager.items.find { rank -> rank.isNext }
                 Result.Success(
                     Optional.ofNullable(currRank) to
                             Optional.ofNullable(nextRank))
