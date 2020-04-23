@@ -107,7 +107,26 @@ class ConsumerInteractorImpl(
         return callApi(call = { apiV1.getRanks(language) })
             .flatMap { pagedResponseOpt ->
                 pagedResponseOpt.ifPresentOrDefault(
-                    { Result.Success(it) },
+                    { pager ->
+                        val sortedRanks = pager.items
+                            .sortedBy { item -> item.priority }
+                        val currRankIndex = sortedRanks.indexOfFirst { rank ->
+                            rank.isCurrent
+                        }
+                        if (currRankIndex > -1) {
+                            sortedRanks.forEachIndexed { index, rank ->
+                                if (index <= currRankIndex) {
+                                    rank.wasReached = true
+                                }
+                            }
+                        }
+                        val ranksResponse = PagedResponse(
+                            pager.page, pager.count,
+                            pager.pagesCount, pager.itemsCount,
+                            pager.nextPage, pager.previousPage,
+                            sortedRanks)
+                        Result.Success(ranksResponse)
+                    },
                     { Result.Failure(ApiException()) })
             }
     }

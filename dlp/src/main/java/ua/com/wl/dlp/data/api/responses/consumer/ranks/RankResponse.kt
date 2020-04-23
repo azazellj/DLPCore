@@ -32,10 +32,13 @@ open class RankResponse(
     var isNext: Boolean = false,
 
     @SerializedName("is_current_rank")
-    var isCurrent: Boolean = true,
+    var isCurrent: Boolean = false,
 
     @SerializedName("is_previous_rank")
     var isPrevious: Boolean = false,
+
+    @Transient
+    var wasReached: Boolean = false,
 
     @SerializedName("permissions")
     val permissions: RankPermissions,
