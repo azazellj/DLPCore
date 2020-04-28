@@ -6,6 +6,7 @@ import kotlinx.coroutines.withContext
 import android.app.Application
 
 import ua.com.wl.dlp.core.Constants
+import ua.com.wl.dlp.data.db.datasources.ShopsDataSource
 import ua.com.wl.dlp.data.api.OffersApiV1
 import ua.com.wl.dlp.data.api.errors.ErrorsMapper
 import ua.com.wl.dlp.data.api.responses.shop.offer.OfferResponse
@@ -18,6 +19,7 @@ import ua.com.wl.dlp.domain.exeptions.api.ApiException
 import ua.com.wl.dlp.domain.interactors.OffersInteractor
 import ua.com.wl.dlp.utils.sendBroadcastMessage
 import ua.com.wl.dlp.utils.processBalanceChanges
+import ua.com.wl.dlp.utils.updatePreOrdersCounter
 
 /**
  * @author Denis Makovskyi
@@ -27,6 +29,7 @@ class OffersInteractorImpl(
     errorsMapper: ErrorsMapper,
     private val app: Application,
     private val apiV1: OffersApiV1,
+    private val shopsDataSource: ShopsDataSource,
     private val consumerPreferences: ConsumerPreferences
 ) : UseCase(errorsMapper), OffersInteractor {
 
@@ -64,11 +67,17 @@ class OffersInteractorImpl(
             }
     }
 
-    override suspend fun getOffer(offerId: Int): Result<OfferResponse> {
+    override suspend fun getOffer(offerId: Int, shopId: Int?): Result<OfferResponse> {
         return callApi(call = { apiV1.getOffer(offerId) })
-            .flatMap { response ->
-                response.ifPresentOrDefault(
-                    { Result.Success(it) },
+            .sFlatMap { responseOpt ->
+                responseOpt.sIfPresentOrDefault(
+                    { offer ->
+                        if (shopId != null) {
+                            updatePreOrdersCounter(
+                                shopId, offer, shopsDataSource, Dispatchers.IO)
+                        }
+                        Result.Success(offer)
+                    },
                     { Result.Failure(ApiException()) })
             }
     }

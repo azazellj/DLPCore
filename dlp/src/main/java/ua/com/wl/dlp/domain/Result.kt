@@ -26,19 +26,19 @@ sealed class Result<out T> {
         }
     }
 
-    fun <T, S, R> Result<T>.zipWith(
+    fun <S, R> zipWith(
         second: Result<S>,
         zipper: (T, S) -> R
     ): Result<R> {
         return when(this) {
-            is Result.Success -> {
-                if (second is Result.Success) {
-                    Result.Success(zipper(this.data, second.data))
+            is Success -> {
+                if (second is Success) {
+                    Success(zipper(data, second.data))
                 } else {
-                    second as Result.Failure
+                    second as Failure
                 }
             }
-            is Result.Failure -> this
+            is Failure -> this
         }
     }
 
@@ -78,19 +78,19 @@ sealed class Result<out T> {
         }
     }
 
-    suspend fun <T, S, R> Result<T>.sZipWith(
+    suspend fun <S, R> sZipWith(
         second: Result<S>,
         zipper: suspend (T, S) -> R
     ): Result<R> {
         return when(this) {
-            is Result.Success -> {
-                if (second is Result.Success) {
-                    Result.Success(zipper(this.data, second.data))
+            is Success -> {
+                if (second is Success) {
+                    Success(zipper(data, second.data))
                 } else {
-                    second as Result.Failure
+                    second as Failure
                 }
             }
-            is Result.Failure -> this
+            is Failure -> this
         }
     }
 

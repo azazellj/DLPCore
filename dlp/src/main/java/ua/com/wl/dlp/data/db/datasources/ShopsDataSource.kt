@@ -1,8 +1,9 @@
 package ua.com.wl.dlp.data.db.datasources
 
 import ua.com.wl.archetype.utils.Optional
-import ua.com.wl.dlp.data.db.entities.shops.OfferEntity
+
 import ua.com.wl.dlp.data.db.entities.shops.ShopEntity
+import ua.com.wl.dlp.data.db.entities.shops.OfferEntity
 
 /**
  * @author Denis Makovskyi
@@ -22,7 +23,7 @@ interface ShopsDataSource {
 
     suspend fun getOffer(id: Int): Optional<OfferEntity>
 
-    suspend fun getOrder(id: Int, shopId: Int): Optional<OfferEntity>
+    suspend fun getOrder(offerId: Int, shopId: Int): Optional<OfferEntity>
 
     suspend fun getOrders(): List<ShopEntity>
 

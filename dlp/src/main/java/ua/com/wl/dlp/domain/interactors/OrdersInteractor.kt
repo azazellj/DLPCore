@@ -1,8 +1,8 @@
 package ua.com.wl.dlp.domain.interactors
 
-import ua.com.wl.dlp.data.api.requests.orders.order.GeneralPreOrderRequest
-import ua.com.wl.dlp.data.api.requests.orders.order.PreOrderRequest
-import ua.com.wl.dlp.data.api.requests.orders.order.RateOrderRequest
+import ua.com.wl.dlp.data.api.requests.orders.order.pre_order.GeneralPreOrderRequest
+import ua.com.wl.dlp.data.api.requests.orders.order.pre_order.PreOrderRequest
+import ua.com.wl.dlp.data.api.requests.orders.order.rate.RateOrderRequest
 import ua.com.wl.dlp.data.api.requests.orders.table.TableReservationRequest
 import ua.com.wl.dlp.data.api.responses.PagedResponse
 import ua.com.wl.dlp.data.api.responses.CollectionResponse

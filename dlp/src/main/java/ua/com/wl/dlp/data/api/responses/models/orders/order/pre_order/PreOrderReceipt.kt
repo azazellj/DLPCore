@@ -6,10 +6,7 @@ import com.google.gson.annotations.SerializedName
  * @author Denis Makovskyi
  */
 
-data class PreOrderTradeItem(
-    @SerializedName("trade_item")
-    val tradeId: Int,
-
+data class PreOrderReceipt(
     @SerializedName("count")
     val count: Int,
 

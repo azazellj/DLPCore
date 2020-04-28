@@ -2,6 +2,10 @@ package ua.com.wl.dlp.data.api.models.orders.order.pre_order
 
 import com.google.gson.annotations.SerializedName
 
+/**
+ * @author Denis Makovskyi
+ */
+
 data class PreOrderInfo(
     @SerializedName("street")
     val streetName: String?,
@@ -45,37 +49,34 @@ data class PreOrderInfo(
         private var intercomCode: String? = null
         private var floorNumber: Int? = null
         private var officeNumber: String? = null
-        private var deliveryType: DeliveryType =
-            DeliveryType.DELIVERY
+        private var deliveryType: DeliveryType = DeliveryType.TAKEAWAY
         private var personsQuantity: Int = 1
         private var paymentBanknote: String? = null
-        private var paymentMethod: PaymentMethod =
-            PaymentMethod.CASH
-        private var operatorCall: OperatorCall =
-            OperatorCall.WAITING
+        private var paymentMethod: PaymentMethod = PaymentMethod.ONLINE
+        private var operatorCall: OperatorCall = OperatorCall.WAITING
 
         fun streetName(init: () -> String?) {
-            streetName = init() ?: return
+            streetName = init()
         }
 
         fun houseNumber(init: () -> String?) {
-            houseNumber = init() ?: return
+            houseNumber = init()
         }
 
         fun houseEntrance(init: () -> String?) {
-            houseEntrance = init() ?: return
+            houseEntrance = init()
         }
 
         fun intercomCode(init: () -> String?) {
-            intercomCode = init() ?: return
+            intercomCode = init()
         }
 
         fun floorNumber(init: () -> Int?) {
-            floorNumber = init() ?: return
+            floorNumber = init()
         }
 
         fun officeNumber(init: () -> String?) {
-            officeNumber = init() ?: return
+            officeNumber = init()
         }
 
         fun deliveryType(init: () -> DeliveryType) {
@@ -87,7 +88,7 @@ data class PreOrderInfo(
         }
 
         fun paymentBanknote(init: () -> String?) {
-            paymentBanknote = init() ?: return
+            paymentBanknote = init()
         }
 
         fun paymentMethod(init: () -> PaymentMethod) {
@@ -103,8 +104,7 @@ data class PreOrderInfo(
             return PreOrderInfo(
                 streetName, houseNumber, houseEntrance,
                 intercomCode, floorNumber, officeNumber,
-                deliveryType, personsQuantity, paymentBanknote, paymentMethod, operatorCall
-            )
+                deliveryType, personsQuantity, paymentBanknote, paymentMethod, operatorCall)
         }
     }
 }

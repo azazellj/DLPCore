@@ -3,19 +3,16 @@ package ua.com.wl.dlp.data.api
 import retrofit2.Response
 import retrofit2.http.*
 
-import ua.com.wl.dlp.data.api.requests.orders.order.PreOrderRequest
-import ua.com.wl.dlp.data.api.requests.orders.order.RateOrderRequest
+import ua.com.wl.dlp.data.api.requests.orders.order.rate.RateOrderRequest
 import ua.com.wl.dlp.data.api.requests.orders.table.TableReservationRequest
 import ua.com.wl.dlp.data.api.responses.BaseResponse
 import ua.com.wl.dlp.data.api.responses.PagedResponse
-import ua.com.wl.dlp.data.api.responses.orders.order.*
-import ua.com.wl.dlp.data.api.responses.orders.order.pre_order.BasePreOrderResponse
-import ua.com.wl.dlp.data.api.responses.orders.order.pre_order.PreOrderCreationResponse
-import ua.com.wl.dlp.data.api.responses.orders.order.pre_order.PreOrderResponse
-import ua.com.wl.dlp.data.api.responses.orders.order.rate.BaseOrderRateResponse
 import ua.com.wl.dlp.data.api.responses.orders.order.rate.OrderRateResponse
-import ua.com.wl.dlp.data.api.responses.orders.table.TableReservationDetailedResponse
+import ua.com.wl.dlp.data.api.responses.orders.order.rate.BaseOrderRateResponse
 import ua.com.wl.dlp.data.api.responses.orders.table.TableReservationItemResponse
+import ua.com.wl.dlp.data.api.responses.orders.table.TableReservationDetailedResponse
+import ua.com.wl.dlp.data.api.responses.orders.order.pre_order.PreOrderResponse
+import ua.com.wl.dlp.data.api.responses.orders.order.pre_order.BasePreOrderResponse
 
 /**
  * @author Denis Makovskyi
@@ -35,9 +32,6 @@ interface OrdersApiV1 {
 
     @GET("api/mobile/v1/consumer/last-order-rate/")
     suspend fun getLastOrderRate(): Response<OrderRateResponse>
-
-    @POST("api/mobile/v1/consumer/pre-orders/")
-    suspend fun createPreOrder(@Body request: PreOrderRequest): Response<PreOrderCreationResponse>
 
     @GET("api/mobile/v1/consumer/pre-orders/")
     suspend fun getPreOrders(

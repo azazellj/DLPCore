@@ -6,9 +6,9 @@ import kotlinx.coroutines.withContext
 import ua.com.wl.dlp.data.api.OrdersApiV1
 import ua.com.wl.dlp.data.api.OrdersApiV2
 import ua.com.wl.dlp.data.api.errors.ErrorsMapper
-import ua.com.wl.dlp.data.api.requests.orders.order.GeneralPreOrderRequest
-import ua.com.wl.dlp.data.api.requests.orders.order.PreOrderRequest
-import ua.com.wl.dlp.data.api.requests.orders.order.RateOrderRequest
+import ua.com.wl.dlp.data.api.requests.orders.order.pre_order.GeneralPreOrderRequest
+import ua.com.wl.dlp.data.api.requests.orders.order.pre_order.PreOrderRequest
+import ua.com.wl.dlp.data.api.requests.orders.order.rate.RateOrderRequest
 import ua.com.wl.dlp.data.api.requests.orders.table.TableReservationRequest
 import ua.com.wl.dlp.data.api.responses.PagedResponse
 import ua.com.wl.dlp.data.api.responses.CollectionResponse
@@ -95,7 +95,7 @@ class OrdersInteractorImpl(
     }
 
     override suspend fun createPreOrder(request: PreOrderRequest): Result<PreOrderCreationResponse> {
-        return callApi(call = { apiV1.createPreOrder(request) })
+        return callApi(call = { apiV2.createPreOrder(request) })
             .flatMap { responseOpt ->
                 responseOpt.ifPresentOrDefault(
                     { Result.Success(it) },

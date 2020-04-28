@@ -1,4 +1,4 @@
-package ua.com.wl.dlp.data.api.requests.orders.order
+package ua.com.wl.dlp.data.api.requests.orders.order.rate
 
 import com.google.gson.annotations.SerializedName
 

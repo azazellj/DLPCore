@@ -10,5 +10,7 @@ enum class PaymentMethod(val value: String) {
     @SerializedName("CASH")
     CASH("CASH"),
     @SerializedName("BY_CARD")
-    CARD("BY_CARD")
+    CARD("BY_CARD"),
+    @SerializedName("ONLINE")
+    ONLINE("ONLINE")
 }

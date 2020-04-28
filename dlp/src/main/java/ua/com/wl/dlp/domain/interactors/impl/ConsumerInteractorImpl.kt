@@ -8,6 +8,13 @@ import ua.com.wl.archetype.utils.Optional
 
 import ua.com.wl.dlp.R
 import ua.com.wl.dlp.core.Constants
+import ua.com.wl.dlp.data.events.prefs.ProfileBusEvent
+import ua.com.wl.dlp.data.events.factory.CoreBusEventsFactory
+import ua.com.wl.dlp.data.db.datasources.ShopsDataSource
+import ua.com.wl.dlp.data.prefereces.ConsumerPreferences
+import ua.com.wl.dlp.data.prefereces.models.ProfilePrefs
+import ua.com.wl.dlp.data.prefereces.models.RankCriteriaPrefs
+import ua.com.wl.dlp.data.prefereces.models.RankPermissionsPrefs
 import ua.com.wl.dlp.data.api.ConsumerApiV1
 import ua.com.wl.dlp.data.api.ConsumerApiV2
 import ua.com.wl.dlp.data.api.errors.ErrorsMapper
@@ -28,12 +35,6 @@ import ua.com.wl.dlp.data.api.responses.consumer.referral.InvitationResponse
 import ua.com.wl.dlp.data.api.responses.consumer.feedback.FeedbackResponse
 import ua.com.wl.dlp.data.api.responses.consumer.history.transactions.TransactionResponse
 import ua.com.wl.dlp.data.api.responses.consumer.history.notifications.NotificationsResponse
-import ua.com.wl.dlp.data.events.prefs.ProfileBusEvent
-import ua.com.wl.dlp.data.events.factory.CoreBusEventsFactory
-import ua.com.wl.dlp.data.prefereces.ConsumerPreferences
-import ua.com.wl.dlp.data.prefereces.models.ProfilePrefs
-import ua.com.wl.dlp.data.prefereces.models.RankCriteriaPrefs
-import ua.com.wl.dlp.data.prefereces.models.RankPermissionsPrefs
 import ua.com.wl.dlp.domain.Result
 import ua.com.wl.dlp.domain.UseCase
 import ua.com.wl.dlp.domain.exeptions.api.ApiException
@@ -42,6 +43,7 @@ import ua.com.wl.dlp.domain.interactors.OffersInteractor
 import ua.com.wl.dlp.domain.interactors.ConsumerInteractor
 import ua.com.wl.dlp.utils.toPrefs
 import ua.com.wl.dlp.utils.sendBroadcastMessage
+import ua.com.wl.dlp.utils.updatePreOrdersCounter
 
 /**
  * @author Denis Makovskyi
@@ -52,6 +54,7 @@ class ConsumerInteractorImpl(
     private val app: Application,
     private val apiV1: ConsumerApiV1,
     private val apiV2: ConsumerApiV2,
+    private val shopsDataSource: ShopsDataSource,
     private val offersInteractor: OffersInteractor,
     private val consumerPreferences: ConsumerPreferences
 ) : UseCase(errorsMapper), ConsumerInteractor, OffersInteractor by offersInteractor {
@@ -108,14 +111,12 @@ class ConsumerInteractorImpl(
             .flatMap { pagedResponseOpt ->
                 pagedResponseOpt.ifPresentOrDefault(
                     { pager ->
-                        val sortedRanks = pager.items
-                            .sortedBy { item -> item.priority }
-                        val currRankIndex = sortedRanks.indexOfFirst { rank ->
-                            rank.isCurrent
-                        }
-                        if (currRankIndex > -1) {
-                            sortedRanks.forEachIndexed { index, rank ->
-                                if (index <= currRankIndex) {
+                        val ranks = pager.items
+                        val currRank = ranks.find { rank -> rank.isCurrent }
+                        val currRankPriority = currRank?.priority ?: -1
+                        if (currRankPriority > -1) {
+                            ranks.forEach { rank ->
+                                if (rank.priority < currRankPriority) {
                                     rank.wasReached = true
                                 }
                             }
@@ -124,7 +125,7 @@ class ConsumerInteractorImpl(
                             pager.page, pager.count,
                             pager.pagesCount, pager.itemsCount,
                             pager.nextPage, pager.previousPage,
-                            sortedRanks)
+                            ranks)
                         Result.Success(ranksResponse)
                     },
                     { Result.Failure(ApiException()) })
@@ -191,8 +192,8 @@ class ConsumerInteractorImpl(
 
     override suspend fun getGroups(): Result<CollectionResponse<GroupResponse>> {
         return callApi(call = { apiV2.getGroups() })
-            .flatMap { responseOpt ->
-                responseOpt.ifPresentOrDefault(
+            .flatMap { collectionResponseOpt ->
+                collectionResponseOpt.ifPresentOrDefault(
                     { Result.Success(it) },
                     { Result.Failure(ApiException()) })
             }
@@ -203,8 +204,8 @@ class ConsumerInteractorImpl(
         count: Int?
     ): Result<PagedResponse<CouponResponse>> {
         return callApi(call = { apiV2.getCoupons(page, count) })
-            .flatMap { responseOpt ->
-                responseOpt.ifPresentOrDefault(
+            .flatMap { pagedResponseOpt ->
+                pagedResponseOpt.ifPresentOrDefault(
                     { Result.Success(it.payload) },
                     { Result.Failure(ApiException()) })
             }
@@ -318,24 +319,38 @@ class ConsumerInteractorImpl(
 
     override suspend fun getPromoOffers(
         page: Int?,
-        count: Int?
+        count: Int?,
+        shopId: Int?
     ): Result<PagedResponse<BaseOfferResponse>> {
         return callApi(call = { apiV1.getPromoOffers(page, count) })
-            .flatMap { pagedResponseOpt ->
-                pagedResponseOpt.ifPresentOrDefault(
-                    { Result.Success(it) },
+            .sFlatMap { pagedResponseOpt ->
+                pagedResponseOpt.sIfPresentOrDefault(
+                    { pager ->
+                        if (shopId != null) {
+                            updatePreOrdersCounter(
+                                shopId, pager.items, shopsDataSource, Dispatchers.IO)
+                        }
+                        Result.Success(pager)
+                    },
                     { Result.Failure(ApiException()) })
             }
     }
 
     override suspend fun getNoveltyOffers(
         page: Int?,
-        count: Int?
+        count: Int?,
+        shopId: Int?
     ): Result<PagedResponse<BaseOfferResponse>> {
         return callApi(call = { apiV1.getNoveltyOffers(page, count) })
-            .flatMap { pagedResponseOpt ->
-                pagedResponseOpt.ifPresentOrDefault(
-                    { Result.Success(it) },
+            .sFlatMap { pagedResponseOpt ->
+                pagedResponseOpt.sIfPresentOrDefault(
+                    { pager ->
+                        if (shopId != null) {
+                            updatePreOrdersCounter(
+                                shopId, pager.items, shopsDataSource, Dispatchers.IO)
+                        }
+                        Result.Success(pager)
+                    },
                     { Result.Failure(ApiException()) })
             }
     }

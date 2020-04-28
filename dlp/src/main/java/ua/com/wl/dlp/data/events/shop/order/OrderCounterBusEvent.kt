@@ -9,5 +9,5 @@ import ua.com.wl.archetype.core.android.bus.BusEvent
 data class OrderCounterBusEvent(
     val shopId: Int,
     val offerId: Int,
-    val counter: Int = 0
+    val counter: Int
 ) : BusEvent()

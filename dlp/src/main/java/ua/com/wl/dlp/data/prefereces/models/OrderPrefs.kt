@@ -1,6 +1,6 @@
-package ua.com.wl.dlp.data.db.entities.shops.embedded.shop
+package ua.com.wl.dlp.data.prefereces.models
 
-import androidx.room.ColumnInfo
+import com.google.gson.annotations.SerializedName
 
 import ua.com.wl.dlp.data.api.models.orders.order.pre_order.DeliveryType
 import ua.com.wl.dlp.data.api.models.orders.order.pre_order.OperatorCall
@@ -10,51 +10,54 @@ import ua.com.wl.dlp.data.api.models.orders.order.pre_order.PaymentMethod
  * @author Denis Makovskyi
  */
 
-data class PreOrderParams(
-    @ColumnInfo(name = "date")
+data class OrderPrefs(
+    @SerializedName("date")
     val date: String? = null,
 
-    @ColumnInfo(name = "time")
+    @SerializedName("time")
     val time: String? = null,
 
-    @ColumnInfo(name = "comment")
+    @SerializedName("comment")
     val comment: String? = null,
 
-    @ColumnInfo(name = "street")
+    @SerializedName("address")
+    val address: String? = null,
+
+    @SerializedName("street")
     val streetName: String? = null,
 
-    @ColumnInfo(name = "house_number")
+    @SerializedName("house_number")
     val houseNumber: String? = null,
 
-    @ColumnInfo(name = "entrance")
+    @SerializedName("entrance")
     val houseEntrance: String? = null,
 
-    @ColumnInfo(name = "intercom")
+    @SerializedName("intercom")
     val intercomCode: String? = null,
 
-    @ColumnInfo(name = "floor")
+    @SerializedName("floor")
     val floorNumber: Int? = null,
 
-    @ColumnInfo(name = "office_number")
+    @SerializedName("office_number")
     val officeNumber: String? = null,
 
-    @ColumnInfo(name = "delivery_type")
+    @SerializedName("delivery_type")
     val deliveryType: DeliveryType? = null,
 
-    @ColumnInfo(name = "persons_quantity")
+    @SerializedName("persons_quantity")
     val personsQuantity: Int? = null,
 
-    @ColumnInfo(name = "use_bonuses")
+    @SerializedName("use_bonuses")
     val useBonuses: Boolean? = null,
 
-    @ColumnInfo(name = "bonuses_amount")
+    @SerializedName("bonuses_amount")
     val bonusesAmount: Long? = null,
 
-    @ColumnInfo(name = "payment_banknote")
+    @SerializedName("payment_banknote")
     val paymentBanknote: String? = null,
 
-    @ColumnInfo(name = "payment_method")
+    @SerializedName("payment_method")
     val paymentMethod: PaymentMethod? = null,
 
-    @ColumnInfo(name = "operator_call")
+    @SerializedName("operator_call")
     val operatorCall: OperatorCall? = null)

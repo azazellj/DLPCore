@@ -14,7 +14,7 @@ interface OffersInteractor {
 
     suspend fun removeOfferFromFavourites(offerId: Int): Result<Boolean>
 
-    suspend fun getOffer(offerId: Int): Result<OfferResponse>
+    suspend fun getOffer(offerId: Int, shopId: Int? = null): Result<OfferResponse>
 
     suspend fun collectBonusesPerOfferView(offerId: Int): Result<BalanceChangeResponse>
 }

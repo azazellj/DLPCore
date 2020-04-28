@@ -1,6 +1,7 @@
 package ua.com.wl.dlp.data.events.prefs
 
 import ua.com.wl.archetype.core.android.bus.BusEvent
+
 import ua.com.wl.dlp.data.api.responses.models.auth.City
 import ua.com.wl.dlp.data.api.responses.models.consumer.profile.Gender
 
@@ -28,17 +29,14 @@ class ProfileBusEvent(val changes: List<Change>) : BusEvent() {
 
     sealed class FieldValue {
 
-        data class LongValue constructor(val value: Long?) : FieldValue()
+        data class LongValue(val value: Long?) : FieldValue()
 
-        data class StringValue constructor(val value: String?) : FieldValue()
+        data class StringValue(val value: String?) : FieldValue()
 
-        data class CityObjectValue constructor(val value: City?) : FieldValue()
+        data class CityObjectValue(val value: City?) : FieldValue()
 
-        data class GenderObjectValue constructor(val value: Gender?) : FieldValue()
+        data class GenderObjectValue(val value: Gender?) : FieldValue()
     }
 
-    data class Change constructor(
-        val saved: Boolean,
-        val field: Field,
-        val value: FieldValue)
+    data class Change(val saved: Boolean, val field: Field, val value: FieldValue)
 }

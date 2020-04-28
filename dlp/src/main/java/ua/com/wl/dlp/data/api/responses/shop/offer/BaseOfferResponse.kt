@@ -49,6 +49,9 @@ open class BaseOfferResponse(
     @SerializedName("cash_back_percentage")
     var cashBackPercentage: Int? = null,
 
+    @Transient
+    var preOrdersCount: Int = 0,
+
     @SerializedName("promo_settings")
     var promoSettings: PromoSettings? = null,
 

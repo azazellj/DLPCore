@@ -5,6 +5,11 @@ import kotlinx.coroutines.withContext
 
 import ua.com.wl.archetype.utils.Optional
 
+import ua.com.wl.dlp.data.events.factory.CoreBusEventsFactory
+import ua.com.wl.dlp.data.db.DbErrorKeys
+import ua.com.wl.dlp.data.db.entities.shops.ShopEntity
+import ua.com.wl.dlp.data.db.entities.shops.OfferEntity
+import ua.com.wl.dlp.data.db.datasources.ShopsDataSource
 import ua.com.wl.dlp.data.api.ShopApiV1
 import ua.com.wl.dlp.data.api.ShopApiV2
 import ua.com.wl.dlp.data.api.errors.ErrorsMapper
@@ -14,11 +19,6 @@ import ua.com.wl.dlp.data.api.responses.shop.ShopResponse
 import ua.com.wl.dlp.data.api.responses.shop.CityShopsResponse
 import ua.com.wl.dlp.data.api.responses.shop.rubric.RubricResponse
 import ua.com.wl.dlp.data.api.responses.shop.offer.BaseOfferResponse
-import ua.com.wl.dlp.data.db.DbErrorKeys
-import ua.com.wl.dlp.data.db.entities.shops.ShopEntity
-import ua.com.wl.dlp.data.db.entities.shops.OfferEntity
-import ua.com.wl.dlp.data.db.datasources.ShopsDataSource
-import ua.com.wl.dlp.data.events.factory.CoreBusEventsFactory
 import ua.com.wl.dlp.domain.Result
 import ua.com.wl.dlp.domain.UseCase
 import ua.com.wl.dlp.domain.exeptions.api.ApiException
@@ -27,6 +27,7 @@ import ua.com.wl.dlp.domain.exeptions.db.DatabaseException
 import ua.com.wl.dlp.domain.interactors.ShopInteractor
 import ua.com.wl.dlp.domain.interactors.OffersInteractor
 import ua.com.wl.dlp.utils.toOfferEntity
+import ua.com.wl.dlp.utils.updatePreOrdersCounter
 import ua.com.wl.dlp.utils.calculatePersistedOffersCount
 import ua.com.wl.dlp.utils.calculatePersistedOffersPrice
 
@@ -47,8 +48,8 @@ class ShopInteractorImpl(
         count: Int?
     ): Result<PagedResponse<CityShopsResponse>> {
         return callApi(call = { apiV1.getCityShops(page, count) })
-            .flatMap { responseOpt ->
-                responseOpt.ifPresentOrDefault(
+            .flatMap { pagedResponseOpt ->
+                pagedResponseOpt.ifPresentOrDefault(
                     { Result.Success(it) },
                     { Result.Failure(ApiException()) })
             }
@@ -82,9 +83,13 @@ class ShopInteractorImpl(
         rubricId: String?
     ): Result<PagedResponse<BaseOfferResponse>> {
         return callApi(call = { apiV1.getOffers(shopId, page, count, rubricId) })
-            .flatMap { responseOpt ->
-                responseOpt.ifPresentOrDefault(
-                    { Result.Success(it) },
+            .sFlatMap { pagedResponseOpt ->
+                pagedResponseOpt.sIfPresentOrDefault(
+                    { pager ->
+                        updatePreOrdersCounter(
+                            shopId, pager.items, shopsDataSource, Dispatchers.IO)
+                        Result.Success(pager)
+                    },
                     { Result.Failure(ApiException()) })
             }
     }
@@ -95,9 +100,13 @@ class ShopInteractorImpl(
         count: Int?
     ): Result<PagedResponse<BaseOfferResponse>> {
         return callApi(call = { apiV1.getPromoOffers(shopId, page, count) })
-            .flatMap { responseOpt ->
-                responseOpt.ifPresentOrDefault(
-                    { Result.Success(it) },
+            .sFlatMap { pagedResponseOpt ->
+                pagedResponseOpt.sIfPresentOrDefault(
+                    { pager ->
+                        updatePreOrdersCounter(
+                            shopId, pager.items, shopsDataSource, Dispatchers.IO)
+                        Result.Success(pager)
+                    },
                     { Result.Failure(ApiException()) })
             }
     }
@@ -108,9 +117,13 @@ class ShopInteractorImpl(
         count: Int?
     ): Result<PagedResponse<BaseOfferResponse>> {
         return callApi(call = { apiV1.getNoveltyOffers(shopId, page, count) })
-            .flatMap { response ->
-                response.ifPresentOrDefault(
-                    { Result.Success(it) },
+            .sFlatMap { pagedResponseOpt ->
+                pagedResponseOpt.sIfPresentOrDefault(
+                    { pager ->
+                        updatePreOrdersCounter(
+                            shopId, pager.items, shopsDataSource, Dispatchers.IO)
+                        Result.Success(pager)
+                    },
                     { Result.Failure(ApiException()) })
             }
     }
@@ -121,9 +134,13 @@ class ShopInteractorImpl(
         count: Int?
     ): Result<PagedResponse<BaseOfferResponse>> {
         return callApi(call = { apiV1.getFavouriteOffers(shopId, page, count) })
-            .flatMap { responseOpt ->
-                responseOpt.ifPresentOrDefault(
-                    { Result.Success(it) },
+            .sFlatMap { pagedResponseOpt ->
+                pagedResponseOpt.sIfPresentOrDefault(
+                    { pager ->
+                        updatePreOrdersCounter(
+                            shopId, pager.items, shopsDataSource, Dispatchers.IO)
+                        Result.Success(pager)
+                    },
                     { Result.Failure(ApiException()) })
             }
     }
@@ -177,9 +194,7 @@ class ShopInteractorImpl(
                             is Result.Failure -> updateOrderQueryRes
                         }
                     },
-                    {
-                        Result.Failure(DbQueryException(DbErrorKeys.ENTITY_IS_NOT_EXISTS))
-                    })
+                    { Result.Failure(DbQueryException(DbErrorKeys.ENTITY_IS_NOT_EXISTS)) })
             }
     }
 
@@ -200,9 +215,7 @@ class ShopInteractorImpl(
                             is Result.Failure -> updateOrderQueryRes
                         }
                     },
-                    {
-                        Result.Failure(DbQueryException(DbErrorKeys.ENTITY_IS_NOT_EXISTS))
-                    })
+                    { Result.Failure(DbQueryException(DbErrorKeys.ENTITY_IS_NOT_EXISTS)) })
             }.sOnSuccess { orderEntity ->
                 populatePersistedOffersPrice()
                 CoreBusEventsFactory.orderCounter(
@@ -216,9 +229,7 @@ class ShopInteractorImpl(
         return callQuery(call = { shopsDataSource.getShop(shopId) })
             .sFlatMap { shopEntityOpt ->
                 shopEntityOpt.sIfPresentOrDefault(
-                    {
-                        Result.Success(it) as Result<ShopEntity>
-                    },
+                    { Result.Success(it) as Result<ShopEntity> },
                     {
                         val shopEntity = ShopEntity(shopId)
                         when(val insertShopQueryRes = callQuery(call = { shopsDataSource.insertShop(shopEntity) })) {
@@ -321,9 +332,7 @@ class ShopInteractorImpl(
                             }
                         }
                     },
-                    {
-                        Result.Failure(DbQueryException(DbErrorKeys.ENTITY_IS_NOT_EXISTS))
-                    })
+                    { Result.Failure(DbQueryException(DbErrorKeys.ENTITY_IS_NOT_EXISTS)) })
             }.sOnSuccess { orderEntity ->
                 populatePersistedOffersPrice()
                 CoreBusEventsFactory.orderCounter(
@@ -368,9 +377,7 @@ class ShopInteractorImpl(
                                     }
                                 }
                             },
-                            {
-                                Result.Failure(DatabaseException(DbErrorKeys.ENTITY_IS_NOT_EXISTS))
-                            })
+                            { Result.Failure(DatabaseException(DbErrorKeys.ENTITY_IS_NOT_EXISTS)) })
                     }
                     is Result.Failure -> selectOfferQueryRes
                 }

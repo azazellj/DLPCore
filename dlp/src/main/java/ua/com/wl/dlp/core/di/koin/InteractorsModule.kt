@@ -24,6 +24,7 @@ val interactorsModule = module {
             app = get(),
             apiV1 = get(),
             apiV2 = get(),
+            shopsDataSource = get(),
             offersInteractor = get(),
             consumerPreferences = get())
     }
@@ -47,6 +48,7 @@ val interactorsModule = module {
             errorsMapper = get(),
             app = get(),
             apiV1 = get(),
+            shopsDataSource = get(),
             consumerPreferences = get())
     }
     single<OrdersInteractor> {

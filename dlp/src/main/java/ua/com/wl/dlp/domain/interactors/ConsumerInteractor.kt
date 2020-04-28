@@ -75,11 +75,13 @@ interface ConsumerInteractor : OffersInteractor {
 
     suspend fun getPromoOffers(
         page: Int? = null, 
-        count: Int? = null
+        count: Int? = null,
+        shopId: Int? = null
     ): Result<PagedResponse<BaseOfferResponse>>
 
     suspend fun getNoveltyOffers(
         page: Int? = null, 
-        count: Int? = null
+        count: Int? = null,
+        shopId: Int? = null
     ): Result<PagedResponse<BaseOfferResponse>>
 }

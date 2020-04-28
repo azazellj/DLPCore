@@ -2,25 +2,40 @@ package ua.com.wl.dlp.data.api.responses.orders.order.pre_order
 
 import com.google.gson.annotations.SerializedName
 
+import ua.com.wl.dlp.data.api.models.shop.SimpleShop
 import ua.com.wl.dlp.data.api.models.orders.order.pre_order.PreOrderInfo
-import ua.com.wl.dlp.data.api.models.orders.order.pre_order.BasePreOrderTradeItem
+import ua.com.wl.dlp.data.api.responses.models.orders.order.pre_order.PreOrderStatus
+import ua.com.wl.dlp.data.api.responses.models.orders.order.pre_order.PreOrderReceipt
+import ua.com.wl.dlp.data.api.responses.models.orders.order.pre_order.PreOrderPayment
 
 /**
  * @author Denis Makovskyi
  */
 
 data class PreOrderCreationResponse(
-    @SerializedName("shop")
-    val shopId: Int,
+    @SerializedName("id")
+    val id: Int,
 
-    @SerializedName("comment")
-    val comment: String?,
+    @SerializedName("status")
+    val status: PreOrderStatus?,
+
+    @SerializedName("created_at")
+    val createdAt: String,
+
+    @SerializedName("changed_at")
+    val changedAt: String,
+
+    @SerializedName("readiness_date")
+    val readinessDate: String,
 
     @SerializedName("readiness_time")
-    val readinessTime: String?,
+    val readinessTime: String,
+
+    @SerializedName("total_price")
+    val totalPrice: String,
 
     @SerializedName("pay_with_bonuses")
-    val payBonuses: Boolean,
+    val usedBonuses: Boolean,
 
     @SerializedName("count_of_bonuses")
     val bonusesCount: Long,
@@ -28,9 +43,17 @@ data class PreOrderCreationResponse(
     @SerializedName("count_of_bonuses_money")
     val currencyEquivalent: String,
 
-    @SerializedName("info")
-    val info: PreOrderInfo?,
+    @SerializedName("comment")
+    val comment: String?,
 
-    @SerializedName("pre_order_trade_items")
-    val tradeItems: List<BasePreOrderTradeItem>
-)
+    @SerializedName("shop")
+    val shop: SimpleShop,
+
+    @SerializedName("info")
+    val info: PreOrderInfo,
+
+    @SerializedName("payment")
+    val payment: PreOrderPayment,
+
+    @SerializedName("receipt")
+    val receipt: List<PreOrderReceipt>)
