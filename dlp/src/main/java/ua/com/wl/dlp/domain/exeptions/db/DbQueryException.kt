@@ -9,7 +9,7 @@ import ua.com.wl.dlp.data.db.DbErrorKeys
  * @author Denis Makovskyi
  */
 
-class DbQueryException constructor(
+class DbQueryException(
     message: String,
     cause: Throwable? = null
 ): DatabaseException(message, cause) {

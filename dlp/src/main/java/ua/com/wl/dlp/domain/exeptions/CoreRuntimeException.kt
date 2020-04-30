@@ -8,7 +8,7 @@ import ua.com.wl.dlp.R
  * @author Denis Makovskyi
  */
 
-open class CoreRuntimeException constructor(
+open class CoreRuntimeException(
     message: String? = null,
     cause: Throwable? = null
 ) : CoreException(message, cause) {

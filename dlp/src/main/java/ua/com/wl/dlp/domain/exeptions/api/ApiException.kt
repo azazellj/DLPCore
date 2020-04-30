@@ -12,7 +12,7 @@ import ua.com.wl.dlp.utils.getApiErrorType
  * @author Denis Makovskyi
  */
 
-open class ApiException constructor(
+open class ApiException(
     type: String? = null,
     cause: Throwable? = null
 ) : CoreRuntimeException(type, cause) {

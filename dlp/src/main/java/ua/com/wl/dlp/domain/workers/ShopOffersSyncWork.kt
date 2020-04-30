@@ -26,8 +26,7 @@ import ua.com.wl.dlp.utils.isEmpty
 class ShopOffersSyncWork(
     context: Context,
     workerParams: WorkerParameters
-) : CoroutineWorker(context, workerParams),
-    DLPCoreComponent {
+) : CoroutineWorker(context, workerParams), DLPCoreComponent {
 
     companion object {
 

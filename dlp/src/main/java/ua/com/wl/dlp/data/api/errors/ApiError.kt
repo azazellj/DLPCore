@@ -6,6 +6,6 @@ import com.google.gson.annotations.SerializedName
  * @author Denis Makovskyi
  */
 
-data class ApiError constructor(
+data class ApiError(
     @SerializedName(value = "type", alternate = ["status"])
     val type: String)

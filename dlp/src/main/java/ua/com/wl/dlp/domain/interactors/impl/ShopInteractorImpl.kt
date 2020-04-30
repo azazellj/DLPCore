@@ -162,7 +162,6 @@ class ShopInteractorImpl(
             .sOnSuccess {
                 withContext(Dispatchers.Main.immediate) {
                     CoreBusEventsFactory.ordersPrice(shop.id)
-                    populatePersistedOffersPrice()
                 }
             }
     }
@@ -217,11 +216,11 @@ class ShopInteractorImpl(
                     },
                     { Result.Failure(DbQueryException(DbErrorKeys.ENTITY_IS_NOT_EXISTS)) })
             }.sOnSuccess { orderEntity ->
-                populatePersistedOffersPrice()
                 CoreBusEventsFactory.orderCounter(
                     shopId = orderEntity.shopId,
                     offerId = orderEntity.id,
                     counter = orderEntity.preOrdersCount)
+                populatePersistedOffersPrice(orderEntity.shopId)
             }
     }
 
@@ -299,11 +298,11 @@ class ShopInteractorImpl(
                     is Result.Failure -> selectOfferQueryRes
                 }
             }.sOnSuccess { offerEntity ->
-                populatePersistedOffersPrice()
                 CoreBusEventsFactory.orderCounter(
                     shopId = offerEntity.shopId,
                     offerId = offerEntity.id,
                     counter = offerEntity.preOrdersCount)
+                populatePersistedOffersPrice(offerEntity.shopId)
             }
     }
 
@@ -334,15 +333,16 @@ class ShopInteractorImpl(
                     },
                     { Result.Failure(DbQueryException(DbErrorKeys.ENTITY_IS_NOT_EXISTS)) })
             }.sOnSuccess { orderEntity ->
-                populatePersistedOffersPrice()
                 CoreBusEventsFactory.orderCounter(
                     shopId = orderEntity.shopId,
                     offerId = orderEntity.id,
                     counter = orderEntity.preOrdersCount)
+                populatePersistedOffersPrice(orderEntity.shopId)
             }.sOnFailure { error ->
                 if (error.message == DbErrorKeys.ENTITY_IS_NOT_EXISTS_ANYMORE) {
-                    populatePersistedOffersPrice()
-                    CoreBusEventsFactory.orderCounter(shopId = shopId, offerId = offerId)
+                    CoreBusEventsFactory.orderCounter(
+                        shopId = shopId, offerId = offerId)
+                    populatePersistedOffersPrice(shopId)
                 }
             }
     }
@@ -370,9 +370,7 @@ class ShopInteractorImpl(
 
                                 } else {
                                     when(val deleteOfferQueryRes = callQuery(call = { shopsDataSource.deleteOrder(offerEntity) })) {
-                                        is Result.Success -> Result.Failure(
-                                            DatabaseException(DbErrorKeys.ENTITY_IS_NOT_EXISTS_ANYMORE)
-                                        )
+                                        is Result.Success -> Result.Failure(DatabaseException(DbErrorKeys.ENTITY_IS_NOT_EXISTS_ANYMORE))
                                         is Result.Failure -> deleteOfferQueryRes
                                     }
                                 }
@@ -382,15 +380,16 @@ class ShopInteractorImpl(
                     is Result.Failure -> selectOfferQueryRes
                 }
             }.sOnSuccess { offerEntity ->
-                populatePersistedOffersPrice()
                 CoreBusEventsFactory.orderCounter(
                     shopId = offerEntity.shopId,
                     offerId = offerEntity.id,
                     counter = offerEntity.preOrdersCount)
+                populatePersistedOffersPrice(offerEntity.shopId)
             }.sOnFailure { error ->
                 if (error.message == DbErrorKeys.ENTITY_IS_NOT_EXISTS_ANYMORE) {
-                    populatePersistedOffersPrice()
-                    CoreBusEventsFactory.orderCounter(shopId = shopId, offerId = offer.id)
+                    CoreBusEventsFactory.orderCounter(
+                        shopId = shopId, offerId = offer.id)
+                    populatePersistedOffersPrice(shopId)
                 }
             }
     }
@@ -415,7 +414,7 @@ class ShopInteractorImpl(
             callQuery(call = { shopsDataSource.getOrders(shopId) })
                 .onSuccess { offers ->
                     CoreBusEventsFactory.ordersPrice(
-                        shopId, offers.size, calculatePersistedOffersPrice(offers))
+                        shopId, calculatePersistedOffersCount(offers), calculatePersistedOffersPrice(offers))
                 }
         }
     }
