@@ -6,21 +6,19 @@ import kotlinx.coroutines.withContext
 import ua.com.wl.dlp.data.api.OrdersApiV1
 import ua.com.wl.dlp.data.api.OrdersApiV2
 import ua.com.wl.dlp.data.api.errors.ErrorsMapper
-import ua.com.wl.dlp.data.api.requests.orders.order.pre_order.GeneralPreOrderRequest
-import ua.com.wl.dlp.data.api.requests.orders.order.pre_order.PreOrderRequest
 import ua.com.wl.dlp.data.api.requests.orders.order.rate.RateOrderRequest
+import ua.com.wl.dlp.data.api.requests.orders.order.pre_order.PreOrderRequest
+import ua.com.wl.dlp.data.api.requests.orders.order.pre_order.GeneralPreOrderRequest
 import ua.com.wl.dlp.data.api.requests.orders.table.TableReservationRequest
 import ua.com.wl.dlp.data.api.responses.PagedResponse
 import ua.com.wl.dlp.data.api.responses.CollectionResponse
 import ua.com.wl.dlp.data.api.responses.orders.order.*
-import ua.com.wl.dlp.data.api.responses.orders.order.pre_order.PreOrderResponse
-import ua.com.wl.dlp.data.api.responses.orders.order.pre_order.BasePreOrderResponse
-import ua.com.wl.dlp.data.api.responses.orders.order.pre_order.PreOrderCreationResponse
 import ua.com.wl.dlp.data.api.responses.orders.order.rate.OrderRateResponse
 import ua.com.wl.dlp.data.api.responses.orders.order.rate.BaseOrderRateResponse
+import ua.com.wl.dlp.data.api.responses.orders.order.pre_order.PreOrderResponse
+import ua.com.wl.dlp.data.api.responses.orders.order.pre_order.BasePreOrderResponse
 import ua.com.wl.dlp.data.api.responses.orders.table.TableReservationItemResponse
 import ua.com.wl.dlp.data.api.responses.orders.table.TableReservationDetailedResponse
-import ua.com.wl.dlp.data.api.responses.models.orders.order.pre_order.GeneralPreOrderItem
 import ua.com.wl.dlp.data.events.factory.CoreBusEventsFactory
 import ua.com.wl.dlp.domain.Result
 import ua.com.wl.dlp.domain.UseCase
@@ -94,7 +92,7 @@ class OrdersInteractorImpl(
             }
     }
 
-    override suspend fun createPreOrder(request: PreOrderRequest): Result<PreOrderCreationResponse> {
+    override suspend fun createPreOrder(request: PreOrderRequest): Result<PreOrderResponse> {
         return callApi(call = { apiV2.createPreOrder(request) })
             .flatMap { responseOpt ->
                 responseOpt.ifPresentOrDefault(
@@ -103,7 +101,7 @@ class OrdersInteractorImpl(
             }
     }
 
-    override suspend fun createGeneralPreOrder(request: GeneralPreOrderRequest): Result<CollectionResponse<GeneralPreOrderItem>> {
+    override suspend fun createGeneralPreOrder(request: GeneralPreOrderRequest): Result<CollectionResponse<PreOrderResponse>> {
         return callApi(
             call = { apiV2.createGeneralPreOrder(request) },
             errorClass = GeneralPreOrderException::class
@@ -118,7 +116,7 @@ class OrdersInteractorImpl(
         page: Int?,
         count: Int?
     ): Result<PagedResponse<BasePreOrderResponse>> {
-        return callApi(call = { apiV1.getPreOrders(page, count) })
+        return callApi(call = { apiV2.getPreOrders(page, count) })
             .flatMap { responseOpt ->
                 responseOpt.ifPresentOrDefault(
                     { Result.Success(it) },
@@ -127,7 +125,7 @@ class OrdersInteractorImpl(
     }
 
     override suspend fun getPreOrder(preOrderId: Int): Result<PreOrderResponse> {
-        return callApi(call = { apiV1.getPreOrder(preOrderId) })
+        return callApi(call = { apiV2.getPreOrder(preOrderId) })
             .flatMap { responseOpt ->
                 responseOpt.ifPresentOrDefault(
                     { Result.Success(it) },

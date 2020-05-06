@@ -7,6 +7,9 @@ import com.google.gson.annotations.SerializedName
  */
 
 data class PreOrderInfo(
+    @SerializedName("delivery_type")
+    val deliveryType: DeliveryType,
+
     @SerializedName("street")
     val streetName: String?,
 
@@ -25,35 +28,36 @@ data class PreOrderInfo(
     @SerializedName("office_number")
     val officeNumber: String?,
 
-    @SerializedName("delivery_type")
-    val deliveryType: DeliveryType,
-
     @SerializedName("persons_quantity")
     val personsQuantity: Int,
-
-    @SerializedName("payment_banknote")
-    val paymentBanknote: String?,
 
     @SerializedName("payment_method")
     val paymentMethod: PaymentMethod,
 
+    @SerializedName("payment_banknote")
+    val paymentBanknote: String?,
+
     @SerializedName("operator_call")
-    val operatorCall: OperatorCall
+    val operatorCall: OperatorCall?
 ) {
 
     class Builder {
 
+        private var deliveryType: DeliveryType = DeliveryType.TAKEAWAY
         private var streetName: String? = null
         private var houseNumber: String? = null
         private var houseEntrance: String? = null
         private var intercomCode: String? = null
         private var floorNumber: Int? = null
         private var officeNumber: String? = null
-        private var deliveryType: DeliveryType = DeliveryType.TAKEAWAY
         private var personsQuantity: Int = 1
+        private var paymentMethod: PaymentMethod = PaymentMethod.CASH
         private var paymentBanknote: String? = null
-        private var paymentMethod: PaymentMethod = PaymentMethod.ONLINE
         private var operatorCall: OperatorCall = OperatorCall.WAITING
+
+        fun deliveryType(init: () -> DeliveryType) {
+            deliveryType = init()
+        }
 
         fun streetName(init: () -> String?) {
             streetName = init()
@@ -79,20 +83,16 @@ data class PreOrderInfo(
             officeNumber = init()
         }
 
-        fun deliveryType(init: () -> DeliveryType) {
-            deliveryType = init()
-        }
-
         fun personsQuantity(init: () -> Int) {
             personsQuantity = init()
         }
 
-        fun paymentBanknote(init: () -> String?) {
-            paymentBanknote = init()
-        }
-
         fun paymentMethod(init: () -> PaymentMethod) {
             paymentMethod = init()
+        }
+
+        fun paymentBanknote(init: () -> String?) {
+            paymentBanknote = init()
         }
 
         fun operatorCall(init: () -> OperatorCall) {
@@ -102,9 +102,9 @@ data class PreOrderInfo(
         fun build(init: Builder.() -> Unit): PreOrderInfo {
             init()
             return PreOrderInfo(
-                streetName, houseNumber, houseEntrance,
-                intercomCode, floorNumber, officeNumber,
-                deliveryType, personsQuantity, paymentBanknote, paymentMethod, operatorCall)
+                deliveryType, streetName, houseNumber, houseEntrance,
+                intercomCode, floorNumber, officeNumber, personsQuantity,
+                paymentMethod, paymentBanknote, operatorCall)
         }
     }
 }

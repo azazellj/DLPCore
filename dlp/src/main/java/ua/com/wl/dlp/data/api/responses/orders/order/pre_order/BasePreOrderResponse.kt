@@ -10,14 +10,32 @@ import ua.com.wl.dlp.data.api.responses.models.orders.order.pre_order.PreOrderSt
  */
 
 open class BasePreOrderResponse(
-    @SerializedName("number")
-    var number: Int = 0,
+    @SerializedName("id")
+    var id: Int = 0,
 
     @SerializedName("status")
     var status: PreOrderStatus? = null,
 
     @SerializedName("created_at")
     var createdAt: String = "",
+
+    @SerializedName("changed_at")
+    var changedAt: String = "",
+
+    @SerializedName("readiness_date")
+    var readinessDate: String? = null,
+
+    @SerializedName("readiness_time")
+    var readinessTime: String? = null,
+
+    @SerializedName("pay_with_bonuses")
+    var usedBonuses: Boolean = false,
+
+    @SerializedName("count_of_bonuses")
+    var bonusesCount: Long = 0,
+
+    @SerializedName("count_of_bonuses_money")
+    var currencyEquivalent: String = "",
 
     @SerializedName("price_total")
     var totalPrice: String = "",

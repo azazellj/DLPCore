@@ -11,8 +11,6 @@ import ua.com.wl.dlp.data.api.responses.orders.order.rate.OrderRateResponse
 import ua.com.wl.dlp.data.api.responses.orders.order.rate.BaseOrderRateResponse
 import ua.com.wl.dlp.data.api.responses.orders.table.TableReservationItemResponse
 import ua.com.wl.dlp.data.api.responses.orders.table.TableReservationDetailedResponse
-import ua.com.wl.dlp.data.api.responses.orders.order.pre_order.PreOrderResponse
-import ua.com.wl.dlp.data.api.responses.orders.order.pre_order.BasePreOrderResponse
 
 /**
  * @author Denis Makovskyi
@@ -32,15 +30,6 @@ interface OrdersApiV1 {
 
     @GET("api/mobile/v1/consumer/last-order-rate/")
     suspend fun getLastOrderRate(): Response<OrderRateResponse>
-
-    @GET("api/mobile/v1/consumer/pre-orders/")
-    suspend fun getPreOrders(
-        @Query("page") page: Int? = null,
-        @Query("page_size") count: Int? = null
-    ): Response<PagedResponse<BasePreOrderResponse>>
-
-    @GET("api/mobile/v1/consumer/pre-orders/{pre_order_id}")
-    suspend fun getPreOrder(@Path("pre_order_id") preOrderId: Int): Response<PreOrderResponse>
 
     @POST("api/mobile/v1/consumer/table-reservations/")
     suspend fun createTableReservation(@Body request: TableReservationRequest): Response<TableReservationItemResponse>

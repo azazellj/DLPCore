@@ -1,20 +1,18 @@
 package ua.com.wl.dlp.domain.interactors
 
-import ua.com.wl.dlp.data.api.requests.orders.order.pre_order.GeneralPreOrderRequest
-import ua.com.wl.dlp.data.api.requests.orders.order.pre_order.PreOrderRequest
 import ua.com.wl.dlp.data.api.requests.orders.order.rate.RateOrderRequest
+import ua.com.wl.dlp.data.api.requests.orders.order.pre_order.PreOrderRequest
+import ua.com.wl.dlp.data.api.requests.orders.order.pre_order.GeneralPreOrderRequest
 import ua.com.wl.dlp.data.api.requests.orders.table.TableReservationRequest
 import ua.com.wl.dlp.data.api.responses.PagedResponse
 import ua.com.wl.dlp.data.api.responses.CollectionResponse
 import ua.com.wl.dlp.data.api.responses.orders.order.*
-import ua.com.wl.dlp.data.api.responses.orders.order.pre_order.PreOrderResponse
-import ua.com.wl.dlp.data.api.responses.orders.order.pre_order.BasePreOrderResponse
-import ua.com.wl.dlp.data.api.responses.orders.order.pre_order.PreOrderCreationResponse
 import ua.com.wl.dlp.data.api.responses.orders.order.rate.OrderRateResponse
 import ua.com.wl.dlp.data.api.responses.orders.order.rate.BaseOrderRateResponse
+import ua.com.wl.dlp.data.api.responses.orders.order.pre_order.PreOrderResponse
+import ua.com.wl.dlp.data.api.responses.orders.order.pre_order.BasePreOrderResponse
 import ua.com.wl.dlp.data.api.responses.orders.table.TableReservationItemResponse
 import ua.com.wl.dlp.data.api.responses.orders.table.TableReservationDetailedResponse
-import ua.com.wl.dlp.data.api.responses.models.orders.order.pre_order.GeneralPreOrderItem
 import ua.com.wl.dlp.domain.Result
 
 /**
@@ -36,9 +34,9 @@ interface OrdersInteractor {
 
     suspend fun getLastOrderRate(): Result<OrderRateResponse>
 
-    suspend fun createPreOrder(request: PreOrderRequest): Result<PreOrderCreationResponse>
+    suspend fun createPreOrder(request: PreOrderRequest): Result<PreOrderResponse>
 
-    suspend fun createGeneralPreOrder(request: GeneralPreOrderRequest): Result<CollectionResponse<GeneralPreOrderItem>>
+    suspend fun createGeneralPreOrder(request: GeneralPreOrderRequest): Result<CollectionResponse<PreOrderResponse>>
 
     suspend fun getPreOrders(
         page: Int? = null,

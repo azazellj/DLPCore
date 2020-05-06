@@ -9,10 +9,14 @@ import com.google.gson.annotations.SerializedName
 enum class PreOrderStatus(val value: String) {
     @SerializedName("OPENED")
     OPENED("OPENED"),
-    @SerializedName("PROCESSED")
-    PROCESSED("PROCESSED"),
     @SerializedName("REJECTED")
     REJECTED("REJECTED"),
-    @SerializedName("REJECTED_BY_CONSUMER")
-    REJECTED_BY_CONSUMER("REJECTED_BY_CONSUMER")
+    @SerializedName("CONFIRMED")
+    CONFIRMED("CONFIRMED"),
+    @SerializedName("PROCESSED")
+    PROCESSED("PROCESSED"),
+    @SerializedName("IN_DELIVERY")
+    IN_DELIVERY("IN_DELIVERY"),
+    @SerializedName("CLOSED")
+    CLOSED("CLOSED")
 }

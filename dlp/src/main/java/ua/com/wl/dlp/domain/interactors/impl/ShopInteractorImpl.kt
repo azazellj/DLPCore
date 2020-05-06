@@ -306,11 +306,7 @@ class ShopInteractorImpl(
             }
     }
 
-    override suspend fun decrementPreOrderCounter(
-        shopId: Int,
-        offerId: Int,
-        tradeItem: Int
-    ): Result<OfferEntity> {
+    override suspend fun decrementPreOrderCounter(shopId: Int, offerId: Int): Result<OfferEntity> {
         return callQuery(call = { shopsDataSource.getOrder(offerId, shopId) })
             .sFlatMap { orderEntityOpt ->
                 orderEntityOpt.sIfPresentOrDefault(

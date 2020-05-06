@@ -79,11 +79,7 @@ interface ShopInteractor : OffersInteractor {
 
     suspend fun incrementPreOrderCounter(shopId: Int, offer: BaseOfferResponse): Result<OfferEntity>
 
-    suspend fun decrementPreOrderCounter(
-        shopId: Int,
-        offerId: Int,
-        tradeItem: Int
-    ): Result<OfferEntity>
+    suspend fun decrementPreOrderCounter(shopId: Int, offerId: Int): Result<OfferEntity>
 
     suspend fun decrementPreOrderCounter(shopId: Int, offer: BaseOfferResponse): Result<OfferEntity>
 
