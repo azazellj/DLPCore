@@ -40,10 +40,10 @@ data class CouponResponse(
     val moneySpent: String,
 
     @SerializedName("count_available")
-    val countAvailable: Double?,
+    val countAvailable: Int?,
 
     @SerializedName("monetary_available")
-    val monetaryAvailable: Double?,
+    val monetaryAvailable: String?,
 
     @SerializedName("offer")
     val offer: CouponOffer?,
