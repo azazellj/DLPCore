@@ -128,7 +128,7 @@ class OrdersInteractorImpl(
         return callApi(call = { apiV2.getPreOrder(preOrderId) })
             .flatMap { responseOpt ->
                 responseOpt.ifPresentOrDefault(
-                    { Result.Success(it) },
+                    { Result.Success(it.payload) },
                     { Result.Failure(ApiException()) })
             }
     }

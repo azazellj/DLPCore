@@ -41,5 +41,5 @@ interface OrdersApiV2 {
     ): Response<DataResponse<PagedResponse<BasePreOrderResponse>>>
 
     @GET("pi/mobile/v2/pre-order/{pre_order_id}")
-    suspend fun getPreOrder(@Path("pre_order_id") preOrderId: Int): Response<PreOrderResponse>
+    suspend fun getPreOrder(@Path("pre_order_id") preOrderId: Int): Response<DataResponse<PreOrderResponse>>
 }
