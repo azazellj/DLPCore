@@ -40,6 +40,6 @@ interface OrdersApiV2 {
         @Query("page_size") count: Int? = null
     ): Response<DataResponse<PagedResponse<BasePreOrderResponse>>>
 
-    @GET("api/mobile/v2/pre-order/{pre_order_id}")
+    @GET("api/mobile/v2/pre-order/{pre_order_id}/")
     suspend fun getPreOrder(@Path("pre_order_id") preOrderId: Int): Response<DataResponse<PreOrderResponse>>
 }
