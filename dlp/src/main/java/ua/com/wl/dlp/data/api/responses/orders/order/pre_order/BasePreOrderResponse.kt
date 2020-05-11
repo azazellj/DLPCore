@@ -37,7 +37,7 @@ open class BasePreOrderResponse(
     @SerializedName("count_of_bonuses_money")
     var currencyEquivalent: String = "",
 
-    @SerializedName("price_total")
+    @SerializedName("total_price")
     var totalPrice: String = "",
 
     @SerializedName("shop")
