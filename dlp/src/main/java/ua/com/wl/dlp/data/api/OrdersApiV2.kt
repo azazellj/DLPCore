@@ -34,12 +34,12 @@ interface OrdersApiV2 {
     @POST("api/mobile/v2/pre-order/basket/")
     suspend fun createGeneralPreOrder(@Body request: GeneralPreOrderRequest): Response<CollectionResponse<PreOrderResponse>>
 
-    @GET("api/mobile/v1/consumer/pre-orders/")
+    @GET("api/mobile/v2/pre-order/")
     suspend fun getPreOrders(
         @Query("page") page: Int? = null,
         @Query("page_size") count: Int? = null
     ): Response<PagedResponse<BasePreOrderResponse>>
 
-    @GET("api/mobile/v1/consumer/pre-orders/{pre_order_id}")
+    @GET("pi/mobile/v2/pre-order/{pre_order_id}")
     suspend fun getPreOrder(@Path("pre_order_id") preOrderId: Int): Response<PreOrderResponse>
 }
