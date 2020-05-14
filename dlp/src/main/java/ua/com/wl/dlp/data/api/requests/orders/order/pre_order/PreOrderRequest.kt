@@ -2,7 +2,7 @@ package ua.com.wl.dlp.data.api.requests.orders.order.pre_order
 
 import com.google.gson.annotations.SerializedName
 
-import ua.com.wl.dlp.data.api.models.orders.order.pre_order.PreOrderInfo
+import ua.com.wl.dlp.data.api.models.orders.order.pre_order.BasePreOrderInfo
 import ua.com.wl.dlp.data.api.requests.models.orders.order.pre_order.PreOrderItem
 
 /**
@@ -29,7 +29,7 @@ data class PreOrderRequest(
     val comment: String?,
 
     @SerializedName("info")
-    val info: PreOrderInfo?,
+    val info: BasePreOrderInfo?,
 
     @SerializedName("receipt")
     val receipt: List<PreOrderItem>
@@ -43,7 +43,7 @@ data class PreOrderRequest(
         private var useBonuses: Boolean = false
         private var bonusesCount: Long = 0L
         private var comment: String? = null
-        private var info: PreOrderInfo? = null
+        private var info: BasePreOrderInfo? = null
         private val receipt: MutableList<PreOrderItem> = mutableListOf()
 
         fun shopId(init: () -> Int) {
@@ -70,8 +70,8 @@ data class PreOrderRequest(
             comment = init()
         }
 
-        fun info(init: PreOrderInfo.Builder.() -> Unit) {
-            info = PreOrderInfo.Builder().build(init)
+        fun info(init: BasePreOrderInfo.Builder.() -> Unit) {
+            info = BasePreOrderInfo.Builder().build(init)
         }
 
         fun receiptItem(init: PreOrderItem.Builder.() -> Unit) {

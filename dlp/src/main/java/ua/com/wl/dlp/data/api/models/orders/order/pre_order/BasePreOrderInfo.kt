@@ -6,39 +6,39 @@ import com.google.gson.annotations.SerializedName
  * @author Denis Makovskyi
  */
 
-data class PreOrderInfo(
+open class BasePreOrderInfo(
     @SerializedName("delivery_type")
-    val deliveryType: DeliveryType,
+    var deliveryType: DeliveryType = DeliveryType.TAKEAWAY,
 
     @SerializedName("street")
-    val streetName: String?,
+    var streetName: String? = null,
 
     @SerializedName("house_number")
-    val houseNumber: String?,
+    var houseNumber: String? = null,
 
     @SerializedName("entrance")
-    val houseEntrance: String?,
+    var houseEntrance: String? = null,
 
     @SerializedName("intercom")
-    val intercomCode: String?,
+    var intercomCode: String? = null,
 
     @SerializedName("floor")
-    val floorNumber: Int?,
+    var floorNumber: Int? = null,
 
     @SerializedName("office_number")
-    val officeNumber: String?,
+    var officeNumber: String? = null,
 
     @SerializedName("persons_quantity")
-    val personsQuantity: Int,
+    var personsQuantity: Int? = null,
 
     @SerializedName("payment_method")
-    val paymentMethod: PaymentMethod,
+    var paymentMethod: PaymentMethod = PaymentMethod.CASH,
 
     @SerializedName("payment_banknote")
-    val paymentBanknote: String?,
+    var paymentBanknote: String? = null,
 
     @SerializedName("operator_call")
-    val operatorCall: OperatorCall?
+    var operatorCall: OperatorCall = OperatorCall.WAITING
 ) {
 
     class Builder {
@@ -99,9 +99,9 @@ data class PreOrderInfo(
             operatorCall = init()
         }
 
-        fun build(init: Builder.() -> Unit): PreOrderInfo {
+        fun build(init: Builder.() -> Unit): BasePreOrderInfo {
             init()
-            return PreOrderInfo(
+            return BasePreOrderInfo(
                 deliveryType, streetName, houseNumber, houseEntrance,
                 intercomCode, floorNumber, officeNumber, personsQuantity,
                 paymentMethod, paymentBanknote, operatorCall)
