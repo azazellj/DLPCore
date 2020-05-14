@@ -29,7 +29,7 @@ interface OrdersApiV2 {
     suspend fun getOrder(@Path("order_id") orderId: Int): Response<DataResponse<OrderResponse>>
 
     @POST("api/mobile/v2/pre-order/")
-    suspend fun createPreOrder(@Body request: PreOrderRequest): Response<PreOrderResponse>
+    suspend fun createPreOrder(@Body request: PreOrderRequest): Response<DataResponse<PreOrderResponse>>
 
     @POST("api/mobile/v2/pre-order/basket/")
     suspend fun createGeneralPreOrder(@Body request: GeneralPreOrderRequest): Response<CollectionResponse<PreOrderResponse>>
