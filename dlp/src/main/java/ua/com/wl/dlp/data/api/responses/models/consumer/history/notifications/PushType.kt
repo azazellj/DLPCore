@@ -10,6 +10,9 @@ enum class PushType(val value: String) {
     @SerializedName("show_shop")
     SHOP("show_shop"),
 
+    @SerializedName("rank_reached")
+    RANK("rank_reached"),
+
     @SerializedName("show_offer")
     OFFER("show_offer"),
 
