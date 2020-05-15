@@ -33,7 +33,7 @@ data class CouponResponse(
     @SerializedName("used")
     val isUsed: Boolean,
 
-    @SerializedName("used_count")
+    @SerializedName("count_used")
     val usedCount: Int,
 
     @SerializedName("money_spent")
