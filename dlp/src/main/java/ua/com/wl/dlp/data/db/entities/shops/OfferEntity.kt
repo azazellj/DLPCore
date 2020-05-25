@@ -9,7 +9,7 @@ import ua.com.wl.dlp.data.db.entities.shops.embedded.offer.OfferEntityPromoSetti
  */
 
 @Entity(tableName = OfferEntity.TABLE_NAME)
-data class OfferEntity constructor(
+data class OfferEntity(
     @PrimaryKey
     @ColumnInfo(name = "id")
     val id: Int,

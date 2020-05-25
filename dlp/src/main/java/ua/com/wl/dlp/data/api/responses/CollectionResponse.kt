@@ -6,6 +6,6 @@ import com.google.gson.annotations.SerializedName
  * @author Denis Makovskyi
  */
 
-data class CollectionResponse<T> constructor(
-    @SerializedName(value = "data")
+data class CollectionResponse<T>(
+    @SerializedName(value = "data", alternate = ["results"])
     val items: List<T>)

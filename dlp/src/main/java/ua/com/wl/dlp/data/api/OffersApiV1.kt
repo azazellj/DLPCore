@@ -1,14 +1,14 @@
 package ua.com.wl.dlp.data.api
 
 import retrofit2.Response
-import retrofit2.http.DELETE
 import retrofit2.http.GET
-import retrofit2.http.POST
 import retrofit2.http.Path
+import retrofit2.http.POST
+import retrofit2.http.DELETE
 
 import ua.com.wl.dlp.data.api.responses.BaseResponse
-import ua.com.wl.dlp.data.api.responses.consumer.history.BalanceChangeResponse
 import ua.com.wl.dlp.data.api.responses.shop.offer.OfferResponse
+import ua.com.wl.dlp.data.api.responses.consumer.history.transactions.BalanceChangeResponse
 
 /**
  * @author Denis Makovskyi

@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName
  * @author Denis Makovskyi
  */
 
-data class ShopResponse constructor(
+data class ShopResponse(
     @SerializedName("description")
     val description: String,
 

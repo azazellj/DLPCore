@@ -6,33 +6,58 @@ import com.google.gson.annotations.SerializedName
  * @author Denis Makovskyi
  */
 
-data class FeedbackRequest constructor(
-    @SerializedName("message")
-    val message: String?,
-
-    @SerializedName("mobile_app_version")
-    val appVersion: String?,
-
+data class FeedbackRequest(
     @SerializedName("mobile_phone")
     val phone: String?,
 
     @SerializedName("email")
     val email: String?,
 
+    @SerializedName("message")
+    val message: String?,
+
+    @SerializedName("mobile_app_version")
+    val appVersion: String?,
+
     @SerializedName("mobile_phone_info")
-    val deviceInfo: String?) {
+    val deviceInfo: String?
+) {
 
-    internal class Builder {
-        var message: String? = null
-        var appVersion: String? = null
-        var email: String? = null
-        var phone: String? = null
-        var deviceInfo: String? = null
+    class Builder {
 
-        fun build(): FeedbackRequest = FeedbackRequest(message, appVersion, phone, email, deviceInfo)
+        private var phone: String? = null
+        private var email: String? = null
+        private var message: String? = null
+        private var appVersion: String? = null
+        private var deviceInfo: String? = null
+
+        fun phone(init: () -> String?) {
+            phone = init() ?: return
+        }
+
+        fun email(init: () -> String?) {
+            email = init() ?: return
+        }
+
+        fun message(init: () -> String?) {
+            message = init() ?: return
+        }
+
+        fun appVersion(init: () -> String?) {
+            appVersion = init() ?: return
+        }
+
+        fun deviceInfo(init: () -> String?) {
+            deviceInfo = init() ?: return
+        }
+
+        fun build(init: Builder.() -> Unit): FeedbackRequest {
+            init()
+            return FeedbackRequest(phone, email, message, appVersion, deviceInfo)
+        }
     }
 }
 
-internal fun feedback(
-    init: FeedbackRequest.Builder.() -> Unit
-): FeedbackRequest = FeedbackRequest.Builder().apply(init).build()
+fun feedbackRequest(init: FeedbackRequest.Builder.() -> Unit): FeedbackRequest {
+    return FeedbackRequest.Builder().build(init)
+}

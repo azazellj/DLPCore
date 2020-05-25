@@ -6,7 +6,7 @@ import android.content.Context
  * @author Denis Makovskyi
  */
 
-abstract class CoreException constructor(
+abstract class CoreException(
     message: String? = null,
     cause: Throwable? = null
 ) : Exception(message, cause) {

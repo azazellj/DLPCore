@@ -6,7 +6,7 @@ import ua.com.wl.archetype.core.android.bus.BusEvent
  * @author Denis Makovskyi
  */
 
-data class OfferBusEvent constructor(
+data class OfferBusEvent(
     val offerId: Int,
     val tradeId: Int?,
     val field: Field,

@@ -6,37 +6,103 @@ import com.google.gson.annotations.SerializedName
  * @author Denis Makovskyi
  */
 
-open class TableReservationRequest constructor(
+data class TableReservationRequest(
     @SerializedName("shop")
-    var shopId: Int = 0,
+    val shopId: Int,
 
     @SerializedName("date")
-    var date: String? = null,
+    val date: String?,
 
     @SerializedName("time_from")
-    var timeFrom: String? = null,
+    val timeFrom: String?,
 
     @SerializedName("time_to")
-    var timeTo: String? = null,
+    val timeTo: String?,
 
     @SerializedName("reserve_one_table")
-    var singleTable: Boolean = true,
+    val singleTable: Boolean,
 
     @SerializedName("guests_count")
-    var guestsCount: Int = 1,
+    val guestsCount: Int,
 
     @SerializedName("child_guests_count")
-    var childrenCount: Int = 0,
+    val childrenCount: Int,
 
     @SerializedName("pre_ordered_flag")
-    var preOrdered: Boolean = false,
+    val isPreOrdered: Boolean,
 
     @SerializedName("smoking_place_flag")
-    var needSmokingPlace: Boolean = false,
+    val needSmokingPlace: Boolean,
 
     @SerializedName("comment")
-    var comment: String? = null)
+    val comment: String?
+) {
 
-fun tableReservation(
-    init: TableReservationRequest.() -> Unit
-): TableReservationRequest = TableReservationRequest().apply(init)
+    class Builder {
+
+        private var shopId: Int = 0
+        private var date: String? = null
+        private var timeFrom: String? = null
+        private var timeTo: String? = null
+        private var singleTable: Boolean = true
+        private var guestsCount: Int = 1
+        private var childrenCount: Int = 0
+        private var isPreOrdered: Boolean = false
+        private var needSmokingPlace: Boolean = false
+        private var comment: String? = null
+
+        fun shopId(init: () -> Int) {
+            shopId = init()
+        }
+
+        fun date(init: () -> String?) {
+            date = init() ?: return
+        }
+
+        fun timeFrom(init: () -> String?) {
+            timeFrom = init() ?: return
+        }
+
+        fun timeTo(init: () -> String?) {
+            timeTo = init() ?: return
+        }
+
+        fun singleTable(init: () -> Boolean) {
+            singleTable = init()
+        }
+
+        fun guestsCount(init: () -> Int) {
+            guestsCount = init()
+        }
+
+        fun childrenCount(init: () -> Int) {
+            childrenCount = init()
+        }
+
+        fun isPreOrdered(init: () -> Boolean) {
+            isPreOrdered = init()
+        }
+
+        fun needSmokingPlace(init: () -> Boolean) {
+            needSmokingPlace = init()
+        }
+
+        fun comment(init: () -> String?) {
+            comment = init() ?: return
+        }
+
+        fun build(init: Builder.() -> Unit): TableReservationRequest {
+            init()
+            return TableReservationRequest(
+                shopId, date,
+                timeFrom, timeTo,
+                singleTable, guestsCount,
+                childrenCount, isPreOrdered,
+                needSmokingPlace, comment)
+        }
+    }
+}
+
+fun tableReservationRequest(init: TableReservationRequest.Builder.() -> Unit): TableReservationRequest {
+    return TableReservationRequest.Builder().build(init)
+}

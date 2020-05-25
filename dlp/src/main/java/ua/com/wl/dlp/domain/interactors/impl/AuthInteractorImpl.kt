@@ -8,15 +8,15 @@ import ua.com.wl.dlp.data.api.AuthApiV2
 import ua.com.wl.dlp.data.api.errors.ErrorsMapper
 import ua.com.wl.dlp.data.api.requests.auth.*
 import ua.com.wl.dlp.data.api.responses.PagedResponse
+import ua.com.wl.dlp.data.api.responses.auth.SignResponse
 import ua.com.wl.dlp.data.api.responses.auth.TokenResponse
 import ua.com.wl.dlp.data.api.responses.auth.AuthenticationResponse
-import ua.com.wl.dlp.data.api.responses.auth.SignResponse
-import ua.com.wl.dlp.data.api.responses.models.auth.CardsStatus
 import ua.com.wl.dlp.data.api.responses.models.auth.City
-import ua.com.wl.dlp.data.events.factory.CoreBusEventsFactory
+import ua.com.wl.dlp.data.api.responses.models.auth.CardsStatus
 import ua.com.wl.dlp.data.events.session.SessionBusEvent
-import ua.com.wl.dlp.data.prefereces.ConsumerPreferences
+import ua.com.wl.dlp.data.events.factory.CoreBusEventsFactory
 import ua.com.wl.dlp.data.prefereces.CorePreferences
+import ua.com.wl.dlp.data.prefereces.ConsumerPreferences
 import ua.com.wl.dlp.domain.Result
 import ua.com.wl.dlp.domain.UseCase
 import ua.com.wl.dlp.domain.exeptions.api.ApiException
@@ -27,7 +27,7 @@ import ua.com.wl.dlp.domain.interactors.AuthInteractor
  * @author Denis Makovskyi
  */
 
-class AuthInteractorImpl constructor(
+class AuthInteractorImpl(
     errorsMapper: ErrorsMapper,
     private val apiV1: AuthApiV1,
     private val apiV2: AuthApiV2,
@@ -35,8 +35,8 @@ class AuthInteractorImpl constructor(
     private val consumerPreferences: ConsumerPreferences
 ) : UseCase(errorsMapper), AuthInteractor {
 
-    override suspend fun verification(): Result<TokenResponse> =
-        callApi(
+    override suspend fun verification(): Result<TokenResponse> {
+        return callApi(
             call = { apiV2.verification(TokenRequest(corePreferences.authPrefs.authToken)) },
             errorClass = AuthException::class
         ).flatMap { dataResponseOpt ->
@@ -48,9 +48,10 @@ class AuthInteractorImpl constructor(
                 corePreferences.authPrefs = corePreferences.authPrefs.copy(authToken = tokenResponse.token)
             }
         }
+    }
 
-    override suspend fun refreshToken(): Result<TokenResponse> =
-        callApi(
+    override suspend fun refreshToken(): Result<TokenResponse> {
+        return callApi(
             call = { apiV2.refreshToken(TokenRequest(corePreferences.authPrefs.refreshToken)) },
             errorClass = AuthException::class
         ).flatMap { dataResponseOpt ->
@@ -62,23 +63,22 @@ class AuthInteractorImpl constructor(
                 corePreferences.authPrefs = corePreferences.authPrefs.copy(authToken = tokenResponse.token)
             }
         }
+    }
 
-    override suspend fun authentication(
-        phone: String,
-        sendSms: Boolean
-    ): Result<AuthenticationResponse> =
-        callApi(
-            call = { apiV2.authentication(AuthenticationRequest(sendSms, phone)) },
+    override suspend fun authentication(request: AuthenticationRequest): Result<AuthenticationResponse> {
+        return callApi(
+            call = { apiV2.authentication(request) },
             errorClass = AuthException::class
         ).flatMap { dataResponseOpt ->
             dataResponseOpt.ifPresentOrDefault(
                 { Result.Success(it.payload) },
                 { Result.Failure(ApiException()) })
         }
+    }
 
-    override suspend fun signIn(phone: String, password: String, appVersion: String?): Result<SignResponse> =
-        callApi(
-            call = { apiV2.signIn(SignInRequest(phone, password)) },
+    override suspend fun signIn(request: SignInRequest, appVersion: String?): Result<SignResponse> {
+        return callApi(
+            call = { apiV2.signIn(request) },
             errorClass = AuthException::class
         ).flatMap { dataResponseOpt ->
             dataResponseOpt.ifPresentOrDefault(
@@ -92,26 +92,22 @@ class AuthInteractorImpl constructor(
                 callApi(call = { apiV2.deviceInfo(DeviceInfoRequest(appVersion = appVersion)) })
             }
         }
+    }
 
-    override suspend fun cardsStatus(phone: String, password: String): Result<CardsStatus> =
-        callApi(
-            call = { apiV2.cardsStatus(CardsStatusRequest(phone, password)) },
+    override suspend fun cardsStatus(request: CardsStatusRequest): Result<CardsStatus> {
+        return callApi(
+            call = { apiV2.cardsStatus(request) },
             errorClass = AuthException::class
         ).flatMap { dataResponseOpt ->
             dataResponseOpt.ifPresentOrDefault(
                 { Result.Success(it.payload.cardsStatus) },
                 { Result.Failure(ApiException()) })
         }
+    }
 
-    override suspend fun signUp(
-        city: Int,
-        phone: String,
-        password: String,
-        barcode: String?,
-        appVersion: String?
-    ): Result<SignResponse> =
-        callApi(
-            call = { apiV2.signUp(SignUpRequest(city, phone, password, barcode)) },
+    override suspend fun signUp(request: SignUpRequest, appVersion: String?): Result<SignResponse> {
+        return callApi(
+            call = { apiV2.signUp(request) },
             errorClass = AuthException::class
         ).flatMap { dataResponseOpt ->
             dataResponseOpt.ifPresentOrDefault(
@@ -125,9 +121,10 @@ class AuthInteractorImpl constructor(
                 callApi(call = { apiV2.deviceInfo(DeviceInfoRequest(appVersion = appVersion)) })
             }
         }
+    }
 
-    override suspend fun signOut(): Result<Boolean> =
-        callApi(
+    override suspend fun signOut(): Result<Boolean> {
+        return callApi(
             call = { apiV2.signOut() },
             errorClass = AuthException::class
         ).map { baseResponseOpt ->
@@ -135,30 +132,33 @@ class AuthInteractorImpl constructor(
         }.sOnEach {
             withContext(Dispatchers.IO) {
                 corePreferences.removeAuthPrefs()
+                consumerPreferences.removeRankPrefs()
                 consumerPreferences.removeProfilePrefs()
             }
             CoreBusEventsFactory.sessionExpired(SessionBusEvent.FallbackType.SIGNED_OUT)
         }
+    }
 
-    override suspend fun requestSmsCode(phone: String): Result<Boolean> =
-        callApi(
-            call = { apiV2.requestSmsCode(SmsCodeRequest(phone)) },
+    override suspend fun requestSmsCode(request: SmsCodeRequest): Result<Boolean> {
+        return callApi(
+            call = { apiV2.requestSmsCode(request) },
             errorClass = AuthException::class
         ).map { baseResponseOpt ->
             baseResponseOpt.getUnsafe()?.isSuccessfully() ?: false
         }
+    }
 
-    override suspend fun restorePassword(phone: String): Result<Boolean> =
-        callApi(call = { apiV1.restorePassword(SmsCodeRequest(phone)) })
-            .map { baseResponseOpt ->
-                baseResponseOpt.getUnsafe()?.isSuccessfully() ?: false
-            }
+    override suspend fun restorePassword(request: SmsCodeRequest): Result<Boolean> {
+        return callApi(call = { apiV1.restorePassword(request) }).map { baseResponseOpt ->
+            baseResponseOpt.getUnsafe()?.isSuccessfully() ?: false
+        }
+    }
 
-    override suspend fun cities(): Result<PagedResponse<City>> =
-        callApi(call = { apiV2.cities() })
-            .flatMap { dataResponseOpt ->
-                dataResponseOpt.ifPresentOrDefault(
-                    { Result.Success(it.payload) },
-                    { Result.Failure(ApiException()) })
-            }
+    override suspend fun cities(): Result<PagedResponse<City>> {
+        return callApi(call = { apiV2.cities() }).flatMap { dataResponseOpt ->
+            dataResponseOpt.ifPresentOrDefault(
+                { Result.Success(it.payload) },
+                { Result.Failure(ApiException()) })
+        }
+    }
 }

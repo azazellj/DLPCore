@@ -8,43 +8,118 @@ import ua.com.wl.dlp.data.api.responses.models.consumer.profile.Gender
  * @author Denis Makovskyi
  */
 
-data class ProfileRequest constructor(
+data class ProfileRequest(
     @SerializedName("first_name")
-    var firstName: String? = null,
+    val firstName: String?,
 
     @SerializedName("patronymic")
-    var patronymic: String? = null,
+    val patronymic: String?,
 
     @SerializedName("last_name")
-    var lastName: String? = null,
+    val lastName: String?,
 
     @SerializedName("gender")
-    var gender: Gender? = null,
-
-    @SerializedName("email")
-    var email: String? = null,
-
-    @SerializedName("city")
-    var city: Int? = null,
-
-    @SerializedName("address")
-    var address: String? = null,
+    val gender: Gender?,
 
     @SerializedName("birth_date")
-    var birthDate: String? = null,
+    val birthDate: String?,
 
     @SerializedName("is_married")
-    var isMarried: Boolean? = null,
+    val isMarried: Boolean?,
+
+    @SerializedName("city")
+    val city: Int?,
+
+    @SerializedName("address")
+    val address: String?,
+
+    @SerializedName("email")
+    val email: String?,
 
     @SerializedName("language")
-    var language: String? = null,
+    val language: String?,
 
     @SerializedName("comment")
-    var comment: String? = null,
+    val comment: String?,
 
     @SerializedName("notification_token")
-    var notificationToken: String? = null)
+    val notificationToken: String?
+) {
 
-fun profile(
-    init: ProfileRequest.() -> Unit
-): ProfileRequest = ProfileRequest().apply(init)
+    class Builder {
+
+        private var firstName: String? = null
+        private var patronymic: String? = null
+        private var lastName: String? = null
+        private var gender: Gender? = null
+        private var birthDate: String? = null
+        private var isMarried: Boolean? = null
+        private var city: Int? = null
+        private var address: String? = null
+        private var email: String? = null
+        private var language: String? = null
+        private var comment: String? = null
+        private var notificationToken: String? = null
+
+        fun firstName(init: () -> String?) {
+            firstName = init() ?: return
+        }
+
+        fun patronymic(init: () -> String?) {
+            patronymic = init() ?: return
+        }
+
+        fun lastName(init: () -> String?) {
+            lastName = init() ?: return
+        }
+
+        fun gender(init: () -> Gender?) {
+            gender = init() ?: return
+        }
+
+        fun birthDate(init: () -> String?) {
+            birthDate = init() ?: return
+        }
+
+        fun isMarried(init: () -> Boolean?) {
+            isMarried = init() ?: return
+        }
+
+        fun city(init: () -> Int?) {
+            city = init() ?: return
+        }
+
+        fun address(init: () -> String?) {
+            address = init() ?: return
+        }
+
+        fun email(init: () -> String?) {
+            email = init() ?: return
+        }
+
+        fun language(init: () -> String?) {
+            language = init() ?: return
+        }
+
+        fun comment(init: () -> String?) {
+            comment = init() ?: return
+        }
+
+        fun notificationToken(init: () -> String?) {
+            notificationToken = init() ?: return
+        }
+
+        fun build(init: Builder.() -> Unit): ProfileRequest {
+            init()
+            return ProfileRequest(
+                firstName, patronymic, lastName,
+                gender, birthDate, isMarried,
+                city, address, email,
+                language, comment, notificationToken)
+        }
+    }
+}
+
+fun profileRequest(init: ProfileRequest.Builder.() -> Unit): ProfileRequest {
+    return ProfileRequest.Builder().build(init)
+}

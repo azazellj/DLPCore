@@ -9,7 +9,7 @@ import ua.com.wl.dlp.data.api.responses.models.shop.offer.promo.PromoType
  * @author Denis Makovskyi
  */
 
-data class OfferEntityPromoSettings constructor(
+data class OfferEntityPromoSettings(
     @ColumnInfo(name = "promo_type")
     val promoType: PromoType? = null,
 

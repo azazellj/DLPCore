@@ -8,10 +8,10 @@ import ua.com.wl.dlp.data.api.requests.auth.*
 import ua.com.wl.dlp.data.api.responses.BaseResponse
 import ua.com.wl.dlp.data.api.responses.DataResponse
 import ua.com.wl.dlp.data.api.responses.PagedResponse
-import ua.com.wl.dlp.data.api.responses.auth.TokenResponse
-import ua.com.wl.dlp.data.api.responses.auth.AuthenticationResponse
-import ua.com.wl.dlp.data.api.responses.auth.CardsStatusResponse
 import ua.com.wl.dlp.data.api.responses.auth.SignResponse
+import ua.com.wl.dlp.data.api.responses.auth.TokenResponse
+import ua.com.wl.dlp.data.api.responses.auth.CardsStatusResponse
+import ua.com.wl.dlp.data.api.responses.auth.AuthenticationResponse
 import ua.com.wl.dlp.data.api.responses.models.auth.City
 
 /**

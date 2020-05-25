@@ -3,30 +3,21 @@ package ua.com.wl.dlp.utils
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.CoroutineDispatcher
 
-import android.content.Context
-import android.content.Intent
 import android.os.Bundle
+import android.content.Intent
+import android.content.Context
 
-import ua.com.wl.dlp.data.api.responses.models.consumer.history.BalanceChange
-import ua.com.wl.dlp.data.api.responses.models.shop.offer.promo.PromoType
-import ua.com.wl.dlp.data.db.entities.shops.OfferEntity
 import ua.com.wl.dlp.data.events.prefs.ProfileBusEvent
+import ua.com.wl.dlp.data.db.entities.shops.OfferEntity
+import ua.com.wl.dlp.data.db.datasources.ShopsDataSource
 import ua.com.wl.dlp.data.prefereces.ConsumerPreferences
+import ua.com.wl.dlp.data.api.responses.shop.offer.BaseOfferResponse
+import ua.com.wl.dlp.data.api.responses.models.shop.offer.promo.PromoType
+import ua.com.wl.dlp.data.api.responses.models.consumer.history.transactions.BalanceChange
 
 /**
  * @author Denis Makovskyi
  */
-
-fun getQueryParam(url: String, key: String): String? {
-    if (url.contains("?")) {
-        val params = url.substring(url.indexOf("?") + 1).split("&")
-        for (param in params) {
-            val keyVal = param.split("=")
-            if (keyVal[0] == key) return keyVal[1]
-        }
-    }
-    return null
-}
 
 fun calculatePersistedOffersCount(offers: List<OfferEntity>): Int {
     return offers.sumBy { offer -> offer.preOrdersCount }
@@ -90,6 +81,33 @@ suspend fun processBalanceChanges(
                 ProfileBusEvent.FieldValue.StringValue(consumerPreferences.profilePrefs.moneyAmount)
             ).let { changes.add(it) }
         }
+    }
+}
+
+internal suspend fun updatePreOrdersCounter(
+    shopId: Int,
+    offersList: List<BaseOfferResponse>,
+    shopsDataSource: ShopsDataSource,
+    coroutineDispatcher: CoroutineDispatcher
+) {
+    withContext(coroutineDispatcher) {
+        for (offer in offersList) {
+            updatePreOrdersCounter(shopId, offer, shopsDataSource, coroutineDispatcher)
+        }
+    }
+}
+
+internal suspend fun updatePreOrdersCounter(
+    shopId: Int,
+    offerResponse: BaseOfferResponse,
+    shopsDataSource: ShopsDataSource,
+    coroutineDispatcher: CoroutineDispatcher
+) {
+    withContext(coroutineDispatcher) {
+        shopsDataSource.getOrder(offerResponse.id, shopId)
+            .ifPresent { offerEntity ->
+                offerResponse.preOrdersCount = offerEntity.preOrdersCount
+            }
     }
 }
 

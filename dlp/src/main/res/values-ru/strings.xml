@@ -1,6 +1,4 @@
 <resources>
-    <string name="app_name">dlp</string>
-
     <string name="dlp_feedback_app_version">Android_app_v</string>
     <string name="dlp_feedback_callback_prefix">Я не против, чтобы мне позвонили</string>
     <string name="dlp_feedback_callback_agree">ДА</string>
@@ -18,6 +16,10 @@
     <string name="dlp_error_network_io">Ошибка соединения с сетью</string>
     <string name="dlp_error_network_ssl">Ошибка SSL сертификата</string>
     <string name="dlp_error_network_json">Неожиданный ответ от сервера</string>
+
+    <string name="dlp_error_server">Ошибка сервера</string>
+    <string name="dlp_error_server_database">Ошибка базы данных на сервере</string>
+    <string name="dlp_error_server_unreachable">Сервер недоступен</string>
 
     <string name="dlp_error_token_required">Отсутствует токен доступа</string>
     <string name="dlp_error_token_invalid">Неверный токен доступа</string>
@@ -56,9 +58,6 @@
     <string name="dlp_error_pre_order_invalid_delivery_type">Тип доставки указан неверно</string>
     <string name="dlp_error_pre_order_illegal_flag_use_bonuses">Конфликт с опцией \"Оплатить бонусами\"</string>
     <string name="dlp_error_pre_order_incorrect_readiness_time">Время готовности меньше или равно текущему времени</string>
-
-    <string name="dlp_error_server_unreachable">Отдаленный сервер недоступен</string>
-    <string name="dlp_error_server_database">Ошибка базы данных на отдаленном сервере</string>
 
     <string name="dlp_error_runtime">Ошибка исполнения. Пожалуйста, попробуйте еще раз</string>
 </resources>

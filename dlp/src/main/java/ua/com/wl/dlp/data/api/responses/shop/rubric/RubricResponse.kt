@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName
  * @author Denis Makovskyi
  */
 
-data class RubricResponse constructor(
+data class RubricResponse(
     @SerializedName("id")
     val id: Int,
 

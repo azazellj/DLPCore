@@ -8,10 +8,12 @@ import ua.com.wl.dlp.R
  * @author Denis Makovskyi
  */
 
-open class CoreRuntimeException constructor(
+open class CoreRuntimeException(
     message: String? = null,
     cause: Throwable? = null
 ) : CoreException(message, cause) {
 
-    override fun getLocalizedMessage(context: Context): String = context.getString(R.string.dlp_error_runtime)
+    override fun getLocalizedMessage(context: Context): String {
+        return context.getString(R.string.dlp_error_runtime)
+    }
 }

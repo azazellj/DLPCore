@@ -6,7 +6,7 @@ import org.koin.dsl.koinApplication
 import org.koin.core.KoinApplication
 import org.koin.android.ext.koin.androidContext
 
-import ua.com.wl.dlp.core.di.*
+import ua.com.wl.dlp.core.di.koin.*
 
 /**
  * @author Denis Makovskyi
@@ -34,7 +34,8 @@ object DLPCore {
                     preferencesModule,
                     apiModule,
                     databaseModule,
-                    interactorsModule))
+                    interactorsModule
+                ))
         }
     }
 

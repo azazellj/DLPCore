@@ -10,15 +10,17 @@ import ua.com.wl.dlp.data.api.responses.PagedResponse
  * @author Denis Makovskyi
  */
 
-fun PagedResponse<*>.previousPage(): Int? =
-    previousPage?.let { getQueryParam(it, "page") }?.toInt()
+fun Data.containsBool(key: String): Boolean {
+    return keyValueMap.containsKey(key) && getBoolean(key, false)
+}
 
-fun PagedResponse<*>.nextPage(): Int? =
-    nextPage?.let { getQueryParam(it, "page") }?.toInt()
+fun PagedResponse<*>.previousPage(): Int? {
+    return previousPage?.let { getQueryParam(it, "page") }?.toInt()
+}
 
-fun Data.containsBool(key: String) = keyValueMap.containsKey(key) && getBoolean(key, false)
-
-internal inline fun <T> T.only(block: (T) -> Unit) = block(this)
+fun PagedResponse<*>.nextPage(): Int? {
+    return nextPage?.let { getQueryParam(it, "page") }?.toInt()
+}
 
 internal infix fun Int.isEqualsTo(another: Int): Boolean = this == another
 
@@ -26,13 +28,12 @@ internal infix fun Int.isGreaterThan(another: Int): Boolean = this > another
 
 internal infix fun Long.isGreaterThan(another: Int): Boolean = this > another
 
-internal infix fun String?.mulAsDouble(multiplier: Int): Double = this?.toDouble()?.times(multiplier) ?: 0.0
-
 internal fun CharSequence?.isNonNullOrEmpty(): Boolean = this != null && this.isNotEmpty()
 
 internal fun String?.toJwt(): String = "JWT $this"
 
+internal infix fun String?.mulAsDouble(multiplier: Int): Double = this?.toDouble()?.times(multiplier) ?: 0.0
+
 internal fun Data.isEmpty(): Boolean = keyValueMap.isEmpty()
 
-internal fun Request.hasHeader(name: String, value: String): Boolean =
-    header(name)?.let { it -> it.isNotEmpty() && it == value } ?: false
+internal fun Request.hasHeader(name: String, value: String): Boolean = header(name)?.let { it -> it.isNotEmpty() && it == value } ?: false

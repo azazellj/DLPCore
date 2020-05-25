@@ -6,24 +6,24 @@ import com.google.gson.annotations.SerializedName
  * @author Denis Makovskyi
  */
 
-data class PagedResponse<T> constructor(
+open class PagedResponse<T>(
     @SerializedName("page_number")
-    val page: Int,
+    val page: Int? = null,
 
-    @SerializedName(value = "per_page", alternate = ["count"])
-    val count: Int,
+    @SerializedName(value = "count", alternate = ["per_page", "page_size"])
+    val count: Int? = null,
 
     @SerializedName("total_pages_count")
-    val pagesCount: Int,
+    val pagesCount: Int? = null,
 
     @SerializedName("total_items_count")
-    val itemsCount: Int,
+    val itemsCount: Int? = null,
 
     @SerializedName("next")
-    val nextPage: String?,
+    val nextPage: String? = null,
 
     @SerializedName("previous")
-    val previousPage: String?,
+    val previousPage: String? = null,
 
     @SerializedName(value = "data", alternate = ["results"])
-    val items: List<T>)
+    val items: List<T> = listOf())

@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName
  * @author Denis Makovskyi
  */
 
-data class SignResponse constructor(
+data class SignResponse(
     @SerializedName("token") 
     val token: String,
     

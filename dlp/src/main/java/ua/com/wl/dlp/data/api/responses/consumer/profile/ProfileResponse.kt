@@ -2,15 +2,15 @@ package ua.com.wl.dlp.data.api.responses.consumer.profile
 
 import com.google.gson.annotations.SerializedName
 
+import ua.com.wl.dlp.data.api.models.consumer.profile.ProfileOperation
 import ua.com.wl.dlp.data.api.responses.models.auth.City
-import ua.com.wl.dlp.data.api.responses.consumer.history.TransactionResponse
 import ua.com.wl.dlp.data.api.responses.models.consumer.profile.Gender
 
 /**
  * @author Denis Makovskyi
  */
 
-data class ProfileResponse constructor(
+data class ProfileResponse(
     @SerializedName("first_name")
     val firstName: String,
 
@@ -23,23 +23,23 @@ data class ProfileResponse constructor(
     @SerializedName("gender")
     val gender: Gender?,
 
-    @SerializedName("email")
-    val email: String,
-
-    @SerializedName("mobile_phone")
-    val phone: String,
-
-    @SerializedName("address")
-    val address: String,
-
-    @SerializedName("city")
-    val city: City?,
-
     @SerializedName("birth_date")
     val birthDate: String?,
 
     @SerializedName("is_married")
     val isMarried: Boolean?,
+
+    @SerializedName("city")
+    val city: City?,
+
+    @SerializedName("address")
+    val address: String,
+
+    @SerializedName("email")
+    val email: String,
+
+    @SerializedName("mobile_phone")
+    val phone: String,
 
     @SerializedName("language")
     val language: String,
@@ -69,4 +69,4 @@ data class ProfileResponse constructor(
     val notificationToken: String,
 
     @SerializedName("balance_changes")
-    val transactions: List<TransactionResponse>)
+    val transactions: List<ProfileOperation>)

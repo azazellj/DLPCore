@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName
  * @author Denis Makovskyi
  */
 
-data class PromoSettings constructor(
+data class PromoSettings(
     @SerializedName("promo_type")
     val promoType: PromoType,
 

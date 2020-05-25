@@ -9,7 +9,7 @@ import ua.com.wl.dlp.data.api.responses.models.shop.offer.promo.PromoSettings
  * @author Denis Makovskyi
  */
 
-open class BaseOfferResponse constructor(
+open class BaseOfferResponse(
     @SerializedName("id")
     var id: Int = 0,
 
@@ -40,14 +40,17 @@ open class BaseOfferResponse constructor(
     @SerializedName("hide_price")
     var isPriceHidden: Boolean = false,
 
-    @SerializedName("price_in_uah")
-    var priceInCurrency: String? = null,
-
     @SerializedName("price_in_bonuses")
     var priceInBonuses: Long? = null,
 
+    @SerializedName("price_in_uah")
+    var priceInCurrency: String? = null,
+
     @SerializedName("cash_back_percentage")
     var cashBackPercentage: Int? = null,
+
+    @Transient
+    var preOrdersCount: Int = 0,
 
     @SerializedName("promo_settings")
     var promoSettings: PromoSettings? = null,

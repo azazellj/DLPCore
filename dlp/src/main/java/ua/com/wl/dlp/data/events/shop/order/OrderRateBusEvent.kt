@@ -6,8 +6,8 @@ import ua.com.wl.archetype.core.android.bus.BusEvent
  * @author Denis Makovskyi
  */
 
-data class OrderRateBusEvent constructor(
+data class OrderRateBusEvent(
     val shopId: Int,
     val orderId: Int,
-    val orderRate: Int = 0
+    val orderRate: Int
 ) : BusEvent()

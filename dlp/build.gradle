@@ -1,12 +1,12 @@
 apply plugin: 'com.android.library'
 
-apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion 29
-    buildToolsVersion "29.0.2"
+    buildToolsVersion "29.0.3"
 
     defaultConfig {
         minSdkVersion 17
@@ -34,13 +34,13 @@ android {
 }
 
 dependencies {
-    def core_version = '1.3.0-alpha01'
-    def room_version = '2.2.3'
-    def work_version = '2.3.1'
+    def core_version = '1.4.0-alpha01'
+    def room_version = '2.2.5'
+    def work_version = '2.3.4'
     def koin_version = "2.0.1"
     def gson_version = '2.8.6'
-    def okhttp_version = '4.3.1'
-    def retrofit_version = '2.7.1'
+    def okhttp_version = '4.7.2'
+    def retrofit_version = '2.9.0'
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
@@ -77,7 +77,7 @@ dependencies {
     implementation "com.github.ChuckerTeam.Chucker:library:3.0.1"
 
     // Architecture
-    implementation 'com.github.DenisMakovskyi:DLPArchetype:0.9'
+    implementation 'com.github.DenisMakovskyi:DLPArchetype:1.0.6'
 
     // Unit test
     testImplementation 'junit:junit:4.13'

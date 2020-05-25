@@ -2,7 +2,7 @@ package ua.com.wl.dlp.data.db.converters
 
 import androidx.room.TypeConverter
 
-import ua.com.wl.dlp.data.api.models.order.DeliveryType
+import ua.com.wl.dlp.data.api.models.orders.order.pre_order.DeliveryType
 
 /**
  * @author Denis Makovskyi

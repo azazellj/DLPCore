@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName
  * @author Denis Makovskyi
  */
 
-data class SignUpRequest constructor(
+data class SignUpRequest(
     @SerializedName("city") 
     val city: Int,
     
@@ -17,4 +17,39 @@ data class SignUpRequest constructor(
     val password: String,
     
     @SerializedName("barcode") 
-    val barcode: String? = null)
+    val barcode: String? = null
+) {
+
+    class Builder {
+
+        private var city: Int = 0
+        private var phone: String = ""
+        private var password: String = ""
+        private var barcode: String? = null
+
+        fun city(init: () -> Int) {
+            city = init()
+        }
+
+        fun phone(init: () -> String) {
+            phone = init()
+        }
+
+        fun password(init: () -> String) {
+            password = init()
+        }
+
+        fun barcode(init: () -> String?) {
+            barcode = init() ?: return
+        }
+
+        fun build(init: Builder.() -> Unit): SignUpRequest {
+            init()
+            return SignUpRequest(city, phone, password, barcode)
+        }
+    }
+}
+
+fun signUpRequest(init: SignUpRequest.Builder.() -> Unit): SignUpRequest {
+    return SignUpRequest.Builder().build(init)
+}
