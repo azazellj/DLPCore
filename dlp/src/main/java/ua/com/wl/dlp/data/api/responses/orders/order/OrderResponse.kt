@@ -18,4 +18,4 @@ data class OrderResponse(
 
     @SerializedName("staff_member")
     val staffMember: OrderStaffMember?
-): BaseOrderResponse()
+) : BaseOrderResponse()

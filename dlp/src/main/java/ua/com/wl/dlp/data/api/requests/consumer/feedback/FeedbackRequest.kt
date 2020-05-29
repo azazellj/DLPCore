@@ -32,23 +32,23 @@ data class FeedbackRequest(
         private var deviceInfo: String? = null
 
         fun phone(init: () -> String?) {
-            phone = init() ?: return
+            phone = init()
         }
 
         fun email(init: () -> String?) {
-            email = init() ?: return
+            email = init()
         }
 
         fun message(init: () -> String?) {
-            message = init() ?: return
+            message = init()
         }
 
         fun appVersion(init: () -> String?) {
-            appVersion = init() ?: return
+            appVersion = init()
         }
 
         fun deviceInfo(init: () -> String?) {
-            deviceInfo = init() ?: return
+            deviceInfo = init()
         }
 
         fun build(init: Builder.() -> Unit): FeedbackRequest {

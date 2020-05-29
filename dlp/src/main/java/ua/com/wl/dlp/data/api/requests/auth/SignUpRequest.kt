@@ -40,7 +40,7 @@ data class SignUpRequest(
         }
 
         fun barcode(init: () -> String?) {
-            barcode = init() ?: return
+            barcode = init()
         }
 
         fun build(init: Builder.() -> Unit): SignUpRequest {

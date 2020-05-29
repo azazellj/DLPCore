@@ -29,5 +29,4 @@ data class TransactionResponse(
     val createdAt: String,
 
     @SerializedName("detail")
-    val details: TransactionDetails
-)
+    val details: TransactionDetails)

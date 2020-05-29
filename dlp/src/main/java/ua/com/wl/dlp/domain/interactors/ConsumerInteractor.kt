@@ -36,9 +36,9 @@ interface ConsumerInteractor : OffersInteractor {
 
     suspend fun getRanks(language: String = Locale.getDefault().language): Result<PagedResponse<RankResponse>>
 
-    suspend fun getCurrentRank(language: String = Locale.getDefault().language): Result<Optional<RankResponse>>
-
     suspend fun getRank(rankId: Int, language: String = Locale.getDefault().language): Result<RankResponse>
+
+    suspend fun getCurrentRank(language: String = Locale.getDefault().language): Result<Optional<RankResponse>>
 
     suspend fun getGroups(): Result<CollectionResponse<GroupResponse>>
 

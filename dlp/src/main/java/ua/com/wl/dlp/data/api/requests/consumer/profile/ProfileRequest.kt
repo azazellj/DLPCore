@@ -62,51 +62,51 @@ data class ProfileRequest(
         private var notificationToken: String? = null
 
         fun firstName(init: () -> String?) {
-            firstName = init() ?: return
+            firstName = init()
         }
 
         fun patronymic(init: () -> String?) {
-            patronymic = init() ?: return
+            patronymic = init()
         }
 
         fun lastName(init: () -> String?) {
-            lastName = init() ?: return
+            lastName = init()
         }
 
         fun gender(init: () -> Gender?) {
-            gender = init() ?: return
+            gender = init()
         }
 
         fun birthDate(init: () -> String?) {
-            birthDate = init() ?: return
+            birthDate = init()
         }
 
         fun isMarried(init: () -> Boolean?) {
-            isMarried = init() ?: return
+            isMarried = init()
         }
 
         fun city(init: () -> Int?) {
-            city = init() ?: return
+            city = init()
         }
 
         fun address(init: () -> String?) {
-            address = init() ?: return
+            address = init()
         }
 
         fun email(init: () -> String?) {
-            email = init() ?: return
+            email = init()
         }
 
         fun language(init: () -> String?) {
-            language = init() ?: return
+            language = init()
         }
 
         fun comment(init: () -> String?) {
-            comment = init() ?: return
+            comment = init()
         }
 
         fun notificationToken(init: () -> String?) {
-            notificationToken = init() ?: return
+            notificationToken = init()
         }
 
         fun build(init: Builder.() -> Unit): ProfileRequest {

@@ -132,6 +132,15 @@ class ConsumerInteractorImpl(
             }
     }
 
+    override suspend fun getRank(rankId: Int, language: String): Result<RankResponse> {
+        return callApi(call = { apiV1.getRank(rankId, language) })
+            .flatMap { responseOpt ->
+                responseOpt.ifPresentOrDefault(
+                    { Result.Success(it) },
+                    { Result.Failure(ApiException()) })
+            }
+    }
+
     override suspend fun getCurrentRank(language: String): Result<Optional<RankResponse>> {
         return getRanks(language)
             .flatMap { pager ->
@@ -156,12 +165,12 @@ class ConsumerInteractorImpl(
                             collectedBonuses = nextRank.selectionCriteria?.collectedBonuses?.copy())
                     } else null
                     val currRankPermissions = RankPermissionsPrefs(
-                        cashbackPercentage = currRank.permissions.cashbackPercentage,
-                        isOfferViewAllowed = currRank.permissions.isOfferViewAllowed,
-                        isOfferSharingAllowed = currRank.permissions.isOfferSharingAllowed,
-                        isArticleSharingAllowed = currRank.permissions.isArticleSharingAllowed,
-                        isPreOrderAllowed = currRank.permissions.isPreOrderAllowed,
-                        isTableReservationAllowed = currRank.permissions.isTableReservationAllowed)
+                        cashbackPercentage = currRank.permissions?.cashbackPercentage,
+                        isOfferViewAllowed = currRank.permissions?.isOfferViewAllowed,
+                        isOfferSharingAllowed = currRank.permissions?.isOfferSharingAllowed,
+                        isArticleSharingAllowed = currRank.permissions?.isArticleSharingAllowed,
+                        isPreOrderAllowed = currRank.permissions?.isPreOrderAllowed,
+                        isTableReservationAllowed = currRank.permissions?.isTableReservationAllowed)
                     withContext(Dispatchers.IO) {
                         val prevRankId = consumerPreferences.rankPrefs.id
                         consumerPreferences.rankPrefs = consumerPreferences.rankPrefs.copy(
@@ -179,15 +188,6 @@ class ConsumerInteractorImpl(
                     }
                 }
             }.map { (currRankOpt, _) -> currRankOpt }
-    }
-
-    override suspend fun getRank(rankId: Int, language: String): Result<RankResponse> {
-        return callApi(call = { apiV1.getRank(rankId, language) })
-            .flatMap { responseOpt ->
-                responseOpt.ifPresentOrDefault(
-                    { Result.Success(it) },
-                    { Result.Failure(ApiException()) })
-            }
     }
 
     override suspend fun getGroups(): Result<CollectionResponse<GroupResponse>> {

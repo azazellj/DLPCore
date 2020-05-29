@@ -41,7 +41,7 @@ open class RankResponse(
     var wasReached: Boolean = false,
 
     @SerializedName("permissions")
-    val permissions: RankPermissions,
+    val permissions: RankPermissions? = null,
 
     @SerializedName("selection_criteria")
     var selectionCriteria: RankSelectionCriteria? = null)

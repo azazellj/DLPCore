@@ -11,4 +11,4 @@ import ua.com.wl.dlp.data.api.responses.models.orders.order.ConsumerOrder
 data class OrderRateResponse(
     @SerializedName("rs_order")
     val consumerOrder: ConsumerOrder?
-): BaseOrderRateResponse()
+) : BaseOrderRateResponse()

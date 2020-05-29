@@ -37,4 +37,5 @@ data class ArticleResponse(
     val sharingSocialNetwork: List<SocialNetwork>,
 
     @SerializedName("payed_for_sharing_social_networks")
-    val sharedSocialNetwork: List<SocialNetwork>) : BaseArticleResponse()
+    val sharedSocialNetwork: List<SocialNetwork>
+) : BaseArticleResponse()

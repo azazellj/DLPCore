@@ -7,7 +7,7 @@ import com.google.gson.annotations.SerializedName
  */
 
 data class DeviceInfoRequest constructor(
-    @SerializedName("mobile_phone")
+    @SerializedName("model")
     val model: String? = "${android.os.Build.MANUFACTURER} ${android.os.Build.MODEL}",
 
     @SerializedName("app_version")

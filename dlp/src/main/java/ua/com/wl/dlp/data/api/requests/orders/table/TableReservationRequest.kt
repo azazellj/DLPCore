@@ -56,15 +56,15 @@ data class TableReservationRequest(
         }
 
         fun date(init: () -> String?) {
-            date = init() ?: return
+            date = init()
         }
 
         fun timeFrom(init: () -> String?) {
-            timeFrom = init() ?: return
+            timeFrom = init()
         }
 
         fun timeTo(init: () -> String?) {
-            timeTo = init() ?: return
+            timeTo = init()
         }
 
         fun singleTable(init: () -> Boolean) {
@@ -88,7 +88,7 @@ data class TableReservationRequest(
         }
 
         fun comment(init: () -> String?) {
-            comment = init() ?: return
+            comment = init()
         }
 
         fun build(init: Builder.() -> Unit): TableReservationRequest {
