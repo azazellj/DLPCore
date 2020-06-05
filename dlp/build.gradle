@@ -77,7 +77,7 @@ dependencies {
     implementation "com.github.ChuckerTeam.Chucker:library:3.0.1"
 
     // Architecture
-    implementation 'com.github.DenisMakovskyi:DLPArchetype:1.0.6'
+    implementation 'com.github.DenisMakovskyi:DLPArchetype:1.0.7'
 
     // Unit test
     testImplementation 'junit:junit:4.13'
