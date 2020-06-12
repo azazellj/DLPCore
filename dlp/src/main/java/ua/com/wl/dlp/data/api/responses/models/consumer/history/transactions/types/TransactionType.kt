@@ -59,6 +59,8 @@ enum class TransactionType(val value: String) {
     CASH_BACK("CASH_BACK"),
     @SerializedName("SHOP_REWARD")
     SHOP_REWARD("SHOP_REWARD"),
+    @SerializedName("BIRTHDAY_REWARD")
+    BIRTHDAY_REWARD("BIRTHDAY_REWARD"),
     @SerializedName("BUSINESS_REWARD")
     BUSINESS_REWARD("BUSINESS_REWARD")
 }
