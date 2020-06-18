@@ -32,6 +32,14 @@ interface ShopApiV1 {
         @Query("rubric_ids") rubricId: String? = null
     ): Response<PagedResponse<BaseOfferResponse>>
 
+    @GET("api/mobile/v1/consumer/offers/find/{shop_id}/")
+    suspend fun findOffers(
+        @Path("shop_id") shopId: Int,
+        @Query("query") query: String,
+        @Query("page") page: Int? = null,
+        @Query("page_size") count: Int? = null
+    ): Response<PagedResponse<BaseOfferResponse>>
+
     @GET("api/mobile/v1/consumer/shops/{shop_id}/promo-offers/")
     suspend fun getPromoOffers(
         @Path("shop_id") shopId: Int,

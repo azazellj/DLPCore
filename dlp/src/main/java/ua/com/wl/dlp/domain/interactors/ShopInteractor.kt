@@ -39,6 +39,13 @@ interface ShopInteractor : OffersInteractor {
         rubricId: String? = null
     ): Result<PagedResponse<BaseOfferResponse>>
 
+    suspend fun findOffers(
+        shopId: Int,
+        query: String,
+        page: Int? = null,
+        count: Int? = null
+    ): Result<PagedResponse<BaseOfferResponse>>
+
     suspend fun getPromoOffers(
         shopId: Int,
         page: Int? = null,

@@ -94,6 +94,24 @@ class ShopInteractorImpl(
             }
     }
 
+    override suspend fun findOffers(
+        shopId: Int,
+        query: String,
+        page: Int?,
+        count: Int?
+    ): Result<PagedResponse<BaseOfferResponse>> {
+        return callApi(call = { apiV1.findOffers(shopId, query, page, count) })
+            .sFlatMap { pagedResponseOpt ->
+                pagedResponseOpt.sIfPresentOrDefault(
+                    { pager ->
+                        updatePreOrdersCounter(
+                            shopId, pager.items, shopsDataSource, Dispatchers.IO)
+                        Result.Success(pager)
+                    },
+                    { Result.Failure(ApiException()) })
+            }
+    }
+
     override suspend fun getPromoOffers(
         shopId: Int,
         page: Int?,
