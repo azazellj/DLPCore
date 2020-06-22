@@ -167,7 +167,8 @@ class ShopsDataSourceImpl(
                 } else {
                     offersDao.insertOffer(offer) isGreaterThan 0
                 }
-                val order = OrderEntity(offer.shopId, offer.id, offer.preOrdersCount)
+                val order = OrderEntity(
+                    offer.shopId, offer.id, offer.preOrdersCount)
                 isOfferInserted && ordersDao.insertOrder(order) isGreaterThan 0
             }
 
@@ -179,7 +180,8 @@ class ShopsDataSourceImpl(
     override suspend fun updateOrder(offer: OfferEntity): Boolean {
         return try {
             withContext(Dispatchers.IO) {
-                val order = OrderEntity(offer.shopId, offer.id, offer.preOrdersCount)
+                val order = OrderEntity(
+                    offer.shopId, offer.id, offer.preOrdersCount)
                 offersDao.updateOffer(offer) isGreaterThan 0
                         && ordersDao.updateOrder(order) isGreaterThan 0
             }

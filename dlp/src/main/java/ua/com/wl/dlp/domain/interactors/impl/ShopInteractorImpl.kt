@@ -163,12 +163,27 @@ class ShopInteractorImpl(
             }
     }
 
-    override suspend fun persistShop(shop: ShopEntity): Result<Boolean> {
-        return callQuery(call = { shopsDataSource.insertShop(shop) })
-    }
-
     override suspend fun getPersistedShop(shopId: Int): Result<Optional<ShopEntity>> {
         return callQuery(call = { shopsDataSource.getShop(shopId) })
+    }
+
+    override suspend fun upsertPersistedShop(shop: ShopEntity): Result<Boolean> {
+        return callQuery(call = { shopsDataSource.getShop(shop.id) })
+            .sFlatMap { shopEntityOpt ->
+                shopEntityOpt.sIfPresentOrDefault (
+                    {
+                        when(val updateShopQueryRes = callQuery(call = { shopsDataSource.updateShop(shop) })) {
+                            is Result.Success -> Result.Success(true)
+                            is Result.Failure -> updateShopQueryRes
+                        }
+                    },
+                    {
+                        when(val insertShopQueryRes = callQuery(call = { shopsDataSource.insertShop(shop) })) {
+                            is Result.Success -> Result.Success(true)
+                            is Result.Failure -> insertShopQueryRes
+                        }
+                    })
+            }
     }
 
     override suspend fun updatePersistedShop(shop: ShopEntity): Result<Boolean> {
@@ -246,7 +261,7 @@ class ShopInteractorImpl(
         return callQuery(call = { shopsDataSource.getShop(shopId) })
             .sFlatMap { shopEntityOpt ->
                 shopEntityOpt.sIfPresentOrDefault(
-                    { Result.Success(it) as Result<ShopEntity> },
+                    { Result.Success(it) as Result<ShopEntity> }, // Keep this cast, otherwise types erasure will happen.
                     {
                         val shopEntity = ShopEntity(shopId)
                         when(val insertShopQueryRes = callQuery(call = { shopsDataSource.insertShop(shopEntity) })) {

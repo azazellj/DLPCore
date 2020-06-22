@@ -14,6 +14,18 @@ data class ShopEntity(
     @ColumnInfo(name = "id")
     val id: Int,
 
+    @ColumnInfo(name = "name")
+    val name: String? = null,
+
+    @ColumnInfo(name = "address")
+    val address: String? = null,
+
+    @ColumnInfo(name = "schedule")
+    val schedule: String? = null,
+
+    @ColumnInfo(name = "thumb_image")
+    val thumbImage: String? = null,
+
     @Embedded
     var preOrderParams: PreOrderParams? = null
 ) {

@@ -64,9 +64,9 @@ interface ShopInteractor : OffersInteractor {
         count: Int? = null
     ): Result<PagedResponse<BaseOfferResponse>>
 
-    suspend fun persistShop(shop: ShopEntity): Result<Boolean>
-
     suspend fun getPersistedShop(shopId: Int): Result<Optional<ShopEntity>>
+
+    suspend fun upsertPersistedShop(shop: ShopEntity): Result<Boolean>
 
     suspend fun updatePersistedShop(shop: ShopEntity): Result<Boolean>
 
