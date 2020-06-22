@@ -253,6 +253,7 @@ class ShopInteractorImpl(
                     shopId = orderEntity.shopId,
                     offerId = orderEntity.id,
                     counter = orderEntity.preOrdersCount)
+                populatePersistedOffersPrice()
                 populatePersistedOffersPrice(orderEntity.shopId)
             }
     }
@@ -335,6 +336,7 @@ class ShopInteractorImpl(
                     shopId = offerEntity.shopId,
                     offerId = offerEntity.id,
                     counter = offerEntity.preOrdersCount)
+                populatePersistedOffersPrice()
                 populatePersistedOffersPrice(offerEntity.shopId)
             }
     }
@@ -366,11 +368,13 @@ class ShopInteractorImpl(
                     shopId = orderEntity.shopId,
                     offerId = orderEntity.id,
                     counter = orderEntity.preOrdersCount)
+                populatePersistedOffersPrice()
                 populatePersistedOffersPrice(orderEntity.shopId)
             }.sOnFailure { error ->
                 if (error.message == DbErrorKeys.ENTITY_IS_NOT_EXISTS_ANYMORE) {
                     CoreBusEventsFactory.orderCounter(
                         shopId = shopId, offerId = offerId)
+                    populatePersistedOffersPrice()
                     populatePersistedOffersPrice(shopId)
                 }
             }
@@ -413,11 +417,13 @@ class ShopInteractorImpl(
                     shopId = offerEntity.shopId,
                     offerId = offerEntity.id,
                     counter = offerEntity.preOrdersCount)
+                populatePersistedOffersPrice()
                 populatePersistedOffersPrice(offerEntity.shopId)
             }.sOnFailure { error ->
                 if (error.message == DbErrorKeys.ENTITY_IS_NOT_EXISTS_ANYMORE) {
                     CoreBusEventsFactory.orderCounter(
                         shopId = shopId, offerId = offer.id)
+                    populatePersistedOffersPrice()
                     populatePersistedOffersPrice(shopId)
                 }
             }
