@@ -26,6 +26,9 @@ data class OfferEntity(
     @ColumnInfo(name = "short_description")
     val shortDescription: String? = null,
 
+    @ColumnInfo(name = "outcome")
+    val outcome: String? = null,
+
     @ColumnInfo(name = "price_in_bonuses")
     val priceInBonuses: Long? = null,
 

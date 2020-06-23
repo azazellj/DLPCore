@@ -2,12 +2,12 @@ package ua.com.wl.dlp.utils
 
 import ua.com.wl.dlp.data.prefereces.models.ProfilePrefs
 import ua.com.wl.dlp.data.prefereces.models.BusinessPrefs
-import ua.com.wl.dlp.data.api.responses.shop.offer.BaseOfferResponse
-import ua.com.wl.dlp.data.api.responses.consumer.info.BusinessResponse
-import ua.com.wl.dlp.data.api.responses.consumer.profile.ProfileResponse
 import ua.com.wl.dlp.data.db.entities.shops.OfferEntity
 import ua.com.wl.dlp.data.db.entities.shops.embedded.offer.OfferEntityPromoParams
 import ua.com.wl.dlp.data.db.entities.shops.embedded.offer.OfferEntityPromoSettings
+import ua.com.wl.dlp.data.api.responses.shop.offer.BaseOfferResponse
+import ua.com.wl.dlp.data.api.responses.consumer.info.BusinessResponse
+import ua.com.wl.dlp.data.api.responses.consumer.profile.ProfileResponse
 
 /**
  * @author Denis Makovskyi
@@ -15,19 +15,19 @@ import ua.com.wl.dlp.data.db.entities.shops.embedded.offer.OfferEntityPromoSetti
 
 fun ProfileResponse.toPrefs(): ProfilePrefs {
     return ProfilePrefs(
-        this.firstName, this.patronymic, this.lastName,
-        this.gender, this.birthDate, this.isMarried,
-        this.city, this.address, this.email,
-        this.phone, this.language, this.timezone,
-        this.balance, this.moneyAmount, null,
-        this.inviteCode, this.referralCode, this.comment)
+        firstName, patronymic, lastName,
+        gender, birthDate, isMarried,
+        city, address, email,
+        phone, language, timezone,
+        balance, moneyAmount, null,
+        inviteCode, referralCode, comment)
 }
 
 fun BusinessResponse.toPrefs(): BusinessPrefs {
     return BusinessPrefs(
-        this.id, this.phone,
-        this.email, this.address, this.homePage,
-        this.feedbackEmail, this.applicationLink)
+        id, phone,
+        email, address, homePage,
+        feedbackEmail, applicationLink)
 }
 
 fun BaseOfferResponse.toOfferEntity(shopId: Int, count: Int = 0): OfferEntity {
@@ -50,8 +50,9 @@ fun BaseOfferResponse.toOfferEntity(shopId: Int, count: Int = 0): OfferEntity {
     return OfferEntity(
         id, tradeItem,
         name, thumbImage, shortDescription,
-        priceInBonuses, priceInCurrency, cashBackPercentage,
-        isPromo, isFavourite, entityPromoSettings).apply {
+        outcome, priceInBonuses, priceInCurrency,
+        cashBackPercentage, isPromo, isFavourite, entityPromoSettings
+    ).apply {
         this.shopId = shopId
         this.preOrdersCount = count
     }

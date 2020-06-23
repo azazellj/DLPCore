@@ -48,7 +48,7 @@ abstract class ShopsDatabase : RoomDatabase() {
     companion object {
 
         private const val NAME = "Shops.db"
-        internal const val VERSION = 3
+        internal const val VERSION = 4
 
         @Volatile
         private var INSTANCE: ShopsDatabase? = null

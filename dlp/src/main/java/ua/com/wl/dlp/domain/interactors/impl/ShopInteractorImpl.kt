@@ -201,6 +201,11 @@ class ShopInteractorImpl(
 
     override suspend fun deletePersistedShops(): Result<Boolean> {
         return callQuery(call = { shopsDataSource.deleteShops() })
+            .sOnSuccess {
+                withContext(Dispatchers.Main.immediate) {
+                    CoreBusEventsFactory.ordersTotalPrice()
+                }
+            }
     }
 
     override suspend fun getPersistedOffer(shopId: Int, offerId: Int): Result<Optional<OfferEntity>> {

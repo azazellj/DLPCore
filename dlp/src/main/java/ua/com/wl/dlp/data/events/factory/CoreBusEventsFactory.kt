@@ -1,13 +1,14 @@
 package ua.com.wl.dlp.data.events.factory
 
 import ua.com.wl.archetype.core.android.bus.Bus
-import ua.com.wl.dlp.data.events.prefs.ProfileBusEvent
+
 import ua.com.wl.dlp.data.events.prefs.RankBusEvent
+import ua.com.wl.dlp.data.events.prefs.ProfileBusEvent
 import ua.com.wl.dlp.data.events.session.SessionBusEvent
 import ua.com.wl.dlp.data.events.shop.offer.OfferBusEvent
-import ua.com.wl.dlp.data.events.shop.order.OrderCounterBusEvent
 import ua.com.wl.dlp.data.events.shop.order.OrderRateBusEvent
 import ua.com.wl.dlp.data.events.shop.order.OrdersPriceBusEvent
+import ua.com.wl.dlp.data.events.shop.order.OrderCounterBusEvent
 import ua.com.wl.dlp.data.events.shop.order.OrdersTotalPriceBusEvent
 
 /**
