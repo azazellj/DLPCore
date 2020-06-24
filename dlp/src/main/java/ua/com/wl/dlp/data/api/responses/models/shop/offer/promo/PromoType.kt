@@ -6,6 +6,8 @@ import com.google.gson.annotations.SerializedName
  * @author Denis Makovskyi
  */
 
+@Deprecated(
+    message = "This class will be removed in further revisions. Changes are caused by offer promo structure refactoring.")
 enum class PromoType(val type: String) {
     @SerializedName("GIFT")
     GIFT("GIFT"),

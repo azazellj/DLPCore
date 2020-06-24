@@ -73,6 +73,7 @@ interface ConsumerInteractor : OffersInteractor {
         count: Int? = null
     ): Result<NotificationsResponse>
 
+    @Deprecated(message = "This method will be removed in further revisions. Changes are caused by offer promo structure refactoring.")
     suspend fun getPromoOffers(
         page: Int? = null, 
         count: Int? = null,

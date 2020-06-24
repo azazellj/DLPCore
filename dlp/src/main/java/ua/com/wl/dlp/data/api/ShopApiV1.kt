@@ -40,6 +40,7 @@ interface ShopApiV1 {
         @Query("page_size") count: Int? = null
     ): Response<PagedResponse<BaseOfferResponse>>
 
+    @Deprecated(message = "This method will be removed in further revisions. Changes are caused by offer promo structure refactoring.")
     @GET("api/mobile/v1/consumer/shops/{shop_id}/promo-offers/")
     suspend fun getPromoOffers(
         @Path("shop_id") shopId: Int,

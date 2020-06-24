@@ -2,7 +2,7 @@ package ua.com.wl.dlp.data.api.responses.orders.order.pre_order
 
 import com.google.gson.annotations.SerializedName
 
-import ua.com.wl.dlp.data.api.responses.models.orders.order.pre_order.PreOrderShop
+import ua.com.wl.dlp.data.api.models.shop.SimpleShop
 import ua.com.wl.dlp.data.api.responses.models.orders.order.pre_order.PreOrderStatus
 
 /**
@@ -41,4 +41,4 @@ open class BasePreOrderResponse(
     var totalPrice: String = "",
 
     @SerializedName("shop")
-    var shop: PreOrderShop? = null)
+    var shop: SimpleShop? = null)

@@ -46,6 +46,7 @@ interface ShopInteractor : OffersInteractor {
         count: Int? = null
     ): Result<PagedResponse<BaseOfferResponse>>
 
+    @Deprecated(message = "This method will be removed in further revisions. Changes are caused by offer promo structure refactoring.")
     suspend fun getPromoOffers(
         shopId: Int,
         page: Int? = null,
@@ -81,6 +82,8 @@ interface ShopInteractor : OffersInteractor {
     suspend fun getPersistedOffers(shopId: Int): Result<List<OfferEntity>>
 
     suspend fun updatePersistedOffer(shopId: Int, offer: BaseOfferResponse): Result<Boolean>
+
+    suspend fun deletePreOrders(): Result<Boolean>
 
     suspend fun incrementPreOrderCounter(shopId: Int, offerId: Int): Result<OfferEntity>
 

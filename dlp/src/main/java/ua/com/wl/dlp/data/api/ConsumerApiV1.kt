@@ -28,6 +28,7 @@ interface ConsumerApiV1 {
     @POST("api/mobile/v1/consumer/feedback/")
     suspend fun feedback(@Body request: FeedbackRequest): Response<FeedbackResponse>
 
+    @Deprecated(message = "This method will be removed in further revisions. Changes are caused by offer promo structure refactoring.")
     @GET("api/mobile/v1/consumer/promo-offers/")
     suspend fun getPromoOffers(
         @Query("page") page: Int? = null,

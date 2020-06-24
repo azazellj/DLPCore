@@ -5,12 +5,12 @@ import ua.com.wl.dlp.data.api.requests.orders.order.pre_order.PreOrderRequest
 import ua.com.wl.dlp.data.api.requests.orders.order.pre_order.GeneralPreOrderRequest
 import ua.com.wl.dlp.data.api.requests.orders.table.TableReservationRequest
 import ua.com.wl.dlp.data.api.responses.PagedResponse
-import ua.com.wl.dlp.data.api.responses.CollectionResponse
 import ua.com.wl.dlp.data.api.responses.orders.order.*
 import ua.com.wl.dlp.data.api.responses.orders.order.rate.OrderRateResponse
 import ua.com.wl.dlp.data.api.responses.orders.order.rate.BaseOrderRateResponse
 import ua.com.wl.dlp.data.api.responses.orders.order.pre_order.PreOrderResponse
 import ua.com.wl.dlp.data.api.responses.orders.order.pre_order.BasePreOrderResponse
+import ua.com.wl.dlp.data.api.responses.orders.order.pre_order.GeneralPreOrderResponse
 import ua.com.wl.dlp.data.api.responses.orders.table.TableReservationItemResponse
 import ua.com.wl.dlp.data.api.responses.orders.table.TableReservationDetailedResponse
 import ua.com.wl.dlp.domain.Result
@@ -36,7 +36,7 @@ interface OrdersInteractor {
 
     suspend fun createPreOrder(request: PreOrderRequest): Result<PreOrderResponse>
 
-    suspend fun createGeneralPreOrder(request: GeneralPreOrderRequest): Result<CollectionResponse<PreOrderResponse>>
+    suspend fun createGeneralPreOrder(request: GeneralPreOrderRequest): Result<GeneralPreOrderResponse>
 
     suspend fun getPreOrders(
         page: Int? = null,

@@ -206,4 +206,14 @@ class ShopsDataSourceImpl(
             throw DbQueryException(DbErrorKeys.DELETE_QUERY_ERROR, e)
         }
     }
+
+    override suspend fun deleteOrders(): Boolean {
+        return try {
+            withContext(Dispatchers.IO) {
+                ordersDao.deleteOrders() isGreaterThan 0
+            }
+        } catch (e: Exception) {
+            throw DbQueryException(DbErrorKeys.DELETE_QUERY_ERROR, e)
+        }
+    }
 }

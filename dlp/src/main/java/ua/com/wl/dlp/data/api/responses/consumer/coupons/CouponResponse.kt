@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 import ua.com.wl.dlp.data.api.models.shop.SimpleShop
 import ua.com.wl.dlp.data.api.responses.models.another.NoveltyDatesRange
 import ua.com.wl.dlp.data.api.responses.models.consumer.coupons.CouponType
-import ua.com.wl.dlp.data.api.responses.models.consumer.coupons.CouponOffer
+import ua.com.wl.dlp.data.api.responses.shop.offer.BaseOfferResponse
 
 /**
  * @author Denis Makovskyi
@@ -46,7 +46,7 @@ data class CouponResponse(
     val monetaryAvailable: String?,
 
     @SerializedName("offer")
-    val offer: CouponOffer?,
+    val offer: BaseOfferResponse?,
 
     @SerializedName("date_range")
     val dateRange: NoveltyDatesRange?,

@@ -235,6 +235,15 @@ class ShopInteractorImpl(
             }
     }
 
+    override suspend fun deletePreOrders(): Result<Boolean> {
+        return callQuery(call = { shopsDataSource.deleteOrders() })
+            .sOnSuccess {
+                withContext(Dispatchers.Main.immediate) {
+                    CoreBusEventsFactory.ordersTotalPrice()
+                }
+            }
+    }
+
     override suspend fun incrementPreOrderCounter(shopId: Int, offerId: Int): Result<OfferEntity> {
         return callQuery(call = { shopsDataSource.getOrder(offerId, shopId) })
             .sFlatMap { orderEntityOpt ->

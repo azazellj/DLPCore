@@ -11,12 +11,12 @@ import ua.com.wl.dlp.data.api.requests.orders.order.pre_order.PreOrderRequest
 import ua.com.wl.dlp.data.api.requests.orders.order.pre_order.GeneralPreOrderRequest
 import ua.com.wl.dlp.data.api.requests.orders.table.TableReservationRequest
 import ua.com.wl.dlp.data.api.responses.PagedResponse
-import ua.com.wl.dlp.data.api.responses.CollectionResponse
 import ua.com.wl.dlp.data.api.responses.orders.order.*
 import ua.com.wl.dlp.data.api.responses.orders.order.rate.OrderRateResponse
 import ua.com.wl.dlp.data.api.responses.orders.order.rate.BaseOrderRateResponse
 import ua.com.wl.dlp.data.api.responses.orders.order.pre_order.PreOrderResponse
 import ua.com.wl.dlp.data.api.responses.orders.order.pre_order.BasePreOrderResponse
+import ua.com.wl.dlp.data.api.responses.orders.order.pre_order.GeneralPreOrderResponse
 import ua.com.wl.dlp.data.api.responses.orders.table.TableReservationItemResponse
 import ua.com.wl.dlp.data.api.responses.orders.table.TableReservationDetailedResponse
 import ua.com.wl.dlp.data.events.factory.CoreBusEventsFactory
@@ -101,13 +101,13 @@ class OrdersInteractorImpl(
             }
     }
 
-    override suspend fun createGeneralPreOrder(request: GeneralPreOrderRequest): Result<CollectionResponse<PreOrderResponse>> {
+    override suspend fun createGeneralPreOrder(request: GeneralPreOrderRequest): Result<GeneralPreOrderResponse> {
         return callApi(
             call = { apiV2.createGeneralPreOrder(request) },
             errorClass = GeneralPreOrderException::class
         ).flatMap { responseOpt ->
             responseOpt.ifPresentOrDefault(
-                { Result.Success(it) },
+                { Result.Success(it.payload) },
                 { Result.Failure(ApiException()) })
         }
     }

@@ -34,4 +34,6 @@ interface ShopsDataSource {
     suspend fun updateOrder(offer: OfferEntity): Boolean
 
     suspend fun deleteOrder(offer: OfferEntity): Boolean
+
+    suspend fun deleteOrders(): Boolean
 }
