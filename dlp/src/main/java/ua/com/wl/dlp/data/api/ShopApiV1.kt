@@ -35,7 +35,7 @@ interface ShopApiV1 {
     @GET("api/mobile/v1/consumer/offers/find/{shop_id}/")
     suspend fun findOffers(
         @Path("shop_id") shopId: Int,
-        @Query("query") query: String,
+        @Query("q") query: String,
         @Query("page") page: Int? = null,
         @Query("page_size") count: Int? = null
     ): Response<PagedResponse<BaseOfferResponse>>
