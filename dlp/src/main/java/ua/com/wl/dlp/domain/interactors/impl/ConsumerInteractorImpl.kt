@@ -165,7 +165,7 @@ class ConsumerInteractorImpl(
                             collectedBonuses = nextRank.selectionCriteria?.collectedBonuses?.copy())
                     } else null
                     val currRankPermissions = RankPermissionsPrefs(
-                        cashbackPercentage = currRank.permissions?.cashbackPercentage,
+                        cashBackPercentage = currRank.permissions?.cashBackPercentage,
                         isOfferViewAllowed = currRank.permissions?.isOfferViewAllowed,
                         isOfferSharingAllowed = currRank.permissions?.isOfferSharingAllowed,
                         isArticleSharingAllowed = currRank.permissions?.isArticleSharingAllowed,

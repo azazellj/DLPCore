@@ -57,7 +57,7 @@ data class RankCriteriaPrefs(
 
 data class RankPermissionsPrefs(
     @SerializedName("cash_back_percentage")
-    val cashbackPercentage: Int? = null,
+    val cashBackPercentage: Int? = null,
 
     @SerializedName("offer_view_allowed")
     val isOfferViewAllowed: Boolean? = null,

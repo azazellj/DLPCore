@@ -10,5 +10,8 @@ data class TableReservationItemShop(
     @SerializedName("name")
     val name: String,
 
+    @SerializedName("address")
+    val address: String?,
+
     @SerializedName("thumb_logo")
     val thumbImage: String)

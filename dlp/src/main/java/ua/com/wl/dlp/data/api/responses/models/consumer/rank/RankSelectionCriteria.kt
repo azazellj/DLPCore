@@ -34,4 +34,7 @@ data class RankSelectionCriteria(
     val spentBonuses: RankSelectionCriteriaValue<Long, Long>? = null,
 
     @SerializedName("accumulated_bonuses_amount")
-    val collectedBonuses: RankSelectionCriteriaValue<Long, Long>? = null)
+    val collectedBonuses: RankSelectionCriteriaValue<Long, Long>? = null,
+
+    @SerializedName("accumulated_cash_back_amount")
+    val collectedCashBack: RankSelectionCriteriaValue<Long, Long>? = null)

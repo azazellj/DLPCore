@@ -40,6 +40,9 @@ data class NotificationData(
     @SerializedName("rate_id")
     val orderId: Int?,
 
+    @SerializedName("coupon_id")
+    val couponId: Int?,
+
     @SerializedName("news_item_id")
     val articleId: Int?,
 

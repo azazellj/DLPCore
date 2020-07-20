@@ -8,7 +8,7 @@ import com.google.gson.annotations.SerializedName
 
 data class RankPermissions(
     @SerializedName("cash_back_percentage")
-    val cashbackPercentage: Int,
+    val cashBackPercentage: Int,
     @SerializedName("allow_offer_view")
     val isOfferViewAllowed: Boolean,
     @SerializedName("allow_offer_sharing")

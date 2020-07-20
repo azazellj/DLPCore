@@ -13,11 +13,11 @@ open class RankResponse(
     @SerializedName("id")
     var id: Int = 0,
 
+    @SerializedName("rank_priority_number")
+    var priority: Int = 0,
+
     @SerializedName("name")
     var name: String = "",
-
-    @SerializedName("description")
-    var description: String = "",
 
     @SerializedName("thumb_icon")
     var iconUrl: String = "",
@@ -25,8 +25,8 @@ open class RankResponse(
     @SerializedName("color")
     var colorHex: String = "",
 
-    @SerializedName("rank_priority_number")
-    var priority: Int = 0,
+    @SerializedName("description")
+    var description: String = "",
 
     @SerializedName("is_next_rank")
     var isNext: Boolean = false,
