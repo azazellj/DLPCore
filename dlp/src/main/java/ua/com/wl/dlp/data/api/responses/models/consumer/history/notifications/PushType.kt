@@ -15,6 +15,8 @@ enum class PushType(val value: String) {
     OFFER("show_offer"),
     @SerializedName("new_order")
     ORDER("new_order"),
+    @SerializedName("show_coupon")
+    COUPON("show_coupon"),
     @SerializedName("show_news_item")
     ARTICLE("show_news_item"),
     @SerializedName("show_promotion")

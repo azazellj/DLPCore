@@ -2,14 +2,13 @@ package ua.com.wl.dlp.data.api.requests.orders.order.pre_order
 
 import com.google.gson.annotations.SerializedName
 
-import ua.com.wl.dlp.data.api.models.orders.order.pre_order.BasePreOrderInfo
 import ua.com.wl.dlp.data.api.requests.models.orders.order.pre_order.PreOrderItem
 
 /**
  * @author Denis Makovskyi
  */
 
-data class PreOrderRequest(
+open class MultiPreOrderRequest(
     @SerializedName("shop")
     val shopId: Int,
 
@@ -28,23 +27,19 @@ data class PreOrderRequest(
     @SerializedName("comment")
     val comment: String?,
 
-    @SerializedName("info")
-    val info: BasePreOrderInfo?,
-
     @SerializedName("receipt")
     val receipt: List<PreOrderItem>
 ) {
-    
-    class Builder {
 
-        private var shopId: Int = 0
-        private var readinessDate: String = ""
-        private var readinessTime: String = ""
-        private var useBonuses: Boolean = false
-        private var bonusesCount: Long = 0L
-        private var comment: String? = null
-        private var info: BasePreOrderInfo? = null
-        private val receipt: MutableList<PreOrderItem> = mutableListOf()
+    open class Builder {
+
+        protected var shopId: Int = 0
+        protected var readinessDate: String = ""
+        protected var readinessTime: String = ""
+        protected var useBonuses: Boolean = false
+        protected var bonusesCount: Long = 0L
+        protected var comment: String? = null
+        protected val receipt: MutableList<PreOrderItem> = mutableListOf()
 
         fun shopId(init: () -> Int) {
             shopId = init()
@@ -70,23 +65,15 @@ data class PreOrderRequest(
             comment = init()
         }
 
-        fun info(init: BasePreOrderInfo.Builder.() -> Unit) {
-            info = BasePreOrderInfo.Builder().build(init)
-        }
-
         fun receiptItem(init: PreOrderItem.Builder.() -> Unit) {
             receipt.add(PreOrderItem.Builder().build(init))
         }
 
-        fun build(init: Builder.() -> Unit): PreOrderRequest {
+        fun build(init: Builder.() -> Unit): MultiPreOrderRequest {
             init()
-            return PreOrderRequest(
+            return MultiPreOrderRequest(
                 shopId, readinessDate, readinessTime,
-                useBonuses, bonusesCount, comment, info, receipt)
+                useBonuses, bonusesCount, comment, receipt)
         }
     }
-}
-
-fun preOrderRequest(init: PreOrderRequest.Builder.() -> Unit): PreOrderRequest {
-    return PreOrderRequest.Builder().build(init)
 }

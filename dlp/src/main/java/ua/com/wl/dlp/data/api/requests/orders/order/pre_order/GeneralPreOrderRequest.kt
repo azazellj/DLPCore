@@ -2,26 +2,36 @@ package ua.com.wl.dlp.data.api.requests.orders.order.pre_order
 
 import com.google.gson.annotations.SerializedName
 
+import ua.com.wl.dlp.data.api.models.orders.order.pre_order.BasePreOrderInfo
+
 /**
  * @author Denis Makovskyi
  */
 
 data class GeneralPreOrderRequest(
+    @SerializedName("info")
+    val info: BasePreOrderInfo?,
+
     @SerializedName("pre_orders")
-    val preOrders: List<PreOrderRequest>
+    val preOrders: List<MultiPreOrderRequest>
 ) {
 
     class Builder {
 
-        private val preOrders: MutableList<PreOrderRequest> = mutableListOf()
+        private var info: BasePreOrderInfo? = null
+        private val preOrders: MutableList<MultiPreOrderRequest> = mutableListOf()
 
-        fun preOrder(init: PreOrderRequest.Builder.() -> Unit) {
-            preOrders.add(PreOrderRequest.Builder().build(init))
+        fun info(init: () -> BasePreOrderInfo) {
+            info = init()
+        }
+
+        fun preOrder(init: MultiPreOrderRequest.Builder.() -> Unit) {
+            preOrders.add(MultiPreOrderRequest.Builder().build(init))
         }
 
         fun build(init: Builder.() -> Unit): GeneralPreOrderRequest {
             init()
-            return GeneralPreOrderRequest(preOrders)
+            return GeneralPreOrderRequest(info, preOrders)
         }
     }
 }
