@@ -34,8 +34,8 @@ class SinglePreOrderRequest(
 
         private var info: BasePreOrderInfo? = null
 
-        fun info(init: () -> BasePreOrderInfo) {
-            info = init()
+        fun info(init: BasePreOrderInfo.Builder.() -> Unit) {
+            info = BasePreOrderInfo.Builder().build(init)
         }
 
         fun build(init: SinglePreOrderRequest.Builder.() -> Unit): SinglePreOrderRequest {

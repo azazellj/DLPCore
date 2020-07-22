@@ -21,8 +21,8 @@ data class GeneralPreOrderRequest(
         private var info: BasePreOrderInfo? = null
         private val preOrders: MutableList<MultiPreOrderRequest> = mutableListOf()
 
-        fun info(init: () -> BasePreOrderInfo) {
-            info = init()
+        fun info(init: BasePreOrderInfo.Builder.() -> Unit) {
+            info = BasePreOrderInfo.Builder().build(init)
         }
 
         fun preOrder(init: MultiPreOrderRequest.Builder.() -> Unit) {
