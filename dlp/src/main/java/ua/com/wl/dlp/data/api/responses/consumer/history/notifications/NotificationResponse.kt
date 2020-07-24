@@ -30,14 +30,14 @@ data class NotificationResponse(
     @SerializedName("title_loc_key")
     val titleLocKey: String?,
 
-    @SerializedName("title_loc_args")
-    val titleLocArgs: List<String>?,
+    /*@SerializedName("title_loc_args")
+    val titleLocArgs: List<String>?,*/
 
     @SerializedName("body_loc_key")
     val bodyLocKey: String?,
 
-    @SerializedName("body_loc_args")
-    val bodyLocArgs: List<String>?,
+    /*@SerializedName("body_loc_args")
+    val bodyLocArgs: List<String>?,*/
 
     @SerializedName("sound")
     val sound: String?,
