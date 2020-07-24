@@ -49,7 +49,7 @@ interface ConsumerApiV2 {
     @GET("api/mobile/v2/coupon/{coupon_id}/")
     suspend fun getCoupon(@Path("coupon_id") id: Int): Response<DataResponse<CouponResponse>>
 
-    @GET("api/mobile/v2/coupon/{coupon_id}}/gpay/{coupon_barcode}}/")
+    @GET("api/mobile/v2/coupon/{coupon_id}/gpay/{coupon_barcode}/")
     suspend fun addCouponToWallet(
         @Path("coupon_id") id: Int,
         @Path("coupon_barcode") barcode: String
