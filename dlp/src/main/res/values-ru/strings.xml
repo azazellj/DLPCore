@@ -54,6 +54,9 @@
 
     <string name="dlp_error_shop_required">Не указан уникальный идентификатор заведения</string>
 
+    <string name="dlp_error_coupon_wallet_invalid_url">Google Pay не может создать купон</string>
+    <string name="dlp_error_coupon_wallet_unsupported_config">Google Pay Api не поддерживается</string>
+
     <string name="dlp_error_pre_order_invalid_trade_items">Одно или несколько предложений не связанные с указанным заведением, неактивны, или заведение не связано с потребителем</string>
     <string name="dlp_error_pre_order_invalid_delivery_type">Тип доставки указан неверно</string>
     <string name="dlp_error_pre_order_illegal_flag_use_bonuses">Конфликт с опцией \"Оплатить бонусами\"</string>

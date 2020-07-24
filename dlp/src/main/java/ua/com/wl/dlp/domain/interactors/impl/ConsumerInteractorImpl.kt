@@ -29,6 +29,7 @@ import ua.com.wl.dlp.data.api.responses.consumer.ranks.RankResponse
 import ua.com.wl.dlp.data.api.responses.consumer.groups.GroupResponse
 import ua.com.wl.dlp.data.api.responses.consumer.info.BusinessResponse
 import ua.com.wl.dlp.data.api.responses.consumer.coupons.CouponResponse
+import ua.com.wl.dlp.data.api.responses.consumer.coupons.CouponWalletResponse
 import ua.com.wl.dlp.data.api.responses.consumer.profile.ProfileResponse
 import ua.com.wl.dlp.data.api.responses.consumer.referral.QrCodeResponse
 import ua.com.wl.dlp.data.api.responses.consumer.referral.InvitationResponse
@@ -38,6 +39,7 @@ import ua.com.wl.dlp.data.api.responses.consumer.history.notifications.Notificat
 import ua.com.wl.dlp.domain.Result
 import ua.com.wl.dlp.domain.UseCase
 import ua.com.wl.dlp.domain.exeptions.api.ApiException
+import ua.com.wl.dlp.domain.exeptions.api.consumer.coupons.WalletException
 import ua.com.wl.dlp.domain.exeptions.api.consumer.referral.ReferralException
 import ua.com.wl.dlp.domain.interactors.OffersInteractor
 import ua.com.wl.dlp.domain.interactors.ConsumerInteractor
@@ -218,6 +220,17 @@ class ConsumerInteractorImpl(
                     { Result.Success(it.payload) },
                     { Result.Failure(ApiException()) })
             }
+    }
+
+    override suspend fun addCouponToWallet(id: Int, barcode: String): Result<CouponWalletResponse> {
+        return callApi(
+            call = { apiV2.addCouponToWallet(id, barcode) },
+            errorClass = WalletException::class
+        ).flatMap { dataResponseOpt ->
+            dataResponseOpt.ifPresentOrDefault(
+                { Result.Success(it.payload) },
+                { Result.Failure(ApiException()) })
+        }
     }
 
     override suspend fun getQrCode(): Result<QrCodeResponse> {

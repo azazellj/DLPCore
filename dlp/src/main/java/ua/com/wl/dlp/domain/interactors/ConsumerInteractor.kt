@@ -14,6 +14,7 @@ import ua.com.wl.dlp.data.api.responses.consumer.ranks.RankResponse
 import ua.com.wl.dlp.data.api.responses.consumer.groups.GroupResponse
 import ua.com.wl.dlp.data.api.responses.consumer.info.BusinessResponse
 import ua.com.wl.dlp.data.api.responses.consumer.coupons.CouponResponse
+import ua.com.wl.dlp.data.api.responses.consumer.coupons.CouponWalletResponse
 import ua.com.wl.dlp.data.api.responses.consumer.profile.ProfileResponse
 import ua.com.wl.dlp.data.api.responses.consumer.referral.QrCodeResponse
 import ua.com.wl.dlp.data.api.responses.consumer.referral.InvitationResponse
@@ -48,6 +49,8 @@ interface ConsumerInteractor : OffersInteractor {
     ): Result<PagedResponse<CouponResponse>>
 
     suspend fun getCoupon(id: Int): Result<CouponResponse>
+
+    suspend fun addCouponToWallet(id: Int, barcode: String): Result<CouponWalletResponse>
 
     suspend fun getQrCode(): Result<QrCodeResponse>
 
