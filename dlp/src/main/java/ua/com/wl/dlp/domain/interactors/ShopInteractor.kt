@@ -41,7 +41,7 @@ interface ShopInteractor : OffersInteractor {
         page: Int?,
         count: Int?,
         language: String
-    ): Result<CollectionResponse<CityShopsResponse>>
+    ): Result<PagedResponse<CityShopsResponse>>
 
     suspend fun getOffers(
         shopId: Int,

@@ -92,7 +92,7 @@ class ShopInteractorImpl(
         page: Int?,
         count: Int?,
         language: String
-    ): Result<CollectionResponse<CityShopsResponse>> {
+    ): Result<PagedResponse<CityShopsResponse>> {
         return callApi(call = { apiV2.getShopWithChain(page, count, language) })
             .flatMap { dataResponseOpt ->
                 dataResponseOpt.ifPresentOrDefault(
