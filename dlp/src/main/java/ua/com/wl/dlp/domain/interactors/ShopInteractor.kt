@@ -37,6 +37,12 @@ interface ShopInteractor : OffersInteractor {
         language: String = Locale.getDefault().language
     ): Result<CollectionResponse<StoreChainResponse>>
 
+    suspend fun getShopWithChain(
+        page: Int?,
+        count: Int?,
+        language: String
+    ): Result<CollectionResponse<CityShopsResponse>>
+
     suspend fun getOffers(
         shopId: Int,
         page: Int? = null,
