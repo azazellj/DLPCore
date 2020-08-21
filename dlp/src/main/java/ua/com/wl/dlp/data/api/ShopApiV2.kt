@@ -35,5 +35,5 @@ interface ShopApiV2 {
         @Query("page") page: Int? = null,
         @Query("page_size") count: Int? = null,
         @Query("language") language: String
-    ): Response<DataResponse<PagedResponse<CityShopsResponse>>>
+    ): Response<PagedResponse<CityShopsResponse>>
 }

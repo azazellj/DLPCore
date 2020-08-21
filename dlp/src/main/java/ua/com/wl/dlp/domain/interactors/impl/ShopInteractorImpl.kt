@@ -56,6 +56,20 @@ class ShopInteractorImpl(
             }
     }
 
+    override suspend fun getShopWithChain(
+        page: Int?,
+        count: Int?,
+        language: String
+    ): Result<PagedResponse<CityShopsResponse>> {
+        return callApi(call = { apiV2.getShopWithChain(page, count, language) })
+            .flatMap { dataResponseOpt ->
+                dataResponseOpt.ifPresentOrDefault(
+                    { Result.Success(it) },
+                    { Result.Failure(ApiException()) })
+            }
+    }
+
+
     override suspend fun getShop(shopId: Int): Result<ShopResponse> {
         return callApi(call = { apiV1.getShop(shopId) })
             .flatMap { responseOpt ->
@@ -81,19 +95,6 @@ class ShopInteractorImpl(
         language: String
     ): Result<CollectionResponse<StoreChainResponse>> {
         return callApi(call = { apiV2.getStoreChain(language) })
-            .flatMap { dataResponseOpt ->
-                dataResponseOpt.ifPresentOrDefault(
-                    { Result.Success(it.payload) },
-                    { Result.Failure(ApiException()) })
-            }
-    }
-
-    override suspend fun getShopWithChain(
-        page: Int?,
-        count: Int?,
-        language: String
-    ): Result<PagedResponse<CityShopsResponse>> {
-        return callApi(call = { apiV2.getShopWithChain(page, count, language) })
             .flatMap { dataResponseOpt ->
                 dataResponseOpt.ifPresentOrDefault(
                     { Result.Success(it.payload) },
