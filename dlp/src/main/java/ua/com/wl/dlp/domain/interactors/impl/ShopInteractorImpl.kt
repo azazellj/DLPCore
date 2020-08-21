@@ -17,6 +17,7 @@ import ua.com.wl.dlp.data.api.responses.PagedResponse
 import ua.com.wl.dlp.data.api.responses.CollectionResponse
 import ua.com.wl.dlp.data.api.responses.shop.ShopResponse
 import ua.com.wl.dlp.data.api.responses.shop.CityShopsResponse
+import ua.com.wl.dlp.data.api.responses.shop.chain.StoreChainResponse
 import ua.com.wl.dlp.data.api.responses.shop.rubric.RubricResponse
 import ua.com.wl.dlp.data.api.responses.shop.offer.BaseOfferResponse
 import ua.com.wl.dlp.domain.Result
@@ -69,6 +70,17 @@ class ShopInteractorImpl(
         language: String
     ): Result<CollectionResponse<RubricResponse>> {
         return callApi(call = { apiV2.getRubrics(shopId, language) })
+            .flatMap { dataResponseOpt ->
+                dataResponseOpt.ifPresentOrDefault(
+                    { Result.Success(it.payload) },
+                    { Result.Failure(ApiException()) })
+            }
+    }
+
+    override suspend fun getStoreChain(
+        language: String
+    ): Result<CollectionResponse<StoreChainResponse>> {
+        return callApi(call = { apiV2.getStoreChain(language) })
             .flatMap { dataResponseOpt ->
                 dataResponseOpt.ifPresentOrDefault(
                     { Result.Success(it.payload) },

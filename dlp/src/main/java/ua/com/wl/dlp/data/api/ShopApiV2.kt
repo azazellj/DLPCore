@@ -7,6 +7,7 @@ import retrofit2.http.Query
 
 import ua.com.wl.dlp.data.api.responses.DataResponse
 import ua.com.wl.dlp.data.api.responses.CollectionResponse
+import ua.com.wl.dlp.data.api.responses.shop.chain.StoreChainResponse
 import ua.com.wl.dlp.data.api.responses.shop.rubric.RubricResponse
 
 /**
@@ -20,4 +21,10 @@ interface ShopApiV2 {
         @Path("shop_id") shopId: Int,
         @Query("language") language: String
     ): Response<DataResponse<CollectionResponse<RubricResponse>>>
+
+
+    @GET("/api/mobile/v2/store-chain/")
+    suspend fun getStoreChain(
+        @Query("language") language: String
+    ): Response<DataResponse<CollectionResponse<StoreChainResponse>>>
 }
