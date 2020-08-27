@@ -3,6 +3,7 @@ package ua.com.wl.dlp.data.api.responses.shop
 import com.google.gson.annotations.SerializedName
 
 import ua.com.wl.dlp.data.api.responses.models.shop.service.ShopService
+import ua.com.wl.dlp.data.api.responses.shop.chain.Chain
 
 /**
  * @author Denis Makovskyi
@@ -49,4 +50,8 @@ open class BaseShopResponse(
     var isTableReservationAllowed: Boolean = false,
 
     @SerializedName("services")
-    var services: List<ShopService>? = null)
+    var services: List<ShopService>? = null,
+
+    @SerializedName("chain")
+    var chain: Chain? = null
+)
