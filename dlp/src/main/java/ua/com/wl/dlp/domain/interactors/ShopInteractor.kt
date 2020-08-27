@@ -8,9 +8,9 @@ import ua.com.wl.dlp.data.api.responses.PagedResponse
 import ua.com.wl.dlp.data.api.responses.CollectionResponse
 import ua.com.wl.dlp.data.api.responses.shop.ShopResponse
 import ua.com.wl.dlp.data.api.responses.shop.CityShopsResponse
-import ua.com.wl.dlp.data.api.responses.shop.chain.StoreChainResponse
 import ua.com.wl.dlp.data.api.responses.shop.rubric.RubricResponse
 import ua.com.wl.dlp.data.api.responses.shop.offer.BaseOfferResponse
+import ua.com.wl.dlp.data.api.responses.shop.chain.ShopChainResponse
 import ua.com.wl.dlp.data.db.entities.shops.ShopEntity
 import ua.com.wl.dlp.data.db.entities.shops.OfferEntity
 import ua.com.wl.dlp.domain.Result
@@ -26,22 +26,22 @@ interface ShopInteractor : OffersInteractor {
         count: Int? = null
     ): Result<PagedResponse<CityShopsResponse>>
 
+    suspend fun getShopsWithChain(
+        page: Int?,
+        count: Int?,
+        language: String
+    ): Result<PagedResponse<CityShopsResponse>>
+
     suspend fun getShop(shopId: Int): Result<ShopResponse>
+
+    suspend fun getShopChain(
+        language: String = Locale.getDefault().language
+    ): Result<CollectionResponse<ShopChainResponse>>
 
     suspend fun getRubrics(
         shopId: Int,
         language: String = Locale.getDefault().language
     ): Result<CollectionResponse<RubricResponse>>
-
-    suspend fun getStoreChain(
-        language: String = Locale.getDefault().language
-    ): Result<CollectionResponse<StoreChainResponse>>
-
-    suspend fun getShopWithChain(
-        page: Int?,
-        count: Int?,
-        language: String
-    ): Result<PagedResponse<CityShopsResponse>>
 
     suspend fun getOffers(
         shopId: Int,

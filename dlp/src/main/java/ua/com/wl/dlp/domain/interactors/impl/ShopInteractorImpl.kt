@@ -17,9 +17,9 @@ import ua.com.wl.dlp.data.api.responses.PagedResponse
 import ua.com.wl.dlp.data.api.responses.CollectionResponse
 import ua.com.wl.dlp.data.api.responses.shop.ShopResponse
 import ua.com.wl.dlp.data.api.responses.shop.CityShopsResponse
-import ua.com.wl.dlp.data.api.responses.shop.chain.StoreChainResponse
 import ua.com.wl.dlp.data.api.responses.shop.rubric.RubricResponse
 import ua.com.wl.dlp.data.api.responses.shop.offer.BaseOfferResponse
+import ua.com.wl.dlp.data.api.responses.shop.chain.ShopChainResponse
 import ua.com.wl.dlp.domain.Result
 import ua.com.wl.dlp.domain.UseCase
 import ua.com.wl.dlp.domain.exeptions.api.ApiException
@@ -56,19 +56,18 @@ class ShopInteractorImpl(
             }
     }
 
-    override suspend fun getShopWithChain(
+    override suspend fun getShopsWithChain(
         page: Int?,
         count: Int?,
         language: String
     ): Result<PagedResponse<CityShopsResponse>> {
-        return callApi(call = { apiV2.getShopWithChain(page, count, language) })
+        return callApi(call = { apiV2.getShopsWithChain(page, count, language) })
             .flatMap { dataResponseOpt ->
                 dataResponseOpt.ifPresentOrDefault(
                     { Result.Success(it) },
                     { Result.Failure(ApiException()) })
             }
     }
-
 
     override suspend fun getShop(shopId: Int): Result<ShopResponse> {
         return callApi(call = { apiV1.getShop(shopId) })
@@ -79,11 +78,8 @@ class ShopInteractorImpl(
             }
     }
 
-    override suspend fun getRubrics(
-        shopId: Int,
-        language: String
-    ): Result<CollectionResponse<RubricResponse>> {
-        return callApi(call = { apiV2.getRubrics(shopId, language) })
+    override suspend fun getShopChain(language: String): Result<CollectionResponse<ShopChainResponse>> {
+        return callApi(call = { apiV2.getShopChain(language) })
             .flatMap { dataResponseOpt ->
                 dataResponseOpt.ifPresentOrDefault(
                     { Result.Success(it.payload) },
@@ -91,10 +87,11 @@ class ShopInteractorImpl(
             }
     }
 
-    override suspend fun getStoreChain(
+    override suspend fun getRubrics(
+        shopId: Int,
         language: String
-    ): Result<CollectionResponse<StoreChainResponse>> {
-        return callApi(call = { apiV2.getStoreChain(language) })
+    ): Result<CollectionResponse<RubricResponse>> {
+        return callApi(call = { apiV2.getRubrics(shopId, language) })
             .flatMap { dataResponseOpt ->
                 dataResponseOpt.ifPresentOrDefault(
                     { Result.Success(it.payload) },
