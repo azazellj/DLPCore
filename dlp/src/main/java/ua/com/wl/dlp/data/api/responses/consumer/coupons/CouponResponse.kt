@@ -5,6 +5,7 @@ import com.google.gson.annotations.SerializedName
 import ua.com.wl.dlp.data.api.models.shop.SimpleShop
 import ua.com.wl.dlp.data.api.responses.models.another.NoveltyDatesRange
 import ua.com.wl.dlp.data.api.responses.models.consumer.coupons.CouponType
+import ua.com.wl.dlp.data.api.responses.models.consumer.coupons.CouponStatus
 import ua.com.wl.dlp.data.api.responses.shop.offer.BaseOfferResponse
 
 /**
@@ -17,6 +18,9 @@ data class CouponResponse(
 
     @SerializedName("type")
     val type: CouponType,
+
+    @SerializedName("status")
+    val status: CouponStatus,
 
     @SerializedName("name")
     val name: String,
