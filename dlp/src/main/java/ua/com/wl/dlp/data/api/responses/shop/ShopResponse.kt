@@ -2,6 +2,10 @@ package ua.com.wl.dlp.data.api.responses.shop
 
 import com.google.gson.annotations.SerializedName
 
+import ua.com.wl.dlp.data.api.responses.models.shop.WorkSchedule
+import ua.com.wl.dlp.data.api.responses.models.shop.delivery.DeliveryPrice
+import ua.com.wl.dlp.data.api.responses.models.shop.delivery.PaymentOptions
+
 /**
  * @author Denis Makovskyi
  */
@@ -20,5 +24,17 @@ data class ShopResponse(
     val facebookLink: String,
 
     @SerializedName("insta_link")
-    val instagramLink: String
+    val instagramLink: String,
+
+    @SerializedName("delivery_minimal_sum")
+    val deliveryMinAmount: String?,
+
+    @SerializedName("delivery_payment_options")
+    val deliveryPaymentOptions: PaymentOptions,
+
+    @SerializedName("delivery_prices")
+    val deliveryProbablyPrices: List<DeliveryPrice>,
+
+    @SerializedName("work_schedule")
+    val workSchedule: List<WorkSchedule>
 ) : BaseShopResponse()
