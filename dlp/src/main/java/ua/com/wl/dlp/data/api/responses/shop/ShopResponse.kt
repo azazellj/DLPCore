@@ -36,5 +36,5 @@ data class ShopResponse(
     val deliveryProbablyPrices: List<DeliveryPrice>,
 
     @SerializedName("work_schedule")
-    val workSchedule: List<WorkSchedule>
+    val workSchedule: List<WorkSchedule>?
 ) : BaseShopResponse()

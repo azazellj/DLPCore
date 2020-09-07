@@ -13,7 +13,7 @@ data class WorkSchedule(
 
     @IntRange(from = 0L, to = 8L)
     @SerializedName("week_day")
-    val weekDay: Int?,
+    val weekDay: Int,
 
     @SerializedName("time_from")
     val timeFrom: String,
