@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName
 
 class Contacts(
     @SerializedName("phone")
-    var phone: Int = 0,
+    var phone: String = "",
 
     @SerializedName("link")
     var webLinkUrl: String = "",
