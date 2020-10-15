@@ -29,6 +29,12 @@ interface ShopApiV2 {
         @Query("language") language: String
     ): Response<DataResponse<CollectionResponse<ShopChainResponse>>>
 
+    @GET("/api/mobile/v2/store-chain/{store_chain_id}/")
+    suspend fun getShopChainDetail(
+        @Path("store_chain_id") storeChainId: Int,
+        @Query("language") language: String
+    ): Response<DataResponse<ShopChainResponse>>
+
     @GET("/api/mobile/v2/shop/city/")
     suspend fun getShopsWithChain(
         @Query("page") page: Int? = null,
