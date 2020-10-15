@@ -87,6 +87,15 @@ class ShopInteractorImpl(
             }
     }
 
+    override suspend fun getShopChainDetail(storeChainId: Int,language: String): Result<ShopChainResponse> {
+        return callApi(call = { apiV2.getShopChainDetail(storeChainId,language) })
+            .flatMap { dataResponseOpt ->
+                dataResponseOpt.ifPresentOrDefault(
+                    { Result.Success(it.payload) },
+                    { Result.Failure(ApiException()) })
+            }
+    }
+
     override suspend fun getRubrics(
         shopId: Int,
         language: String

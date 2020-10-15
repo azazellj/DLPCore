@@ -38,6 +38,11 @@ interface ShopInteractor : OffersInteractor {
         language: String = Locale.getDefault().language
     ): Result<CollectionResponse<ShopChainResponse>>
 
+    suspend fun getShopChainDetail(
+        storeChainId: Int,
+        language: String = Locale.getDefault().language
+    ): Result<ShopChainResponse>
+
     suspend fun getRubrics(
         shopId: Int,
         language: String = Locale.getDefault().language
