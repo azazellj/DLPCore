@@ -16,7 +16,7 @@ interface PromotionApiV2 {
         @Query("page") page: Int? = null,
         @Query("page_size") count: Int? = null,
         @Query("language") language: String
-    ): Response<DataResponse<CollectionResponse<PromotionsResponse>>>
+    ): Response<DataResponse<PagedResponse<PromotionsResponse>>>
 
     @GET("/api/mobile/v2/promotion/{promotion_id}/")
     suspend fun getPromotionDetail(

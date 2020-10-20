@@ -14,7 +14,7 @@ interface PromotionInteractor {
         page: Int? = null,
         count: Int? = null,
         language: String = Locale.getDefault().language
-    ): Result<CollectionResponse<PromotionsResponse>>
+    ): Result<PagedResponse<PromotionsResponse>>
 
 
     suspend fun getPromotionDetail(
