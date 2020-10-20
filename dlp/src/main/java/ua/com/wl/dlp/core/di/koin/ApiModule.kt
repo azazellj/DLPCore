@@ -157,6 +157,10 @@ val apiModule = module {
     }
     factory {
         get<Retrofit>(qualifier = named(Constants.DI_NAMED_API_RETROFIT))
+            .create(PromotionApiV2::class.java)
+    }
+    factory {
+        get<Retrofit>(qualifier = named(Constants.DI_NAMED_API_RETROFIT))
             .create(OffersApiV1::class.java)
     }
     factory {
