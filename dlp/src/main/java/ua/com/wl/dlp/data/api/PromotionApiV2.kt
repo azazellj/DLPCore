@@ -20,7 +20,7 @@ interface PromotionApiV2 {
 
     @GET("/api/mobile/v2/promotion/{promotion_id}/")
     suspend fun getPromotionDetail(
-        @Path("store_chain_id") storeChainId: Int,
+        @Path("promotion_id") promotionId: Int,
         @Query("language") language: String
     ): Response<PromotionsResponse>
 }
