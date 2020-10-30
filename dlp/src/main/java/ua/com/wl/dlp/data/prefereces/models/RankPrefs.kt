@@ -31,6 +31,9 @@ data class RankCriteriaPrefs(
     @SerializedName("referral_count")
     val referralCount: RankSelectionCriteriaValue<Int, Int>? = null,
 
+    @SerializedName("accumulated_cash_back_amount")
+    val collectedCashBack: RankSelectionCriteriaValue<Long, Long>? = null,
+
     @SerializedName("days_registered")
     val daysRegistered: RankSelectionCriteriaValue<Long, Long>? = null,
 
@@ -54,6 +57,8 @@ data class RankCriteriaPrefs(
 
     @SerializedName("accumulated_bonuses_amount")
     val collectedBonuses: RankSelectionCriteriaValue<Long, Long>? = null)
+
+
 
 data class RankPermissionsPrefs(
     @SerializedName("cash_back_percentage")

@@ -158,6 +158,7 @@ class ConsumerInteractorImpl(
                         RankCriteriaPrefs(
                             referralCount = nextRank.selectionCriteria?.referralCount?.copy(),
                             daysRegistered = nextRank.selectionCriteria?.daysRegistered?.copy(),
+                            collectedCashBack = nextRank.selectionCriteria?.collectedCashBack?.copy(),
                             profileDataFilled = nextRank.selectionCriteria?.profileDataFilled?.copy(),
                             sharingCount = nextRank.selectionCriteria?.sharingCount?.copy(),
                             commentsCount = nextRank.selectionCriteria?.commentsCount?.copy(),
@@ -165,6 +166,7 @@ class ConsumerInteractorImpl(
                             spentMoney = nextRank.selectionCriteria?.spentMoney?.copy(),
                             spentBonuses = nextRank.selectionCriteria?.spentBonuses?.copy(),
                             collectedBonuses = nextRank.selectionCriteria?.collectedBonuses?.copy())
+
                     } else null
                     val currRankPermissions = RankPermissionsPrefs(
                         cashBackPercentage = currRank.permissions?.cashBackPercentage,
