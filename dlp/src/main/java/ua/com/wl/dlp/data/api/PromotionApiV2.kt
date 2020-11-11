@@ -16,11 +16,11 @@ interface PromotionApiV2 {
         @Query("page") page: Int? = null,
         @Query("page_size") count: Int? = null,
         @Query("language") language: String
-    ): Response<DataResponse<CollectionResponse<PromotionsResponse>>>
+    ): Response<DataResponse<PagedResponse<PromotionsResponse>>>
 
     @GET("/api/mobile/v2/promotion/{promotion_id}/")
     suspend fun getPromotionDetail(
-        @Path("store_chain_id") storeChainId: Int,
+        @Path("promotion_id") promotionId: Int,
         @Query("language") language: String
     ): Response<PromotionsResponse>
 }

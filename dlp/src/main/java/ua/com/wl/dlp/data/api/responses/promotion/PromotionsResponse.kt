@@ -2,6 +2,7 @@ package ua.com.wl.dlp.data.api.responses.promotion
 
 import com.google.gson.annotations.SerializedName
 import ua.com.wl.dlp.data.api.responses.models.shop.chain.ShopChainItem
+import ua.com.wl.dlp.data.api.responses.models.shop.offer.item.OfferItem
 
 data class PromotionsResponse(
     @SerializedName("id")
@@ -14,6 +15,9 @@ data class PromotionsResponse(
     var type: String? = null,
 
     @SerializedName("percent")
+    var percent: String? = null,
+
+    @SerializedName("is_disposable")
     var isDisposable: Boolean? = null,
 
     @SerializedName("criteria")

@@ -19,7 +19,7 @@ class PromotionInteractorImpl(
         page: Int?,
         count: Int?,
         language: String
-    ): Result<CollectionResponse<PromotionsResponse>> {
+    ): Result<PagedResponse<PromotionsResponse>> {
         return callApi(call = { apiV2.getPromotions(page, count, language) })
             .flatMap { dataResponseOpt ->
                 dataResponseOpt.ifPresentOrDefault(

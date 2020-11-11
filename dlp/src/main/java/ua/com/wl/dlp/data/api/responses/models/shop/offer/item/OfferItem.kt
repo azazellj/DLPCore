@@ -16,6 +16,9 @@ data class OfferItem(
     @SerializedName("name")
     val name: String?,
 
+    @SerializedName("description")
+    val description: String?,
+
     @SerializedName("photo")
     val photo: String?,
 
