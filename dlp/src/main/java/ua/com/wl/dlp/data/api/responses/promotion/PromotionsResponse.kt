@@ -2,7 +2,6 @@ package ua.com.wl.dlp.data.api.responses.promotion
 
 import com.google.gson.annotations.SerializedName
 import ua.com.wl.dlp.data.api.responses.models.shop.chain.ShopChainItem
-import ua.com.wl.dlp.data.api.responses.models.shop.offer.item.OfferItem
 
 data class PromotionsResponse(
     @SerializedName("id")
@@ -30,5 +29,8 @@ data class PromotionsResponse(
     var thumbImage: String? = null,
 
     @SerializedName("shops")
-    var relatedShops: List<ShopChainItem>? = null
+    var relatedShops: List<ShopChainItem>? = null,
+
+    @SerializedName("description")
+    var description: String? = null
 )
