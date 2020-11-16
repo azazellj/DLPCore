@@ -52,6 +52,9 @@ open class BaseShopResponse(
     @SerializedName("allow_pre_order_takeaway")
     var isPreOrderTakeawayAllowed: Boolean = false,
 
+    @SerializedName("allow_pre_order_in_place")
+    var isPreOrderInPlaceAllowed: Boolean = false,
+
     @SerializedName("allow_table_reservation")
     var isTableReservationAllowed: Boolean = false,
 
