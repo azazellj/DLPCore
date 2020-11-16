@@ -52,9 +52,6 @@ data class RankCriteriaPrefs(
     @SerializedName("payments_in_money_amount")
     val spentMoney: RankSelectionCriteriaValue<String, String>? = null,
     
-    @SerializedName("collected_cash_back")
-    val collectedCashBack: RankSelectionCriteriaValue<String, String>? = null,
-
     @SerializedName("payments_in_bonuses_amount")
     val spentBonuses: RankSelectionCriteriaValue<Long, Long>? = null,
 
