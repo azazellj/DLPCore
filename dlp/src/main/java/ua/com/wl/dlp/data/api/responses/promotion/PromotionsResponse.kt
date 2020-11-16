@@ -1,6 +1,7 @@
 package ua.com.wl.dlp.data.api.responses.promotion
 
 import com.google.gson.annotations.SerializedName
+import ua.com.wl.dlp.data.api.responses.models.shop.chain.ShopChainItem
 
 data class PromotionsResponse(
     @SerializedName("id")
@@ -13,7 +14,10 @@ data class PromotionsResponse(
     var type: String? = null,
 
     @SerializedName("percent")
-    var percent:  String = "",
+    var percent: String? = null,
+
+    @SerializedName("is_disposable")
+    var isDisposable: Boolean? = null,
 
     @SerializedName("criteria")
     var criteria: Criteria? = null,
@@ -21,12 +25,12 @@ data class PromotionsResponse(
     @SerializedName("offer")
     var offer: Offer? = null,
 
-    @SerializedName("is_disposable")
-    var isDisposable: Boolean? = null,
-
     @SerializedName("thumb_image")
     var thumbImage: String? = null,
 
+    @SerializedName("shops")
+    var relatedShops: List<ShopChainItem>? = null,
+
     @SerializedName("description")
-    var description: String? = null,
+    var description: String? = null
 )

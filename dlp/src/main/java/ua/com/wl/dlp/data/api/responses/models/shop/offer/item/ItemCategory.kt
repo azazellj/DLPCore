@@ -10,8 +10,12 @@ data class ItemCategory(
     @SerializedName("id")
     val id: Int,
 
+    @SerializedName("parent_id")
+    val parentId: Int?,
+
     @SerializedName("name")
     val name: String,
 
     @SerializedName("timezone")
-    val timezone: String)
+    val timezone: String?
+)
