@@ -45,7 +45,7 @@ class SessionAuthenticator constructor(
 
                     val dataResponse = try {
                         api.refreshToken(
-                            TokenRequest(corePreferences.authPrefs.refreshToken)
+                            TokenRequest(corePreferences.authPrefs.refreshToken), authInterceptor.appId
                         )
                     } catch (e: Exception) {
                         return@runBlocking sessionExpired()

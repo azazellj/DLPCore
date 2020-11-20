@@ -1,27 +1,21 @@
 package ua.com.wl.dlp.core.di.koin
 
-import java.util.concurrent.TimeUnit
-
 import android.content.pm.PackageManager
-
 import com.chuckerteam.chucker.api.ChuckerInterceptor
-
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
-
-import org.koin.dsl.module
-import org.koin.core.qualifier.named
 import org.koin.android.ext.koin.androidContext
-
+import org.koin.core.qualifier.named
+import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-
-import ua.com.wl.dlp.core.network.AuthInterceptor
 import ua.com.wl.dlp.core.Constants
 import ua.com.wl.dlp.core.DLPCore
+import ua.com.wl.dlp.core.network.AuthInterceptor
 import ua.com.wl.dlp.core.network.SessionAuthenticator
 import ua.com.wl.dlp.data.api.*
 import ua.com.wl.dlp.data.api.errors.ErrorsMapper
+import java.util.concurrent.TimeUnit
 
 /**
  * @author Denis Makovskyi
@@ -53,10 +47,12 @@ val apiModule = module {
         }
     }
     // - Interceptors
-    single {
+    factory {
         AuthInterceptor(
             appIds = get(qualifier = named(Constants.DI_NAMED_APP_IDS)),
-            corePreferences = get())
+            corePreferences = get(),
+            retrofit = get(qualifier = named(Constants.DI_NAMED_REFRESH_RETROFIT))
+        )
     }
     factory {
         HttpLoggingInterceptor().apply {
@@ -83,11 +79,32 @@ val apiModule = module {
             }
             .build()
     }
+    factory(qualifier = named(Constants.DI_NAMED_REFRESH_OKHTTP)) {
+        OkHttpClient.Builder()
+            .connectTimeout(TimeUnit.SECONDS.toMillis(10), TimeUnit.SECONDS)
+            .readTimeout(TimeUnit.SECONDS.toMillis(10), TimeUnit.SECONDS)
+            .followRedirects(false)
+            .followSslRedirects(false)
+            .addInterceptor(interceptor = get<HttpLoggingInterceptor>())
+            .apply {
+                if (DLPCore.debuggable) {
+                    addInterceptor(interceptor = ChuckerInterceptor(androidContext()))
+                }
+            }
+            .build()
+    }
     // - Session retrofit - for anonymous api calls
     factory(qualifier = named(Constants.DI_NAMED_SESSION_RETROFIT)) {
         Retrofit.Builder()
             .baseUrl(get<String>(qualifier = named(Constants.DI_NAMED_URL)))
             .client(get<OkHttpClient>(qualifier = named(Constants.DI_NAMED_SESSION_OKHTTP)))
+            .addConverterFactory(GsonConverterFactory.create(get()))
+            .build()
+    }
+    factory(qualifier = named(Constants.DI_NAMED_REFRESH_RETROFIT)) {
+        Retrofit.Builder()
+            .baseUrl(get<String>(qualifier = named(Constants.DI_NAMED_URL)))
+            .client(get<OkHttpClient>(qualifier = named(Constants.DI_NAMED_REFRESH_OKHTTP)))
             .addConverterFactory(GsonConverterFactory.create(get()))
             .build()
     }
