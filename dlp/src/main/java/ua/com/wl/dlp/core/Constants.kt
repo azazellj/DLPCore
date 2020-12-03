@@ -15,7 +15,9 @@ object Constants {
     const val DI_NAMED_APP_IDS = "app_ids"
 
     const val DI_NAMED_SESSION_OKHTTP = "SESSION_OKHTTP"
+    const val DI_NAMED_REFRESH_OKHTTP = "REFRESH_OKHTTP"
     const val DI_NAMED_SESSION_RETROFIT = "SESSION_RETROFIT"
+    const val DI_NAMED_REFRESH_RETROFIT = "REFRESH_RETROFIT"
     const val DI_NAMED_API_OKHTTP = "API_OKHTTP"
     const val DI_NAMED_API_RETROFIT = "APi_RETROFIT"
 
