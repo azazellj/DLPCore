@@ -9,6 +9,7 @@ import ua.com.wl.dlp.data.api.responses.DataResponse
 import ua.com.wl.dlp.data.api.responses.CollectionResponse
 import ua.com.wl.dlp.data.api.responses.PagedResponse
 import ua.com.wl.dlp.data.api.responses.shop.CityShopsResponse
+import ua.com.wl.dlp.data.api.responses.shop.ShopResponse
 import ua.com.wl.dlp.data.api.responses.shop.chain.ShopChainResponse
 import ua.com.wl.dlp.data.api.responses.shop.rubric.RubricResponse
 
@@ -23,6 +24,11 @@ interface ShopApiV2 {
         @Path("shop_id") shopId: Int,
         @Query("language") language: String
     ): Response<DataResponse<CollectionResponse<RubricResponse>>>
+
+    @GET("api/mobile/v2/shop/{shop_id}/")
+    suspend fun getShopV2(
+        @Path("shop_id") shopId: Int
+    ): Response<ShopResponse>
 
     @GET("/api/mobile/v2/store-chain/")
     suspend fun getShopChain(
