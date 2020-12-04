@@ -17,6 +17,9 @@ class ShopChainItem(
     @SerializedName("thumb_logo")
     var thumbLogoUrl: String? = null,
 
+    @SerializedName("schedule")
+    var schedule: String = "",
+
     @SerializedName("allow_pre_order_delivery")
     var isPreOrderDeliveryAllowed: Boolean = false,
 
