@@ -20,17 +20,11 @@ class ShopChainItem(
     @SerializedName("schedule")
     var schedule: String = "",
 
-    @SerializedName("allow_pre_order_delivery")
-    var isPreOrderDeliveryAllowed: Boolean = false,
-
-    @SerializedName("allow_pre_order_takeaway")
-    var isPreOrderTakeawayAllowed: Boolean = false,
-
-    @SerializedName("allow_pre_order_in_place")
-    var isPreOrderInPlaceAllowed: Boolean = false,
-
     @SerializedName("address")
     var address: String? = null,
+
+    @SerializedName("configuration")
+    var configuration: ShopConfiguration? = null,
 
     @SerializedName("city")
     var city: City? = null)
