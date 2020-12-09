@@ -78,11 +78,11 @@ class ShopInteractorImpl(
                     { Result.Failure(ApiException()) })
             }
     }
-    override suspend fun getShopV2(shopId: Int): Result<DataResponse<ShopResponse>> {
+    override suspend fun getShopV2(shopId: Int): Result<ShopResponse> {
         return callApi(call = { apiV2.getShopV2(shopId) })
-            .flatMap { responseOpt ->
-                responseOpt.ifPresentOrDefault(
-                    { Result.Success(it) },
+            .flatMap { dataResponseOpt ->
+                dataResponseOpt.ifPresentOrDefault(
+                    { Result.Success(it.payload) },
                     { Result.Failure(ApiException()) })
             }
     }

@@ -35,7 +35,7 @@ interface ShopInteractor : OffersInteractor {
 
     suspend fun getShop(shopId: Int): Result<ShopResponse>
 
-    suspend fun getShopV2(shopId: Int): Result<DataResponse<ShopResponse>>
+    suspend fun getShopV2(shopId: Int): Result<ShopResponse>
 
     suspend fun getShopChain(
         language: String = Locale.getDefault().language
