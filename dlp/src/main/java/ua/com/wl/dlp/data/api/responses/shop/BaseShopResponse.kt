@@ -1,8 +1,10 @@
 package ua.com.wl.dlp.data.api.responses.shop
 
 import com.google.gson.annotations.SerializedName
+import ua.com.wl.dlp.data.api.responses.models.auth.City
 
 import ua.com.wl.dlp.data.api.responses.models.shop.chain.Chain
+import ua.com.wl.dlp.data.api.responses.models.shop.chain.ShopConfiguration
 import ua.com.wl.dlp.data.api.responses.models.shop.service.ShopService
 
 /**
@@ -61,5 +63,12 @@ open class BaseShopResponse(
     @SerializedName("chain")
     var chain: Chain? = null,
 
+    @SerializedName("configuration")
+    var configuration: ShopConfiguration? = null,
+
+    @SerializedName("City")
+    var city: City? = null,
+
     @SerializedName("services")
     var services: List<ShopService>? = null)
+
