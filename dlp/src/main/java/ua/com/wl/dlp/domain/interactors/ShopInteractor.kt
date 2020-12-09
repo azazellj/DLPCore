@@ -6,6 +6,7 @@ import ua.com.wl.archetype.utils.Optional
 
 import ua.com.wl.dlp.data.api.responses.PagedResponse
 import ua.com.wl.dlp.data.api.responses.CollectionResponse
+import ua.com.wl.dlp.data.api.responses.DataResponse
 import ua.com.wl.dlp.data.api.responses.shop.ShopResponse
 import ua.com.wl.dlp.data.api.responses.shop.CityShopsResponse
 import ua.com.wl.dlp.data.api.responses.shop.rubric.RubricResponse
@@ -34,7 +35,7 @@ interface ShopInteractor : OffersInteractor {
 
     suspend fun getShop(shopId: Int): Result<ShopResponse>
 
-    suspend fun getShopV2(shopId: Int): Result<ShopResponse>
+    suspend fun getShopV2(shopId: Int): Result<DataResponse<ShopResponse>>
 
     suspend fun getShopChain(
         language: String = Locale.getDefault().language

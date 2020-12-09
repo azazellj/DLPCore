@@ -28,7 +28,7 @@ interface ShopApiV2 {
     @GET("api/mobile/v2/shop/{shop_id}/")
     suspend fun getShopV2(
         @Path("shop_id") shopId: Int
-    ): Response<ShopResponse>
+    ): Response<DataResponse<ShopResponse>>
 
     @GET("/api/mobile/v2/store-chain/")
     suspend fun getShopChain(

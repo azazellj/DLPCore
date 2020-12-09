@@ -15,6 +15,7 @@ import ua.com.wl.dlp.data.api.ShopApiV2
 import ua.com.wl.dlp.data.api.errors.ErrorsMapper
 import ua.com.wl.dlp.data.api.responses.PagedResponse
 import ua.com.wl.dlp.data.api.responses.CollectionResponse
+import ua.com.wl.dlp.data.api.responses.DataResponse
 import ua.com.wl.dlp.data.api.responses.shop.ShopResponse
 import ua.com.wl.dlp.data.api.responses.shop.CityShopsResponse
 import ua.com.wl.dlp.data.api.responses.shop.rubric.RubricResponse
@@ -77,7 +78,7 @@ class ShopInteractorImpl(
                     { Result.Failure(ApiException()) })
             }
     }
-    override suspend fun getShopV2(shopId: Int): Result<ShopResponse> {
+    override suspend fun getShopV2(shopId: Int): Result<DataResponse<ShopResponse>> {
         return callApi(call = { apiV2.getShopV2(shopId) })
             .flatMap { responseOpt ->
                 responseOpt.ifPresentOrDefault(
