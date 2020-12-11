@@ -40,6 +40,10 @@ class AuthInterceptor constructor(
     }
 
     override fun intercept(chain: Interceptor.Chain): Response {
+        if (corePreferences.hasSelectedAppIdIndex()) {
+            appId = appIds.getOrElse(corePreferences.getSelectedAppIdIndex()) { appIds[0] }
+        }
+
         val originalRequest = wrapRequest(chain.request(), corePreferences.authPrefs.authToken)
         val originalResponse = chain.proceed(originalRequest)
 

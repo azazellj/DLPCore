@@ -20,6 +20,7 @@ class CorePreferences(
     companion object {
 
         const val KEY_AUTH_PREFS = "auth_prefs"
+        const val KEY_SELECTED_APP_INDEX = "selected_app_index"
     }
 
     var authPrefs: AuthPrefs
@@ -36,4 +37,16 @@ class CorePreferences(
         }
 
     fun removeAuthPrefs() = remove(KEY_AUTH_PREFS)
+
+    fun hasSelectedAppIdIndex(): Boolean {
+        return getSelectedAppIdIndex() != -1
+    }
+
+    fun getSelectedAppIdIndex(): Int {
+        return getInteger(KEY_SELECTED_APP_INDEX, -1)
+    }
+
+    fun setSelectedAppId(appIdIndex: Int) {
+        save(KEY_SELECTED_APP_INDEX, appIdIndex)
+    }
 }
