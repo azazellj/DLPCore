@@ -41,7 +41,7 @@ interface ShopInteractor : OffersInteractor {
         page: Int?,
         count: Int?,
         language: String = Locale.getDefault().language
-    ): Result<CollectionResponse<ShopChainResponse>>
+    ): Result<PagedResponse<ShopChainResponse>>
 
     suspend fun getShopChainDetail(
         storeChainId: Int,
