@@ -87,8 +87,12 @@ class ShopInteractorImpl(
             }
     }
 
-    override suspend fun getShopChain(language: String): Result<CollectionResponse<ShopChainResponse>> {
-        return callApi(call = { apiV2.getShopChain(language) })
+    override suspend fun getShopChain(
+            page: Int?,
+            count: Int?,
+            language: String
+    ): Result<PagedResponse<ShopChainResponse>> {
+        return callApi(call = { apiV2.getShopChain(page, count, language) })
             .flatMap { dataResponseOpt ->
                 dataResponseOpt.ifPresentOrDefault(
                     { Result.Success(it.payload) },
