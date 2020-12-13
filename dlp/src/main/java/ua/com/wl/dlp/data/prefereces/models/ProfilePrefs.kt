@@ -1,65 +1,63 @@
 package ua.com.wl.dlp.data.prefereces.models
 
-import com.google.gson.annotations.SerializedName
-
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 import ua.com.wl.dlp.data.api.responses.models.auth.City
 import ua.com.wl.dlp.data.api.responses.models.consumer.profile.Gender
 
-/**
- * @author Denis Makovskyi
- */
-
+@JsonClass(generateAdapter = true)
 data class ProfilePrefs(
-    @SerializedName("first_name")
+    @Json(name = "first_name")
     val firstName: String? = null,
 
-    @SerializedName("patronymic")
+    @Json(name = "patronymic")
     val patronymic: String? = null,
 
-    @SerializedName("last_name")
+    @Json(name = "last_name")
     val lastName: String? = null,
 
-    @SerializedName("gender")
+    @Json(name = "gender")
     val gender: Gender? = null,
 
-    @SerializedName("birth_date")
+    @Json(name = "birth_date")
     val birthDate: String? = null,
 
-    @SerializedName("is_married")
+    @Json(name = "is_married")
     val isMarried: Boolean? = null,
 
-    @SerializedName("city")
+    @Json(name = "city")
     val city: City? = null,
 
-    @SerializedName("address")
+    @Json(name = "address")
     val address: String? = null,
 
-    @SerializedName("email")
+    @Json(name = "email")
     val email: String? = null,
 
-    @SerializedName("mobile_phone")
+    @Json(name = "mobile_phone")
     val phone: String? = null,
 
-    @SerializedName("language")
+    @Json(name = "language")
     val language: String? = null,
 
-    @SerializedName("timezone")
+    @Json(name = "timezone")
     val timezone: String? = null,
 
-    @SerializedName("balance")
+    @Json(name = "balance")
     val balance: Long? = null,
 
-    @SerializedName("money_amount")
+    @Json(name = "money_amount")
     val moneyAmount: String? = null,
 
-    @SerializedName("qr_code")
+    @Json(name = "qr_code")
     val qrCode: String? = null,
 
-    @SerializedName("invite_code")
+    @Json(name = "invite_code")
     val inviteCode: String? = null,
 
-    @SerializedName("referral_code")
+    @Json(name = "referral_code")
     val referralCode: String? = null,
 
-    @SerializedName("comment")
-    val comment: String? = null)
+    @Json(name = "comment")
+    val comment: String? = null
+)

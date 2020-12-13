@@ -1,125 +1,45 @@
 package ua.com.wl.dlp.data.api.requests.consumer.profile
 
-import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
 import ua.com.wl.dlp.data.api.responses.models.consumer.profile.Gender
 
-/**
- * @author Denis Makovskyi
- */
-
+@JsonClass(generateAdapter = true)
 data class ProfileRequest(
-    @SerializedName("first_name")
+    @Json(name = "first_name")
     val firstName: String?,
 
-    @SerializedName("patronymic")
+    @Json(name = "patronymic")
     val patronymic: String?,
 
-    @SerializedName("last_name")
+    @Json(name = "last_name")
     val lastName: String?,
 
-    @SerializedName("gender")
+    @Json(name = "gender")
     val gender: Gender?,
 
-    @SerializedName("birth_date")
+    @Json(name = "birth_date")
     val birthDate: String?,
 
-    @SerializedName("is_married")
+    @Json(name = "is_married")
     val isMarried: Boolean?,
 
-    @SerializedName("city")
+    @Json(name = "city")
     val city: Int?,
 
-    @SerializedName("address")
+    @Json(name = "address")
     val address: String?,
 
-    @SerializedName("email")
+    @Json(name = "email")
     val email: String?,
 
-    @SerializedName("language")
+    @Json(name = "language")
     val language: String?,
 
-    @SerializedName("comment")
+    @Json(name = "comment")
     val comment: String?,
 
-    @SerializedName("notification_token")
+    @Json(name = "notification_token")
     val notificationToken: String?
-) {
-
-    class Builder {
-
-        private var firstName: String? = null
-        private var patronymic: String? = null
-        private var lastName: String? = null
-        private var gender: Gender? = null
-        private var birthDate: String? = null
-        private var isMarried: Boolean? = null
-        private var city: Int? = null
-        private var address: String? = null
-        private var email: String? = null
-        private var language: String? = null
-        private var comment: String? = null
-        private var notificationToken: String? = null
-
-        fun firstName(init: () -> String?) {
-            firstName = init()
-        }
-
-        fun patronymic(init: () -> String?) {
-            patronymic = init()
-        }
-
-        fun lastName(init: () -> String?) {
-            lastName = init()
-        }
-
-        fun gender(init: () -> Gender?) {
-            gender = init()
-        }
-
-        fun birthDate(init: () -> String?) {
-            birthDate = init()
-        }
-
-        fun isMarried(init: () -> Boolean?) {
-            isMarried = init()
-        }
-
-        fun city(init: () -> Int?) {
-            city = init()
-        }
-
-        fun address(init: () -> String?) {
-            address = init()
-        }
-
-        fun email(init: () -> String?) {
-            email = init()
-        }
-
-        fun language(init: () -> String?) {
-            language = init()
-        }
-
-        fun comment(init: () -> String?) {
-            comment = init()
-        }
-
-        fun notificationToken(init: () -> String?) {
-            notificationToken = init()
-        }
-
-        fun build(init: Builder.() -> Unit): ProfileRequest {
-            init()
-            return ProfileRequest(
-                firstName, patronymic, lastName,
-                gender, birthDate, isMarried,
-                city, address, email,
-                language, comment, notificationToken)
-        }
-    }
-}
-
-fun profileRequest(init: ProfileRequest.Builder.() -> Unit): ProfileRequest {
-    return ProfileRequest.Builder().build(init)
-}
+)

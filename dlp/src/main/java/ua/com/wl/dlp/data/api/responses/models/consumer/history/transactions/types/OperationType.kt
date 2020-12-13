@@ -1,14 +1,11 @@
 package ua.com.wl.dlp.data.api.responses.models.consumer.history.transactions.types
 
-import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
 
-/**
- * @author Denis Makovskyi
- */
+enum class OperationType {
+    @Json(name = "OFFER_VIEW")
+    OFFER_VIEW,
 
-enum class OperationType(val value: String) {
-    @SerializedName("OFFER_VIEW")
-    OFFER_VIEW("OFFER_VIEW"),
-    @SerializedName("NEWS_ITEM_VIEW")
-    ARTICLE_VIEW("NEWS_ITEM_VIEW")
+    @Json(name = "NEWS_ITEM_VIEW")
+    ARTICLE_VIEW
 }

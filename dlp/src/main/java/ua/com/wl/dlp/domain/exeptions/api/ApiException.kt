@@ -1,16 +1,10 @@
 package ua.com.wl.dlp.domain.exeptions.api
 
 import android.content.Context
-
 import ua.com.wl.dlp.R
-import ua.com.wl.dlp.domain.exeptions.api.ApiErrorType.*
 import ua.com.wl.dlp.domain.exeptions.CoreRuntimeException
+import ua.com.wl.dlp.domain.exeptions.api.ApiErrorType.*
 import ua.com.wl.dlp.utils.getApiErrorType
-
-
-/**
- * @author Denis Makovskyi
- */
 
 open class ApiException(
     type: String? = null,
@@ -18,7 +12,7 @@ open class ApiException(
 ) : CoreRuntimeException(type, cause) {
 
     override fun getLocalizedMessage(context: Context): String {
-        return when(getApiErrorType(cause)) {
+        return when (getApiErrorType(cause)) {
             SSL_CERTIFICATE -> context.getString(R.string.dlp_error_network_ssl)
             RESPONSE_PARSING -> context.getString(R.string.dlp_error_network_json)
             NETWORK_CONNECTION -> context.getString(R.string.dlp_error_network_io)

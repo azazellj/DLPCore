@@ -1,14 +1,13 @@
 package ua.com.wl.dlp.data.api.responses.consumer.referral
 
-import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
-/**
- * @author Denis Makovskyi
- */
-
+@JsonClass(generateAdapter = true)
 data class InvitationResponse(
-    @SerializedName("consumer_balance")
+    @Json(name = "consumer_balance")
     val balance: Long,
 
-    @SerializedName("invite_code")
-    val inviteCode: String)
+    @Json(name = "invite_code")
+    val inviteCode: String
+)

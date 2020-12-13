@@ -1,40 +1,37 @@
 package ua.com.wl.dlp.data.api.responses.shop
 
-import com.google.gson.annotations.SerializedName
-
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 import ua.com.wl.dlp.data.api.responses.models.shop.WorkSchedule
 import ua.com.wl.dlp.data.api.responses.models.shop.delivery.DeliveryPrice
 import ua.com.wl.dlp.data.api.responses.models.shop.delivery.PaymentOptions
 
-/**
- * @author Denis Makovskyi
- */
-
+@JsonClass(generateAdapter = true)
 data class ShopResponse(
-    @SerializedName("description")
+    @Json(name = "description")
     val description: String,
 
-    @SerializedName("in_favorite")
+    @Json(name = "in_favorite")
     val isFavourite: Boolean,
 
-    @SerializedName("link")
+    @Json(name = "link")
     val link: String,
 
-    @SerializedName("fb_link")
+    @Json(name = "fb_link")
     val facebookLink: String,
 
-    @SerializedName("insta_link")
+    @Json(name = "insta_link")
     val instagramLink: String,
 
-    @SerializedName("delivery_minimal_sum")
+    @Json(name = "delivery_minimal_sum")
     val deliveryMinAmount: String?,
 
-    @SerializedName("delivery_payment_options")
+    @Json(name = "delivery_payment_options")
     val deliveryPaymentOptions: PaymentOptions,
 
-    @SerializedName("delivery_prices")
+    @Json(name = "delivery_prices")
     val deliveryProbablyPrices: List<DeliveryPrice>,
 
-    @SerializedName("pre_order_work_schedule")
+    @Json(name = "pre_order_work_schedule")
     val preOrderingWorkSchedule: List<WorkSchedule>?
 ) : BaseShopResponse()

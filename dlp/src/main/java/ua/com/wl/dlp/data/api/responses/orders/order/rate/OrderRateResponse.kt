@@ -1,14 +1,11 @@
 package ua.com.wl.dlp.data.api.responses.orders.order.rate
 
-import com.google.gson.annotations.SerializedName
-
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 import ua.com.wl.dlp.data.api.responses.models.orders.order.ConsumerOrder
 
-/**
- * @author Denis Makovskyi
- */
-
+@JsonClass(generateAdapter = true)
 data class OrderRateResponse(
-    @SerializedName("rs_order")
+    @Json(name = "rs_order")
     val consumerOrder: ConsumerOrder?
 ) : BaseOrderRateResponse()

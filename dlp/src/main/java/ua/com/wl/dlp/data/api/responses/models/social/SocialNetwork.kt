@@ -1,11 +1,10 @@
 package ua.com.wl.dlp.data.api.responses.models.social
 
-import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
-/**
- * @author Denis Makovskyi
- */
-
+@JsonClass(generateAdapter = true)
 data class SocialNetwork(
-    @SerializedName("code")
-    val code: SocialNetworkCode)
+    @Json(name = "code")
+    val code: SocialNetworkCode
+)

@@ -1,34 +1,25 @@
 package ua.com.wl.dlp.domain
 
-import kotlin.reflect.KClass
-
-import retrofit2.Response
 import retrofit2.HttpException
-
+import retrofit2.Response
 import ua.com.wl.archetype.utils.Optional
-
 import ua.com.wl.dlp.data.api.errors.ErrorsMapper
 import ua.com.wl.dlp.domain.exeptions.api.ApiException
 import ua.com.wl.dlp.domain.exeptions.db.DatabaseException
-
-/**
- * @author Denis Makovskyi
- */
 
 open class UseCase(private val errorsMapper: ErrorsMapper) {
 
     protected suspend fun <T : Any> callApi(
         call: suspend () -> Response<T>,
-        errorClass: KClass<out ApiException>? = null
+        errorMapper: ((type: String?, cause: Throwable?) -> ApiException)? = null
     ): Result<Optional<T>> {
         return try {
             val response = call.invoke()
             if (response.isSuccessful) {
                 Result.Success(Optional.ofNullable(response.body()))
-
             } else {
-                val throwable = if (errorClass != null) {
-                    errorsMapper.createExceptionFromResponse(response, errorClass)
+                val throwable = if (errorMapper != null) {
+                    errorsMapper.createExceptionFromResponse(response, errorMapper)
                 } else {
                     ApiException(cause = HttpException(response))
                 }

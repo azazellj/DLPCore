@@ -23,6 +23,7 @@ import ua.com.wl.dlp.data.events.factory.CoreBusEventsFactory
 import ua.com.wl.dlp.domain.Result
 import ua.com.wl.dlp.domain.UseCase
 import ua.com.wl.dlp.domain.exeptions.api.ApiException
+import ua.com.wl.dlp.domain.exeptions.api.auth.AuthException
 import ua.com.wl.dlp.domain.exeptions.api.orders.order.GeneralPreOrderException
 import ua.com.wl.dlp.domain.interactors.OrdersInteractor
 
@@ -104,7 +105,7 @@ class OrdersInteractorImpl(
     override suspend fun createGeneralPreOrder(request: GeneralPreOrderRequest): Result<GeneralPreOrderResponse> {
         return callApi(
             call = { apiV2.createGeneralPreOrder(request) },
-            errorClass = GeneralPreOrderException::class
+            errorMapper = { type, cause -> GeneralPreOrderException(type, cause) }
         ).flatMap { responseOpt ->
             responseOpt.ifPresentOrDefault(
                 { Result.Success(it.payload) },

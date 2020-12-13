@@ -1,29 +1,28 @@
 package ua.com.wl.dlp.data.api.responses.consumer.info
 
-import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
-/**
- * @author Denis Makovskyi
- */
-
+@JsonClass(generateAdapter = true)
 data class BusinessResponse(
-    @SerializedName("id")
+    @Json(name = "id")
     val id: Int,
 
-    @SerializedName("phone")
+    @Json(name = "phone")
     val phone: String?,
 
-    @SerializedName("email")
+    @Json(name = "email")
     val email: String?,
 
-    @SerializedName("address")
+    @Json(name = "address")
     val address: String?,
 
-    @SerializedName("home_page")
+    @Json(name = "home_page")
     val homePage: String?,
 
-    @SerializedName("feedback_email")
+    @Json(name = "feedback_email")
     val feedbackEmail: String?,
 
-    @SerializedName("app_link")
-    val applicationLink: String?)
+    @Json(name = "app_link")
+    val applicationLink: String?
+)

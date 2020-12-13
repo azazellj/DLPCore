@@ -1,28 +1,27 @@
 package ua.com.wl.dlp.data.api.responses.models.orders.order.rate
 
-import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
 import ua.com.wl.dlp.data.api.models.shop.SimpleShop
 
-/**
- * @author Denis Makovskyi
- */
-
+@JsonClass(generateAdapter = true)
 data class Order(
-    @SerializedName("id")
+    @Json(name = "id")
     val id: Int,
 
-    @SerializedName("cash_back_amount")
+    @Json(name = "cash_back_amount")
     var cashback: Long? = null,
 
-    @SerializedName("changed_at")
+    @Json(name = "changed_at")
     val changedAt: String?,
 
-    @SerializedName("price_in_money_total")
+    @Json(name = "price_in_money_total")
     val priceInCurrency: String?,
 
-    @SerializedName("price_in_bonuses_total")
+    @Json(name = "price_in_bonuses_total")
     val priceInBonuses: Long?,
 
-    @SerializedName("shop")
-    val shop: SimpleShop)
+    @Json(name = "shop")
+    val shop: SimpleShop
+)

@@ -1,11 +1,17 @@
 package ua.com.wl.dlp.data.api.errors
 
-import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
-/**
- * @author Denis Makovskyi
- */
-
+@JsonClass(generateAdapter = true)
 data class ApiError(
-    @SerializedName(value = "type", alternate = ["status"])
-    val type: String)
+    @Json(name = "type")
+    val errorType: String?,
+    @Json(name = "status")
+    val status: String?
+) {
+    val type: String
+        get() {
+            return errorType ?: status.orEmpty()
+        }
+}

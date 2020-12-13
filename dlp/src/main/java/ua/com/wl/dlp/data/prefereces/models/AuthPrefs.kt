@@ -1,14 +1,13 @@
 package ua.com.wl.dlp.data.prefereces.models
 
-import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
-/**
- * @author Denis Makovskyi
- */
-
+@JsonClass(generateAdapter = true)
 data class AuthPrefs(
-    @SerializedName("auth_token")
+    @Json(name = "auth_token")
     val authToken: String? = null,
 
-    @SerializedName("refresh_token")
-    val refreshToken: String? = null)
+    @Json(name = "refresh_token")
+    val refreshToken: String? = null
+)

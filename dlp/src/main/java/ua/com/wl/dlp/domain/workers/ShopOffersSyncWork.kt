@@ -9,9 +9,6 @@ import android.content.Context
 
 import androidx.work.*
 
-import org.koin.core.inject
-
-import ua.com.wl.dlp.core.di.koin.DLPCoreComponent
 import ua.com.wl.dlp.data.db.entities.shops.OfferEntity
 import ua.com.wl.dlp.data.api.responses.shop.offer.BaseOfferResponse
 import ua.com.wl.dlp.domain.interactors.ShopInteractor
@@ -25,8 +22,9 @@ import ua.com.wl.dlp.utils.isEmpty
 
 class ShopOffersSyncWork(
     context: Context,
-    workerParams: WorkerParameters
-) : CoroutineWorker(context, workerParams), DLPCoreComponent {
+    workerParams: WorkerParameters,
+    private val shopInteractor: ShopInteractor
+) : CoroutineWorker(context, workerParams) {
 
     companion object {
 
@@ -67,8 +65,6 @@ class ShopOffersSyncWork(
     }
 
     private val shopId = inputData.getInt(INPUT_KEY_SHOP_ID, 0)
-    private val shopInteractor: ShopInteractor by inject()
-
     private val outputs: Data.Builder = Data.Builder()
 
     override suspend fun doWork(): Result {

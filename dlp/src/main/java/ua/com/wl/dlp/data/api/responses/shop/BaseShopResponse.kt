@@ -1,62 +1,60 @@
 package ua.com.wl.dlp.data.api.responses.shop
 
-import com.google.gson.annotations.SerializedName
-
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 import ua.com.wl.dlp.data.api.responses.models.shop.chain.Chain
 import ua.com.wl.dlp.data.api.responses.models.shop.service.ShopService
 
-/**
- * @author Denis Makovskyi
- */
-
+@JsonClass(generateAdapter = true)
 open class BaseShopResponse(
-    @SerializedName("id")
+    @Json(name = "id")
     var id: Int = 0,
 
-    @SerializedName("name")
+    @Json(name = "name")
     var name: String = "",
 
-    @SerializedName("thumb_logo")
+    @Json(name = "thumb_logo")
     var thumbLogo: String? = null,
 
-    @SerializedName("thumb_photo")
+    @Json(name = "thumb_photo")
     var thumbPhoto: String? = null,
 
-    @SerializedName("thumb_photos")
+    @Json(name = "thumb_photos")
     var thumbPhotos: List<String>? = null,
 
-    @SerializedName("phone")
+    @Json(name = "phone")
     val phone: String? = null,
 
-    @SerializedName("address")
+    @Json(name = "address")
     var address: String = "",
 
-    @SerializedName("schedule")
+    @Json(name = "schedule")
     var schedule: String = "",
 
-    @SerializedName("coordinates_str")
+    @Json(name = "coordinates_str")
     var coordinates: String = "",
 
-    @SerializedName("is_pending")
+    @Json(name = "is_pending")
     var isPending: Boolean = false,
 
-    @SerializedName("cash_back_percentage")
+    @Json(name = "cash_back_percentage")
     var cashBackPercentage: Int? = null,
 
-    @SerializedName("allow_pre_orders")
+    @Json(name = "allow_pre_orders")
     var isPreOrdersAllowed: Boolean = false,
 
-    @SerializedName("allow_pre_order_delivery")
+    @Json(name = "allow_pre_order_delivery")
     var isPreOrderDeliveryAllowed: Boolean = false,
 
-    @SerializedName("allow_pre_order_takeaway")
+    @Json(name = "allow_pre_order_takeaway")
     var isPreOrderTakeawayAllowed: Boolean = false,
 
-    @SerializedName("allow_table_reservation")
+    @Json(name = "allow_table_reservation")
     var isTableReservationAllowed: Boolean = false,
 
-    @SerializedName("chain")
+    @Json(name = "chain")
     var chain: Chain? = null,
 
-    @SerializedName("services")
-    var services: List<ShopService>? = null)
+    @Json(name = "services")
+    var services: List<ShopService>? = null
+)

@@ -1,59 +1,58 @@
 package ua.com.wl.dlp.data.api.responses.consumer.coupons
 
-import com.google.gson.annotations.SerializedName
 
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 import ua.com.wl.dlp.data.api.models.shop.SimpleShop
 import ua.com.wl.dlp.data.api.responses.models.another.NoveltyDatesRange
-import ua.com.wl.dlp.data.api.responses.models.consumer.coupons.CouponType
 import ua.com.wl.dlp.data.api.responses.models.consumer.coupons.CouponStatus
+import ua.com.wl.dlp.data.api.responses.models.consumer.coupons.CouponType
 import ua.com.wl.dlp.data.api.responses.shop.offer.BaseOfferResponse
 
-/**
- * @author Denis Makovskyi
- */
-
+@JsonClass(generateAdapter = true)
 data class CouponResponse(
-    @SerializedName("id")
+    @Json(name = "id")
     val id: Int,
 
-    @SerializedName("type")
+    @Json(name = "type")
     val type: CouponType,
 
-    @SerializedName("status")
+    @Json(name = "status")
     val status: CouponStatus,
 
-    @SerializedName("name")
+    @Json(name = "name")
     val name: String,
 
-    @SerializedName("barcode")
+    @Json(name = "barcode")
     val barcode: String,
 
-    @SerializedName("description")
+    @Json(name = "description")
     val description: String,
 
-    @SerializedName("image")
+    @Json(name = "image")
     val imageUrl: String?,
 
-    @SerializedName("used")
+    @Json(name = "used")
     val isUsed: Boolean,
 
-    @SerializedName("count_used")
+    @Json(name = "count_used")
     val usedCount: Int,
 
-    @SerializedName("money_spent")
+    @Json(name = "money_spent")
     val moneySpent: String,
 
-    @SerializedName("count_available")
+    @Json(name = "count_available")
     val countAvailable: Int?,
 
-    @SerializedName("monetary_available")
+    @Json(name = "monetary_available")
     val monetaryAvailable: String?,
 
-    @SerializedName("offer")
+    @Json(name = "offer")
     val offer: BaseOfferResponse?,
 
-    @SerializedName("date_range")
+    @Json(name = "date_range")
     val dateRange: NoveltyDatesRange?,
 
-    @SerializedName("shops")
-    val shops: List<SimpleShop>)
+    @Json(name = "shops")
+    val shops: List<SimpleShop>
+)

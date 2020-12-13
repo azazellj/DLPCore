@@ -1,25 +1,24 @@
 package ua.com.wl.dlp.data.api.responses.models.orders.order.trading
 
-import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
 import ua.com.wl.dlp.data.api.responses.models.orders.order.trading.product.OrderItem
 
-/**
- * @author Denis Makovskyi
- */
-
+@JsonClass(generateAdapter = true)
 data class OrderReceipt(
-    @SerializedName("total_price_in_money")
+    @Json(name = "total_price_in_money")
     val totalPriceInMoney: String,
 
-    @SerializedName("total_price_in_bonuses")
+    @Json(name = "total_price_in_bonuses")
     val totalPriceInBonuses: Long,
 
-    @SerializedName("total_price_in_bonuses_money")
+    @Json(name = "total_price_in_bonuses_money")
     val totalPriceInBonusesMoney: String,
 
-    @SerializedName("items")
+    @Json(name = "items")
     val items: List<OrderItem>?,
 
-    @SerializedName("trade_items")
-    val tradeItems: List<OrderTradeItem>?)
+    @Json(name = "trade_items")
+    val tradeItems: List<OrderTradeItem>?
+)

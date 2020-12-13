@@ -1,18 +1,20 @@
 package ua.com.wl.dlp.data.api.responses.promotion
 
-import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 import ua.com.wl.dlp.data.api.responses.models.shop.offer.item.OfferItem
 
+@JsonClass(generateAdapter = true)
 data class Offer(
-    @SerializedName("id")
+    @Json(name = "id")
     var id: Int = 0,
 
-    @SerializedName("name")
+    @Json(name = "name")
     var name: String = "",
 
-    @SerializedName("item")
+    @Json(name = "item")
     var item: OfferItem? = null,
 
-    @SerializedName("short_description")
+    @Json(name = "short_description")
     var shortDescription: String? = null
 )

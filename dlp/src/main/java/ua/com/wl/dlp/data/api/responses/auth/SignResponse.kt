@@ -1,14 +1,13 @@
 package ua.com.wl.dlp.data.api.responses.auth
 
-import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
-/**
- * @author Denis Makovskyi
- */
-
+@JsonClass(generateAdapter = true)
 data class SignResponse(
-    @SerializedName("token") 
+    @Json(name = "token")
     val token: String,
-    
-    @SerializedName("refresh_token") 
-    val refreshToken: String)
+
+    @Json(name = "refresh_token")
+    val refreshToken: String
+)

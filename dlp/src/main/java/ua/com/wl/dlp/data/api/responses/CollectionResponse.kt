@@ -1,11 +1,14 @@
 package ua.com.wl.dlp.data.api.responses
 
-import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
-/**
- * @author Denis Makovskyi
- */
-
+@JsonClass(generateAdapter = true)
 data class CollectionResponse<T>(
-    @SerializedName(value = "data", alternate = ["results"])
-    val items: List<T>)
+    @Json(name = "data")
+    val data: List<T> = emptyList(),
+    @Json(name = "results")
+    val results: List<T> = emptyList()
+) {
+    val items: List<T> = if (data.isNotEmpty()) data else results
+}

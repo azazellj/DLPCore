@@ -1,13 +1,14 @@
 package ua.com.wl.dlp.data.api.responses.promotion
 
-import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 import ua.com.wl.dlp.data.api.responses.models.another.NoveltyDatesRange
 
+@JsonClass(generateAdapter = true)
 data class Criteria(
-    @SerializedName("date_range")
+    @Json(name = "date_range")
     val dateRange: NoveltyDatesRange?,
 
-    @SerializedName("receipt_total_price")
+    @Json(name = "receipt_total_price")
     var receiptTotalPrice: String = ""
-
 )

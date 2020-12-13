@@ -1,51 +1,52 @@
 package ua.com.wl.dlp.data.api.responses.shop.offer
 
-import com.google.gson.annotations.SerializedName
-
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 import ua.com.wl.dlp.data.api.responses.models.another.NoveltyDatesRange
 import ua.com.wl.dlp.data.api.responses.models.shop.offer.item.OfferItem
 import ua.com.wl.dlp.data.api.responses.models.shop.offer.promo.PromoSettings
 
-/**
- * @author Denis Makovskyi
- */
-
+@JsonClass(generateAdapter = true)
 open class BaseOfferResponse(
-    @SerializedName("id")
+    @Json(name = "id")
     var id: Int = 0,
 
-    @SerializedName("is_new")
+    @Json(name = "is_new")
     var isNew: Boolean = false,
 
     @Deprecated(message = "This field will be removed in further revisions. This change caused by offer promo structure refactoring.")
-    @SerializedName("is_promo_offer")
+    @Json(name = "is_promo_offer")
     var isPromo: Boolean? = null,
 
-    @SerializedName("in_favorite")
+    @Json(name = "in_favorite")
     var isFavourite: Boolean = false,
 
-    @SerializedName("hide_price")
+    @Json(name = "hide_price")
     var isPriceHidden: Boolean = false,
 
-    @SerializedName("name")
+    @Json(name = "name")
     var name: String = "",
 
-    @SerializedName("outcome")
+    @Json(name = "outcome")
     var outcome: String = "",
 
-    @SerializedName("thumb_image")
+    @Json(name = "thumb_image")
     var thumbImage: String? = null,
 
-    @SerializedName("short_description")
+    @Json(name = "short_description")
     var shortDescription: String = "",
 
-    @SerializedName("item")
+    @Json(name = "item")
     var offerItem: OfferItem? = null,
 
     @Deprecated(
         message = "This field will be moved in specific object.",
-        replaceWith = ReplaceWith("BaseOfferResponse.offerItem", "ua.com.wl.dlp.data.api.responses.shop.offer"))
-    @SerializedName("trade_item")
+        replaceWith = ReplaceWith(
+            "BaseOfferResponse.offerItem",
+            "ua.com.wl.dlp.data.api.responses.shop.offer"
+        )
+    )
+    @Json(name = "trade_item")
     var tradeItem: Int? = null,
 
     @Transient
@@ -53,31 +54,44 @@ open class BaseOfferResponse(
 
     @Deprecated(
         message = "This field will be moved in specific object.",
-        replaceWith = ReplaceWith("BaseOfferResponse.offerItem", "ua.com.wl.dlp.data.api.responses.shop.offer"))
-    @SerializedName("price_in_bonuses")
+        replaceWith = ReplaceWith(
+            "BaseOfferResponse.offerItem",
+            "ua.com.wl.dlp.data.api.responses.shop.offer"
+        )
+    )
+    @Json(name = "price_in_bonuses")
     var priceInBonuses: Long? = null,
 
     @Deprecated(
         message = "This field will be moved in specific object.",
-        replaceWith = ReplaceWith("BaseOfferResponse.offerItem", "ua.com.wl.dlp.data.api.responses.shop.offer"))
-    @SerializedName("price_in_uah")
+        replaceWith = ReplaceWith(
+            "BaseOfferResponse.offerItem",
+            "ua.com.wl.dlp.data.api.responses.shop.offer"
+        )
+    )
+    @Json(name = "price_in_uah")
     var priceInCurrency: String? = null,
 
     @Deprecated(
         message = "This field will be moved in specific object.",
-        replaceWith = ReplaceWith("BaseOfferResponse.offerItem", "ua.com.wl.dlp.data.api.responses.shop.offer"))
-    @SerializedName("cash_back_percentage")
+        replaceWith = ReplaceWith(
+            "BaseOfferResponse.offerItem",
+            "ua.com.wl.dlp.data.api.responses.shop.offer"
+        )
+    )
+    @Json(name = "cash_back_percentage")
     var cashBackPercentage: Int? = null,
 
-    @SerializedName("publication_end_date")
+    @Json(name = "publication_end_date")
     var publicationEndDate: String? = null,
 
-    @SerializedName("publication_start_date")
+    @Json(name = "publication_start_date")
     var publicationStartDate: String? = null,
 
     @Deprecated(message = "This field will be removed in further revisions. Changes are caused by offer promo structure refactoring.")
-    @SerializedName("promo_settings")
+    @Json(name = "promo_settings")
     var promoSettings: PromoSettings? = null,
 
-    @SerializedName("novelty_date_range")
-    var noveltyDatesRange: NoveltyDatesRange? = null)
+    @Json(name = "novelty_date_range")
+    var noveltyDatesRange: NoveltyDatesRange? = null
+)

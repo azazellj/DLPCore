@@ -1,38 +1,36 @@
 package ua.com.wl.dlp.data.api.responses.models.consumer.history.transactions
 
-import com.google.gson.annotations.SerializedName
-
-import ua.com.wl.dlp.data.api.responses.models.consumer.history.transactions.types.TransactionType
-import ua.com.wl.dlp.data.api.responses.models.consumer.history.transactions.endpoints.ShopTransactionsDetails
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
+import ua.com.wl.dlp.data.api.responses.models.consumer.history.transactions.endpoints.ArticleTransactionDetails
 import ua.com.wl.dlp.data.api.responses.models.consumer.history.transactions.endpoints.OfferTransactionDetails
 import ua.com.wl.dlp.data.api.responses.models.consumer.history.transactions.endpoints.OrderTransactionDetails
-import ua.com.wl.dlp.data.api.responses.models.consumer.history.transactions.endpoints.ArticleTransactionDetails
+import ua.com.wl.dlp.data.api.responses.models.consumer.history.transactions.endpoints.ShopTransactionsDetails
+import ua.com.wl.dlp.data.api.responses.models.consumer.history.transactions.types.TransactionType
 
-/**
- * @author Denis Makovskyi
- */
-
+@JsonClass(generateAdapter = true)
 data class TransactionDetails(
-    @SerializedName("operation_type") 
+    @Json(name = "operation_type")
     val transactionType: TransactionType?,
-    
-    @SerializedName("amount") 
+
+    @Json(name = "amount")
     val amount: Int,
 
-    @SerializedName("amount_money")
+    @Json(name = "amount_money")
     val money: Float,
-    
-    @SerializedName("comment") 
+
+    @Json(name = "comment")
     val comment: String?,
 
-    @SerializedName("shop")
+    @Json(name = "shop")
     val shopDetails: ShopTransactionsDetails?,
 
-    @SerializedName("offer") 
+    @Json(name = "offer")
     val offerDetails: OfferTransactionDetails?,
-    
-    @SerializedName("order") 
+
+    @Json(name = "order")
     val orderDetails: OrderTransactionDetails?,
-    
-    @SerializedName("news_item") 
-    val articleDetails: ArticleTransactionDetails?)
+
+    @Json(name = "news_item")
+    val articleDetails: ArticleTransactionDetails?
+)

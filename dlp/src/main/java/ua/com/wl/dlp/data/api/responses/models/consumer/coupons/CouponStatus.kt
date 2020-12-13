@@ -1,15 +1,12 @@
 package ua.com.wl.dlp.data.api.responses.models.consumer.coupons
 
-import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
 
-/**
- * @author Denis Makovskyi
- */
 
-enum class CouponStatus(val value: String) {
-    @SerializedName("ACTIVE")
-    ACTIVE("ACTIVE"),
+enum class CouponStatus {
+    @Json(name = "ACTIVE")
+    ACTIVE,
 
-    @SerializedName("INACTIVE")
-    INACTIVE("INACTIVE")
+    @Json(name = "INACTIVE")
+    INACTIVE
 }

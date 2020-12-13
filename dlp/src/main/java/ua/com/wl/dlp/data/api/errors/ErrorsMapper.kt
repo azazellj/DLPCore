@@ -1,72 +1,34 @@
 package ua.com.wl.dlp.data.api.errors
 
-import kotlin.reflect.KClass
-import kotlin.reflect.full.primaryConstructor
-
-import com.google.gson.Gson
-
-import retrofit2.Response
+import com.squareup.moshi.Moshi
 import retrofit2.HttpException
-
+import retrofit2.Response
 import ua.com.wl.dlp.domain.exeptions.CoreRuntimeException
 import ua.com.wl.dlp.domain.exeptions.api.ApiException
+import ua.com.wl.dlp.utils.fromJson
 
-/**
- * @author Denis Makovskyi
- */
+class ErrorsMapper(private val moshi: Moshi) {
 
-class ErrorsMapper(private val gson: Gson) {
-
-    fun createExceptionFromResponse(
+    inline fun <T : ApiException> createExceptionFromResponse(
         response: Response<*>,
-        errorClass: KClass<out ApiException>
+        errorMapper: (type: String?, cause: Throwable?) -> T
     ): Throwable {
-
-        fun constructorArgs(argsSize: Int, type: String?, cause: HttpException?): Array<Any?> {
-            return Array(argsSize) { index ->
-                when(index) {
-                    1 -> type
-                    2 -> cause
-                    else -> null
-                }
-            }
-        }
-
         val cause = HttpException(response)
         val error = createErrorFromBody(response)
         return if (error != null) {
-            try {
-                val constructor = requireNotNull(errorClass.primaryConstructor) {
-                    "Primary constructor was not defined"
-                }
-                return when(val size = constructor.parameters.size) {
-                    1 -> constructor.call(error.type)
-                    2 -> constructor.call(error.type, cause)
-                    in 3..Int.MAX_VALUE -> constructor.call(*constructorArgs(size, error.type, cause))
-                    else -> throw IllegalStateException("There is something wrong with constructor arguments")
-                }
-
-            } catch (e: Exception) {
-                CoreRuntimeException(
-                    createDetailMessage("could not instantiate class ${errorClass.java.name}"), e)
-            }
-
+            errorMapper.invoke(error.type, cause)
         } else {
-            CoreRuntimeException(
-                createDetailMessage("could not unmarshall response error body"))
+            CoreRuntimeException(createDetailMessage("could not unmarshall response error body"))
         }
     }
 
-    private fun createErrorFromBody(response: Response<*>): ApiError? {
+    fun createErrorFromBody(response: Response<*>): ApiError? {
         return try {
-            gson.fromJson(
-                response.errorBody()?.string(),
-                ApiError::class.java)
-
+            moshi.fromJson<ApiError>(response.errorBody()?.string())
         } catch (ignored: Exception) {
             null
         }
     }
 
-    private fun createDetailMessage(message: String): String = "${javaClass.name}: $message"
+    fun createDetailMessage(message: String): String = "${javaClass.name}: $message"
 }

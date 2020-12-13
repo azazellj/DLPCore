@@ -1,50 +1,48 @@
 package ua.com.wl.dlp.domain.interactors.impl
 
-import kotlinx.coroutines.*
-
 import android.app.Application
-
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import ua.com.wl.archetype.utils.Optional
-
 import ua.com.wl.dlp.R
 import ua.com.wl.dlp.core.Constants
-import ua.com.wl.dlp.data.events.prefs.ProfileBusEvent
-import ua.com.wl.dlp.data.events.factory.CoreBusEventsFactory
+import ua.com.wl.dlp.data.api.ConsumerApiV1
+import ua.com.wl.dlp.data.api.ConsumerApiV2
+import ua.com.wl.dlp.data.api.errors.ErrorsMapper
+import ua.com.wl.dlp.data.api.requests.consumer.feedback.FeedbackRequest
+import ua.com.wl.dlp.data.api.requests.consumer.history.notifications.NotificationsReadRequest
+import ua.com.wl.dlp.data.api.requests.consumer.profile.ProfileRequest
+import ua.com.wl.dlp.data.api.requests.consumer.referral.InvitationRequest
+import ua.com.wl.dlp.data.api.responses.CollectionResponse
+import ua.com.wl.dlp.data.api.responses.PagedResponse
+import ua.com.wl.dlp.data.api.responses.consumer.coupons.CouponResponse
+import ua.com.wl.dlp.data.api.responses.consumer.coupons.CouponWalletResponse
+import ua.com.wl.dlp.data.api.responses.consumer.feedback.FeedbackResponse
+import ua.com.wl.dlp.data.api.responses.consumer.groups.GroupResponse
+import ua.com.wl.dlp.data.api.responses.consumer.history.notifications.NotificationsResponse
+import ua.com.wl.dlp.data.api.responses.consumer.history.transactions.TransactionResponse
+import ua.com.wl.dlp.data.api.responses.consumer.info.BusinessResponse
+import ua.com.wl.dlp.data.api.responses.consumer.profile.ProfileResponse
+import ua.com.wl.dlp.data.api.responses.consumer.ranks.RankResponse
+import ua.com.wl.dlp.data.api.responses.consumer.referral.InvitationResponse
+import ua.com.wl.dlp.data.api.responses.consumer.referral.QrCodeResponse
+import ua.com.wl.dlp.data.api.responses.shop.offer.BaseOfferResponse
 import ua.com.wl.dlp.data.db.datasources.ShopsDataSource
+import ua.com.wl.dlp.data.events.factory.CoreBusEventsFactory
+import ua.com.wl.dlp.data.events.prefs.ProfileBusEvent
 import ua.com.wl.dlp.data.prefereces.ConsumerPreferences
 import ua.com.wl.dlp.data.prefereces.models.ProfilePrefs
 import ua.com.wl.dlp.data.prefereces.models.RankCriteriaPrefs
 import ua.com.wl.dlp.data.prefereces.models.RankPermissionsPrefs
-import ua.com.wl.dlp.data.api.ConsumerApiV1
-import ua.com.wl.dlp.data.api.ConsumerApiV2
-import ua.com.wl.dlp.data.api.errors.ErrorsMapper
-import ua.com.wl.dlp.data.api.requests.consumer.profile.ProfileRequest
-import ua.com.wl.dlp.data.api.requests.consumer.referral.InvitationRequest
-import ua.com.wl.dlp.data.api.requests.consumer.feedback.feedbackRequest
-import ua.com.wl.dlp.data.api.requests.consumer.history.notifications.NotificationsReadRequest
-import ua.com.wl.dlp.data.api.responses.PagedResponse
-import ua.com.wl.dlp.data.api.responses.CollectionResponse
-import ua.com.wl.dlp.data.api.responses.shop.offer.BaseOfferResponse
-import ua.com.wl.dlp.data.api.responses.consumer.ranks.RankResponse
-import ua.com.wl.dlp.data.api.responses.consumer.groups.GroupResponse
-import ua.com.wl.dlp.data.api.responses.consumer.info.BusinessResponse
-import ua.com.wl.dlp.data.api.responses.consumer.coupons.CouponResponse
-import ua.com.wl.dlp.data.api.responses.consumer.coupons.CouponWalletResponse
-import ua.com.wl.dlp.data.api.responses.consumer.profile.ProfileResponse
-import ua.com.wl.dlp.data.api.responses.consumer.referral.QrCodeResponse
-import ua.com.wl.dlp.data.api.responses.consumer.referral.InvitationResponse
-import ua.com.wl.dlp.data.api.responses.consumer.feedback.FeedbackResponse
-import ua.com.wl.dlp.data.api.responses.consumer.history.transactions.TransactionResponse
-import ua.com.wl.dlp.data.api.responses.consumer.history.notifications.NotificationsResponse
 import ua.com.wl.dlp.domain.Result
 import ua.com.wl.dlp.domain.UseCase
 import ua.com.wl.dlp.domain.exeptions.api.ApiException
 import ua.com.wl.dlp.domain.exeptions.api.consumer.coupons.WalletException
 import ua.com.wl.dlp.domain.exeptions.api.consumer.referral.ReferralException
-import ua.com.wl.dlp.domain.interactors.OffersInteractor
 import ua.com.wl.dlp.domain.interactors.ConsumerInteractor
-import ua.com.wl.dlp.utils.toPrefs
+import ua.com.wl.dlp.domain.interactors.OffersInteractor
 import ua.com.wl.dlp.utils.sendBroadcastMessage
+import ua.com.wl.dlp.utils.toPrefs
 import ua.com.wl.dlp.utils.updatePreOrdersCounter
 
 /**
@@ -124,10 +122,11 @@ class ConsumerInteractorImpl(
                             }
                         }
                         val ranksResponse = PagedResponse(
-                            pager.page, pager.count,
-                            pager.pagesCount, pager.itemsCount,
-                            pager.nextPage, pager.previousPage,
-                            ranks)
+                            page = pager.page, countNumber = pager.count,
+                            pagesCount = pager.pagesCount, itemsCount = pager.itemsCount,
+                            nextPage = pager.nextPage, previousPage = pager.previousPage,
+                            data = ranks, perPage = pager.count, pageSize = pager.count
+                        )
                         Result.Success(ranksResponse)
                     },
                     { Result.Failure(ApiException()) })
@@ -225,7 +224,7 @@ class ConsumerInteractorImpl(
     override suspend fun addCouponToWallet(id: Int, barcode: String): Result<CouponWalletResponse> {
         return callApi(
             call = { apiV2.addCouponToWallet(id, barcode) },
-            errorClass = WalletException::class
+            errorMapper = { type, cause -> WalletException(type, cause) }
         ).flatMap { dataResponseOpt ->
             dataResponseOpt.ifPresentOrDefault(
                 { Result.Success(it.payload) },
@@ -253,7 +252,7 @@ class ConsumerInteractorImpl(
     override suspend fun activateInviteCode(request: InvitationRequest): Result<InvitationResponse> {
         return callApi(
             call = { apiV2.useInviteCode(request) },
-            errorClass = ReferralException::class
+            errorMapper = { type, cause -> ReferralException(type, cause) }
         ).flatMap { dataResponseOpt ->
             dataResponseOpt.ifPresentOrDefault(
                 { Result.Success(it.payload) },
@@ -287,17 +286,20 @@ class ConsumerInteractorImpl(
         callback: Boolean,
         appVersion: String
     ): Result<FeedbackResponse> {
-        val request = feedbackRequest {
-            val answer = if (callback) {
-                app.getString(R.string.dlp_feedback_callback_agree)
-            } else {
-                app.getString(R.string.dlp_feedback_callback_disagree)
-            }
-            phone { phone ?: consumerPreferences.profilePrefs.phone }
-            email { email ?: consumerPreferences.profilePrefs.email }
-            message { "$message\n\n${app.getString(R.string.dlp_feedback_callback_prefix)}: $answer" }
-            appVersion { "${app.getString(R.string.dlp_feedback_app_version)}$appVersion" }
+        val answer = if (callback) {
+            app.getString(R.string.dlp_feedback_callback_agree)
+        } else {
+            app.getString(R.string.dlp_feedback_callback_disagree)
         }
+
+        val request = FeedbackRequest(
+            phone = phone ?: consumerPreferences.profilePrefs.phone,
+            email = email ?: consumerPreferences.profilePrefs.email,
+            message = "$message\n\n${app.getString(R.string.dlp_feedback_callback_prefix)}: $answer",
+            appVersion = "${app.getString(R.string.dlp_feedback_app_version)}$appVersion",
+            deviceInfo = null
+        )
+
         return callApi(call = { apiV1.feedback(request) })
             .flatMap { responseOpt ->
                 responseOpt.ifPresentOrDefault(

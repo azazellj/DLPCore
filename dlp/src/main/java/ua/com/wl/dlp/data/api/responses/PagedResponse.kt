@@ -1,29 +1,49 @@
 package ua.com.wl.dlp.data.api.responses
 
-import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
-/**
- * @author Denis Makovskyi
- */
-
+@JsonClass(generateAdapter = true)
 open class PagedResponse<T>(
-    @SerializedName("page_number")
-    val page: Int? = null,
+    @Json(name = "page_number")
+    open val page: Int?,
 
-    @SerializedName(value = "count", alternate = ["per_page", "page_size"])
-    val count: Int? = null,
+    @Json(name = "total_pages_count")
+    open val pagesCount: Int?,
 
-    @SerializedName("total_pages_count")
-    val pagesCount: Int? = null,
+    @Json(name = "total_items_count")
+    open val itemsCount: Int?,
 
-    @SerializedName("total_items_count")
-    val itemsCount: Int? = null,
+    @Json(name = "next")
+    open val nextPage: String?,
 
-    @SerializedName("next")
-    val nextPage: String? = null,
+    @Json(name = "previous")
+    open val previousPage: String?,
 
-    @SerializedName("previous")
-    val previousPage: String? = null,
+    /**
+     * merged fields for items.
+     */
+    @Json(name = "data")
+    open val data: List<T> = listOf(),
+    @Json(name = "results")
+    open val results: List<T> = listOf(),
 
-    @SerializedName(value = "data", alternate = ["results"])
-    val items: List<T> = listOf())
+    /**
+     * merged fields for count.
+     */
+    @Json(name = "count")
+    open val countNumber: Int?,
+    @Json(name = "per_page")
+    open val perPage: Int?,
+    @Json(name = "page_size")
+    open val pageSize: Int?
+) {
+    val items: List<T>
+        get() {
+            return if (data.isNotEmpty()) data else results
+        }
+    val count: Int
+        get() {
+            return countNumber ?: perPage ?: pageSize ?: 0
+        }
+}

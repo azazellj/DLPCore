@@ -1,21 +1,24 @@
 package ua.com.wl.dlp.data.api.responses.models.shop.chain
 
-import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
 import ua.com.wl.dlp.data.api.responses.models.auth.City
 
-class ShopChainItem(
-    @SerializedName("id")
+@JsonClass(generateAdapter = true)
+data class ShopChainItem(
+    @Json(name = "id")
     var id: Int = 0,
 
-    @SerializedName("name")
+    @Json(name = "name")
     var name: String = "",
 
-    @SerializedName("thumb_logo")
+    @Json(name = "thumb_logo")
     var thumbLogoUrl: String? = null,
 
-    @SerializedName("address")
+    @Json(name = "address")
     var address: String? = null,
 
-    @SerializedName("city")
-    var city: City? = null)
+    @Json(name = "city")
+    var city: City? = null
+)

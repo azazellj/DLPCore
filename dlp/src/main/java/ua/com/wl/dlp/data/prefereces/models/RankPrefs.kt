@@ -1,78 +1,80 @@
 package ua.com.wl.dlp.data.prefereces.models
 
-import com.google.gson.annotations.SerializedName
-
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 import ua.com.wl.dlp.data.api.models.consumer.ranks.RankSelectionCriteriaValue
 
-/**
- * @author Denis Makovskyi
- */
-
+@JsonClass(generateAdapter = true)
 data class RankPrefs(
-    @SerializedName("id")
+    @Json(name = "id")
     val id: Int? = null,
 
-    @SerializedName("name")
+    @Json(name = "name")
     val name: String? = null,
 
-    @SerializedName("icon_url")
+    @Json(name = "icon_url")
     val iconUrl: String? = null,
 
-    @SerializedName("color_hex")
+    @Json(name = "color_hex")
     val colorHex: String? = null,
 
-    @SerializedName("next_rank_criteria")
+    @Json(name = "next_rank_criteria")
     val nextRankCriteria: RankCriteriaPrefs? = null,
 
-    @SerializedName("current_rank_permissions")
-    val currRankPermissions: RankPermissionsPrefs? = null)
+    @Json(name = "current_rank_permissions")
+    val currRankPermissions: RankPermissionsPrefs? = null
+)
 
+@JsonClass(generateAdapter = true)
 data class RankCriteriaPrefs(
-    @SerializedName("referral_count")
+    @Json(name = "referral_count")
     val referralCount: RankSelectionCriteriaValue<Int, Int>? = null,
 
-    @SerializedName("days_registered")
+    @Json(name = "days_registered")
     val daysRegistered: RankSelectionCriteriaValue<Long, Long>? = null,
 
-    @SerializedName("profile_data_filled")
+    @Json(name = "profile_data_filled")
     val profileDataFilled: RankSelectionCriteriaValue<Boolean, Boolean>? = null,
 
-    @SerializedName("sharing_count")
+    @Json(name = "sharing_count")
     val sharingCount: RankSelectionCriteriaValue<Long, Long>? = null,
 
-    @SerializedName("order_comment_count")
+    @Json(name = "order_comment_count")
     val commentsCount: RankSelectionCriteriaValue<Long, Long>? = null,
 
-    @SerializedName("payment_count")
+    @Json(name = "payment_count")
     val paymentsCount: RankSelectionCriteriaValue<Long, Long>? = null,
 
-    @SerializedName("payments_in_money_amount")
+    @Json(name = "payments_in_money_amount")
     val spentMoney: RankSelectionCriteriaValue<String, String>? = null,
-    
-    @SerializedName("collected_cash_back")
+
+    @Json(name = "collected_cash_back")
     val collectedCashBack: RankSelectionCriteriaValue<String, String>? = null,
 
-    @SerializedName("payments_in_bonuses_amount")
+    @Json(name = "payments_in_bonuses_amount")
     val spentBonuses: RankSelectionCriteriaValue<Long, Long>? = null,
 
-    @SerializedName("accumulated_bonuses_amount")
-    val collectedBonuses: RankSelectionCriteriaValue<Long, Long>? = null)
+    @Json(name = "accumulated_bonuses_amount")
+    val collectedBonuses: RankSelectionCriteriaValue<Long, Long>? = null
+)
 
+@JsonClass(generateAdapter = true)
 data class RankPermissionsPrefs(
-    @SerializedName("cash_back_percentage")
+    @Json(name = "cash_back_percentage")
     val cashBackPercentage: Int? = null,
 
-    @SerializedName("offer_view_allowed")
+    @Json(name = "offer_view_allowed")
     val isOfferViewAllowed: Boolean? = null,
 
-    @SerializedName("offer_sharing_allowed")
+    @Json(name = "offer_sharing_allowed")
     val isOfferSharingAllowed: Boolean? = null,
 
-    @SerializedName("article_sharing_allowed")
+    @Json(name = "article_sharing_allowed")
     val isArticleSharingAllowed: Boolean? = null,
 
-    @SerializedName("pre_order_allowed")
+    @Json(name = "pre_order_allowed")
     val isPreOrderAllowed: Boolean? = null,
 
-    @SerializedName("table_reservation_allowed")
-    val isTableReservationAllowed: Boolean? = null)
+    @Json(name = "table_reservation_allowed")
+    val isTableReservationAllowed: Boolean? = null
+)

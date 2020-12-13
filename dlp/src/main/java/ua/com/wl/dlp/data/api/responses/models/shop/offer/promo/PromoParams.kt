@@ -1,34 +1,32 @@
 package ua.com.wl.dlp.data.api.responses.models.shop.offer.promo
 
-import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
-/**
- * @author Denis Makovskyi
- */
-
-@Deprecated(
-    message = "This class will be removed in further revisions. Changes are caused by offer promo structure refactoring.")
+@Deprecated(message = "This class will be removed in further revisions. Changes are caused by offer promo structure refactoring.")
+@JsonClass(generateAdapter = true)
 data class PromoParams(
-    @SerializedName("gift_name")
+    @Json(name = "gift_name")
     val giftName: String? = null,
 
-    @SerializedName("sale_price")
+    @Json(name = "sale_price")
     val salePrice: String? = null,
 
-    @SerializedName("event_price")
+    @Json(name = "event_price")
     val eventPrice: String? = null,
 
-    @SerializedName("event_place")
+    @Json(name = "event_place")
     val eventPlace: String? = null,
 
-    @SerializedName("discount_size")
+    @Json(name = "discount_size")
     val discountSize: Long? = null,
 
-    @SerializedName("discount_price")
+    @Json(name = "discount_price")
     val discountPrice: String? = null,
 
-    @SerializedName("promo_price_in_bonuses")
+    @Json(name = "promo_price_in_bonuses")
     val priceInBonuses: Long? = null,
 
-    @SerializedName("exclusive_cash_back_size")
-    val cashBackSize: Long? = null)
+    @Json(name = "exclusive_cash_back_size")
+    val cashBackSize: Long? = null
+)

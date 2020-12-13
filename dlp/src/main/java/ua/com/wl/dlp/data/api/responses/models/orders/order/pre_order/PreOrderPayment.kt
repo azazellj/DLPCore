@@ -1,50 +1,49 @@
 package ua.com.wl.dlp.data.api.responses.models.orders.order.pre_order
 
-import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
-/**
- * @author Denis Makovskyi
- */
-
+@JsonClass(generateAdapter = true)
 data class PreOrderPayment(
-    @SerializedName("amount")
+    @Json(name = "amount")
     val amount: String,
 
-    @SerializedName("currency")
+    @Json(name = "currency")
     val currency: String,
 
-    @SerializedName("authorizationType")
+    @Json(name = "authorizationType")
     val authType: String,
 
-    @SerializedName("orderReference")
+    @Json(name = "orderReference")
     val orderRef: String,
 
-    @SerializedName("orderDate")
+    @Json(name = "orderDate")
     val orderDate: String,
 
-    @SerializedName("orderTimeout")
+    @Json(name = "orderTimeout")
     val orderTimeout: Long,
 
-    @SerializedName("serviceUrl")
+    @Json(name = "serviceUrl")
     val serviceUrl: String,
 
-    @SerializedName("merchantAccount")
+    @Json(name = "merchantAccount")
     val merchantAccount: String,
 
-    @SerializedName("merchantSignature")
+    @Json(name = "merchantSignature")
     val merchantSignature: String,
 
-    @SerializedName("merchantDomainName")
+    @Json(name = "merchantDomainName")
     val merchantDomainName: String,
 
-    @SerializedName("merchantTransactionSecureType")
+    @Json(name = "merchantTransactionSecureType")
     val merchantTransactionSecureType: String,
 
-    @SerializedName("productName")
+    @Json(name = "productName")
     val productName: List<String>,
 
-    @SerializedName("productCount")
+    @Json(name = "productCount")
     val productCount: List<String>,
 
-    @SerializedName("productPrice")
-    val productPrice: List<String>)
+    @Json(name = "productPrice")
+    val productPrice: List<String>
+)

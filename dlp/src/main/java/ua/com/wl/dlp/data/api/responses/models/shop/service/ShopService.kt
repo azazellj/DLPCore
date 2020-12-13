@@ -1,14 +1,13 @@
 package ua.com.wl.dlp.data.api.responses.models.shop.service
 
-import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
-/**
- * @author Denis Makovskyi
- */
-
+@JsonClass(generateAdapter = true)
 data class ShopService(
-    @SerializedName("name")
+    @Json(name = "name")
     val name: String,
 
-    @SerializedName("thumb_icon")
-    val thumbIcon: String?)
+    @Json(name = "thumb_icon")
+    val thumbIcon: String?
+)

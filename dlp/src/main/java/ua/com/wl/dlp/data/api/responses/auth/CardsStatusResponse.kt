@@ -1,13 +1,19 @@
 package ua.com.wl.dlp.data.api.responses.auth
 
-import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
 import ua.com.wl.dlp.data.api.responses.models.auth.CardsStatus
 
-/**
- * @author Denis Makovskyi
- */
-
+@JsonClass(generateAdapter = true)
 data class CardsStatusResponse(
-    @SerializedName(value = "card_status", alternate = ["cards_status"])
-    val cardsStatus: CardsStatus)
+    @Json(name = "card_status")
+    val statusOfCard: CardsStatus?,
+    @Json(name = "cards_status")
+    val statusOfCards: CardsStatus?
+) {
+    val cardsStatus: CardsStatus
+        get() {
+            return statusOfCard ?: statusOfCards ?: CardsStatus.NO_CARDS
+        }
+}

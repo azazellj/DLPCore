@@ -1,11 +1,10 @@
 package ua.com.wl.dlp.data.api.responses.consumer.coupons
 
-import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
-/**
- * @author Denis Makovskyi
- */
-
+@JsonClass(generateAdapter = true)
 data class CouponWalletResponse(
-    @SerializedName("url")
-    val url: String)
+    @Json(name = "url")
+    val url: String
+)

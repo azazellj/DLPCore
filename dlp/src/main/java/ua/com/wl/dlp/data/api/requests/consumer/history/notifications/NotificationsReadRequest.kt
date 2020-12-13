@@ -1,31 +1,10 @@
 package ua.com.wl.dlp.data.api.requests.consumer.history.notifications
 
-import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
-/**
- * @author Denis Makovskyi
- */
-
+@JsonClass(generateAdapter = true)
 data class NotificationsReadRequest(
-    @SerializedName("items")
+    @Json(name = "items")
     val items: List<Int>
-) {
-
-    class Builder {
-
-        private val items = mutableListOf<Int>()
-
-        fun item(init: () -> Int) {
-            items.add(init())
-        }
-
-        fun build(init: Builder.() -> Unit): NotificationsReadRequest {
-            init()
-            return NotificationsReadRequest(items)
-        }
-    }
-}
-
-fun notificationsReadRequest(init: NotificationsReadRequest.Builder.() -> Unit): NotificationsReadRequest {
-    return NotificationsReadRequest.Builder().build(init)
-}
+)

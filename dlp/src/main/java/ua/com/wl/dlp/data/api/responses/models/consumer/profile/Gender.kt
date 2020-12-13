@@ -1,14 +1,11 @@
 package ua.com.wl.dlp.data.api.responses.models.consumer.profile
 
-import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
 
-/**
- * @author Denis Makovskyi
- */
+enum class Gender {
+    @Json(name = "MALE")
+    MALE,
 
-enum class Gender(val value: String) {
-    @SerializedName("MALE")
-    MALE("MALE"),
-    @SerializedName("FEMALE")
-    FEMALE("FEMALE")
+    @Json(name = "FEMALE")
+    FEMALE
 }

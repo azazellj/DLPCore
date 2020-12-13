@@ -1,17 +1,16 @@
 package ua.com.wl.dlp.data.api.models.shop
 
-import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
-/**
- * @author Denis Makovskyi
- */
-
+@JsonClass(generateAdapter = true)
 data class SimpleShopCity(
-    @SerializedName("id")
+    @Json(name = "id")
     val id: Int,
 
-    @SerializedName("name")
+    @Json(name = "name")
     val name: String,
 
-    @SerializedName("timezone")
-    val timezone: String)
+    @Json(name = "timezone")
+    val timezone: String?
+)

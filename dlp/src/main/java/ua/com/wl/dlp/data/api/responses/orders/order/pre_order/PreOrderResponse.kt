@@ -1,25 +1,23 @@
 package ua.com.wl.dlp.data.api.responses.orders.order.pre_order
 
-import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
 import ua.com.wl.dlp.data.api.responses.models.orders.order.pre_order.PreOrderInfo
 import ua.com.wl.dlp.data.api.responses.models.orders.order.pre_order.PreOrderPayment
 import ua.com.wl.dlp.data.api.responses.models.orders.order.pre_order.PreOrderReceipt
 
-/**
- * @author Denis Makovskyi
- */
-
+@JsonClass(generateAdapter = true)
 data class PreOrderResponse(
-    @SerializedName("comment")
+    @Json(name = "comment")
     val comment: String?,
 
-    @SerializedName("info")
+    @Json(name = "info")
     val info: PreOrderInfo?,
 
-    @SerializedName("payment")
+    @Json(name = "payment")
     val payment: PreOrderPayment?,
 
-    @SerializedName("receipt")
+    @Json(name = "receipt")
     val receipt: List<PreOrderReceipt>
 ) : BasePreOrderResponse()

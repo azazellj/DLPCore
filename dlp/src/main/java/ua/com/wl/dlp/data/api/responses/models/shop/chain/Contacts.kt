@@ -1,16 +1,19 @@
 package ua.com.wl.dlp.data.api.responses.models.shop.chain
 
-import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
-class Contacts(
-    @SerializedName("phone")
+@JsonClass(generateAdapter = true)
+data class Contacts(
+    @Json(name = "phone")
     var phone: String = "",
 
-    @SerializedName("link")
+    @Json(name = "link")
     var webLinkUrl: String = "",
 
-    @SerializedName("fb_link")
+    @Json(name = "fb_link")
     var facebookLinkUrl: String? = null,
 
-    @SerializedName("insta_link")
-    var instagramLinkUrl: String? = null)
+    @Json(name = "insta_link")
+    var instagramLinkUrl: String? = null
+)

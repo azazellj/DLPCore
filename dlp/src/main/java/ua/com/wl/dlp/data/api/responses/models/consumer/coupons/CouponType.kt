@@ -1,15 +1,11 @@
 package ua.com.wl.dlp.data.api.responses.models.consumer.coupons
 
-import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
 
-/**
- * @author Denis Makovskyi
- */
+enum class CouponType {
+    @Json(name = "VALUABLE")
+    VALUABLE,
 
-enum class CouponType(val value: String) {
-    @SerializedName("VALUABLE")
-    VALUABLE("VALUABLE"),
-
-    @SerializedName("QUANTITATIVE")
-    QUANTITATIVE("QUANTITATIVE")
+    @Json(name = "QUANTITATIVE")
+    QUANTITATIVE
 }

@@ -1,23 +1,22 @@
 package ua.com.wl.dlp.data.api.responses.consumer.feedback
 
-import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
-/**
- * @author Denis Makovskyi
- */
-
+@JsonClass(generateAdapter = true)
 data class FeedbackResponse(
-    @SerializedName("email")
+    @Json(name = "email")
     val email: String,
 
-    @SerializedName("mobile_phone")
+    @Json(name = "mobile_phone")
     val phone: String,
 
-    @SerializedName("message")
+    @Json(name = "message")
     val message: String,
 
-    @SerializedName("app_version")
+    @Json(name = "app_version")
     val appVersion: String,
 
-    @SerializedName("mobile_phone_info")
-    val deviceInfo: String)
+    @Json(name = "mobile_phone_info")
+    val deviceInfo: String
+)

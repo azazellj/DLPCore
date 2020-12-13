@@ -1,15 +1,19 @@
 package ua.com.wl.dlp.data.api.responses
 
-import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
-/**
- * @author Denis Makovskyi
- */
-
+@JsonClass(generateAdapter = true)
 open class BaseResponse(
-    @SerializedName(value = "type", alternate = ["status"])
-    val type: String
+    @Json(name = "type")
+    open val responseType: String?,
+    @Json(name = "status")
+    open val status: String?
 ) {
+    val type: String
+        get() {
+            return responseType ?: status.orEmpty()
+        }
 
     fun isSuccessfully() = type.equals(ResponseType.OK, true)
 }

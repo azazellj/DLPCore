@@ -1,14 +1,11 @@
 package ua.com.wl.dlp.data.api.responses.models.social
 
-import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
 
-/**
- * @author Denis Makovskyi
- */
+enum class SocialNetworkCode {
+    @Json(name = "GP")
+    GOOGLE,
 
-enum class SocialNetworkCode(val value: String) {
-    @SerializedName("GP")
-    GOOGLE("GP"),
-    @SerializedName("FB")
-    FACEBOOK("FB")
+    @Json(name = "FB")
+    FACEBOOK
 }

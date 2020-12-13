@@ -1,31 +1,10 @@
 package ua.com.wl.dlp.data.api.requests.consumer.referral
 
-import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
-/**
- * @author Denis Makovskyi
- */
-
+@JsonClass(generateAdapter = true)
 data class InvitationRequest(
-    @SerializedName("invite_code")
+    @Json(name = "invite_code")
     val code: String
-) {
-
-    class Builder {
-
-        private var code: String = ""
-
-        fun code(init: () -> String) {
-            code = init()
-        }
-
-        fun build(init: Builder.() -> Unit): InvitationRequest {
-            init()
-            return InvitationRequest(code)
-        }
-    }
-}
-
-fun invitationRequest(init: InvitationRequest.Builder.() -> Unit): InvitationRequest {
-    return InvitationRequest.Builder().build(init)
-}
+)

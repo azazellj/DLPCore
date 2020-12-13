@@ -1,31 +1,10 @@
 package ua.com.wl.dlp.data.api.requests.auth
 
-import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
-/**
- * @author Denis Makovskyi
- */
-
+@JsonClass(generateAdapter = true)
 data class SmsCodeRequest(
-    @SerializedName("mobile_phone")
+    @Json(name = "mobile_phone")
     val phone: String
-) {
-
-    class Builder {
-
-        private var phone: String = ""
-
-        fun phone(init: () -> String) {
-            phone = init()
-        }
-
-        fun build(init: Builder.() -> Unit): SmsCodeRequest {
-            init()
-            return SmsCodeRequest(phone)
-        }
-    }
-}
-
-fun smsCodeRequest(init: SmsCodeRequest.Builder.() -> Unit): SmsCodeRequest {
-    return SmsCodeRequest.Builder().build(init)
-}
+)

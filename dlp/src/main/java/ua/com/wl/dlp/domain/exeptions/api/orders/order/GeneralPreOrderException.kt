@@ -6,8 +6,7 @@ import ua.com.wl.dlp.R
 import ua.com.wl.dlp.data.api.responses.ResponseType
 import ua.com.wl.dlp.domain.exeptions.api.ApiException
 
-class GeneralPreOrderException(type: String, cause: Throwable): ApiException(type, cause) {
-
+class GeneralPreOrderException(type: String?, cause: Throwable?) : ApiException(type, cause) {
     override fun getLocalizedMessage(context: Context): String {
         return when (message) {
             ResponseType.SHOP_REQUIRED -> context.getString(R.string.dlp_error_shop_required)

@@ -1,17 +1,16 @@
 package ua.com.wl.dlp.data.api.models.shop
 
-import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
-/**
- * @author Denis Makovskyi
- */
-
+@JsonClass(generateAdapter = true)
 open class BaseSimpleShop(
-    @SerializedName("id")
+    @Json(name = "id")
     var id: Int = 0,
 
-    @SerializedName("address")
+    @Json(name = "address")
     val address: String? = null,
 
-    @SerializedName("thumb_logo")
-    val thumbLogo: String? = null)
+    @Json(name = "thumb_logo")
+    val thumbLogo: String? = null
+)

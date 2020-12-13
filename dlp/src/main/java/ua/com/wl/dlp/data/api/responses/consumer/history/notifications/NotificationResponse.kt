@@ -1,61 +1,60 @@
 package ua.com.wl.dlp.data.api.responses.consumer.history.notifications
 
-import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
 import ua.com.wl.dlp.data.api.responses.models.consumer.history.notifications.NotificationData
 
-/**
- * @author Denis Makovskyi
- */
-
+@JsonClass(generateAdapter = true)
 data class NotificationResponse(
-    @SerializedName("id")
+    @Json(name = "id")
     val id: Int,
 
-    @SerializedName("type")
+    @Json(name = "type")
     val type: String?,
 
-    @SerializedName("target_object_id")
+    @Json(name = "target_object_id")
     val objectId: Int,
 
-    @SerializedName("target_object_content_type_id")
+    @Json(name = "target_object_content_type_id")
     val objectContentTypeId: Int,
 
-    @SerializedName("title")
+    @Json(name = "title")
     val title: String?,
 
-    @SerializedName("body")
+    @Json(name = "body")
     val body: String?,
 
-    @SerializedName("title_loc_key")
+    @Json(name = "title_loc_key")
     val titleLocKey: String?,
 
-    @SerializedName("title_loc_args")
+    @Json(name = "title_loc_args")
     val titleLocArgs: List<String>?,
 
-    @SerializedName("body_loc_key")
+    @Json(name = "body_loc_key")
     val bodyLocKey: String?,
 
-    @SerializedName("body_loc_args")
+    @Json(name = "body_loc_args")
     val bodyLocArgs: List<String>?,
 
-    @SerializedName("sound")
+    @Json(name = "sound")
     val sound: String?,
 
-    @SerializedName("image_url")
+    @Json(name = "image_url")
     val imageUrl: String?,
 
-    @SerializedName("click_action")
+    @Json(name = "click_action")
     val clickAction: String,
 
-    @SerializedName("is_read")
+    @Json(name = "is_read")
     var isRead: Boolean,
 
-    @SerializedName("created_at")
+    @Json(name = "created_at")
     val createdAt: String,
 
-    @SerializedName("read_at")
+    @Json(name = "read_at")
     val markedAsReadAt: String?,
 
-    @SerializedName("data")
-    val data: NotificationData)
+    @Json(name = "data")
+    val data: NotificationData
+)

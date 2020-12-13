@@ -1,14 +1,14 @@
 package ua.com.wl.dlp.data.api.responses
 
-import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
-/**
- * @author Denis Makovskyi
- */
-
+@JsonClass(generateAdapter = true)
 class DataResponse<T>(
-    type: String,
-
-    @SerializedName("results")
+    @Json(name = "type")
+    override val responseType: String?,
+    @Json(name = "status")
+    override val status: String?,
+    @Json(name = "results")
     val payload: T
-) : BaseResponse(type)
+) : BaseResponse(responseType, status)

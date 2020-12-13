@@ -1,21 +1,20 @@
 package ua.com.wl.dlp.data.api.responses.models.consumer.rank
 
-import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
-/**
- * @author Denis Makovskyi
- */
-
+@JsonClass(generateAdapter = true)
 data class RankPermissions(
-    @SerializedName("cash_back_percentage")
+    @Json(name = "cash_back_percentage")
     val cashBackPercentage: Int,
-    @SerializedName("allow_offer_view")
+    @Json(name = "allow_offer_view")
     val isOfferViewAllowed: Boolean,
-    @SerializedName("allow_offer_sharing")
+    @Json(name = "allow_offer_sharing")
     val isOfferSharingAllowed: Boolean,
-    @SerializedName("allow_news_item_sharing")
+    @Json(name = "allow_news_item_sharing")
     val isArticleSharingAllowed: Boolean,
-    @SerializedName("allow_pre_order")
+    @Json(name = "allow_pre_order")
     val isPreOrderAllowed: Boolean,
-    @SerializedName("allow_table_reservation")
-    val isTableReservationAllowed: Boolean)
+    @Json(name = "allow_table_reservation")
+    val isTableReservationAllowed: Boolean
+)
