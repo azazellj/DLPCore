@@ -2,7 +2,7 @@ package ua.com.wl.dlp.domain.exeptions
 
 import android.content.Context
 
-import ua.com.wl.dlp.R
+import ua.com.wl.dlp.common.R
 
 /**
  * @author Denis Makovskyi

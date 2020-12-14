@@ -1,7 +1,7 @@
 package ua.com.wl.dlp.domain.exeptions.api
 
 import android.content.Context
-import ua.com.wl.dlp.R
+import ua.com.wl.dlp.common.R
 import ua.com.wl.dlp.domain.exeptions.CoreRuntimeException
 import ua.com.wl.dlp.domain.exeptions.api.ApiErrorType.*
 import ua.com.wl.dlp.utils.getApiErrorType

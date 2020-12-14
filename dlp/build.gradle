@@ -76,7 +76,7 @@ dependencies {
     kapt "com.squareup.moshi:moshi-kotlin-codegen:$moshi_version"
 
     // Architecture
-    implementation 'com.github.DenisMakovskyi:DLPArchetype:feature~improvements-SNAPSHOT'
+    implementation 'com.github.DenisMakovskyi:DLPArchetype:2a26ca2533735c1194c9061e52275516a5383474'
 
     // Unit test
     testImplementation 'junit:junit:4.13.1'

@@ -4,7 +4,7 @@ import android.app.Application
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import ua.com.wl.archetype.utils.Optional
-import ua.com.wl.dlp.R
+import ua.com.wl.dlp.common.R
 import ua.com.wl.dlp.core.Constants
 import ua.com.wl.dlp.data.api.ConsumerApiV1
 import ua.com.wl.dlp.data.api.ConsumerApiV2

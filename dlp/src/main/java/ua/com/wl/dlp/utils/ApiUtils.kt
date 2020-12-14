@@ -13,7 +13,7 @@ import retrofit2.HttpException
 
 import com.google.gson.JsonParseException
 
-import ua.com.wl.dlp.R
+import ua.com.wl.dlp.common.R
 import ua.com.wl.dlp.domain.exeptions.CoreException
 import ua.com.wl.dlp.domain.exeptions.api.ApiErrorType
 import ua.com.wl.dlp.domain.exeptions.api.ApiErrorType.*
