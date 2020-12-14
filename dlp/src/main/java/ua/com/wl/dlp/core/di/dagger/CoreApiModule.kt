@@ -69,10 +69,15 @@ open class CoreApiModule {
         )
     }
 
+    protected open fun overrideHttpLoggingInterceptor(): HttpLoggingInterceptor? = null
+
     @Provides
     open fun provideHttpLoggingInterceptor(): HttpLoggingInterceptor {
-        return HttpLoggingInterceptor().apply {
-            level = HttpLoggingInterceptor.Level.NONE
+        return when (val customHttpLoggingInterceptor = overrideHttpLoggingInterceptor()) {
+            customHttpLoggingInterceptor ?: false -> customHttpLoggingInterceptor
+            else -> HttpLoggingInterceptor().apply {
+                level = HttpLoggingInterceptor.Level.NONE
+            }
         }
     }
 
