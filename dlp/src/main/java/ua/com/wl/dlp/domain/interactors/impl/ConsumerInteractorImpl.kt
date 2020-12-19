@@ -1,50 +1,50 @@
 package ua.com.wl.dlp.domain.interactors.impl
 
-import kotlinx.coroutines.*
-
 import android.app.Application
-
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import ua.com.wl.archetype.utils.Optional
-
 import ua.com.wl.dlp.R
 import ua.com.wl.dlp.core.Constants
-import ua.com.wl.dlp.data.events.prefs.ProfileBusEvent
-import ua.com.wl.dlp.data.events.factory.CoreBusEventsFactory
+import ua.com.wl.dlp.data.api.ConsumerApiV1
+import ua.com.wl.dlp.data.api.ConsumerApiV2
+import ua.com.wl.dlp.data.api.errors.ErrorsMapper
+import ua.com.wl.dlp.data.api.requests.consumer.feedback.feedbackRequest
+import ua.com.wl.dlp.data.api.requests.consumer.history.notifications.NotificationsReadRequest
+import ua.com.wl.dlp.data.api.requests.consumer.profile.DeleteProfileRequest
+import ua.com.wl.dlp.data.api.requests.consumer.profile.ProfileRequest
+import ua.com.wl.dlp.data.api.requests.consumer.referral.InvitationRequest
+import ua.com.wl.dlp.data.api.responses.CollectionResponse
+import ua.com.wl.dlp.data.api.responses.DataResponse
+import ua.com.wl.dlp.data.api.responses.PagedResponse
+import ua.com.wl.dlp.data.api.responses.consumer.coupons.CouponResponse
+import ua.com.wl.dlp.data.api.responses.consumer.coupons.CouponWalletResponse
+import ua.com.wl.dlp.data.api.responses.consumer.feedback.FeedbackResponse
+import ua.com.wl.dlp.data.api.responses.consumer.groups.GroupResponse
+import ua.com.wl.dlp.data.api.responses.consumer.history.notifications.NotificationsResponse
+import ua.com.wl.dlp.data.api.responses.consumer.history.transactions.TransactionResponse
+import ua.com.wl.dlp.data.api.responses.consumer.info.BusinessResponse
+import ua.com.wl.dlp.data.api.responses.consumer.profile.ProfileResponse
+import ua.com.wl.dlp.data.api.responses.consumer.ranks.RankResponse
+import ua.com.wl.dlp.data.api.responses.consumer.referral.InvitationResponse
+import ua.com.wl.dlp.data.api.responses.consumer.referral.QrCodeResponse
+import ua.com.wl.dlp.data.api.responses.shop.offer.BaseOfferResponse
 import ua.com.wl.dlp.data.db.datasources.ShopsDataSource
+import ua.com.wl.dlp.data.events.factory.CoreBusEventsFactory
+import ua.com.wl.dlp.data.events.prefs.ProfileBusEvent
 import ua.com.wl.dlp.data.prefereces.ConsumerPreferences
 import ua.com.wl.dlp.data.prefereces.models.ProfilePrefs
 import ua.com.wl.dlp.data.prefereces.models.RankCriteriaPrefs
 import ua.com.wl.dlp.data.prefereces.models.RankPermissionsPrefs
-import ua.com.wl.dlp.data.api.ConsumerApiV1
-import ua.com.wl.dlp.data.api.ConsumerApiV2
-import ua.com.wl.dlp.data.api.errors.ErrorsMapper
-import ua.com.wl.dlp.data.api.requests.consumer.profile.ProfileRequest
-import ua.com.wl.dlp.data.api.requests.consumer.referral.InvitationRequest
-import ua.com.wl.dlp.data.api.requests.consumer.feedback.feedbackRequest
-import ua.com.wl.dlp.data.api.requests.consumer.history.notifications.NotificationsReadRequest
-import ua.com.wl.dlp.data.api.responses.PagedResponse
-import ua.com.wl.dlp.data.api.responses.CollectionResponse
-import ua.com.wl.dlp.data.api.responses.shop.offer.BaseOfferResponse
-import ua.com.wl.dlp.data.api.responses.consumer.ranks.RankResponse
-import ua.com.wl.dlp.data.api.responses.consumer.groups.GroupResponse
-import ua.com.wl.dlp.data.api.responses.consumer.info.BusinessResponse
-import ua.com.wl.dlp.data.api.responses.consumer.coupons.CouponResponse
-import ua.com.wl.dlp.data.api.responses.consumer.coupons.CouponWalletResponse
-import ua.com.wl.dlp.data.api.responses.consumer.profile.ProfileResponse
-import ua.com.wl.dlp.data.api.responses.consumer.referral.QrCodeResponse
-import ua.com.wl.dlp.data.api.responses.consumer.referral.InvitationResponse
-import ua.com.wl.dlp.data.api.responses.consumer.feedback.FeedbackResponse
-import ua.com.wl.dlp.data.api.responses.consumer.history.transactions.TransactionResponse
-import ua.com.wl.dlp.data.api.responses.consumer.history.notifications.NotificationsResponse
 import ua.com.wl.dlp.domain.Result
 import ua.com.wl.dlp.domain.UseCase
 import ua.com.wl.dlp.domain.exeptions.api.ApiException
 import ua.com.wl.dlp.domain.exeptions.api.consumer.coupons.WalletException
 import ua.com.wl.dlp.domain.exeptions.api.consumer.referral.ReferralException
-import ua.com.wl.dlp.domain.interactors.OffersInteractor
 import ua.com.wl.dlp.domain.interactors.ConsumerInteractor
-import ua.com.wl.dlp.utils.toPrefs
+import ua.com.wl.dlp.domain.interactors.OffersInteractor
 import ua.com.wl.dlp.utils.sendBroadcastMessage
+import ua.com.wl.dlp.utils.toPrefs
 import ua.com.wl.dlp.utils.updatePreOrdersCounter
 
 /**
@@ -454,5 +454,23 @@ class ConsumerInteractorImpl(
             changes.add(change)
         }
         CoreBusEventsFactory.profileChanges(changes)
+    }
+
+    override suspend fun sendValidationCode(): Result<DataResponse<Any>> {
+        return callApi(call = { apiV2.sendValidationCode() })
+            .flatMap { dataResponseOpt ->
+                dataResponseOpt.ifPresentOrDefault(
+                    { Result.Success(it) },
+                    { Result.Failure(ApiException()) })
+            }
+    }
+
+    override suspend fun deleteProfile(request: DeleteProfileRequest): Result<DataResponse<Any>> {
+        return callApi(call = { apiV2.sendValidationCode() })
+            .flatMap { dataResponseOpt ->
+                dataResponseOpt.ifPresentOrDefault(
+                    { Result.Success(it) },
+                    { Result.Failure(ApiException()) })
+            }
     }
 }
