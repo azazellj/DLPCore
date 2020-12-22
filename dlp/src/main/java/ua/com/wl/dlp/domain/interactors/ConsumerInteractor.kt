@@ -1,27 +1,29 @@
 package ua.com.wl.dlp.domain.interactors
 
-import java.util.*
-
+import retrofit2.http.Body
+import retrofit2.http.POST
 import ua.com.wl.archetype.utils.Optional
-
+import ua.com.wl.dlp.data.api.requests.consumer.history.notifications.NotificationsReadRequest
+import ua.com.wl.dlp.data.api.requests.consumer.profile.DeleteProfileRequest
 import ua.com.wl.dlp.data.api.requests.consumer.profile.ProfileRequest
 import ua.com.wl.dlp.data.api.requests.consumer.referral.InvitationRequest
-import ua.com.wl.dlp.data.api.requests.consumer.history.notifications.NotificationsReadRequest
-import ua.com.wl.dlp.data.api.responses.PagedResponse
 import ua.com.wl.dlp.data.api.responses.CollectionResponse
-import ua.com.wl.dlp.data.api.responses.shop.offer.BaseOfferResponse
-import ua.com.wl.dlp.data.api.responses.consumer.ranks.RankResponse
-import ua.com.wl.dlp.data.api.responses.consumer.groups.GroupResponse
-import ua.com.wl.dlp.data.api.responses.consumer.info.BusinessResponse
+import ua.com.wl.dlp.data.api.responses.DataResponse
+import ua.com.wl.dlp.data.api.responses.PagedResponse
 import ua.com.wl.dlp.data.api.responses.consumer.coupons.CouponResponse
 import ua.com.wl.dlp.data.api.responses.consumer.coupons.CouponWalletResponse
-import ua.com.wl.dlp.data.api.responses.consumer.profile.ProfileResponse
-import ua.com.wl.dlp.data.api.responses.consumer.referral.QrCodeResponse
-import ua.com.wl.dlp.data.api.responses.consumer.referral.InvitationResponse
 import ua.com.wl.dlp.data.api.responses.consumer.feedback.FeedbackResponse
-import ua.com.wl.dlp.data.api.responses.consumer.history.transactions.TransactionResponse
+import ua.com.wl.dlp.data.api.responses.consumer.groups.GroupResponse
 import ua.com.wl.dlp.data.api.responses.consumer.history.notifications.NotificationsResponse
+import ua.com.wl.dlp.data.api.responses.consumer.history.transactions.TransactionResponse
+import ua.com.wl.dlp.data.api.responses.consumer.info.BusinessResponse
+import ua.com.wl.dlp.data.api.responses.consumer.profile.ProfileResponse
+import ua.com.wl.dlp.data.api.responses.consumer.ranks.RankResponse
+import ua.com.wl.dlp.data.api.responses.consumer.referral.InvitationResponse
+import ua.com.wl.dlp.data.api.responses.consumer.referral.QrCodeResponse
+import ua.com.wl.dlp.data.api.responses.shop.offer.BaseOfferResponse
 import ua.com.wl.dlp.domain.Result
+import java.util.*
 
 /**
  * @author Denis Makovskyi
@@ -88,4 +90,10 @@ interface ConsumerInteractor : OffersInteractor {
         count: Int? = null,
         shopId: Int? = null
     ): Result<PagedResponse<BaseOfferResponse>>
+
+    @POST("api/mobile/v2/consumer/data/send-code/")
+    suspend fun sendValidationCode(): Result<DataResponse<Any>>
+
+    @POST("api/mobile/v2/consumer/data/delete/")
+    suspend fun deleteProfile(@Body request: DeleteProfileRequest): Result<DataResponse<Any>>
 }

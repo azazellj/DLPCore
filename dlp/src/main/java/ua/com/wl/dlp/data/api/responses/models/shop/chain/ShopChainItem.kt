@@ -13,12 +13,20 @@ data class ShopChainItem(
     @Json(name = "name")
     var name: String = "",
 
+    @Json(name = "is_pending")
+    var isPending: Boolean = false,
+
     @Json(name = "thumb_logo")
     var thumbLogoUrl: String? = null,
+
+    @Json(name = "schedule")
+    var schedule: String = "",
 
     @Json(name = "address")
     var address: String? = null,
 
+    @Json(name = "configuration")
+    var configuration: ShopConfiguration? = null,
+
     @Json(name = "city")
-    var city: City? = null
-)
+    var city: City? = null)

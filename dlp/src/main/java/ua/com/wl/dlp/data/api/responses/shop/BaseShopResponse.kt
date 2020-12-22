@@ -2,7 +2,9 @@ package ua.com.wl.dlp.data.api.responses.shop
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import ua.com.wl.dlp.data.api.responses.models.auth.City
 import ua.com.wl.dlp.data.api.responses.models.shop.chain.Chain
+import ua.com.wl.dlp.data.api.responses.models.shop.chain.ShopConfiguration
 import ua.com.wl.dlp.data.api.responses.models.shop.service.ShopService
 
 @JsonClass(generateAdapter = true)
@@ -49,11 +51,20 @@ open class BaseShopResponse(
     @Json(name = "allow_pre_order_takeaway")
     var isPreOrderTakeawayAllowed: Boolean = false,
 
+    @Json(name = "allow_pre_order_in_place")
+    var isPreOrderInPlaceAllowed: Boolean = false,
+
     @Json(name = "allow_table_reservation")
     var isTableReservationAllowed: Boolean = false,
 
     @Json(name = "chain")
     var chain: Chain? = null,
+
+    @Json(name = "configuration")
+    var configuration: ShopConfiguration? = null,
+
+    @Json(name = "City")
+    var city: City? = null,
 
     @Json(name = "services")
     var services: List<ShopService>? = null

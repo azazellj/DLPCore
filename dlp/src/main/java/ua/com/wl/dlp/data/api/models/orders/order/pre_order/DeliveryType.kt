@@ -11,5 +11,8 @@ enum class DeliveryType {
     DELIVERY,
 
     @Json(name = "TAKEAWAY")
-    TAKEAWAY
+    TAKEAWAY,
+
+    @Json(name = "IN_PLACE")
+    IN_PLACE
 }

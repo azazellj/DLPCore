@@ -11,9 +11,11 @@ import ua.com.wl.dlp.data.api.ConsumerApiV2
 import ua.com.wl.dlp.data.api.errors.ErrorsMapper
 import ua.com.wl.dlp.data.api.requests.consumer.feedback.FeedbackRequest
 import ua.com.wl.dlp.data.api.requests.consumer.history.notifications.NotificationsReadRequest
+import ua.com.wl.dlp.data.api.requests.consumer.profile.DeleteProfileRequest
 import ua.com.wl.dlp.data.api.requests.consumer.profile.ProfileRequest
 import ua.com.wl.dlp.data.api.requests.consumer.referral.InvitationRequest
 import ua.com.wl.dlp.data.api.responses.CollectionResponse
+import ua.com.wl.dlp.data.api.responses.DataResponse
 import ua.com.wl.dlp.data.api.responses.PagedResponse
 import ua.com.wl.dlp.data.api.responses.consumer.coupons.CouponResponse
 import ua.com.wl.dlp.data.api.responses.consumer.coupons.CouponWalletResponse
@@ -157,6 +159,7 @@ class ConsumerInteractorImpl(
                         RankCriteriaPrefs(
                             referralCount = nextRank.selectionCriteria?.referralCount?.copy(),
                             daysRegistered = nextRank.selectionCriteria?.daysRegistered?.copy(),
+                            collectedCashBack = nextRank.selectionCriteria?.collectedCashBack?.copy(),
                             profileDataFilled = nextRank.selectionCriteria?.profileDataFilled?.copy(),
                             sharingCount = nextRank.selectionCriteria?.sharingCount?.copy(),
                             commentsCount = nextRank.selectionCriteria?.commentsCount?.copy(),
@@ -454,5 +457,23 @@ class ConsumerInteractorImpl(
             changes.add(change)
         }
         CoreBusEventsFactory.profileChanges(changes)
+    }
+
+    override suspend fun sendValidationCode(): Result<DataResponse<Any>> {
+        return callApi(call = { apiV2.sendValidationCode() })
+            .flatMap { dataResponseOpt ->
+                dataResponseOpt.ifPresentOrDefault(
+                    { Result.Success(it) },
+                    { Result.Failure(ApiException()) })
+            }
+    }
+
+    override suspend fun deleteProfile(request: DeleteProfileRequest): Result<DataResponse<Any>> {
+        return callApi(call = { apiV2.sendValidationCode() })
+            .flatMap { dataResponseOpt ->
+                dataResponseOpt.ifPresentOrDefault(
+                    { Result.Success(it) },
+                    { Result.Failure(ApiException()) })
+            }
     }
 }
