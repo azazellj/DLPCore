@@ -1,0 +1,33 @@
+<resources>
+    <string name="fcm_channel_name_default">Общие уведомления</string>
+
+    <string name="TITLE_SHOP_BECAME_AVAILABLE">Доступно новое заведение</string>
+    <string name="MESSAGE_SHOP_BECAME_AVAILABLE_ARGS">%1$s теперь доступно в нашем приложении</string>
+    <string name="TITLE_ORDER">Оцените свой заказ</string>
+    <string name="MESSAGE_ORDER_ARGS">Заказ от %1$s</string>
+    <string name="TITLE_PRE_ORDER_STATUS_CHANGED">Статус вашего предзаказ изменены!</string>
+    <string name="MESSAGE_PRE_ORDER_INFORMATION_CHANGED_ARGS">Статус Вашего предзаказа изменен!</string>
+    <string name="MESSAGE_PRE_ORDER_CONFIRMED_ARGS">Предзаказ %1$s готов!</string>
+    <string name="MESSAGE_PRE_ORDER_OPENED_ARGS">Заказ %1$s открыт</string>
+    <string name="MESSAGE_PRE_ORDER_REJECTED_ARGS">Предзаказ %1$s отклонен</string>
+    <string name="MESSAGE_PRE_ORDER_PROCESSED_ARGS">Предзаказ %1$s готовится</string>
+    <string name="MESSAGE_PRE_ORDER_IN_DELIVERY_ARGS">Ваш заказ %1$s уже готов. Не забудьте забрать его пока он теплый😊</string>
+    <string name="MESSAGE_PRE_ORDER_CLOSED_ARGS">Предзаказ %1$s закрыт</string>
+    <string name="TITLE_PRE_ORDER_PAY_KEY">Предзаказ оплачен</string>
+    <string name="PRE_ORDER_PAYMENT_SUCCESSFUL_ARGS">Предзаказ №%1$s успешно оплачен</string>
+    <string name="TITLE_PRE_ORDER_REFUND_KEY">Возвращены средства</string>
+    <string name="PRE_ORDER_PAYMENT_CANCEL_ARGS">Возвращены средства, уплаченные за предзаказ №%1$s</string>
+    <string name="TITLE_SHOP_REWARD">Вознаграждение от заведения</string>
+    <string name="MESSAGE_SHOP_REWARD_ARGS">Поздравляем! Вам начислено %1$s бонусов от %2$s</string>
+    <string name="TITLE_YOUVE_GOT_REWARD">Вы получили вознаграждение</string>
+    <string name="MESSAGE_GOT_REWARD_ARGS">Вы получили баллы %1$s в вознаграждение!</string>
+    <string name="TITLE_CASH_BACK">Совершено покупку</string>
+    <string name="TITLE_TABLE_RESERVATION_STATUS_CHANGED">Статус брони изменился</string>
+    <string name="MESSAGE_TABLE_RESERVATION_CONFIRMED_ARGS">Бронь столика %1$s подтверждена</string>
+    <string name="MESSAGE_TABLE_RESERVATION_REJECTED_ARGS">Бронь столика %1$s отклонена</string>
+    <string name="MESSAGE_TABLE_RESERVATION_REMINDER_ARGS">Не забудьте про бронь столика %1$s</string>
+    <string name="MESSAGE_TABLE_RESERVATION_UPDATED_ARGS">Бронь столика %1$s изменена</string>
+    <string name="MESSAGE_CASH_BACK_ARGS">Вы получили %1$s бонусов, было потрачено %2$s бонусов в рамках программы лояльности %3$s</string>
+    <string name="TITLE_BIRTHDAY_REWARDS_NOTIFICATION">C Днем рождения!</string>
+    <string name="TITLE_BIRTHDAY_CONGRATULATION_NOTIFICATION">C Днем рождения!</string>
+</resources>

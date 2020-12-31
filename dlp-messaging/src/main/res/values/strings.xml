@@ -1,0 +1,34 @@
+<resources>
+    <string name="fcm_channel_name_default">General notifications</string>
+
+    <string name="TITLE_SHOP_BECAME_AVAILABLE">New establishment available</string>
+    <string name="MESSAGE_SHOP_BECAME_AVAILABLE_ARGS"> %1$s is now available in our application</string>
+    <string name="TITLE_ORDER">Rate your order</string>
+    <string name="MESSAGE_ORDER_ARGS">Order from %1$s</string>
+    <string name="TITLE_PRE_ORDER_STATUS_CHANGED">Your pre-order status has changed</string>
+    <string name="MESSAGE_PRE_ORDER_INFORMATION_CHANGED_ARGS">Your pre-order changed</string>
+    <string name="MESSAGE_PRE_ORDER_CONFIRMED_ARGS">Your pre-order %1$s is processed</string>
+    <string name="MESSAGE_PRE_ORDER_OPENED_ARGS">Your pre-order %1$s is waiting for confirmation</string>
+    <string name="MESSAGE_PRE_ORDER_REJECTED_ARGS">Your pre-order %1$s has been rejected</string>
+    <string name="MESSAGE_PRE_ORDER_PROCESSED_ARGS">Your pre-order %1$s is in progress</string>
+    <string name="MESSAGE_PRE_ORDER_IN_DELIVERY_ARGS">Your order %1$s is on the way.</string>
+    <string name="MESSAGE_PRE_ORDER_CLOSED_ARGS">Your pre-order %1$s is closed</string>
+    <string name="TITLE_TABLE_RESERVATION_STATUS_CHANGED">Reservation status changed</string>
+    <string name="MESSAGE_TABLE_RESERVATION_CONFIRMED_ARGS">Table reservation %1$s is confirmed</string>
+    <string name="MESSAGE_TABLE_RESERVATION_REJECTED_ARGS">Table reservation %1$s is rejected</string>
+    <string name="MESSAGE_TABLE_RESERVATION_REMINDER_ARGS">Dont forget about your reservation %1$s</string>
+    <string name="MESSAGE_TABLE_RESERVATION_UPDATED_ARGS">Table reservation %1$s updated</string>
+    <string name="TITLE_PRE_ORDER_PAY_KEY">Pre-order paid</string>
+    <string name="PRE_ORDER_PAYMENT_SUCCESSFUL_ARGS">Pre-order №%1$s is successfully paid</string>
+    <string name="TITLE_PRE_ORDER_REFUND_KEY">Refund</string>
+    <string name="PRE_ORDER_PAYMENT_CANCEL_ARGS">Refund paid for pre-order №%1$s</string>
+    <string name="TITLE_SHOP_REWARD">Extra bonuses</string>
+    <string name="MESSAGE_SHOP_REWARD_ARGS">Congratulations! You were got %1$s bon. from %2$s</string>
+    <string name="TITLE_YOUVE_GOT_REWARD">You\'ve got a reward</string>
+    <string name="MESSAGE_GOT_REWARD_ARGS">You\'ve got points %1$s as a reward!</string>
+    <string name="TITLE_CASH_BACK">Accrued bonuses for purchase</string>
+    <string name="MESSAGE_CASH_BACK_ARGS">Cash-back is %1$s bonuses, you have spent %2$s bonuses for purchases in %3$s</string>
+    <string name="TITLE_BIRTHDAY_REWARDS_NOTIFICATION">Happy Birthday!</string>
+    <string name="TITLE_BIRTHDAY_CONGRATULATION_NOTIFICATION">Happy Birthday!</string>
+
+</resources>

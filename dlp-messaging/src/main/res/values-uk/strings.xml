@@ -1,0 +1,33 @@
+<resources>
+    <string name="fcm_channel_name_default">Загальні сповіщення</string>
+
+    <string name="TITLE_SHOP_BECAME_AVAILABLE">Доступний новий заклад</string>
+    <string name="MESSAGE_SHOP_BECAME_AVAILABLE_ARGS">%1$s тепер доступно в нашому додатку</string>
+    <string name="TITLE_ORDER">Оціни своє замовлення</string>
+    <string name="MESSAGE_ORDER_ARGS">Замовлення від %1$s</string>
+    <string name="TITLE_PRE_ORDER_STATUS_CHANGED">Статус вашого передзамовлення змінено!</string>
+    <string name="MESSAGE_PRE_ORDER_INFORMATION_CHANGED_ARGS"> Ваше передзамовлення змінено!</string>
+    <string name="MESSAGE_PRE_ORDER_CONFIRMED_ARGS">Передзамовлення %1$s готове</string>
+    <string name="MESSAGE_PRE_ORDER_OPENED_ARGS">Передзамовлення %1$s відкрито</string>
+    <string name="MESSAGE_PRE_ORDER_REJECTED_ARGS">Передзамовлення %1$s відхилено</string>
+    <string name="MESSAGE_PRE_ORDER_PROCESSED_ARGS">Передзамовлення %1$s готується</string>
+    <string name="MESSAGE_PRE_ORDER_IN_DELIVERY_ARGS">Твоє замовлення %1$s в дорозі</string>
+    <string name="MESSAGE_PRE_ORDER_CLOSED_ARGS">Передзамовлення %1$s закрито</string>
+    <string name="TITLE_TABLE_RESERVATION_STATUS_CHANGED">Статус бронювання змінено</string>
+    <string name="MESSAGE_TABLE_RESERVATION_CONFIRMED_ARGS">Бронювання столика %1$s підтверджено</string>
+    <string name="MESSAGE_TABLE_RESERVATION_REJECTED_ARGS">Бронювання столика %1$s відхилено</string>
+    <string name="MESSAGE_TABLE_RESERVATION_REMINDER_ARGS">Не забудьте про бронювання столика %1$s</string>
+    <string name="MESSAGE_TABLE_RESERVATION_UPDATED_ARGS">Бронювання столика %1$s змінено</string>
+    <string name="TITLE_PRE_ORDER_PAY_KEY">Передзамовлення оплачено</string>
+    <string name="PRE_ORDER_PAYMENT_SUCCESSFUL_ARGS">Передзамовлення №%1$s успішно оплачено</string>
+    <string name="TITLE_PRE_ORDER_REFUND_KEY">Повернено кошти</string>
+    <string name="PRE_ORDER_PAYMENT_CANCEL_ARGS">Повернено кошти, сплачені за передзамовлення №%1$s</string>
+    <string name="TITLE_SHOP_REWARD">Винагорода від закладу</string>
+    <string name="MESSAGE_SHOP_REWARD_ARGS">Вітаємо! Вам нараховано %1$s бонусів від %2$s</string>
+    <string name="TITLE_YOUVE_GOT_REWARD">Ви отримали винагороду!</string>
+    <string name="MESSAGE_GOT_REWARD_ARGS">Ви були нагороджені балами %1$s</string>
+    <string name="TITLE_CASH_BACK">Здійснено покупку</string>
+    <string name="MESSAGE_CASH_BACK_ARGS">Ви отримали %1$s бонусів, було витрачено %2$s бонусів в рамках програми лояльності %3$s</string>
+    <string name="TITLE_BIRTHDAY_REWARDS_NOTIFICATION">З Днем народження!</string>
+    <string name="TITLE_BIRTHDAY_CONGRATULATION_NOTIFICATION">З Днем народження!</string>
+</resources>
