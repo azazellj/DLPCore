@@ -1,16 +1,15 @@
 package ua.com.wl.dlp.data.api.responses.auth
 
-import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
 import ua.com.wl.dlp.data.api.responses.models.auth.AuthWay
 
-/**
- * @author Denis Makovskyi
- */
-
+@JsonClass(generateAdapter = true)
 data class AuthenticationResponse(
-    @SerializedName("is_registered")
+    @Json(name = "is_registered")
     val isRegistered: Boolean,
 
-    @SerializedName("registration_way")
-    val authWay: AuthWay)
+    @Json(name = "registration_way")
+    val authWay: AuthWay
+)

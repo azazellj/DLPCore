@@ -1,20 +1,19 @@
 package ua.com.wl.dlp.data.api.responses.shop
 
-import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
-/**
- * @author Denis Makovskyi
- */
-
+@JsonClass(generateAdapter = true)
 data class CityShopsResponse(
-    @SerializedName("id")
+    @Json(name = "id")
     val id: Int,
 
-    @SerializedName("name")
+    @Json(name = "name")
     val name: String,
 
-    @SerializedName("is_native_city")
+    @Json(name = "is_native_city")
     val isNativeCity: Boolean,
 
-    @SerializedName("shops")
-    val shops: List<BaseShopResponse>)
+    @Json(name = "shops")
+    val shops: List<BaseShopResponse>
+)

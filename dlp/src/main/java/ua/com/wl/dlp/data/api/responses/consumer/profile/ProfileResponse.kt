@@ -1,72 +1,71 @@
 package ua.com.wl.dlp.data.api.responses.consumer.profile
 
-import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
 import ua.com.wl.dlp.data.api.models.consumer.profile.ProfileOperation
 import ua.com.wl.dlp.data.api.responses.models.auth.City
 import ua.com.wl.dlp.data.api.responses.models.consumer.profile.Gender
 
-/**
- * @author Denis Makovskyi
- */
-
+@JsonClass(generateAdapter = true)
 data class ProfileResponse(
-    @SerializedName("first_name")
+    @Json(name = "first_name")
     val firstName: String,
 
-    @SerializedName("patronymic")
+    @Json(name = "patronymic")
     val patronymic: String,
 
-    @SerializedName("last_name")
+    @Json(name = "last_name")
     val lastName: String,
 
-    @SerializedName("gender")
+    @Json(name = "gender")
     val gender: Gender?,
 
-    @SerializedName("birth_date")
+    @Json(name = "birth_date")
     val birthDate: String?,
 
-    @SerializedName("is_married")
+    @Json(name = "is_married")
     val isMarried: Boolean?,
 
-    @SerializedName("city")
+    @Json(name = "city")
     val city: City?,
 
-    @SerializedName("address")
+    @Json(name = "address")
     val address: String,
 
-    @SerializedName("email")
+    @Json(name = "email")
     val email: String,
 
-    @SerializedName("mobile_phone")
+    @Json(name = "mobile_phone")
     val phone: String,
 
-    @SerializedName("language")
+    @Json(name = "language")
     val language: String,
 
-    @SerializedName("timezone")
+    @Json(name = "timezone")
     val timezone: String,
 
-    @SerializedName("balance")
+    @Json(name = "balance")
     val balance: Long,
 
-    @SerializedName("balance_money")
+    @Json(name = "balance_money")
     val moneyAmount: String,
 
-    @SerializedName("invite_code")
+    @Json(name = "invite_code")
     val inviteCode: String,
 
-    @SerializedName("referral_code")
+    @Json(name = "referral_code")
     val referralCode: String?,
 
-    @SerializedName("comment")
+    @Json(name = "comment")
     val comment: String,
 
-    @SerializedName("notifications")
+    @Json(name = "notifications")
     val notifications: Int,
 
-    @SerializedName("notification_token")
+    @Json(name = "notification_token")
     val notificationToken: String,
 
-    @SerializedName("balance_changes")
-    val transactions: List<ProfileOperation>)
+    @Json(name = "balance_changes")
+    val transactions: List<ProfileOperation>
+)

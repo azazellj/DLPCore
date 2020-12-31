@@ -1,59 +1,58 @@
 package ua.com.wl.dlp.data.api.responses.models.consumer.history.notifications
 
-import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
-/**
- * @author Denis Makovskyi
- */
-
+@JsonClass(generateAdapter = true)
 data class NotificationData(
-    @SerializedName("show_push_type")
+    @Json(name = "show_push_type")
     val type: PushType?,
 
-    @SerializedName("title_loc_key")
+    @Json(name = "title_loc_key")
     val titleLocKey: String?,
 
-    /*@SerializedName("title_loc_args")
+    /*@Json(name = "title_loc_args")
     val titleLocArgs: List<String>?,*/
 
-    @SerializedName("body_loc_key")
+    @Json(name = "body_loc_key")
     val bodyLocKey: String?,
 
-    /*@SerializedName("body_loc_args")
+    /*@Json(name = "body_loc_args")
     val bodyLocArgs: List<String>?,*/
 
-    @SerializedName("badge")
+    @Json(name = "badge")
     val badge: String,
 
-    @SerializedName("sound")
+    @Json(name = "sound")
     val sound: String?,
 
-    @SerializedName("click_action")
+    @Json(name = "click_action")
     val clickAction: String,
 
-    @SerializedName("shop_id")
+    @Json(name = "shop_id")
     val shopId: Int?,
 
-    @SerializedName("offer_id")
+    @Json(name = "offer_id")
     val offerId: Int?,
 
-    @SerializedName("rate_id")
+    @Json(name = "rate_id")
     val orderId: Int?,
 
-    @SerializedName("coupon_id")
+    @Json(name = "coupon_id")
     val couponId: Int?,
 
-    @SerializedName("news_item_id")
+    @Json(name = "news_item_id")
     val articleId: Int?,
 
-    @SerializedName("promotion_id")
+    @Json(name = "promotion_id")
     val promotionId: Int?,
 
-    @SerializedName("pre_order_id")
+    @Json(name = "pre_order_id")
     val preOrderId: Int?,
 
-    @SerializedName("shop")
+    @Json(name = "shop")
     val relatedShop: String?
 
-    /*@SerializedName("shops")
-    val relatedShops: List<String>?*/)
+    /*@Json(name = "shops")
+    val relatedShops: List<String>?*/
+)

@@ -1,63 +1,61 @@
 package ua.com.wl.dlp.data.prefereces.models
 
-import com.google.gson.annotations.SerializedName
-
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 import ua.com.wl.dlp.data.api.models.orders.order.pre_order.DeliveryType
 import ua.com.wl.dlp.data.api.models.orders.order.pre_order.OperatorCall
 import ua.com.wl.dlp.data.api.models.orders.order.pre_order.PaymentMethod
 
-/**
- * @author Denis Makovskyi
- */
-
+@JsonClass(generateAdapter = true)
 data class OrderPrefs(
-    @SerializedName("date")
+    @Json(name = "date")
     val date: String? = null,
 
-    @SerializedName("time")
+    @Json(name = "time")
     val time: String? = null,
 
-    @SerializedName("comment")
+    @Json(name = "comment")
     val comment: String? = null,
 
-    @SerializedName("address")
+    @Json(name = "address")
     val address: String? = null,
 
-    @SerializedName("street")
+    @Json(name = "street")
     val streetName: String? = null,
 
-    @SerializedName("house_number")
+    @Json(name = "house_number")
     val houseNumber: String? = null,
 
-    @SerializedName("entrance")
+    @Json(name = "entrance")
     val houseEntrance: String? = null,
 
-    @SerializedName("intercom")
+    @Json(name = "intercom")
     val intercomCode: String? = null,
 
-    @SerializedName("floor")
+    @Json(name = "floor")
     val floorNumber: Int? = null,
 
-    @SerializedName("office_number")
+    @Json(name = "office_number")
     val officeNumber: String? = null,
 
-    @SerializedName("delivery_type")
+    @Json(name = "delivery_type")
     val deliveryType: DeliveryType? = null,
 
-    @SerializedName("persons_quantity")
+    @Json(name = "persons_quantity")
     val personsQuantity: Int? = null,
 
-    @SerializedName("use_bonuses")
+    @Json(name = "use_bonuses")
     val useBonuses: Boolean? = null,
 
-    @SerializedName("bonuses_amount")
+    @Json(name = "bonuses_amount")
     val bonusesAmount: Long? = null,
 
-    @SerializedName("payment_banknote")
+    @Json(name = "payment_banknote")
     val paymentBanknote: String? = null,
 
-    @SerializedName("payment_method")
+    @Json(name = "payment_method")
     val paymentMethod: PaymentMethod? = null,
 
-    @SerializedName("operator_call")
-    val operatorCall: OperatorCall? = null)
+    @Json(name = "operator_call")
+    val operatorCall: OperatorCall? = null
+)

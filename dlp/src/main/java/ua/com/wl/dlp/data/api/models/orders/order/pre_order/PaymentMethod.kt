@@ -1,16 +1,18 @@
 package ua.com.wl.dlp.data.api.models.orders.order.pre_order
 
-import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
 
 /**
  * @author Denis Makovskyi
  */
 
-enum class PaymentMethod(val value: String) {
-    @SerializedName("CASH")
-    CASH("CASH"),
-    @SerializedName("BY_CARD")
-    CARD("BY_CARD"),
-    @SerializedName("ONLINE")
-    ONLINE("ONLINE")
+enum class PaymentMethod {
+    @Json(name = "CASH")
+    CASH,
+
+    @Json(name = "BY_CARD")
+    CARD,
+
+    @Json(name = "ONLINE")
+    ONLINE
 }

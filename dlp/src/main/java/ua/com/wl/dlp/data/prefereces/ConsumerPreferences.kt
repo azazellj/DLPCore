@@ -1,15 +1,14 @@
 package ua.com.wl.dlp.data.prefereces
 
 import android.content.Context
-
-import com.google.gson.Gson
-
+import com.squareup.moshi.Moshi
 import ua.com.wl.archetype.core.android.preferences.BasePreferences
-
-import ua.com.wl.dlp.data.prefereces.models.RankPrefs
-import ua.com.wl.dlp.data.prefereces.models.ProfilePrefs
 import ua.com.wl.dlp.data.prefereces.models.BusinessPrefs
+import ua.com.wl.dlp.data.prefereces.models.ProfilePrefs
+import ua.com.wl.dlp.data.prefereces.models.RankPrefs
+import ua.com.wl.dlp.utils.fromJson
 import ua.com.wl.dlp.utils.isNonNullOrEmpty
+import ua.com.wl.dlp.utils.toJson
 
 /**
  * @author Denis Makovskyi
@@ -17,7 +16,7 @@ import ua.com.wl.dlp.utils.isNonNullOrEmpty
 
 class ConsumerPreferences(
     context: Context,
-    private val gson: Gson
+    private val moshi: Moshi
 ) : BasePreferences(context, ConsumerPreferences::class.java.simpleName) {
 
     companion object {
@@ -29,12 +28,12 @@ class ConsumerPreferences(
 
     var rankPrefs: RankPrefs
         set(value) {
-            save(KEY_RANK_PREFS, gson.toJson(value))
+            save(KEY_RANK_PREFS, moshi.toJson(value))
         }
         get() {
             val json = getString(KEY_RANK_PREFS)
             return if (json.isNonNullOrEmpty()) {
-                gson.fromJson(json, RankPrefs::class.java)
+                moshi.fromJson<RankPrefs>(json) ?: RankPrefs()
             } else {
                 RankPrefs()
             }
@@ -42,12 +41,12 @@ class ConsumerPreferences(
 
     var profilePrefs: ProfilePrefs
         set(value) {
-            save(KEY_PROFILE_PREFS, gson.toJson(value))
+            save(KEY_PROFILE_PREFS, moshi.toJson(value))
         }
         get() {
             val json = getString(KEY_PROFILE_PREFS)
             return if (json.isNonNullOrEmpty()) {
-                gson.fromJson(json, ProfilePrefs::class.java)
+                moshi.fromJson<ProfilePrefs>(json) ?: ProfilePrefs()
             } else {
                 ProfilePrefs()
             }
@@ -55,12 +54,12 @@ class ConsumerPreferences(
 
     var businessPrefs: BusinessPrefs
         set(value) {
-            save(KEY_BUSINESS_PREFS, gson.toJson(value))
+            save(KEY_BUSINESS_PREFS, moshi.toJson(value))
         }
         get() {
             val json = getString(KEY_BUSINESS_PREFS)
             return if (json.isNonNullOrEmpty()) {
-                gson.fromJson(json, BusinessPrefs::class.java)
+                moshi.fromJson<BusinessPrefs>(json) ?: BusinessPrefs()
             } else {
                 BusinessPrefs()
             }

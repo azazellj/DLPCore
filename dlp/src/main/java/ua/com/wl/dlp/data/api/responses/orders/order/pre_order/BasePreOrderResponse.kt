@@ -1,44 +1,43 @@
 package ua.com.wl.dlp.data.api.responses.orders.order.pre_order
 
-import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
 import ua.com.wl.dlp.data.api.models.shop.SimpleShop
 import ua.com.wl.dlp.data.api.responses.models.orders.order.pre_order.PreOrderStatus
 
-/**
- * @author Denis Makovskyi
- */
-
+@JsonClass(generateAdapter = true)
 open class BasePreOrderResponse(
-    @SerializedName("id")
+    @Json(name = "id")
     var id: Int = 0,
 
-    @SerializedName("status")
+    @Json(name = "status")
     var status: PreOrderStatus? = null,
 
-    @SerializedName("created_at")
+    @Json(name = "created_at")
     var createdAt: String = "",
 
-    @SerializedName("changed_at")
+    @Json(name = "changed_at")
     var changedAt: String = "",
 
-    @SerializedName("readiness_date")
+    @Json(name = "readiness_date")
     var readinessDate: String? = null,
 
-    @SerializedName("readiness_time")
+    @Json(name = "readiness_time")
     var readinessTime: String? = null,
 
-    @SerializedName("pay_with_bonuses")
+    @Json(name = "pay_with_bonuses")
     var usedBonuses: Boolean = false,
 
-    @SerializedName("count_of_bonuses")
+    @Json(name = "count_of_bonuses")
     var bonusesCount: Long = 0,
 
-    @SerializedName("count_of_bonuses_money")
+    @Json(name = "count_of_bonuses_money")
     var currencyEquivalent: String = "",
 
-    @SerializedName("total_price")
+    @Json(name = "total_price")
     var totalPrice: String = "",
 
-    @SerializedName("shop")
-    var shop: SimpleShop? = null)
+    @Json(name = "shop")
+    var shop: SimpleShop? = null
+)

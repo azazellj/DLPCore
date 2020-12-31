@@ -1,21 +1,18 @@
 package ua.com.wl.dlp.data.api.responses.orders.order
 
-import com.google.gson.annotations.SerializedName
-
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 import ua.com.wl.dlp.data.api.responses.models.orders.order.trading.OrderReceipt
 import ua.com.wl.dlp.data.api.responses.models.orders.order.trading.OrderStaffMember
 
-/**
- * @author Denis Makovskyi
- */
-
+@JsonClass(generateAdapter = true)
 data class OrderResponse(
-    @SerializedName("comment")
+    @Json(name = "comment")
     val comment: String,
 
-    @SerializedName("receipt")
+    @Json(name = "receipt")
     val receipt: OrderReceipt,
 
-    @SerializedName("staff_member")
+    @Json(name = "staff_member")
     val staffMember: OrderStaffMember?
 ) : BaseOrderResponse()

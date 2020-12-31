@@ -1,18 +1,18 @@
 package ua.com.wl.dlp.data.api.responses.models.orders.table
 
-import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
 
-/**
- * @author Denis Makovskyi
- */
 
-enum class TableReservationStatus(val value: String) {
-    @SerializedName("OPENED")
-    OPENED("OPENED"),
-    @SerializedName("CONFIRMED")
-    CONFIRMED("CONFIRMED"),
-    @SerializedName("REJECTED")
-    REJECTED("REJECTED"),
-    @SerializedName("REJECTED_BY_CONSUMER")
-    REJECTED_BY_CONSUMER("REJECTED_BY_CONSUMER")
+enum class TableReservationStatus {
+    @Json(name = "OPENED")
+    OPENED,
+
+    @Json(name = "CONFIRMED")
+    CONFIRMED,
+
+    @Json(name = "REJECTED")
+    REJECTED,
+
+    @Json(name = "REJECTED_BY_CONSUMER")
+    REJECTED_BY_CONSUMER
 }

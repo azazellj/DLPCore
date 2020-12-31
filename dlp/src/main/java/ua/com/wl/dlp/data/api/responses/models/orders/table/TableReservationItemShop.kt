@@ -1,17 +1,16 @@
 package ua.com.wl.dlp.data.api.responses.models.orders.table
 
-import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
-/**
- * @author Denis Makovskyi
- */
-
+@JsonClass(generateAdapter = true)
 data class TableReservationItemShop(
-    @SerializedName("name")
+    @Json(name = "name")
     val name: String,
 
-    @SerializedName("address")
+    @Json(name = "address")
     val address: String?,
 
-    @SerializedName("thumb_logo")
-    val thumbImage: String)
+    @Json(name = "thumb_logo")
+    val thumbImage: String
+)

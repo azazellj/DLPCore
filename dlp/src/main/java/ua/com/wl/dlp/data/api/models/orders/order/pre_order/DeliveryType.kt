@@ -1,16 +1,18 @@
 package ua.com.wl.dlp.data.api.models.orders.order.pre_order
 
-import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
 
 /**
  * @author Denis Makovskyi
  */
 
-enum class DeliveryType(val value: String) {
-    @SerializedName("DELIVERY")
-    DELIVERY("DELIVERY"),
-    @SerializedName("TAKEAWAY")
-    TAKEAWAY("TAKEAWAY"),
-    @SerializedName("IN_PLACE")
-    IN_PLACE("IN_PLACE")
+enum class DeliveryType {
+    @Json(name = "DELIVERY")
+    DELIVERY,
+
+    @Json(name = "TAKEAWAY")
+    TAKEAWAY,
+
+    @Json(name = "IN_PLACE")
+    IN_PLACE
 }

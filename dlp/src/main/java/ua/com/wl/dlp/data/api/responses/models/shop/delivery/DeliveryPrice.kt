@@ -1,16 +1,16 @@
 package ua.com.wl.dlp.data.api.responses.models.shop.delivery
 
-import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
-/**
- * @author Denis Makovskyi
- */
+@JsonClass(generateAdapter = true)
 data class DeliveryPrice(
-    @SerializedName("id")
+    @Json(name = "id")
     val id: Int,
 
-    @SerializedName("price")
+    @Json(name = "price")
     val price: Long,
 
-    @SerializedName("total_price_from")
-    val totalPriceFrom: String)
+    @Json(name = "total_price_from")
+    val totalPriceFrom: String
+)

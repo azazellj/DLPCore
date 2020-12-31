@@ -1,46 +1,48 @@
 package ua.com.wl.dlp.data.api.models.orders.order.pre_order
 
-import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
 /**
  * @author Denis Makovskyi
  */
-
+@JsonClass(generateAdapter = true)
 open class BasePreOrderInfo(
-    @SerializedName("delivery_type")
+    @Json(name = "delivery_type")
     var deliveryType: DeliveryType = DeliveryType.TAKEAWAY,
 
-    @SerializedName("street")
+    @Json(name = "street")
     var streetName: String? = null,
 
-    @SerializedName("house_number")
+    @Json(name = "house_number")
     var houseNumber: String? = null,
 
-    @SerializedName("entrance")
+    @Json(name = "entrance")
     var houseEntrance: String? = null,
 
-    @SerializedName("intercom")
+    @Json(name = "intercom")
     var intercomCode: String? = null,
 
-    @SerializedName("floor")
+    @Json(name = "floor")
     var floorNumber: Int? = null,
 
-    @SerializedName("office_number")
+    @Json(name = "office_number")
     var officeNumber: String? = null,
 
-    @SerializedName("persons_quantity")
+    @Json(name = "persons_quantity")
     var personsQuantity: Int? = null,
 
-    @SerializedName("payment_method")
+    @Json(name = "payment_method")
     var paymentMethod: PaymentMethod = PaymentMethod.CASH,
 
-    @SerializedName("payment_banknote")
+    @Json(name = "payment_banknote")
     var paymentBanknote: String? = null,
 
-    @SerializedName("operator_call")
+    @Json(name = "operator_call")
     var operatorCall: OperatorCall = OperatorCall.WAITING
 ) {
 
+    // TODO: 12/12/20 separate methods
     class Builder {
 
         private var deliveryType: DeliveryType = DeliveryType.TAKEAWAY
@@ -104,7 +106,8 @@ open class BasePreOrderInfo(
             return BasePreOrderInfo(
                 deliveryType, streetName, houseNumber, houseEntrance,
                 intercomCode, floorNumber, officeNumber, personsQuantity,
-                paymentMethod, paymentBanknote, operatorCall)
+                paymentMethod, paymentBanknote, operatorCall
+            )
         }
     }
 }

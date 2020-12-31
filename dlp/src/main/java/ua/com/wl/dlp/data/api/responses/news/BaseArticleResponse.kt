@@ -1,26 +1,25 @@
 package ua.com.wl.dlp.data.api.responses.news
 
-import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
-/**
- * @author Denis Makovskyi
- */
-
+@JsonClass(generateAdapter = true)
 open class BaseArticleResponse(
-    @SerializedName("id")
+    @Json(name = "id")
     var id: Int = 0,
 
-    @SerializedName("name")
+    @Json(name = "name")
     var name: String = "",
 
-    @SerializedName("thumb_image")
+    @Json(name = "thumb_image")
     var thumbImage: String? = null,
 
-    @SerializedName("short_description")
+    @Json(name = "short_description")
     var shortDescription: String = "",
 
-    @SerializedName("publication_start_datetime")
+    @Json(name = "publication_start_datetime")
     var publicationStartDate: String = "",
 
-    @SerializedName("publication_end_date")
-    var publicationEndDate: String = "")
+    @Json(name = "publication_end_date")
+    var publicationEndDate: String = ""
+)

@@ -1,11 +1,10 @@
 package ua.com.wl.dlp.data.api.responses.consumer.referral
 
-import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
-/**
- * @author Denis Makovskyi
- */
-
+@JsonClass(generateAdapter = true)
 data class QrCodeResponse(
-    @SerializedName("qr_code")
-    val qrCode: String)
+    @Json(name = "qr_code")
+    val qrCode: String
+)

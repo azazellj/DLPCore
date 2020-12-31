@@ -1,17 +1,16 @@
 package ua.com.wl.dlp.data.api.responses.models.orders.order
 
-import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
-/**
- * @author Denis Makovskyi
- */
-
+@JsonClass(generateAdapter = true)
 data class ConsumerOrder(
-    @SerializedName("rs_order_id")
+    @Json(name = "rs_order_id")
     val id: String,
 
-    @SerializedName("rs_price_in_money")
+    @Json(name = "rs_price_in_money")
     val amount: String?,
 
-    @SerializedName("rs_price_in_bonuses")
-    val bonuses: Long?)
+    @Json(name = "rs_price_in_bonuses")
+    val bonuses: Long?
+)

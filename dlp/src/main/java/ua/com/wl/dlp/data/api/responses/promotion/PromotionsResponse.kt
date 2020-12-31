@@ -1,36 +1,38 @@
 package ua.com.wl.dlp.data.api.responses.promotion
 
-import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 import ua.com.wl.dlp.data.api.responses.models.shop.chain.ShopChainItem
 
+@JsonClass(generateAdapter = true)
 data class PromotionsResponse(
-    @SerializedName("id")
+    @Json(name = "id")
     var id: Int = 0,
 
-    @SerializedName("name")
+    @Json(name = "name")
     var name: String = "",
 
-    @SerializedName("type")
+    @Json(name = "type")
     var type: String? = null,
 
-    @SerializedName("percent")
+    @Json(name = "percent")
     var percent: String? = null,
 
-    @SerializedName("is_disposable")
+    @Json(name = "is_disposable")
     var isDisposable: Boolean? = null,
 
-    @SerializedName("criteria")
+    @Json(name = "criteria")
     var criteria: Criteria? = null,
 
-    @SerializedName("offer")
+    @Json(name = "offer")
     var offer: Offer? = null,
 
-    @SerializedName("thumb_image")
+    @Json(name = "thumb_image")
     var thumbImage: String? = null,
 
-    @SerializedName("shops")
+    @Json(name = "shops")
     var relatedShops: List<ShopChainItem>? = null,
 
-    @SerializedName("description")
+    @Json(name = "description")
     var description: String? = null
 )

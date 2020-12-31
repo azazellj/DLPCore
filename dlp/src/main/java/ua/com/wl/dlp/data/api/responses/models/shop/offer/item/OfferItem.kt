@@ -1,38 +1,37 @@
 package ua.com.wl.dlp.data.api.responses.models.shop.offer.item
 
-import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
-/**
- * @author Denis Makovskyi
- */
-
+@JsonClass(generateAdapter = true)
 data class OfferItem(
-    @SerializedName("id")
+    @Json(name = "id")
     val id: Int,
 
-    @SerializedName("item_type")
+    @Json(name = "item_type")
     val type: ItemType?,
 
-    @SerializedName("name")
+    @Json(name = "name")
     val name: String?,
 
-    @SerializedName("description")
+    @Json(name = "description")
     val description: String?,
 
-    @SerializedName("photo")
+    @Json(name = "photo")
     val photo: String?,
 
-    @SerializedName("price")
+    @Json(name = "price")
     val price: String?,
 
-    @SerializedName("category")
+    @Json(name = "category")
     val category: ItemCategory?,
 
-    @SerializedName("price_in_money")
+    @Json(name = "price_in_money")
     val priceInMoney: String?,
 
-    @SerializedName("price_in_bonuses")
+    @Json(name = "price_in_bonuses")
     val priceInBonuses: Long?,
 
-    @SerializedName("cash_back_percentage")
-    val cashBackPercentage: Int?)
+    @Json(name = "cash_back_percentage")
+    val cashBackPercentage: Int?
+)

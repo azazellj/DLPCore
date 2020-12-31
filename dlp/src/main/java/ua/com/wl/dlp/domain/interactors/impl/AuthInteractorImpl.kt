@@ -2,30 +2,25 @@ package ua.com.wl.dlp.domain.interactors.impl
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-
 import ua.com.wl.dlp.data.api.AuthApiV1
 import ua.com.wl.dlp.data.api.AuthApiV2
 import ua.com.wl.dlp.data.api.errors.ErrorsMapper
 import ua.com.wl.dlp.data.api.requests.auth.*
 import ua.com.wl.dlp.data.api.responses.PagedResponse
+import ua.com.wl.dlp.data.api.responses.auth.AuthenticationResponse
 import ua.com.wl.dlp.data.api.responses.auth.SignResponse
 import ua.com.wl.dlp.data.api.responses.auth.TokenResponse
-import ua.com.wl.dlp.data.api.responses.auth.AuthenticationResponse
-import ua.com.wl.dlp.data.api.responses.models.auth.City
 import ua.com.wl.dlp.data.api.responses.models.auth.CardsStatus
-import ua.com.wl.dlp.data.events.session.SessionBusEvent
+import ua.com.wl.dlp.data.api.responses.models.auth.City
 import ua.com.wl.dlp.data.events.factory.CoreBusEventsFactory
-import ua.com.wl.dlp.data.prefereces.CorePreferences
+import ua.com.wl.dlp.data.events.session.SessionBusEvent
 import ua.com.wl.dlp.data.prefereces.ConsumerPreferences
+import ua.com.wl.dlp.data.prefereces.CorePreferences
 import ua.com.wl.dlp.domain.Result
 import ua.com.wl.dlp.domain.UseCase
 import ua.com.wl.dlp.domain.exeptions.api.ApiException
 import ua.com.wl.dlp.domain.exeptions.api.auth.AuthException
 import ua.com.wl.dlp.domain.interactors.AuthInteractor
-
-/**
- * @author Denis Makovskyi
- */
 
 class AuthInteractorImpl(
     errorsMapper: ErrorsMapper,
@@ -38,8 +33,9 @@ class AuthInteractorImpl(
     override suspend fun verification(): Result<TokenResponse> {
         return callApi(
             call = { apiV2.verification(TokenRequest(corePreferences.authPrefs.authToken)) },
-            errorClass = AuthException::class
-        ).flatMap { dataResponseOpt ->
+            errorMapper = { type, cause -> AuthException(type, cause) }
+        )
+            .flatMap { dataResponseOpt ->
             dataResponseOpt.ifPresentOrDefault(
                 { Result.Success(it.payload) },
                 { Result.Failure(ApiException()) })
@@ -53,7 +49,7 @@ class AuthInteractorImpl(
     override suspend fun refreshToken(): Result<TokenResponse> {
         return callApi(
             call = { apiV2.refreshToken(TokenRequest(corePreferences.authPrefs.refreshToken)) },
-            errorClass = AuthException::class
+            errorMapper = { type, cause -> AuthException(type, cause) }
         ).flatMap { dataResponseOpt ->
             dataResponseOpt.ifPresentOrDefault(
                 { Result.Success(it.payload) },
@@ -68,7 +64,7 @@ class AuthInteractorImpl(
     override suspend fun authentication(request: AuthenticationRequest): Result<AuthenticationResponse> {
         return callApi(
             call = { apiV2.authentication(request) },
-            errorClass = AuthException::class
+            errorMapper = { type, cause -> AuthException(type, cause) }
         ).flatMap { dataResponseOpt ->
             dataResponseOpt.ifPresentOrDefault(
                 { Result.Success(it.payload) },
@@ -79,7 +75,7 @@ class AuthInteractorImpl(
     override suspend fun signIn(request: SignInRequest, appVersion: String?): Result<SignResponse> {
         return callApi(
             call = { apiV2.signIn(request) },
-            errorClass = AuthException::class
+            errorMapper = { type, cause -> AuthException(type, cause) }
         ).flatMap { dataResponseOpt ->
             dataResponseOpt.ifPresentOrDefault(
                 { Result.Success(it.payload) },
@@ -97,7 +93,7 @@ class AuthInteractorImpl(
     override suspend fun cardsStatus(request: CardsStatusRequest): Result<CardsStatus> {
         return callApi(
             call = { apiV2.cardsStatus(request) },
-            errorClass = AuthException::class
+            errorMapper = { type, cause -> AuthException(type, cause) }
         ).flatMap { dataResponseOpt ->
             dataResponseOpt.ifPresentOrDefault(
                 { Result.Success(it.payload.cardsStatus) },
@@ -108,7 +104,7 @@ class AuthInteractorImpl(
     override suspend fun signUp(request: SignUpRequest, appVersion: String?): Result<SignResponse> {
         return callApi(
             call = { apiV2.signUp(request) },
-            errorClass = AuthException::class
+            errorMapper = { type, cause -> AuthException(type, cause) }
         ).flatMap { dataResponseOpt ->
             dataResponseOpt.ifPresentOrDefault(
                 { Result.Success(it.payload) },
@@ -126,7 +122,7 @@ class AuthInteractorImpl(
     override suspend fun signOut(): Result<Boolean> {
         return callApi(
             call = { apiV2.signOut() },
-            errorClass = AuthException::class
+            errorMapper = { type, cause -> AuthException(type, cause) }
         ).map { baseResponseOpt ->
             baseResponseOpt.getUnsafe()?.isSuccessfully() ?: false
         }.sOnEach {
@@ -142,7 +138,7 @@ class AuthInteractorImpl(
     override suspend fun requestSmsCode(request: SmsCodeRequest): Result<Boolean> {
         return callApi(
             call = { apiV2.requestSmsCode(request) },
-            errorClass = AuthException::class
+            errorMapper = { type, cause -> AuthException(type, cause) }
         ).map { baseResponseOpt ->
             baseResponseOpt.getUnsafe()?.isSuccessfully() ?: false
         }

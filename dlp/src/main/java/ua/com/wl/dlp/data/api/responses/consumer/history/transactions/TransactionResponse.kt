@@ -1,32 +1,31 @@
 package ua.com.wl.dlp.data.api.responses.consumer.history.transactions
 
-import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
 import ua.com.wl.dlp.data.api.responses.models.consumer.history.transactions.TransactionDetails
 import ua.com.wl.dlp.data.api.responses.models.consumer.history.transactions.types.AccountingType
 
-/**
- * @author Denis Makovskyi
- */
-
+@JsonClass(generateAdapter = true)
 data class TransactionResponse(
-    @SerializedName("accounting_type")
+    @Json(name = "accounting_type")
     val accountingType: AccountingType,
 
-    @SerializedName("initial_value")
+    @Json(name = "initial_value")
     val initialValue: Long,
 
-    @SerializedName("resulting_value")
+    @Json(name = "resulting_value")
     val resultingValue: Long,
 
-    @SerializedName("initial_value_money")
+    @Json(name = "initial_value_money")
     val initialMoneyAmount: String,
 
-    @SerializedName("resulting_value_money")
+    @Json(name = "resulting_value_money")
     val resultingMoneyAmount: String,
 
-    @SerializedName("created_at")
+    @Json(name = "created_at")
     val createdAt: String,
 
-    @SerializedName("detail")
-    val details: TransactionDetails)
+    @Json(name = "detail")
+    val details: TransactionDetails
+)

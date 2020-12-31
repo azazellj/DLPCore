@@ -1,13 +1,12 @@
 package ua.com.wl.dlp.data.api.responses.consumer.history.transactions
 
-import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
 import ua.com.wl.dlp.data.api.responses.models.consumer.history.transactions.BalanceChange
 
-/**
- * @author Denis Makovskyi
- */
-
+@JsonClass(generateAdapter = true)
 data class BalanceChangeResponse(
-    @SerializedName("balance_change")
-    val change: BalanceChange?)
+    @Json(name = "balance_change")
+    val change: BalanceChange?
+)

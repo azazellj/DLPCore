@@ -1,18 +1,15 @@
 package ua.com.wl.dlp.data.api.requests.orders.order.pre_order
 
-import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
 import ua.com.wl.dlp.data.api.models.orders.order.pre_order.BasePreOrderInfo
 import ua.com.wl.dlp.data.api.requests.models.orders.order.pre_order.PreOrderItem
 
-/**
- * @author Denis Makovskyi
- */
-
+@JsonClass(generateAdapter = true)
 class SinglePreOrderRequest(
-    @SerializedName("info")
+    @Json(name = "info")
     val info: BasePreOrderInfo?,
-
     shopId: Int,
     readinessDate: String,
     readinessTime: String,
@@ -28,26 +25,4 @@ class SinglePreOrderRequest(
     bonusesCount,
     comment,
     receipt
-) {
-
-    class Builder : MultiPreOrderRequest.Builder() {
-
-        private var info: BasePreOrderInfo? = null
-
-        fun info(init: BasePreOrderInfo.Builder.() -> Unit) {
-            info = BasePreOrderInfo.Builder().build(init)
-        }
-
-        fun build(init: SinglePreOrderRequest.Builder.() -> Unit): SinglePreOrderRequest {
-            init()
-            return SinglePreOrderRequest(
-                info, shopId, readinessDate,
-                readinessTime, useBonuses,
-                bonusesCount, comment, receipt)
-        }
-    }
-}
-
-fun preOrderRequest(init: SinglePreOrderRequest.Builder.() -> Unit): SinglePreOrderRequest {
-    return SinglePreOrderRequest.Builder().build(init)
-}
+)

@@ -1,22 +1,20 @@
 package ua.com.wl.dlp.data.api.responses.consumer.groups
 
-import com.google.gson.annotations.SerializedName
-
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 import ua.com.wl.dlp.data.api.models.shop.SimpleShop
 
-/**
- * @author Denis Makovskyi
- */
-
+@JsonClass(generateAdapter = true)
 data class GroupResponse(
-    @SerializedName("id")
+    @Json(name = "id")
     val id: Int,
 
-    @SerializedName("name")
+    @Json(name = "name")
     val name: String,
 
-    @SerializedName("cash_back_percentage")
+    @Json(name = "cash_back_percentage")
     val cashBackPercentage: Int,
 
-    @SerializedName("shop")
-    val orderShop: SimpleShop)
+    @Json(name = "shop")
+    val orderShop: SimpleShop
+)

@@ -2,16 +2,11 @@ package ua.com.wl.dlp.domain.exeptions.api.auth
 
 import android.content.Context
 
-import ua.com.wl.dlp.R
+import ua.com.wl.dlp.common.R
 import ua.com.wl.dlp.data.api.responses.ResponseType
 import ua.com.wl.dlp.domain.exeptions.api.ApiException
 
-/**
- * @author Denis Makovskyi
- */
-
-class AuthException(type: String, cause: Throwable) : ApiException(type, cause) {
-
+class AuthException(type: String?, cause: Throwable?) : ApiException(type, cause) {
     override fun getLocalizedMessage(context: Context): String {
         return when (message) {
             ResponseType.TOKEN_REQUIRED -> context.getString(R.string.dlp_error_token_required)

@@ -4,12 +4,12 @@ import android.app.Application
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import ua.com.wl.archetype.utils.Optional
-import ua.com.wl.dlp.R
+import ua.com.wl.dlp.common.R
 import ua.com.wl.dlp.core.Constants
 import ua.com.wl.dlp.data.api.ConsumerApiV1
 import ua.com.wl.dlp.data.api.ConsumerApiV2
 import ua.com.wl.dlp.data.api.errors.ErrorsMapper
-import ua.com.wl.dlp.data.api.requests.consumer.feedback.feedbackRequest
+import ua.com.wl.dlp.data.api.requests.consumer.feedback.FeedbackRequest
 import ua.com.wl.dlp.data.api.requests.consumer.history.notifications.NotificationsReadRequest
 import ua.com.wl.dlp.data.api.requests.consumer.profile.DeleteProfileRequest
 import ua.com.wl.dlp.data.api.requests.consumer.profile.ProfileRequest
@@ -124,10 +124,11 @@ class ConsumerInteractorImpl(
                             }
                         }
                         val ranksResponse = PagedResponse(
-                            pager.page, pager.count,
-                            pager.pagesCount, pager.itemsCount,
-                            pager.nextPage, pager.previousPage,
-                            ranks)
+                            page = pager.page, countNumber = pager.count,
+                            pagesCount = pager.pagesCount, itemsCount = pager.itemsCount,
+                            nextPage = pager.nextPage, previousPage = pager.previousPage,
+                            data = ranks, perPage = pager.count, pageSize = pager.count
+                        )
                         Result.Success(ranksResponse)
                     },
                     { Result.Failure(ApiException()) })
@@ -166,7 +167,6 @@ class ConsumerInteractorImpl(
                             spentMoney = nextRank.selectionCriteria?.spentMoney?.copy(),
                             spentBonuses = nextRank.selectionCriteria?.spentBonuses?.copy(),
                             collectedBonuses = nextRank.selectionCriteria?.collectedBonuses?.copy())
-
                     } else null
                     val currRankPermissions = RankPermissionsPrefs(
                         cashBackPercentage = currRank.permissions?.cashBackPercentage,
@@ -227,7 +227,7 @@ class ConsumerInteractorImpl(
     override suspend fun addCouponToWallet(id: Int, barcode: String): Result<CouponWalletResponse> {
         return callApi(
             call = { apiV2.addCouponToWallet(id, barcode) },
-            errorClass = WalletException::class
+            errorMapper = { type, cause -> WalletException(type, cause) }
         ).flatMap { dataResponseOpt ->
             dataResponseOpt.ifPresentOrDefault(
                 { Result.Success(it.payload) },
@@ -255,7 +255,7 @@ class ConsumerInteractorImpl(
     override suspend fun activateInviteCode(request: InvitationRequest): Result<InvitationResponse> {
         return callApi(
             call = { apiV2.useInviteCode(request) },
-            errorClass = ReferralException::class
+            errorMapper = { type, cause -> ReferralException(type, cause) }
         ).flatMap { dataResponseOpt ->
             dataResponseOpt.ifPresentOrDefault(
                 { Result.Success(it.payload) },
@@ -289,17 +289,20 @@ class ConsumerInteractorImpl(
         callback: Boolean,
         appVersion: String
     ): Result<FeedbackResponse> {
-        val request = feedbackRequest {
-            val answer = if (callback) {
-                app.getString(R.string.dlp_feedback_callback_agree)
-            } else {
-                app.getString(R.string.dlp_feedback_callback_disagree)
-            }
-            phone { phone ?: consumerPreferences.profilePrefs.phone }
-            email { email ?: consumerPreferences.profilePrefs.email }
-            message { "$message\n\n${app.getString(R.string.dlp_feedback_callback_prefix)}: $answer" }
-            appVersion { "${app.getString(R.string.dlp_feedback_app_version)}$appVersion" }
+        val answer = if (callback) {
+            app.getString(R.string.dlp_feedback_callback_agree)
+        } else {
+            app.getString(R.string.dlp_feedback_callback_disagree)
         }
+
+        val request = FeedbackRequest(
+            phone = phone ?: consumerPreferences.profilePrefs.phone,
+            email = email ?: consumerPreferences.profilePrefs.email,
+            message = "$message\n\n${app.getString(R.string.dlp_feedback_callback_prefix)}: $answer",
+            appVersion = "${app.getString(R.string.dlp_feedback_app_version)}$appVersion",
+            deviceInfo = null
+        )
+
         return callApi(call = { apiV1.feedback(request) })
             .flatMap { responseOpt ->
                 responseOpt.ifPresentOrDefault(

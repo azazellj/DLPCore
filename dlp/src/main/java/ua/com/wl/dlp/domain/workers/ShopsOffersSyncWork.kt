@@ -1,32 +1,22 @@
 package ua.com.wl.dlp.domain.workers
 
-import java.util.*
-
+import android.content.Context
+import androidx.work.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-
-import android.content.Context
-
-import androidx.work.*
-
-import org.koin.core.inject
-
-import ua.com.wl.dlp.core.di.koin.DLPCoreComponent
-import ua.com.wl.dlp.data.db.entities.shops.OfferEntity
 import ua.com.wl.dlp.data.api.responses.shop.offer.BaseOfferResponse
+import ua.com.wl.dlp.data.db.entities.shops.OfferEntity
 import ua.com.wl.dlp.domain.interactors.ShopInteractor
 import ua.com.wl.dlp.utils.Failure
 import ua.com.wl.dlp.utils.Success
 import ua.com.wl.dlp.utils.isEmpty
-
-/**
- * @author Denis Makovskyi
- */
+import java.util.*
 
 class ShopsOffersSyncWork(
     context: Context,
-    workerParameters: WorkerParameters
-) : CoroutineWorker(context, workerParameters), DLPCoreComponent {
+    workerParameters: WorkerParameters,
+    private val shopInteractor: dagger.Lazy<ShopInteractor>
+) : CoroutineWorker(context, workerParameters) {
 
     companion object {
 
@@ -42,7 +32,8 @@ class ShopsOffersSyncWork(
                 .setConstraints(
                     Constraints.Builder()
                         .setRequiredNetworkType(NetworkType.CONNECTED)
-                        .build())
+                        .build()
+                )
                 .build()
             WorkManager.getInstance(context)
                 .beginUniqueWork(TAG, ExistingWorkPolicy.REPLACE, request)
@@ -50,8 +41,6 @@ class ShopsOffersSyncWork(
             return request.id
         }
     }
-
-    private val shopInteractor: ShopInteractor by inject()
 
     private val outputs: Data.Builder = Data.Builder()
 
@@ -68,7 +57,7 @@ class ShopsOffersSyncWork(
     }
 
     private suspend fun launch() {
-        shopInteractor.getPersistedOffers()
+        shopInteractor.get().getPersistedOffers()
             .sOnSuccess { shops ->
                 for (shop in shops) {
                     loadOffers(shop.id, shop.offers)
@@ -80,16 +69,16 @@ class ShopsOffersSyncWork(
 
     private suspend fun loadOffers(shopId: Int, persistedOffers: List<OfferEntity>) {
         for (persistedOffer in persistedOffers) {
-            when(val offerResult = shopInteractor.getOffer(persistedOffer.id)) {
+            when (val offerResult = shopInteractor.get().getOffer(persistedOffer.id)) {
                 is Success -> updatePersistedOffer(shopId, offerResult.data)
                 is Failure -> outputs.putBoolean(ERROR_KEY_WHEN_LOAD_OFFERS, true)
             }
         }
-        shopInteractor.populatePersistedOffersPrice(shopId)
+        shopInteractor.get().populatePersistedOffersPrice(shopId)
     }
 
     private suspend fun updatePersistedOffer(shopId: Int, offer: BaseOfferResponse) {
-        shopInteractor.updatePersistedOffer(shopId, offer)
+        shopInteractor.get().updatePersistedOffer(shopId, offer)
             .onFailure {
                 outputs.putBoolean(ERROR_KEY_WHEN_WRITE_IN_DB, true)
             }

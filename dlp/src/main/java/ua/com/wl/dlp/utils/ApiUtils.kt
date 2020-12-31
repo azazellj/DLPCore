@@ -8,12 +8,11 @@ import java.net.HttpURLConnection.HTTP_INTERNAL_ERROR
 import javax.net.ssl.SSLException
 
 import android.content.Context
+import com.squareup.moshi.JsonDataException
 
 import retrofit2.HttpException
 
-import com.google.gson.JsonParseException
-
-import ua.com.wl.dlp.R
+import ua.com.wl.dlp.common.R
 import ua.com.wl.dlp.domain.exeptions.CoreException
 import ua.com.wl.dlp.domain.exeptions.api.ApiErrorType
 import ua.com.wl.dlp.domain.exeptions.api.ApiErrorType.*
@@ -45,7 +44,7 @@ fun getApiErrorType(cause: Throwable?): ApiErrorType? {
     return when(cause) {
         is IOException -> NETWORK_CONNECTION
         is SSLException -> SSL_CERTIFICATE
-        is JsonParseException -> RESPONSE_PARSING
+        is JsonDataException -> RESPONSE_PARSING
         else -> {
             if (cause is HttpException) {
                 when(cause.code()) {

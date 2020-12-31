@@ -1,11 +1,10 @@
 package ua.com.wl.dlp.data.api.responses.orders.order.pre_order
 
-import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
-/**
- * @author Denis Makovskyi
- */
-
+@JsonClass(generateAdapter = true)
 class GeneralPreOrderResponse(
-    @SerializedName("pre_orders")
-    val preOrders: List<PreOrderResponse>)
+    @Json(name = "pre_orders")
+    val preOrders: List<PreOrderResponse>
+)

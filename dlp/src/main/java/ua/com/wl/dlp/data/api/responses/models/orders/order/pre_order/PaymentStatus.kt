@@ -1,28 +1,32 @@
 package ua.com.wl.dlp.data.api.responses.models.orders.order.pre_order
 
-import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
 
-/**
- * @author Denis Makovskyi
- */
+enum class PaymentStatus {
+    @Json(name = "inProcessing")
+    IN_PROCESSING,
 
-enum class PaymentStatus(val value: String) {
-    @SerializedName("inProcessing")
-    IN_PROCESSING("inProcessing"),
-    @SerializedName("WaitingAuthComplete")
-    WAITING_AUTH_COMPLETE("WaitingAuthComplete"),
-    @SerializedName("Pending")
-    PENDING("Pending"),
-    @SerializedName("Approved")
-    APPROVED("Approved"),
-    @SerializedName("Expired")
-    EXPIRED("Expired"),
-    @SerializedName("Refunded")
-    REFUNDED("Refunded"),
-    @SerializedName("Voided")
-    VOIDED("Voided"),
-    @SerializedName("Declined")
-    DECLINED("Declined"),
-    @SerializedName("RefundInProcessing")
-    REFUND_IN_PROCESSING("RefundInProcessing")
+    @Json(name = "WaitingAuthComplete")
+    WAITING_AUTH_COMPLETE,
+
+    @Json(name = "Pending")
+    PENDING,
+
+    @Json(name = "Approved")
+    APPROVED,
+
+    @Json(name = "Expired")
+    EXPIRED,
+
+    @Json(name = "Refunded")
+    REFUNDED,
+
+    @Json(name = "Voided")
+    VOIDED,
+
+    @Json(name = "Declined")
+    DECLINED,
+
+    @Json(name = "RefundInProcessing")
+    REFUND_IN_PROCESSING
 }

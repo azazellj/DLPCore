@@ -1,16 +1,16 @@
 package ua.com.wl.dlp.data.api.responses.models.shop.delivery
 
-import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
-/**
- * @author Denis Makovskyi
- */
+@JsonClass(generateAdapter = true)
 data class PaymentOption(
-    @SerializedName("card")
+    @Json(name = "card")
     val card: Boolean,
 
-    @SerializedName("cash")
+    @Json(name = "cash")
     val cash: Boolean,
 
-    @SerializedName("online")
-    val online: Boolean)
+    @Json(name = "online")
+    val online: Boolean
+)

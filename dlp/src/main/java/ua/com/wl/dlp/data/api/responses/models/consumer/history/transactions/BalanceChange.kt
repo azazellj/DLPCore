@@ -1,51 +1,49 @@
 package ua.com.wl.dlp.data.api.responses.models.consumer.history.transactions
 
-import com.google.gson.annotations.SerializedName
-
-import ua.com.wl.dlp.data.api.responses.models.consumer.history.transactions.types.OperationType
-import ua.com.wl.dlp.data.api.responses.models.consumer.history.transactions.endpoints.OfferTransactionDetails
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 import ua.com.wl.dlp.data.api.responses.models.consumer.history.transactions.endpoints.ArticleTransactionDetails
+import ua.com.wl.dlp.data.api.responses.models.consumer.history.transactions.endpoints.OfferTransactionDetails
+import ua.com.wl.dlp.data.api.responses.models.consumer.history.transactions.types.OperationType
 
-/**
- * @author Denis Makovskyi
- */
-
+@JsonClass(generateAdapter = true)
 data class BalanceChange(
-    @SerializedName("operation_type")
+    @Json(name = "operation_type")
     val type: OperationType,
 
-    @SerializedName("id")
+    @Json(name = "id")
     val id: Int,
 
-    @SerializedName("amount")
+    @Json(name = "amount")
     val amount: Int,
 
-    @SerializedName("account")
+    @Json(name = "account")
     val account: Int,
 
-    @SerializedName("transfer")
+    @Json(name = "transfer")
     val transfer: Int,
 
-    @SerializedName("initial_value")
+    @Json(name = "initial_value")
     val initialBalance: Long,
 
-    @SerializedName("resulting_value")
+    @Json(name = "resulting_value")
     val resultingBalance: Long,
 
-    @SerializedName("initial_value_money")
+    @Json(name = "initial_value_money")
     val initialMoneyAmount: String,
 
-    @SerializedName("resulting_value_money")
+    @Json(name = "resulting_value_money")
     val resultingMoneyAmount: String,
 
-    @SerializedName("comment")
+    @Json(name = "comment")
     val comment: String?,
 
-    @SerializedName("created_at")
+    @Json(name = "created_at")
     val createdAt: String,
 
-    @SerializedName("offer")
+    @Json(name = "offer")
     val offerDetails: OfferTransactionDetails?,
 
-    @SerializedName("news_item")
-    val articleDetails: ArticleTransactionDetails?)
+    @Json(name = "news_item")
+    val articleDetails: ArticleTransactionDetails?
+)

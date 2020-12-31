@@ -1,25 +1,27 @@
 package ua.com.wl.dlp.data.api.responses.shop.chain
 
-import com.google.gson.annotations.SerializedName
-
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 import ua.com.wl.dlp.data.api.responses.models.shop.chain.Contacts
 import ua.com.wl.dlp.data.api.responses.models.shop.chain.ShopChainItem
 
+@JsonClass(generateAdapter = true)
 class ShopChainResponse(
-    @SerializedName("id")
+    @Json(name = "id")
     var id: Int = 0,
 
-    @SerializedName("name")
+    @Json(name = "name")
     var name: String = "",
 
-    @SerializedName("image")
+    @Json(name = "image")
     var image: String? = null,
 
-    @SerializedName("description")
+    @Json(name = "description")
     var description: String? = null,
 
-    @SerializedName("contacts")
+    @Json(name = "contacts")
     var chainContacts: Contacts? = null,
 
-    @SerializedName("shops")
-    var relatedShops: List<ShopChainItem>? = null)
+    @Json(name = "shops")
+    var relatedShops: List<ShopChainItem>? = null
+)

@@ -1,14 +1,13 @@
 package ua.com.wl.dlp.data.api.responses.models.another
 
-import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
-/**
- * @author Denis Makovskyi
- */
-
+@JsonClass(generateAdapter = true)
 data class NoveltyDatesRange(
-    @SerializedName("lower")
+    @Json(name = "lower")
     val lower: String,
 
-    @SerializedName("upper")
-    val upper: String)
+    @Json(name = "upper")
+    val upper: String
+)

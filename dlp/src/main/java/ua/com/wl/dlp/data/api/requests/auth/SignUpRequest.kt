@@ -1,55 +1,19 @@
 package ua.com.wl.dlp.data.api.requests.auth
 
-import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
-/**
- * @author Denis Makovskyi
- */
-
+@JsonClass(generateAdapter = true)
 data class SignUpRequest(
-    @SerializedName("city") 
+    @Json(name = "city")
     val city: Int,
-    
-    @SerializedName("mobile_phone") 
+
+    @Json(name = "mobile_phone")
     val phone: String,
-    
-    @SerializedName("password")
+
+    @Json(name = "password")
     val password: String,
-    
-    @SerializedName("barcode") 
+
+    @Json(name = "barcode")
     val barcode: String? = null
-) {
-
-    class Builder {
-
-        private var city: Int = 0
-        private var phone: String = ""
-        private var password: String = ""
-        private var barcode: String? = null
-
-        fun city(init: () -> Int) {
-            city = init()
-        }
-
-        fun phone(init: () -> String) {
-            phone = init()
-        }
-
-        fun password(init: () -> String) {
-            password = init()
-        }
-
-        fun barcode(init: () -> String?) {
-            barcode = init()
-        }
-
-        fun build(init: Builder.() -> Unit): SignUpRequest {
-            init()
-            return SignUpRequest(city, phone, password, barcode)
-        }
-    }
-}
-
-fun signUpRequest(init: SignUpRequest.Builder.() -> Unit): SignUpRequest {
-    return SignUpRequest.Builder().build(init)
-}
+)

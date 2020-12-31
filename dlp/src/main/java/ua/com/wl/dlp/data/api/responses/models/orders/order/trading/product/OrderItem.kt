@@ -1,20 +1,19 @@
 package ua.com.wl.dlp.data.api.responses.models.orders.order.trading.product
 
-import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
-/**
- * @author Denis Makovskyi
- */
-
+@JsonClass(generateAdapter = true)
 data class OrderItem(
-    @SerializedName("price")
+    @Json(name = "price")
     val price: String,
 
-    @SerializedName("quantity")
+    @Json(name = "quantity")
     val quantity: String,
 
-    @SerializedName("total_price")
+    @Json(name = "total_price")
     val totalPrice: String,
 
-    @SerializedName("product")
-    val product: OrderProduct)
+    @Json(name = "product")
+    val product: OrderProduct
+)

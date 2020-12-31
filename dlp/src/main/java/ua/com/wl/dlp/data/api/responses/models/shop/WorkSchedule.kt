@@ -2,21 +2,21 @@ package ua.com.wl.dlp.data.api.responses.models.shop
 
 import androidx.annotation.IntRange
 
-import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
-/**
- * @author Denis Makovskyi
- */
+@JsonClass(generateAdapter = true)
 data class WorkSchedule(
-    @SerializedName("id")
+    @Json(name = "id")
     val id: Int,
 
     @IntRange(from = 0L, to = 8L)
-    @SerializedName("week_day")
+    @Json(name = "week_day")
     val weekDay: Int,
 
-    @SerializedName("time_from")
+    @Json(name = "time_from")
     val timeFrom: String,
 
-    @SerializedName("time_to")
-    val timeUntil: String)
+    @Json(name = "time_to")
+    val timeUntil: String
+)

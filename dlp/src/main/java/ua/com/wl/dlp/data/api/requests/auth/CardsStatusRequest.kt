@@ -1,39 +1,13 @@
 package ua.com.wl.dlp.data.api.requests.auth
 
-import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
-/**
- * @author Denis Makovskyi
- */
-
+@JsonClass(generateAdapter = true)
 data class CardsStatusRequest(
-    @SerializedName("mobile_phone")
+    @Json(name = "mobile_phone")
     val phone: String,
-    
-    @SerializedName("password")
+
+    @Json(name = "password")
     val password: String
-) {
-
-    class Builder {
-
-        private var phone: String = ""
-        private var password: String = ""
-
-        fun phone(init: () -> String) {
-            phone = init()
-        }
-
-        fun password(init: () -> String) {
-            password = init()
-        }
-
-        fun build(init: Builder.() -> Unit): CardsStatusRequest {
-            init()
-            return CardsStatusRequest(phone, password)
-        }
-    }
-}
-
-fun cardStatusRequest(init: CardsStatusRequest.Builder.() -> Unit): CardsStatusRequest {
-    return CardsStatusRequest.Builder().build(init)
-}
+)

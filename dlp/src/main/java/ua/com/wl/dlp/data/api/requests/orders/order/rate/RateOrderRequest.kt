@@ -1,39 +1,13 @@
 package ua.com.wl.dlp.data.api.requests.orders.order.rate
 
-import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
-/**
- * @author Denis Makovskyi
- */
-
+@JsonClass(generateAdapter = true)
 data class RateOrderRequest(
-    @SerializedName("value")
+    @Json(name = "value")
     val value: Int,
 
-    @SerializedName("comment")
+    @Json(name = "comment")
     val comment: String
-) {
-
-    class Builder {
-
-        private var value: Int = 0
-        private var comment: String = ""
-
-        fun value(init: () -> Int) {
-            value = init()
-        }
-
-        fun comment(init: () -> String) {
-            comment = init()
-        }
-
-        fun build(init: Builder.() -> Unit): RateOrderRequest {
-            init()
-            return RateOrderRequest(value, comment)
-        }
-    }
-}
-
-fun rateOrderRequest(init: RateOrderRequest.Builder.() -> Unit): RateOrderRequest {
-    return RateOrderRequest.Builder().build(init)
-}
+)
