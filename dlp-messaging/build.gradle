@@ -33,7 +33,7 @@ android {
 
 dependencies {
     api project(":dlp-notificator")
-    api project(":dlp-constants")
+    implementation project(":dlp-constants")
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
 
