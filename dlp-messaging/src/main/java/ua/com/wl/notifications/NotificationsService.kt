@@ -15,10 +15,10 @@ import ua.com.wl.notifications.ext.*
 import ua.com.wl.notifications.utils.jsonToStringArray
 import ua.com.wl.notificator.data.*
 import ua.com.wl.notificator.utils.defaultNotificationSound
-import javax.inject.Inject
 
-open class NotificationsService @Inject constructor(private val gson: Gson) :
-    FirebaseMessagingService() {
+open class NotificationsService : FirebaseMessagingService() {
+
+    protected lateinit var gson: Gson
 
     var defaultNotificationAlarm: Alarm = notificationAlarm {
         sound { defaultNotificationSound() }
