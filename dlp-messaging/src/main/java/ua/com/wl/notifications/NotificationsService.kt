@@ -18,7 +18,7 @@ import ua.com.wl.notificator.utils.defaultNotificationSound
 
 open class NotificationsService : FirebaseMessagingService() {
 
-    protected lateinit var gson: Gson
+    protected open lateinit var gson: Gson
 
     var defaultNotificationAlarm: Alarm = notificationAlarm {
         sound { defaultNotificationSound() }
