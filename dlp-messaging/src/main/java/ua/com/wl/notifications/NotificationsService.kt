@@ -17,7 +17,7 @@ import ua.com.wl.notificator.data.*
 import ua.com.wl.notificator.utils.defaultNotificationSound
 import javax.inject.Inject
 
-class NotificationsService @Inject constructor(private val gson: Gson) :
+open class NotificationsService @Inject constructor(private val gson: Gson) :
     FirebaseMessagingService() {
 
     var defaultNotificationAlarm: Alarm = notificationAlarm {
@@ -131,7 +131,7 @@ class NotificationsService @Inject constructor(private val gson: Gson) :
         }.show(applicationContext)
     }
 
-    private fun createRankNotification(data: Map<String, String>) {
+    protected open fun createRankNotification(data: Map<String, String>) {
         showNotification(
             title = data[FirebaseConstants.DATA_KEY_TITLE],
             message = data[FirebaseConstants.DATA_KEY_BODY],
@@ -139,7 +139,7 @@ class NotificationsService @Inject constructor(private val gson: Gson) :
         )
     }
 
-    private fun createShopNotification(data: Map<String, String>) {
+    protected open fun createShopNotification(data: Map<String, String>) {
         data[FirebaseConstants.DATA_KEY_BODY_LOC_ARGS]?.let { json ->
             val args = jsonToStringArray(json, gson)
             if (args.size == 1) {
@@ -161,7 +161,7 @@ class NotificationsService @Inject constructor(private val gson: Gson) :
         }
     }
 
-    private fun createOfferNotification(data: Map<String, String>) {
+    protected open fun createOfferNotification(data: Map<String, String>) {
         val offerId = data[FirebaseConstants.DATA_KEY_ARG_OFFER_ID]
         if (offerId != null) {
             showNotification(
@@ -175,7 +175,7 @@ class NotificationsService @Inject constructor(private val gson: Gson) :
         }
     }
 
-    private fun createOrderNotification(data: Map<String, String>) {
+    protected open fun createOrderNotification(data: Map<String, String>) {
         data[FirebaseConstants.DATA_KEY_BODY_LOC_ARGS]?.let { json ->
             val args = jsonToStringArray(json, gson)
             if (args.size == 1) {
@@ -195,7 +195,7 @@ class NotificationsService @Inject constructor(private val gson: Gson) :
         }
     }
 
-    private fun createPreOrderNotification(data: Map<String, String>) {
+    protected open fun createPreOrderNotification(data: Map<String, String>) {
         data[FirebaseConstants.DATA_KEY_BODY_LOC_ARGS]?.let { json ->
             val args = jsonToStringArray(json, gson)
             val preOrderId = data[FirebaseConstants.DATA_KEY_ARG_PRE_ORDER_ID]
@@ -212,7 +212,7 @@ class NotificationsService @Inject constructor(private val gson: Gson) :
         }
     }
 
-    private fun createReservationNotification(data: Map<String, String>) {
+    protected open fun createReservationNotification(data: Map<String, String>) {
         data[FirebaseConstants.DATA_KEY_BODY_LOC_ARGS]?.let { json ->
             val args = jsonToStringArray(json, gson)
             if (args.size == 1) {
@@ -231,7 +231,7 @@ class NotificationsService @Inject constructor(private val gson: Gson) :
         }
     }
 
-    private fun createArticleNotification(data: Map<String, String>) {
+    protected open fun createArticleNotification(data: Map<String, String>) {
         val articleId = data[FirebaseConstants.DATA_KEY_ARG_ARTICLE_ID]
         if (articleId != null) {
             showNotification(
@@ -245,7 +245,7 @@ class NotificationsService @Inject constructor(private val gson: Gson) :
         }
     }
 
-    private fun createShopRewardNotification(data: Map<String, String>) {
+    protected open fun createShopRewardNotification(data: Map<String, String>) {
         data[FirebaseConstants.DATA_KEY_BODY_LOC_ARGS]?.let { json ->
             val args = jsonToStringArray(json, gson)
             if (args.size == 2) {
@@ -258,7 +258,7 @@ class NotificationsService @Inject constructor(private val gson: Gson) :
         }
     }
 
-    private fun createBonusesRewardNotification(data: Map<String, String>) {
+    protected open fun createBonusesRewardNotification(data: Map<String, String>) {
         data[FirebaseConstants.DATA_KEY_BODY_LOC_ARGS]?.let { json ->
             val args = jsonToStringArray(json, gson)
             if (args.size == 1) {
@@ -271,7 +271,7 @@ class NotificationsService @Inject constructor(private val gson: Gson) :
         }
     }
 
-    private fun createCashBackAccruedNotification(data: Map<String, String>) {
+    protected open fun createCashBackAccruedNotification(data: Map<String, String>) {
         data[FirebaseConstants.DATA_KEY_BODY_LOC_ARGS]?.let { json ->
             val args = jsonToStringArray(json, gson)
             if (args.size == 3) {
@@ -284,7 +284,7 @@ class NotificationsService @Inject constructor(private val gson: Gson) :
         }
     }
 
-    private fun createBirthdayCashBackNotification(data: Map<String, String>) {
+    protected open fun createBirthdayCashBackNotification(data: Map<String, String>) {
         showNotification(
             title = stringByName(data[FirebaseConstants.DATA_KEY_TITLE_LOC_KEY]),
             message = data[FirebaseConstants.DATA_KEY_BODY],
