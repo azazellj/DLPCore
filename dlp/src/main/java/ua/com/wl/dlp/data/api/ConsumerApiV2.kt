@@ -76,9 +76,9 @@ interface ConsumerApiV2 {
         @Query("page_size") count: Int? = null
     ): Response<DataResponse<NotificationsResponse>>
 
-    @POST("api/mobile/v2/consumer/data/send-code/")
+    @POST("api/mobile/v2/consumer/profile/delete/code/")
     suspend fun sendValidationCode(): Response<DataResponse<Any>>
 
-    @POST("api/mobile/v2/consumer/data/delete/")
+    @POST("api/mobile/v2/consumer/profile/delete/")
     suspend fun deleteProfile(@Body request: DeleteProfileRequest): Response<DataResponse<Any>>
 }

@@ -1,7 +1,6 @@
 package ua.com.wl.dlp.domain.interactors
 
 import retrofit2.http.Body
-import retrofit2.http.POST
 import ua.com.wl.archetype.utils.Optional
 import ua.com.wl.dlp.data.api.requests.consumer.history.notifications.NotificationsReadRequest
 import ua.com.wl.dlp.data.api.requests.consumer.profile.DeleteProfileRequest
@@ -80,20 +79,18 @@ interface ConsumerInteractor : OffersInteractor {
 
     @Deprecated(message = "This method will be removed in further revisions. Changes are caused by offer promo structure refactoring.")
     suspend fun getPromoOffers(
-        page: Int? = null, 
+        page: Int? = null,
         count: Int? = null,
         shopId: Int? = null
     ): Result<PagedResponse<BaseOfferResponse>>
 
     suspend fun getNoveltyOffers(
-        page: Int? = null, 
+        page: Int? = null,
         count: Int? = null,
         shopId: Int? = null
     ): Result<PagedResponse<BaseOfferResponse>>
 
-    @POST("api/mobile/v2/consumer/data/send-code/")
     suspend fun sendValidationCode(): Result<DataResponse<Any>>
 
-    @POST("api/mobile/v2/consumer/data/delete/")
     suspend fun deleteProfile(@Body request: DeleteProfileRequest): Result<DataResponse<Any>>
 }
