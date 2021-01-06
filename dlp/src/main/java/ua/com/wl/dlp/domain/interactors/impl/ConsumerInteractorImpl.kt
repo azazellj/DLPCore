@@ -466,7 +466,7 @@ class ConsumerInteractorImpl(
     }
 
     override suspend fun deleteProfile(request: DeleteProfileRequest): Result<DataResponse<Any>> {
-        return callApi(call = { apiV2.sendValidationCode() })
+        return callApi(call = { apiV2.deleteProfile(request = request) })
             .flatMap { dataResponseOpt ->
                 dataResponseOpt.ifPresentOrDefault(
                     { Result.Success(it) },
