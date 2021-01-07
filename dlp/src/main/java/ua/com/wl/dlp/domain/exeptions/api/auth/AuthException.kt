@@ -32,4 +32,10 @@ class AuthException(type: String?, cause: Throwable?) : ApiException(type, cause
             else -> super.getLocalizedMessage(context)
         }
     }
+
+    companion object {
+        val MAPPER: (type: String?, cause: Throwable?) -> AuthException = { type, cause ->
+            AuthException(type, cause)
+        }
+    }
 }

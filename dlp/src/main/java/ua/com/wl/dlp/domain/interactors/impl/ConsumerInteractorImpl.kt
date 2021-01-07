@@ -43,9 +43,7 @@ import ua.com.wl.dlp.domain.exeptions.api.consumer.coupons.WalletException
 import ua.com.wl.dlp.domain.exeptions.api.consumer.referral.ReferralException
 import ua.com.wl.dlp.domain.interactors.ConsumerInteractor
 import ua.com.wl.dlp.domain.interactors.OffersInteractor
-import ua.com.wl.dlp.utils.sendBroadcastMessage
-import ua.com.wl.dlp.utils.toPrefs
-import ua.com.wl.dlp.utils.updatePreOrdersCounter
+import ua.com.wl.dlp.utils.*
 
 /**
  * @author Denis Makovskyi
@@ -63,11 +61,8 @@ class ConsumerInteractorImpl(
 
     override suspend fun getInfo(): Result<BusinessResponse> {
         return callApi(call = { apiV2.getInfo() })
-            .flatMap { dataResponseOpt ->
-                dataResponseOpt.ifPresentOrDefault(
-                    { Result.Success(it.payload) },
-                    { Result.Failure(ApiException()) })
-            }.sOnSuccess { businessResponse ->
+            .fromDataResponse()
+            .sOnSuccess { businessResponse ->
                 withContext(Dispatchers.IO) {
                     consumerPreferences.businessPrefs = businessResponse.toPrefs()
                 }
@@ -76,11 +71,8 @@ class ConsumerInteractorImpl(
 
     override suspend fun getProfile(): Result<ProfileResponse> {
         return callApi(call = { apiV2.getProfile() })
-            .flatMap { dataResponseOpt ->
-                dataResponseOpt.ifPresentOrDefault(
-                    { Result.Success(it.payload) },
-                    { Result.Failure(ApiException()) })
-            }.sOnSuccess { profileResponse ->
+            .fromDataResponse()
+            .sOnSuccess { profileResponse ->
                 withContext(Dispatchers.IO) {
                     val snapshot = consumerPreferences.profilePrefs.copy()
                     consumerPreferences.profilePrefs = profileResponse.toPrefs()
@@ -93,11 +85,8 @@ class ConsumerInteractorImpl(
 
     override suspend fun updateProfile(profile: ProfileRequest): Result<ProfileResponse> {
         return callApi(call = { apiV2.updateProfile(profile) })
-            .flatMap { dataResponseOpt ->
-                dataResponseOpt.ifPresentOrDefault(
-                    { Result.Success(it.payload) },
-                    { Result.Failure(ApiException()) })
-            }.sOnSuccess { profileResponse ->
+            .fromDataResponse()
+            .sOnSuccess { profileResponse ->
                 withContext(Dispatchers.IO) {
                     val snapshot = consumerPreferences.profilePrefs.copy()
                     consumerPreferences.profilePrefs = profileResponse.toPrefs()
@@ -110,38 +99,30 @@ class ConsumerInteractorImpl(
 
     override suspend fun getRanks(language: String): Result<PagedResponse<RankResponse>> {
         return callApi(call = { apiV1.getRanks(language) })
-            .flatMap { pagedResponseOpt ->
-                pagedResponseOpt.ifPresentOrDefault(
-                    { pager ->
-                        val ranks = pager.items
-                        val currRank = ranks.find { rank -> rank.isCurrent }
-                        val currRankPriority = currRank?.priority ?: -1
-                        if (currRankPriority > -1) {
-                            ranks.forEach { rank ->
-                                if (rank.priority < currRankPriority) {
-                                    rank.wasReached = true
-                                }
-                            }
+            .fromResponse(successMapper = {
+                val ranks = it.items
+                val currRank = ranks.find { rank -> rank.isCurrent }
+                val currRankPriority = currRank?.priority ?: -1
+                if (currRankPriority > -1) {
+                    ranks.forEach { rank ->
+                        if (rank.priority < currRankPriority) {
+                            rank.wasReached = true
                         }
-                        val ranksResponse = PagedResponse(
-                            page = pager.page, countNumber = pager.count,
-                            pagesCount = pager.pagesCount, itemsCount = pager.itemsCount,
-                            nextPage = pager.nextPage, previousPage = pager.previousPage,
-                            data = ranks, perPage = pager.count, pageSize = pager.count
-                        )
-                        Result.Success(ranksResponse)
-                    },
-                    { Result.Failure(ApiException()) })
-            }
+                    }
+                }
+
+                PagedResponse(
+                    page = it.page, countNumber = it.count,
+                    pagesCount = it.pagesCount, itemsCount = it.itemsCount,
+                    nextPage = it.nextPage, previousPage = it.previousPage,
+                    data = ranks, perPage = it.count, pageSize = it.count
+                )
+            })
     }
 
     override suspend fun getRank(rankId: Int, language: String): Result<RankResponse> {
         return callApi(call = { apiV1.getRank(rankId, language) })
-            .flatMap { responseOpt ->
-                responseOpt.ifPresentOrDefault(
-                    { Result.Success(it) },
-                    { Result.Failure(ApiException()) })
-            }
+            .fromResponse()
     }
 
     override suspend fun getCurrentRank(language: String): Result<Optional<RankResponse>> {
@@ -151,7 +132,8 @@ class ConsumerInteractorImpl(
                 val nextRank = pager.items.find { rank -> rank.isNext }
                 Result.Success(
                     Optional.ofNullable(currRank) to
-                            Optional.ofNullable(nextRank))
+                            Optional.ofNullable(nextRank)
+                )
             }.sOnSuccess { (currRankOpt, nextRankOpt) ->
                 currRankOpt.sIfPresent { currRank ->
                     val nextRank = nextRankOpt.getUnsafe()
@@ -166,7 +148,8 @@ class ConsumerInteractorImpl(
                             paymentsCount = nextRank.selectionCriteria?.paymentsCount?.copy(),
                             spentMoney = nextRank.selectionCriteria?.spentMoney?.copy(),
                             spentBonuses = nextRank.selectionCriteria?.spentBonuses?.copy(),
-                            collectedBonuses = nextRank.selectionCriteria?.collectedBonuses?.copy())
+                            collectedBonuses = nextRank.selectionCriteria?.collectedBonuses?.copy()
+                        )
                     } else null
                     val currRankPermissions = RankPermissionsPrefs(
                         cashBackPercentage = currRank.permissions?.cashBackPercentage,
@@ -174,7 +157,8 @@ class ConsumerInteractorImpl(
                         isOfferSharingAllowed = currRank.permissions?.isOfferSharingAllowed,
                         isArticleSharingAllowed = currRank.permissions?.isArticleSharingAllowed,
                         isPreOrderAllowed = currRank.permissions?.isPreOrderAllowed,
-                        isTableReservationAllowed = currRank.permissions?.isTableReservationAllowed)
+                        isTableReservationAllowed = currRank.permissions?.isTableReservationAllowed
+                    )
                     withContext(Dispatchers.IO) {
                         val prevRankId = consumerPreferences.rankPrefs.id
                         consumerPreferences.rankPrefs = consumerPreferences.rankPrefs.copy(
@@ -183,7 +167,8 @@ class ConsumerInteractorImpl(
                             iconUrl = currRank.iconUrl,
                             colorHex = currRank.colorHex,
                             nextRankCriteria = nextRankCriteria,
-                            currRankPermissions = currRankPermissions)
+                            currRankPermissions = currRankPermissions
+                        )
                         if (prevRankId != currRank.id) {
                             withContext(Dispatchers.Main.immediate) {
                                 CoreBusEventsFactory.rankChanged(currRank.id)
@@ -196,11 +181,7 @@ class ConsumerInteractorImpl(
 
     override suspend fun getGroups(): Result<CollectionResponse<GroupResponse>> {
         return callApi(call = { apiV2.getGroups() })
-            .flatMap { collectionResponseOpt ->
-                collectionResponseOpt.ifPresentOrDefault(
-                    { Result.Success(it) },
-                    { Result.Failure(ApiException()) })
-            }
+            .fromResponse()
     }
 
     override suspend fun getCoupons(
@@ -208,43 +189,29 @@ class ConsumerInteractorImpl(
         count: Int?
     ): Result<PagedResponse<CouponResponse>> {
         return callApi(call = { apiV2.getCoupons(page, count) })
-            .flatMap { pagedResponseOpt ->
-                pagedResponseOpt.ifPresentOrDefault(
-                    { Result.Success(it.payload) },
-                    { Result.Failure(ApiException()) })
-            }
+            .fromDataResponse()
     }
 
     override suspend fun getCoupon(id: Int): Result<CouponResponse> {
         return callApi(call = { apiV2.getCoupon(id) })
-            .flatMap { dataResponseOpt ->
-                dataResponseOpt.ifPresentOrDefault(
-                    { Result.Success(it.payload) },
-                    { Result.Failure(ApiException()) })
-            }
+            .fromDataResponse()
     }
 
     override suspend fun addCouponToWallet(id: Int, barcode: String): Result<CouponWalletResponse> {
         return callApi(
             call = { apiV2.addCouponToWallet(id, barcode) },
             errorMapper = { type, cause -> WalletException(type, cause) }
-        ).flatMap { dataResponseOpt ->
-            dataResponseOpt.ifPresentOrDefault(
-                { Result.Success(it.payload) },
-                { Result.Failure(ApiException()) })
-        }
+        ).fromDataResponse()
     }
 
     override suspend fun getQrCode(): Result<QrCodeResponse> {
         return callApi(call = { apiV2.getQrCode() })
-            .flatMap { dataResponseOpt ->
-                dataResponseOpt.ifPresentOrDefault(
-                    { Result.Success(it.payload) },
-                    { Result.Failure(ApiException()) })
-            }.sOnSuccess { qrResponse ->
+            .fromDataResponse()
+            .sOnSuccess { qrResponse ->
                 withContext(Dispatchers.IO) {
                     val snapshot = consumerPreferences.profilePrefs.copy()
-                    consumerPreferences.profilePrefs = consumerPreferences.profilePrefs.copy(qrCode = qrResponse.qrCode)
+                    consumerPreferences.profilePrefs =
+                        consumerPreferences.profilePrefs.copy(qrCode = qrResponse.qrCode)
                     withContext(Dispatchers.Main.immediate) {
                         notifyProfileChanges(snapshot)
                     }
@@ -256,30 +223,25 @@ class ConsumerInteractorImpl(
         return callApi(
             call = { apiV2.useInviteCode(request) },
             errorMapper = { type, cause -> ReferralException(type, cause) }
-        ).flatMap { dataResponseOpt ->
-            dataResponseOpt.ifPresentOrDefault(
-                { Result.Success(it.payload) },
-                { Result.Failure(ApiException()) })
-        }.sOnSuccess { inviteResponse ->
-            withContext(Dispatchers.IO) {
-                val snapshot = consumerPreferences.profilePrefs.copy()
-                consumerPreferences.profilePrefs = consumerPreferences.profilePrefs.copy(
-                    balance = inviteResponse.balance,
-                    inviteCode = inviteResponse.inviteCode)
-                withContext(Dispatchers.Main.immediate) {
-                    notifyProfileChanges(snapshot)
+        )
+            .fromDataResponse()
+            .sOnSuccess { inviteResponse ->
+                withContext(Dispatchers.IO) {
+                    val snapshot = consumerPreferences.profilePrefs.copy()
+                    consumerPreferences.profilePrefs = consumerPreferences.profilePrefs.copy(
+                        balance = inviteResponse.balance,
+                        inviteCode = inviteResponse.inviteCode
+                    )
+                    withContext(Dispatchers.Main.immediate) {
+                        notifyProfileChanges(snapshot)
+                    }
                 }
             }
-        }
     }
 
     override suspend fun markNotificationsAsRead(request: NotificationsReadRequest): Result<Boolean> {
         return callApi(call = { apiV2.markNotificationsAsRead(request) })
-            .flatMap { responseOpt ->
-                responseOpt.ifPresentOrDefault(
-                    { Result.Success(it.isSuccessfully()) },
-                    { Result.Failure(ApiException()) })
-            }
+            .fromResponse(successMapper = { it.isSuccessfully() })
     }
 
     override suspend fun feedback(
@@ -304,11 +266,7 @@ class ConsumerInteractorImpl(
         )
 
         return callApi(call = { apiV1.feedback(request) })
-            .flatMap { responseOpt ->
-                responseOpt.ifPresentOrDefault(
-                    { Result.Success(it) },
-                    { Result.Failure(ApiException()) })
-            }
+            .fromResponse()
     }
 
     override suspend fun getTransactionsHistory(
@@ -316,11 +274,7 @@ class ConsumerInteractorImpl(
         count: Int?
     ): Result<PagedResponse<TransactionResponse>> {
         return callApi(call = { apiV2.getTransactionsHistory(page, count) })
-            .flatMap { dataResponseOpt ->
-                dataResponseOpt.ifPresentOrDefault(
-                    { Result.Success(it.payload) },
-                    { Result.Failure(ApiException()) })
-            }
+            .fromDataResponse()
     }
 
     override suspend fun getNotificationsHistory(
@@ -328,11 +282,7 @@ class ConsumerInteractorImpl(
         count: Int?
     ): Result<NotificationsResponse> {
         return callApi(call = { apiV2.getNotificationsHistory(page, count) })
-            .flatMap { dataResponseOpt ->
-                dataResponseOpt.ifPresentOrDefault(
-                    { Result.Success(it.payload) },
-                    { Result.Failure(ApiException()) })
-            }
+            .fromDataResponse()
     }
 
     override suspend fun getPromoOffers(
@@ -346,7 +296,8 @@ class ConsumerInteractorImpl(
                     { pager ->
                         if (shopId != null) {
                             updatePreOrdersCounter(
-                                shopId, pager.items, shopsDataSource, Dispatchers.IO)
+                                shopId, pager.items, shopsDataSource, Dispatchers.IO
+                            )
                         }
                         Result.Success(pager)
                     },
@@ -365,7 +316,8 @@ class ConsumerInteractorImpl(
                     { pager ->
                         if (shopId != null) {
                             updatePreOrdersCounter(
-                                shopId, pager.items, shopsDataSource, Dispatchers.IO)
+                                shopId, pager.items, shopsDataSource, Dispatchers.IO
+                            )
                         }
                         Result.Success(pager)
                     },
@@ -378,49 +330,57 @@ class ConsumerInteractorImpl(
         if (snapshot.firstName != consumerPreferences.profilePrefs.firstName) {
             val change = ProfileBusEvent.Change(
                 true, ProfileBusEvent.Field.FIRST_NAME,
-                ProfileBusEvent.FieldValue.StringValue(consumerPreferences.profilePrefs.firstName))
+                ProfileBusEvent.FieldValue.StringValue(consumerPreferences.profilePrefs.firstName)
+            )
             changes.add(change)
         }
         if (snapshot.patronymic != consumerPreferences.profilePrefs.patronymic) {
             val change = ProfileBusEvent.Change(
                 true, ProfileBusEvent.Field.PATRONYMIC,
-                ProfileBusEvent.FieldValue.StringValue(consumerPreferences.profilePrefs.patronymic))
+                ProfileBusEvent.FieldValue.StringValue(consumerPreferences.profilePrefs.patronymic)
+            )
             changes.add(change)
         }
         if (snapshot.lastName != consumerPreferences.profilePrefs.lastName) {
             val change = ProfileBusEvent.Change(
                 true, ProfileBusEvent.Field.LAST_NAME,
-                ProfileBusEvent.FieldValue.StringValue(consumerPreferences.profilePrefs.lastName))
+                ProfileBusEvent.FieldValue.StringValue(consumerPreferences.profilePrefs.lastName)
+            )
             changes.add(change)
         }
         if (snapshot.city != consumerPreferences.profilePrefs.city) {
             val change = ProfileBusEvent.Change(
                 true, ProfileBusEvent.Field.CITY,
-                ProfileBusEvent.FieldValue.CityObjectValue(consumerPreferences.profilePrefs.city))
+                ProfileBusEvent.FieldValue.CityObjectValue(consumerPreferences.profilePrefs.city)
+            )
             changes.add(change)
         }
         if (snapshot.phone != consumerPreferences.profilePrefs.phone) {
             val change = ProfileBusEvent.Change(
                 true, ProfileBusEvent.Field.PHONE,
-                ProfileBusEvent.FieldValue.StringValue(consumerPreferences.profilePrefs.phone))
+                ProfileBusEvent.FieldValue.StringValue(consumerPreferences.profilePrefs.phone)
+            )
             changes.add(change)
         }
         if (snapshot.email != consumerPreferences.profilePrefs.email) {
             val change = ProfileBusEvent.Change(
                 true, ProfileBusEvent.Field.EMAIL,
-                ProfileBusEvent.FieldValue.StringValue(consumerPreferences.profilePrefs.email))
+                ProfileBusEvent.FieldValue.StringValue(consumerPreferences.profilePrefs.email)
+            )
             changes.add(change)
         }
         if (snapshot.gender != consumerPreferences.profilePrefs.gender) {
             val change = ProfileBusEvent.Change(
                 true, ProfileBusEvent.Field.GENDER,
-                ProfileBusEvent.FieldValue.GenderObjectValue(consumerPreferences.profilePrefs.gender))
+                ProfileBusEvent.FieldValue.GenderObjectValue(consumerPreferences.profilePrefs.gender)
+            )
             changes.add(change)
         }
         if (snapshot.birthDate != consumerPreferences.profilePrefs.birthDate) {
             val change = ProfileBusEvent.Change(
                 true, ProfileBusEvent.Field.BIRTH_DATE,
-                ProfileBusEvent.FieldValue.StringValue(consumerPreferences.profilePrefs.birthDate))
+                ProfileBusEvent.FieldValue.StringValue(consumerPreferences.profilePrefs.birthDate)
+            )
             changes.add(change)
         }
         if (snapshot.balance != consumerPreferences.profilePrefs.balance) {
@@ -429,31 +389,36 @@ class ConsumerInteractorImpl(
             }
             val change = ProfileBusEvent.Change(
                 true, ProfileBusEvent.Field.BALANCE,
-                ProfileBusEvent.FieldValue.LongValue(consumerPreferences.profilePrefs.balance))
+                ProfileBusEvent.FieldValue.LongValue(consumerPreferences.profilePrefs.balance)
+            )
             changes.add(change)
         }
         if (snapshot.moneyAmount != consumerPreferences.profilePrefs.moneyAmount) {
             val change = ProfileBusEvent.Change(
                 true, ProfileBusEvent.Field.MONEY_AMOUNT,
-                ProfileBusEvent.FieldValue.StringValue(consumerPreferences.profilePrefs.moneyAmount))
+                ProfileBusEvent.FieldValue.StringValue(consumerPreferences.profilePrefs.moneyAmount)
+            )
             changes.add(change)
         }
         if (snapshot.qrCode != consumerPreferences.profilePrefs.qrCode) {
             val change = ProfileBusEvent.Change(
                 true, ProfileBusEvent.Field.QR_CODE,
-                ProfileBusEvent.FieldValue.StringValue(consumerPreferences.profilePrefs.qrCode))
+                ProfileBusEvent.FieldValue.StringValue(consumerPreferences.profilePrefs.qrCode)
+            )
             changes.add(change)
         }
         if (snapshot.inviteCode != consumerPreferences.profilePrefs.inviteCode) {
             val change = ProfileBusEvent.Change(
                 true, ProfileBusEvent.Field.INVITE_CODE,
-                ProfileBusEvent.FieldValue.StringValue(consumerPreferences.profilePrefs.inviteCode))
+                ProfileBusEvent.FieldValue.StringValue(consumerPreferences.profilePrefs.inviteCode)
+            )
             changes.add(change)
         }
         if (snapshot.referralCode != consumerPreferences.profilePrefs.referralCode) {
             val change = ProfileBusEvent.Change(
                 true, ProfileBusEvent.Field.REFERRAL_CODE,
-                ProfileBusEvent.FieldValue.StringValue(consumerPreferences.profilePrefs.referralCode))
+                ProfileBusEvent.FieldValue.StringValue(consumerPreferences.profilePrefs.referralCode)
+            )
             changes.add(change)
         }
         CoreBusEventsFactory.profileChanges(changes)

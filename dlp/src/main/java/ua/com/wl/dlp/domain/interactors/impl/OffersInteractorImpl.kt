@@ -17,6 +17,7 @@ import ua.com.wl.dlp.domain.Result
 import ua.com.wl.dlp.domain.UseCase
 import ua.com.wl.dlp.domain.exeptions.api.ApiException
 import ua.com.wl.dlp.domain.interactors.OffersInteractor
+import ua.com.wl.dlp.utils.mapIsSuccessfully
 import ua.com.wl.dlp.utils.sendBroadcastMessage
 import ua.com.wl.dlp.utils.processBalanceChanges
 import ua.com.wl.dlp.utils.updatePreOrdersCounter
@@ -35,11 +36,8 @@ class OffersInteractorImpl(
 
     override suspend fun addOfferToFavourites(offerId: Int): Result<Boolean> {
         return callApi(call = { apiV1.addOfferToFavourite(offerId) })
-            .map { responseOpt ->
-                responseOpt.ifPresentOrDefault(
-                    { it.isSuccessfully() },
-                    { false })
-            }.sOnSuccess { isSuccess ->
+            .mapIsSuccessfully()
+            .sOnSuccess { isSuccess ->
                 if (isSuccess) {
                     withContext(Dispatchers.Main.immediate) {
                         CoreBusEventsFactory.offerFavouriteStatus(
@@ -52,11 +50,8 @@ class OffersInteractorImpl(
 
     override suspend fun removeOfferFromFavourites(offerId: Int): Result<Boolean> {
         return callApi(call = { apiV1.removeOfferFromFavourite(offerId) })
-            .map { responseOpt ->
-                responseOpt.ifPresentOrDefault(
-                    { it.isSuccessfully() },
-                    { false })
-            }.sOnSuccess { isSuccess ->
+            .mapIsSuccessfully()
+            .sOnSuccess { isSuccess ->
                 if (isSuccess) {
                     withContext(Dispatchers.Main.immediate) {
                         CoreBusEventsFactory.offerFavouriteStatus(

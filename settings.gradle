@@ -1,4 +1,3 @@
-include ':app'
 include ':dlp'
 include ':dlp-ktx'
 include ':dlp-archetype'

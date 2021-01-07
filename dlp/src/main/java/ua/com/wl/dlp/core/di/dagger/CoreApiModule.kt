@@ -38,18 +38,18 @@ open class CoreApiModule {
     @Singleton
     @Named(Constants.DI_NAMED_URL)
     open fun provideBaseUrl(metaData: Bundle): String {
-        return metaData.getString(Constants.META_PRODUCTION_URL)
-            ?: throw IllegalStateException("Server url was not found")
+        return metaData.getString(Constants.META_BASE_URL)
+            ?: throw IllegalStateException("Set ua.com.wl.dlp.base.url in manifest.")
     }
 
     @Provides
     @Singleton
     @Named(Constants.DI_NAMED_APP_IDS)
     open fun provideAppIds(context: Application, metaData: Bundle): List<String> {
-        return when (val metaValue = metaData.get(Constants.META_PRODUCTION_APP_IDS)) {
+        return when (val metaValue = metaData.get(Constants.META_APP_IDS)) {
             is Int -> context.resources.getStringArray(metaValue).toList()
-            is String -> listOf(metaValue)
-            else -> throw IllegalStateException("Application id was not found")
+            is String -> throw IllegalStateException("Migrate app ids to string array.")
+            else -> throw IllegalStateException("Set ua.com.wl.dlp.app_ids in manifest.")
         }
     }
 

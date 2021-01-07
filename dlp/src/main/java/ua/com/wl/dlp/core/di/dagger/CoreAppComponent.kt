@@ -28,11 +28,3 @@ interface CoreAppComponent {
         fun build(): CoreAppComponent
     }
 }
-
-//@Component
-//interface RealAppComponent : CoreAppComponent {
-//    @Component.Builder
-//    interface RealAppComponentBuilder : CoreAppComponent.CoreAppComponentBuilder {
-//        override fun build(): RealAppComponent
-//    }
-//}
