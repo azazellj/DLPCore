@@ -22,7 +22,7 @@ ext {
     lifecycleVersion = '2.2.0'
     rxJavaVersion = "2.2.20"
     rxAndroidVersion = "2.1.1"
-    roomVersion = '2.2.5'
+    roomVersion = '2.2.6'
     workVersion = '2.4.0'
     daggerVersion = '2.29.1'
     okhttpVersion = '4.9.0'
