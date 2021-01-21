@@ -4,6 +4,9 @@ plugins {
     id('maven-publish')
 }
 
+group = "io.uployal"
+version = "1.0"
+
 android {
     compileSdkVersion 30
     buildToolsVersion "30.0.2"
