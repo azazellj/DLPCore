@@ -63,3 +63,16 @@ dependencies {
     implementation "com.squareup.moshi:moshi-adapters:$moshiVersion"
     kapt "com.squareup.moshi:moshi-kotlin-codegen:$moshiVersion"
 }
+
+afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+                from components.release
+                groupId = 'io.uployal'
+                artifactId = 'core'
+                version = "1.0"
+            }
+        }
+    }
+}
