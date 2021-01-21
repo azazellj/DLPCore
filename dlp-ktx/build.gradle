@@ -26,3 +26,16 @@ android {
 dependencies {
     api project(":dlp")
 }
+
+afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+                from components.release
+                groupId = 'io.uployal'
+                artifactId = 'core-ktx'
+                version = "1.0"
+            }
+        }
+    }
+}

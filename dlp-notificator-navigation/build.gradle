@@ -34,3 +34,16 @@ dependencies {
 
     implementation "androidx.navigation:navigation-fragment-ktx:$navigationVersion"
 }
+
+afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+                from components.release
+                groupId = 'io.uployal'
+                artifactId = 'notificator-navigation'
+                version = "1.0"
+            }
+        }
+    }
+}

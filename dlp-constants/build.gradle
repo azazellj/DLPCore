@@ -30,3 +30,16 @@ dependencies {
     // Kotlin
     implementation "org.jetbrains.kotlin:kotlin-stdlib"
 }
+
+afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+                from components.release
+                groupId = 'io.uployal'
+                artifactId = 'constants'
+                version = "1.0"
+            }
+        }
+    }
+}

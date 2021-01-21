@@ -38,3 +38,16 @@ dependencies {
 
     api "com.google.firebase:firebase-messaging:$firebaseMessagingVersion"
 }
+
+afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+                from components.release
+                groupId = 'io.uployal'
+                artifactId = 'messaging'
+                version = "1.0"
+            }
+        }
+    }
+}
