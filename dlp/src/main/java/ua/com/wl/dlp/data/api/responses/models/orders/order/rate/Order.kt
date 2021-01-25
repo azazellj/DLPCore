@@ -1,11 +1,14 @@
 package ua.com.wl.dlp.data.api.responses.models.orders.order.rate
 
+import android.os.Parcelable
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import kotlinx.parcelize.Parcelize
 
 import ua.com.wl.dlp.data.api.models.shop.SimpleShop
 
 @JsonClass(generateAdapter = true)
+@Parcelize
 data class Order(
     @Json(name = "id")
     val id: Int,
@@ -24,4 +27,4 @@ data class Order(
 
     @Json(name = "shop")
     val shop: SimpleShop
-)
+) : Parcelable

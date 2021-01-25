@@ -2,10 +2,12 @@ package ua.com.wl.dlp.data.api.responses.news
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import kotlinx.parcelize.Parcelize
 
 import ua.com.wl.dlp.data.api.responses.models.social.SocialNetwork
 
 @JsonClass(generateAdapter = true)
+@Parcelize
 data class ArticleResponse(
     @Json(name = "description")
     val description: String,

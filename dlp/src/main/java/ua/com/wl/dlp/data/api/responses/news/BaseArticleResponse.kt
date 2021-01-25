@@ -1,9 +1,12 @@
 package ua.com.wl.dlp.data.api.responses.news
 
+import android.os.Parcelable
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import kotlinx.parcelize.Parcelize
 
 @JsonClass(generateAdapter = true)
+@Parcelize
 open class BaseArticleResponse(
     @Json(name = "id")
     var id: Int = 0,
@@ -22,4 +25,4 @@ open class BaseArticleResponse(
 
     @Json(name = "publication_end_date")
     var publicationEndDate: String = ""
-)
+) : Parcelable
