@@ -21,7 +21,7 @@ import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
-open class CoreApiModule {
+abstract class CoreApiModule {
 
     @Provides
     @Singleton
@@ -34,24 +34,22 @@ open class CoreApiModule {
 
     // - Host url and app id from manifest meta data
 
-    @Provides
-    @Singleton
-    @Named(Constants.DI_NAMED_URL)
-    open fun provideBaseUrl(metaData: Bundle): String {
+    open fun getBaseUrlFromManifest(metaData: Bundle): String {
         return metaData.getString(Constants.META_BASE_URL)
             ?: throw IllegalStateException("Set ua.com.wl.dlp.base.url in manifest.")
     }
 
-    @Provides
-    @Singleton
-    @Named(Constants.DI_NAMED_APP_IDS)
-    open fun provideAppIds(context: Application, metaData: Bundle): List<String> {
+    fun getAppIdsFromManifest(context: Application, metaData: Bundle): List<String> {
         return when (val metaValue = metaData.get(Constants.META_APP_IDS)) {
             is Int -> context.resources.getStringArray(metaValue).toList()
             is String -> throw IllegalStateException("Migrate app ids to string array.")
             else -> throw IllegalStateException("Set ua.com.wl.dlp.app_ids in manifest.")
         }
     }
+
+    abstract fun provideBaseUrl()
+
+    abstract fun provideAppIds()
 
     // - Interceptors
 
