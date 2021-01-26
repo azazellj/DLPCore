@@ -1,12 +1,15 @@
 package ua.com.wl.dlp.data.api.responses.shop.offer
 
+import android.os.Parcelable
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import kotlinx.parcelize.Parcelize
 import ua.com.wl.dlp.data.api.responses.models.another.NoveltyDatesRange
 import ua.com.wl.dlp.data.api.responses.models.shop.offer.item.OfferItem
 import ua.com.wl.dlp.data.api.responses.models.shop.offer.promo.PromoSettings
 
 @JsonClass(generateAdapter = true)
+@Parcelize
 open class BaseOfferResponse(
     @Json(name = "id")
     var id: Int = 0,
@@ -94,4 +97,4 @@ open class BaseOfferResponse(
 
     @Json(name = "novelty_date_range")
     var noveltyDatesRange: NoveltyDatesRange? = null
-)
+) : Parcelable

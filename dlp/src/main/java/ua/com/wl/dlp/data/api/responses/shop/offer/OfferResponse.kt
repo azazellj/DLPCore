@@ -2,9 +2,11 @@ package ua.com.wl.dlp.data.api.responses.shop.offer
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import kotlinx.parcelize.Parcelize
 import ua.com.wl.dlp.data.api.responses.models.social.SocialNetwork
 
 @JsonClass(generateAdapter = true)
+@Parcelize
 data class OfferResponse(
     @Json(name = "tags")
     val tags: String,

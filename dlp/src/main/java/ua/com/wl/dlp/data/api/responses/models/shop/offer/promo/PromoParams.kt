@@ -1,10 +1,13 @@
 package ua.com.wl.dlp.data.api.responses.models.shop.offer.promo
 
+import android.os.Parcelable
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import kotlinx.parcelize.Parcelize
 
 @Deprecated(message = "This class will be removed in further revisions. Changes are caused by offer promo structure refactoring.")
 @JsonClass(generateAdapter = true)
+@Parcelize
 data class PromoParams(
     @Json(name = "gift_name")
     val giftName: String? = null,
@@ -29,4 +32,4 @@ data class PromoParams(
 
     @Json(name = "exclusive_cash_back_size")
     val cashBackSize: Long? = null
-)
+) : Parcelable
