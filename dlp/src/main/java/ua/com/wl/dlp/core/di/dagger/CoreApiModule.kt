@@ -38,19 +38,33 @@ open class CoreApiModule {
     @Singleton
     @Named(Constants.DI_NAMED_URL)
     open fun provideBaseUrl(metaData: Bundle): String {
+        val baseUrl = provideBaseUrl()
+        if (baseUrl != null) return baseUrl
+
         return metaData.getString(Constants.META_BASE_URL)
             ?: throw IllegalStateException("Set ua.com.wl.dlp.base.url in manifest.")
+    }
+
+    open fun provideBaseUrl(): String? {
+        return null
     }
 
     @Provides
     @Singleton
     @Named(Constants.DI_NAMED_APP_IDS)
     open fun provideAppIds(context: Application, metaData: Bundle): List<String> {
+        val appIds = provideAppIds()
+        if (appIds.isNotEmpty()) return appIds
+
         return when (val metaValue = metaData.get(Constants.META_APP_IDS)) {
             is Int -> context.resources.getStringArray(metaValue).toList()
             is String -> throw IllegalStateException("Migrate app ids to string array.")
             else -> throw IllegalStateException("Set ua.com.wl.dlp.app_ids in manifest.")
         }
+    }
+
+    open fun provideAppIds(): List<String> {
+        return emptyList()
     }
 
     // - Interceptors
