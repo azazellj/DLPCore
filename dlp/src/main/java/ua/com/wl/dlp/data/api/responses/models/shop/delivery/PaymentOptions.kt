@@ -10,4 +10,7 @@ class PaymentOptions(
     val delivery: PaymentOption?,
 
     @SerializedName("TAKEAWAY")
-    val takeaway: PaymentOption?)
+    val takeaway: PaymentOption?,
+
+    @SerializedName("IN_PLACE")
+    val inShop : PaymentOption?)

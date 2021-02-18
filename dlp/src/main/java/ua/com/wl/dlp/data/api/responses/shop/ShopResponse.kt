@@ -29,7 +29,7 @@ data class ShopResponse(
     @SerializedName("delivery_minimal_sum")
     val deliveryMinAmount: String?,
 
-    @SerializedName("delivery_payment_options")
+    @SerializedName("delivery_payment")
     val deliveryPaymentOptions: PaymentOptions,
 
     @SerializedName("delivery_prices")
