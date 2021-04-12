@@ -9,5 +9,7 @@ data class PaymentOptions(
     val delivery: PaymentOption?,
 
     @Json(name = "TAKEAWAY")
-    val takeaway: PaymentOption?
-)
+    val takeaway: PaymentOption?,
+
+    @Json(name = "IN_PLACE")
+    val inShop : PaymentOption?)

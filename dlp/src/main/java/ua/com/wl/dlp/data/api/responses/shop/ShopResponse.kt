@@ -26,7 +26,7 @@ data class ShopResponse(
     @Json(name = "delivery_minimal_sum")
     val deliveryMinAmount: String?,
 
-    @Json(name = "delivery_payment_options")
+    @Json(name = "delivery_payment")
     val deliveryPaymentOptions: PaymentOptions,
 
     @Json(name = "delivery_prices")

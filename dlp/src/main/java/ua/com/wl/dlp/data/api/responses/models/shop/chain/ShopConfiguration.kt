@@ -2,6 +2,7 @@ package ua.com.wl.dlp.data.api.responses.models.shop.chain
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import ua.com.wl.dlp.data.api.responses.models.shop.delivery.PaymentOptions
 
 /**
  * @author Oleh "MADCAT" Rysniuk
@@ -25,6 +26,12 @@ data class ShopConfiguration(
 
     @Json(name = "cash_back_percentage")
     var cashBackPercentage: Int,
+
+    @Json(name = "delivery_payment")
+    val deliveryPaymentOptions: PaymentOptions,
+
+    @Json(name = "delivery_minimal_sum")
+    val deliveryMinimalSum: Double,
 
     @Json(name = "payment_online_available")
     var isPaymentOnlineAvailable: Boolean = false
