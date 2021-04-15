@@ -96,12 +96,21 @@ open class CoreApiModule {
     }
 
     @Provides
-    open fun provideOkHttpClientBuilder(): OkHttpClient.Builder {
+    open fun provideOkHttpClientBuilder(context: Application): OkHttpClient.Builder {
         return OkHttpClient.Builder()
             .connectTimeout(TimeUnit.SECONDS.toMillis(10), TimeUnit.SECONDS)
             .readTimeout(TimeUnit.SECONDS.toMillis(10), TimeUnit.SECONDS)
             .followRedirects(false)
-            .followSslRedirects(false)
+            .followSslRedirects(false).apply {
+                modifyOkHttpClientBuilder(context, this)
+            }
+    }
+
+    open fun modifyOkHttpClientBuilder(
+        context: Application,
+        builder: OkHttpClient.Builder
+    ): OkHttpClient.Builder {
+        return builder
     }
 
     @Provides
