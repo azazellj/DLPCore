@@ -1,6 +1,7 @@
 package ua.com.wl.dlp.core.di.dagger
 
 import android.app.Application
+import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Bundle
 import com.squareup.moshi.Moshi
@@ -53,7 +54,7 @@ open class CoreApiModule {
     @Singleton
     @Named(Constants.DI_NAMED_APP_IDS)
     open fun provideAppIds(context: Application, metaData: Bundle): List<String> {
-        val appIds = provideAppIds()
+        val appIds = provideAppIds(context)
         if (appIds.isNotEmpty()) return appIds
 
         return when (val metaValue = metaData.get(Constants.META_APP_IDS)) {
@@ -63,7 +64,7 @@ open class CoreApiModule {
         }
     }
 
-    open fun provideAppIds(): List<String> {
+    open fun provideAppIds(context: Context): List<String> {
         return emptyList()
     }
 
