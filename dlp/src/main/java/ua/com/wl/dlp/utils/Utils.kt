@@ -11,7 +11,7 @@ import ua.com.wl.dlp.data.events.prefs.ProfileBusEvent
 import ua.com.wl.dlp.data.db.entities.shops.OfferEntity
 import ua.com.wl.dlp.data.db.datasources.ShopsDataSource
 import ua.com.wl.dlp.data.prefereces.ConsumerPreferences
-import ua.com.wl.dlp.data.api.responses.shop.offer.BaseOfferResponse
+import ua.com.wl.dlp.data.api.responses.shop.offer.OfferResponse
 import ua.com.wl.dlp.data.api.responses.models.shop.offer.promo.PromoType
 import ua.com.wl.dlp.data.api.responses.models.consumer.history.transactions.BalanceChange
 
@@ -86,7 +86,7 @@ suspend fun processBalanceChanges(
 
 internal suspend fun updatePreOrdersCounter(
     shopId: Int,
-    offersList: List<BaseOfferResponse>,
+    offersList: List<OfferResponse>,
     shopsDataSource: ShopsDataSource,
     coroutineDispatcher: CoroutineDispatcher
 ) {
@@ -99,7 +99,7 @@ internal suspend fun updatePreOrdersCounter(
 
 internal suspend fun updatePreOrdersCounter(
     shopId: Int,
-    offerResponse: BaseOfferResponse,
+    offerResponse: OfferResponse,
     shopsDataSource: ShopsDataSource,
     coroutineDispatcher: CoroutineDispatcher
 ) {

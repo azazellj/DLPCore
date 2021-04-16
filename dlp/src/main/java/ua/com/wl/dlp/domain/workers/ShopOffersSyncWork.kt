@@ -10,7 +10,7 @@ import android.content.Context
 import androidx.work.*
 
 import ua.com.wl.dlp.data.db.entities.shops.OfferEntity
-import ua.com.wl.dlp.data.api.responses.shop.offer.BaseOfferResponse
+import ua.com.wl.dlp.data.api.responses.shop.offer.OfferResponse
 import ua.com.wl.dlp.domain.interactors.ShopInteractor
 import ua.com.wl.dlp.utils.Failure
 import ua.com.wl.dlp.utils.Success
@@ -98,7 +98,7 @@ class ShopOffersSyncWork(
         shopInteractor.populatePersistedOffersPrice(shopId)
     }
 
-    private suspend fun updatePersistedOffer(offer: BaseOfferResponse) {
+    private suspend fun updatePersistedOffer(offer: OfferResponse) {
         shopInteractor.updatePersistedOffer(shopId, offer)
             .onFailure {
                 outputs.putBoolean(ERROR_KEY_WHEN_WRITE_IN_DB, true)

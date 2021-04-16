@@ -6,7 +6,7 @@ import retrofit2.http.*
 import ua.com.wl.dlp.data.api.responses.PagedResponse
 import ua.com.wl.dlp.data.api.responses.shop.ShopResponse
 import ua.com.wl.dlp.data.api.responses.shop.CityShopsResponse
-import ua.com.wl.dlp.data.api.responses.shop.offer.BaseOfferResponse
+import ua.com.wl.dlp.data.api.responses.shop.offer.OfferResponse
 
 /**
  * @author Denis Makovskyi
@@ -30,7 +30,7 @@ interface ShopApiV1 {
         @Query("page") page: Int? = null,
         @Query("page_size") count: Int? = null,
         @Query("rubric_ids") rubricId: String? = null
-    ): Response<PagedResponse<BaseOfferResponse>>
+    ): Response<PagedResponse<OfferResponse>>
 
     @GET("api/mobile/v1/consumer/offers/find/{shop_id}/")
     suspend fun findOffers(
@@ -38,7 +38,7 @@ interface ShopApiV1 {
         @Query("q") query: String,
         @Query("page") page: Int? = null,
         @Query("page_size") count: Int? = null
-    ): Response<PagedResponse<BaseOfferResponse>>
+    ): Response<PagedResponse<OfferResponse>>
 
     @Deprecated(message = "This method will be removed in further revisions. Changes are caused by offer promo structure refactoring.")
     @GET("api/mobile/v1/consumer/shops/{shop_id}/promo-offers/")
@@ -46,19 +46,19 @@ interface ShopApiV1 {
         @Path("shop_id") shopId: Int,
         @Query("page") page: Int? = null,
         @Query("page_size") count: Int? = null
-    ): Response<PagedResponse<BaseOfferResponse>>
+    ): Response<PagedResponse<OfferResponse>>
 
     @GET("api/mobile/v1/consumer/shops/{shop_id}/novelty-offers/")
     suspend fun getNoveltyOffers(
         @Path("shop_id") shopId: Int,
         @Query("page") page: Int? = null,
         @Query("page_size") count: Int? = null
-    ): Response<PagedResponse<BaseOfferResponse>>
+    ): Response<PagedResponse<OfferResponse>>
 
     @GET("api/mobile/v1/consumer/favorite-offers/shop/{shop_id}/")
     suspend fun getFavouriteOffers(
         @Path("shop_id") shopId: Int,
         @Query("page") page: Int? = null,
         @Query("page_size") count: Int? = null
-    ): Response<PagedResponse<BaseOfferResponse>>
+    ): Response<PagedResponse<OfferResponse>>
 }

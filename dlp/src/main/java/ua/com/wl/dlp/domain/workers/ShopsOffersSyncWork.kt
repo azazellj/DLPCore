@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.work.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import ua.com.wl.dlp.data.api.responses.shop.offer.BaseOfferResponse
+import ua.com.wl.dlp.data.api.responses.shop.offer.OfferResponse
 import ua.com.wl.dlp.data.db.entities.shops.OfferEntity
 import ua.com.wl.dlp.domain.interactors.ShopInteractor
 import ua.com.wl.dlp.utils.Failure
@@ -77,7 +77,7 @@ class ShopsOffersSyncWork(
         shopInteractor.get().populatePersistedOffersPrice(shopId)
     }
 
-    private suspend fun updatePersistedOffer(shopId: Int, offer: BaseOfferResponse) {
+    private suspend fun updatePersistedOffer(shopId: Int, offer: OfferResponse) {
         shopInteractor.get().updatePersistedOffer(shopId, offer)
             .onFailure {
                 outputs.putBoolean(ERROR_KEY_WHEN_WRITE_IN_DB, true)

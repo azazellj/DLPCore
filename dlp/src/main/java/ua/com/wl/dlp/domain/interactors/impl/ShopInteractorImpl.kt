@@ -11,7 +11,7 @@ import ua.com.wl.dlp.data.api.responses.PagedResponse
 import ua.com.wl.dlp.data.api.responses.shop.CityShopsResponse
 import ua.com.wl.dlp.data.api.responses.shop.ShopResponse
 import ua.com.wl.dlp.data.api.responses.shop.chain.ShopChainResponse
-import ua.com.wl.dlp.data.api.responses.shop.offer.BaseOfferResponse
+import ua.com.wl.dlp.data.api.responses.shop.offer.OfferResponse
 import ua.com.wl.dlp.data.api.responses.shop.rubric.RubricResponse
 import ua.com.wl.dlp.data.db.DbErrorKeys
 import ua.com.wl.dlp.data.db.datasources.ShopsDataSource
@@ -96,7 +96,7 @@ class ShopInteractorImpl(
         page: Int?,
         count: Int?,
         rubricId: String?
-    ): Result<PagedResponse<BaseOfferResponse>> {
+    ): Result<PagedResponse<OfferResponse>> {
         return callApi(call = { apiV1.getOffers(shopId, page, count, rubricId) })
             .sFlatMap { pagedResponseOpt ->
                 pagedResponseOpt.sIfPresentOrDefault(
@@ -115,7 +115,7 @@ class ShopInteractorImpl(
         query: String,
         page: Int?,
         count: Int?
-    ): Result<PagedResponse<BaseOfferResponse>> {
+    ): Result<PagedResponse<OfferResponse>> {
         return callApi(call = { apiV1.findOffers(shopId, query, page, count) })
             .sFlatMap { pagedResponseOpt ->
                 pagedResponseOpt.sIfPresentOrDefault(
@@ -133,7 +133,7 @@ class ShopInteractorImpl(
         shopId: Int,
         page: Int?,
         count: Int?
-    ): Result<PagedResponse<BaseOfferResponse>> {
+    ): Result<PagedResponse<OfferResponse>> {
         return callApi(call = { apiV1.getPromoOffers(shopId, page, count) })
             .sFlatMap { pagedResponseOpt ->
                 pagedResponseOpt.sIfPresentOrDefault(
@@ -151,7 +151,7 @@ class ShopInteractorImpl(
         shopId: Int,
         page: Int?,
         count: Int?
-    ): Result<PagedResponse<BaseOfferResponse>> {
+    ): Result<PagedResponse<OfferResponse>> {
         return callApi(call = { apiV1.getNoveltyOffers(shopId, page, count) })
             .sFlatMap { pagedResponseOpt ->
                 pagedResponseOpt.sIfPresentOrDefault(
@@ -169,7 +169,7 @@ class ShopInteractorImpl(
         shopId: Int,
         page: Int?,
         count: Int?
-    ): Result<PagedResponse<BaseOfferResponse>> {
+    ): Result<PagedResponse<OfferResponse>> {
         return callApi(call = { apiV1.getFavouriteOffers(shopId, page, count) })
             .sFlatMap { pagedResponseOpt ->
                 pagedResponseOpt.sIfPresentOrDefault(
@@ -247,7 +247,7 @@ class ShopInteractorImpl(
 
     override suspend fun updatePersistedOffer(
         shopId: Int,
-        offer: BaseOfferResponse
+        offer: OfferResponse
     ): Result<Boolean> {
         return callQuery(call = { shopsDataSource.getOrder(offer.id, shopId) })
             .sFlatMap { orderEntityOpt ->
@@ -305,7 +305,7 @@ class ShopInteractorImpl(
 
     override suspend fun incrementPreOrderCounter(
         shopId: Int,
-        offer: BaseOfferResponse
+        offer: OfferResponse
     ): Result<OfferEntity> {
         return callQuery(call = { shopsDataSource.getShop(shopId) })
             .sFlatMap { shopEntityOpt ->
@@ -458,7 +458,7 @@ class ShopInteractorImpl(
 
     override suspend fun decrementPreOrderCounter(
         shopId: Int,
-        offer: BaseOfferResponse
+        offer: OfferResponse
     ): Result<OfferEntity> {
         return callQuery(call = { shopsDataSource.getShop(shopId) })
             .sFlatMap { shopEntityOpt ->

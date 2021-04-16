@@ -7,7 +7,7 @@ import ua.com.wl.dlp.data.api.models.shop.SimpleShop
 import ua.com.wl.dlp.data.api.responses.models.another.NoveltyDatesRange
 import ua.com.wl.dlp.data.api.responses.models.consumer.coupons.CouponStatus
 import ua.com.wl.dlp.data.api.responses.models.consumer.coupons.CouponType
-import ua.com.wl.dlp.data.api.responses.shop.offer.BaseOfferResponse
+import ua.com.wl.dlp.data.api.responses.shop.offer.OfferResponse
 
 @JsonClass(generateAdapter = true)
 data class CouponResponse(
@@ -48,7 +48,7 @@ data class CouponResponse(
     val monetaryAvailable: String?,
 
     @Json(name = "offer")
-    val offer: BaseOfferResponse?,
+    val offer: OfferResponse?,
 
     @Json(name = "date_range")
     val dateRange: NoveltyDatesRange?,

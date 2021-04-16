@@ -2,12 +2,11 @@ package ua.com.wl.dlp.data.api
 
 import retrofit2.Response
 import retrofit2.http.*
-
 import ua.com.wl.dlp.data.api.requests.consumer.feedback.FeedbackRequest
 import ua.com.wl.dlp.data.api.responses.PagedResponse
-import ua.com.wl.dlp.data.api.responses.consumer.ranks.RankResponse
 import ua.com.wl.dlp.data.api.responses.consumer.feedback.FeedbackResponse
-import ua.com.wl.dlp.data.api.responses.shop.offer.BaseOfferResponse
+import ua.com.wl.dlp.data.api.responses.consumer.ranks.RankResponse
+import ua.com.wl.dlp.data.api.responses.shop.offer.OfferResponse
 
 /**
  * @author Denis Makovskyi
@@ -33,11 +32,11 @@ interface ConsumerApiV1 {
     suspend fun getPromoOffers(
         @Query("page") page: Int? = null,
         @Query("page_size") count: Int? = null
-    ): Response<PagedResponse<BaseOfferResponse>>
+    ): Response<PagedResponse<OfferResponse>>
 
     @GET("api/mobile/v1/consumer/novelty-offers/")
     suspend fun getNoveltyOffers(
         @Query("page") page: Int? = null,
         @Query("page_size") count: Int? = null
-    ): Response<PagedResponse<BaseOfferResponse>>
+    ): Response<PagedResponse<OfferResponse>>
 }

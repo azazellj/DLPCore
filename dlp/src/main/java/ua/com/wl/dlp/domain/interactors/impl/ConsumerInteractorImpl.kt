@@ -28,7 +28,7 @@ import ua.com.wl.dlp.data.api.responses.consumer.profile.ProfileResponse
 import ua.com.wl.dlp.data.api.responses.consumer.ranks.RankResponse
 import ua.com.wl.dlp.data.api.responses.consumer.referral.InvitationResponse
 import ua.com.wl.dlp.data.api.responses.consumer.referral.QrCodeResponse
-import ua.com.wl.dlp.data.api.responses.shop.offer.BaseOfferResponse
+import ua.com.wl.dlp.data.api.responses.shop.offer.OfferResponse
 import ua.com.wl.dlp.data.db.datasources.ShopsDataSource
 import ua.com.wl.dlp.data.events.factory.CoreBusEventsFactory
 import ua.com.wl.dlp.data.events.prefs.ProfileBusEvent
@@ -289,7 +289,7 @@ class ConsumerInteractorImpl(
         page: Int?,
         count: Int?,
         shopId: Int?
-    ): Result<PagedResponse<BaseOfferResponse>> {
+    ): Result<PagedResponse<OfferResponse>> {
         return callApi(call = { apiV1.getPromoOffers(page, count) })
             .sFlatMap { pagedResponseOpt ->
                 pagedResponseOpt.sIfPresentOrDefault(
@@ -309,7 +309,7 @@ class ConsumerInteractorImpl(
         page: Int?,
         count: Int?,
         shopId: Int?
-    ): Result<PagedResponse<BaseOfferResponse>> {
+    ): Result<PagedResponse<OfferResponse>> {
         return callApi(call = { apiV1.getNoveltyOffers(page, count) })
             .sFlatMap { pagedResponseOpt ->
                 pagedResponseOpt.sIfPresentOrDefault(

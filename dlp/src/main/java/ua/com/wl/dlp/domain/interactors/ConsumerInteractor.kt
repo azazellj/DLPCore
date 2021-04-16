@@ -20,7 +20,7 @@ import ua.com.wl.dlp.data.api.responses.consumer.profile.ProfileResponse
 import ua.com.wl.dlp.data.api.responses.consumer.ranks.RankResponse
 import ua.com.wl.dlp.data.api.responses.consumer.referral.InvitationResponse
 import ua.com.wl.dlp.data.api.responses.consumer.referral.QrCodeResponse
-import ua.com.wl.dlp.data.api.responses.shop.offer.BaseOfferResponse
+import ua.com.wl.dlp.data.api.responses.shop.offer.OfferResponse
 import ua.com.wl.dlp.domain.Result
 import java.util.*
 
@@ -82,13 +82,13 @@ interface ConsumerInteractor : OffersInteractor {
         page: Int? = null,
         count: Int? = null,
         shopId: Int? = null
-    ): Result<PagedResponse<BaseOfferResponse>>
+    ): Result<PagedResponse<OfferResponse>>
 
     suspend fun getNoveltyOffers(
         page: Int? = null,
         count: Int? = null,
         shopId: Int? = null
-    ): Result<PagedResponse<BaseOfferResponse>>
+    ): Result<PagedResponse<OfferResponse>>
 
     suspend fun sendValidationCode(): Result<DataResponse<Any>>
 

@@ -5,7 +5,7 @@ import ua.com.wl.dlp.data.prefereces.models.BusinessPrefs
 import ua.com.wl.dlp.data.db.entities.shops.OfferEntity
 import ua.com.wl.dlp.data.db.entities.shops.embedded.offer.OfferEntityPromoParams
 import ua.com.wl.dlp.data.db.entities.shops.embedded.offer.OfferEntityPromoSettings
-import ua.com.wl.dlp.data.api.responses.shop.offer.BaseOfferResponse
+import ua.com.wl.dlp.data.api.responses.shop.offer.OfferResponse
 import ua.com.wl.dlp.data.api.responses.consumer.info.BusinessResponse
 import ua.com.wl.dlp.data.api.responses.consumer.profile.ProfileResponse
 
@@ -30,7 +30,7 @@ fun BusinessResponse.toPrefs(): BusinessPrefs {
         feedbackEmail, applicationLink)
 }
 
-fun BaseOfferResponse.toOfferEntity(shopId: Int, count: Int = 0): OfferEntity {
+fun OfferResponse.toOfferEntity(shopId: Int, count: Int = 0): OfferEntity {
     val entityPromoParams = OfferEntityPromoParams(
         promoSettings?.promoParams?.giftName,
         promoSettings?.promoParams?.salePrice,

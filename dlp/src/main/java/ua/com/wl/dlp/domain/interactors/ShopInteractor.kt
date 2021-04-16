@@ -10,8 +10,8 @@ import ua.com.wl.dlp.data.api.responses.DataResponse
 import ua.com.wl.dlp.data.api.responses.shop.ShopResponse
 import ua.com.wl.dlp.data.api.responses.shop.CityShopsResponse
 import ua.com.wl.dlp.data.api.responses.shop.rubric.RubricResponse
-import ua.com.wl.dlp.data.api.responses.shop.offer.BaseOfferResponse
 import ua.com.wl.dlp.data.api.responses.shop.chain.ShopChainResponse
+import ua.com.wl.dlp.data.api.responses.shop.offer.OfferResponse
 import ua.com.wl.dlp.data.db.entities.shops.ShopEntity
 import ua.com.wl.dlp.data.db.entities.shops.OfferEntity
 import ua.com.wl.dlp.domain.Result
@@ -58,33 +58,33 @@ interface ShopInteractor : OffersInteractor {
         page: Int? = null,
         count: Int? = null,
         rubricId: String? = null
-    ): Result<PagedResponse<BaseOfferResponse>>
+    ): Result<PagedResponse<OfferResponse>>
 
     suspend fun findOffers(
         shopId: Int,
         query: String,
         page: Int? = null,
         count: Int? = null
-    ): Result<PagedResponse<BaseOfferResponse>>
+    ): Result<PagedResponse<OfferResponse>>
 
     @Deprecated(message = "This method will be removed in further revisions. Changes are caused by offer promo structure refactoring.")
     suspend fun getPromoOffers(
         shopId: Int,
         page: Int? = null,
         count: Int? = null
-    ): Result<PagedResponse<BaseOfferResponse>>
+    ): Result<PagedResponse<OfferResponse>>
 
     suspend fun getNoveltyOffers(
         shopId: Int,
         page: Int? = null,
         count: Int? = null
-    ): Result<PagedResponse<BaseOfferResponse>>
+    ): Result<PagedResponse<OfferResponse>>
 
     suspend fun getFavouriteOffers(
         shopId: Int,
         page: Int? = null,
         count: Int? = null
-    ): Result<PagedResponse<BaseOfferResponse>>
+    ): Result<PagedResponse<OfferResponse>>
 
     suspend fun getPersistedShop(shopId: Int): Result<Optional<ShopEntity>>
 
@@ -102,17 +102,17 @@ interface ShopInteractor : OffersInteractor {
 
     suspend fun getPersistedOffers(shopId: Int): Result<List<OfferEntity>>
 
-    suspend fun updatePersistedOffer(shopId: Int, offer: BaseOfferResponse): Result<Boolean>
+    suspend fun updatePersistedOffer(shopId: Int, offer: OfferResponse): Result<Boolean>
 
     suspend fun deletePreOrders(): Result<Boolean>
 
     suspend fun incrementPreOrderCounter(shopId: Int, offerId: Int): Result<OfferEntity>
 
-    suspend fun incrementPreOrderCounter(shopId: Int, offer: BaseOfferResponse): Result<OfferEntity>
+    suspend fun incrementPreOrderCounter(shopId: Int, offer: OfferResponse): Result<OfferEntity>
 
     suspend fun decrementPreOrderCounter(shopId: Int, offerId: Int): Result<OfferEntity>
 
-    suspend fun decrementPreOrderCounter(shopId: Int, offer: BaseOfferResponse): Result<OfferEntity>
+    suspend fun decrementPreOrderCounter(shopId: Int, offer: OfferResponse): Result<OfferEntity>
 
     suspend fun populatePersistedOffersPrice(shopId: Int? = null)
 }

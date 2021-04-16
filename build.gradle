@@ -28,7 +28,7 @@ ext {
     daggerVersion = '2.30.1'
     okhttpVersion = '4.9.0'
     retrofitVersion = '2.9.0'
-    moshiVersion = '1.11.0'
+    moshiVersion = '1.12.0'
     firebaseMessagingVersion = '21.0.1'
     gsonVersion = '2.8.6'
 }
