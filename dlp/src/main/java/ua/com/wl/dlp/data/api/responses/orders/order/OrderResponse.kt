@@ -18,7 +18,7 @@ data class OrderResponse(
     var id: Int = 0,
 
     @Json(name = "opened_at")
-    var openedAt: String = "",
+    var openedAt: String? = "",
 
     @Json(name = "closed_at")
     var closedAt: String = "",
