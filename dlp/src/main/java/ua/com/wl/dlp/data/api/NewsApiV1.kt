@@ -10,6 +10,7 @@ import ua.com.wl.dlp.data.api.responses.PagedResponse
 import ua.com.wl.dlp.data.api.responses.news.ArticleResponse
 import ua.com.wl.dlp.data.api.responses.news.BaseArticleResponse
 import ua.com.wl.dlp.data.api.responses.consumer.history.transactions.BalanceChangeResponse
+import ua.com.wl.dlp.data.api.responses.news.BaseArticlePagedResponse
 
 /**
  * @author Denis Makovskyi
@@ -22,14 +23,14 @@ interface NewsApiV1 {
     suspend fun getCityNewsFeed(
         @Query("page") page: Int? = null,
         @Query("page_size") count: Int? = null
-    ): Response<PagedResponse<BaseArticleResponse>>
+    ): Response<BaseArticlePagedResponse>
 
     @GET("api/mobile/v1/consumer/news/feed/shop/{shop_id}/")
     suspend fun getShopNewsFeed(
         @Path("shop_id") shopId: Int,
         @Query("page") page: Int? = null,
         @Query("page_size") count: Int? = null
-    ): Response<PagedResponse<BaseArticleResponse>>
+    ): Response<BaseArticlePagedResponse>
 
     @GET("api/mobile/v1/consumer/news/{item_id}/")
     suspend fun getArticle(@Path("item_id") id: Int): Response<ArticleResponse>
