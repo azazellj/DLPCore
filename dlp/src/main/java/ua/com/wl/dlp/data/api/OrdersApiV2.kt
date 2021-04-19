@@ -8,7 +8,6 @@ import ua.com.wl.dlp.data.api.requests.orders.order.pre_order.GeneralPreOrderReq
 import ua.com.wl.dlp.data.api.responses.DataResponse
 import ua.com.wl.dlp.data.api.responses.PagedResponse
 import ua.com.wl.dlp.data.api.responses.orders.order.OrderResponse
-import ua.com.wl.dlp.data.api.responses.orders.order.BaseOrderResponse
 import ua.com.wl.dlp.data.api.responses.orders.order.pre_order.PreOrderResponse
 import ua.com.wl.dlp.data.api.responses.orders.order.pre_order.BasePreOrderResponse
 import ua.com.wl.dlp.data.api.responses.orders.order.pre_order.GeneralPreOrderResponse
@@ -23,7 +22,7 @@ interface OrdersApiV2 {
     suspend fun getOrders(
         @Query("page") page: Int? = null,
         @Query("page_size") count: Int? = null
-    ): Response<DataResponse<PagedResponse<BaseOrderResponse>>>
+    ): Response<DataResponse<PagedResponse<OrderResponse>>>
 
     @GET("api/mobile/v2/order/{order_id}/")
     suspend fun getOrder(@Path("order_id") orderId: Int): Response<DataResponse<OrderResponse>>

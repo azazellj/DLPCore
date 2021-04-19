@@ -1,9 +1,6 @@
 package ua.com.wl.dlp.domain.interactors
 
-import retrofit2.http.Path
-import ua.com.wl.dlp.data.api.responses.CollectionResponse
 import ua.com.wl.dlp.data.api.responses.PagedResponse
-import ua.com.wl.dlp.data.api.responses.orders.order.BaseOrderResponse
 import ua.com.wl.dlp.data.api.responses.promotion.PromotionsResponse
 import ua.com.wl.dlp.domain.Result
 import java.util.*

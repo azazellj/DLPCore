@@ -24,7 +24,7 @@ interface OrdersInteractor {
     suspend fun getOrders(
         page: Int? = null,
         count: Int? = null
-    ): Result<PagedResponse<BaseOrderResponse>>
+    ): Result<PagedResponse<OrderResponse>>
 
     suspend fun getOrder(orderId: Int): Result<OrderResponse>
 
