@@ -20,9 +20,9 @@ class BaseArticlePagedResponse(
      * merged fields for items.
      */
     @Json(name = "data")
-    override val data: List<BaseArticleResponse> = listOf(),
+    override val data: List<ArticleResponse> = listOf(),
     @Json(name = "results")
-    override val results: List<BaseArticleResponse> = listOf(),
+    override val results: List<ArticleResponse> = listOf(),
     /**
      * merged fields for count.
      */
@@ -32,7 +32,7 @@ class BaseArticlePagedResponse(
     override val perPage: Int? = null,
     @Json(name = "page_size")
     override val pageSize: Int? = null
-) : PagedResponse<BaseArticleResponse>(
+) : PagedResponse<ArticleResponse>(
     page = page,
     pagesCount = pagesCount,
     itemsCount = itemsCount,

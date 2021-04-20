@@ -9,8 +9,6 @@ import ua.com.wl.dlp.data.api.errors.ErrorsMapper
 import ua.com.wl.dlp.data.api.responses.PagedResponse
 import ua.com.wl.dlp.data.api.responses.consumer.history.transactions.BalanceChangeResponse
 import ua.com.wl.dlp.data.api.responses.news.ArticleResponse
-import ua.com.wl.dlp.data.api.responses.news.BaseArticlePagedResponse
-import ua.com.wl.dlp.data.api.responses.news.BaseArticleResponse
 import ua.com.wl.dlp.data.events.factory.CoreBusEventsFactory
 import ua.com.wl.dlp.data.prefereces.ConsumerPreferences
 import ua.com.wl.dlp.domain.Result
@@ -35,7 +33,7 @@ class NewsFeedInteractorImpl(
     override suspend fun getCityNewsFeed(
         page: Int?,
         count: Int?
-    ): Result<PagedResponse<BaseArticleResponse>> {
+    ): Result<PagedResponse<ArticleResponse>> {
         return callApi(call = { apiV1.getCityNewsFeed(page, count) })
             .fromResponse()
     }
@@ -44,7 +42,7 @@ class NewsFeedInteractorImpl(
         shopId: Int,
         page: Int?,
         count: Int?
-    ): Result<PagedResponse<BaseArticleResponse>> {
+    ): Result<PagedResponse<ArticleResponse>> {
         return callApi(call = { apiV1.getShopNewsFeed(shopId, page, count) })
             .fromResponse()
     }

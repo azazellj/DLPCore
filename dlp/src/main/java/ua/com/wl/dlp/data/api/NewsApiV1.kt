@@ -5,11 +5,8 @@ import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.Query
-
-import ua.com.wl.dlp.data.api.responses.PagedResponse
-import ua.com.wl.dlp.data.api.responses.news.ArticleResponse
-import ua.com.wl.dlp.data.api.responses.news.BaseArticleResponse
 import ua.com.wl.dlp.data.api.responses.consumer.history.transactions.BalanceChangeResponse
+import ua.com.wl.dlp.data.api.responses.news.ArticleResponse
 import ua.com.wl.dlp.data.api.responses.news.BaseArticlePagedResponse
 
 /**
