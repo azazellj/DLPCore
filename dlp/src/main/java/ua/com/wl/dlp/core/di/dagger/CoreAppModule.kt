@@ -6,6 +6,7 @@ import dagger.Module
 import dagger.Provides
 import retrofit2.Converter
 import retrofit2.converter.moshi.MoshiConverterFactory
+import ua.com.wl.dlp.data.api.responses.models.consumer.profile.GenderAdapter
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -18,7 +19,9 @@ open class CoreAppModule {
     @Provides
     @Singleton
     open fun provideMoshi(): Moshi {
-        return Moshi.Builder().build()
+        return Moshi.Builder()
+            .add(GenderAdapter)
+            .build()
     }
 
     @Provides
