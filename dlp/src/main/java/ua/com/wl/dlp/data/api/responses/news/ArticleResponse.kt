@@ -16,7 +16,7 @@ data class ArticleResponse(
     val isPromo: Boolean,
 
     @Json(name = "in_favorite")
-    val isFavourite: Boolean,
+    val isFavourite: Boolean? = null,
 
     @Json(name = "payed_per_view")
     val payedPerView: Boolean,
