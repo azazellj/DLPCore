@@ -4,6 +4,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 import ua.com.wl.dlp.data.api.models.consumer.profile.ProfileOperation
+import ua.com.wl.dlp.data.api.responses.consumer.history.transactions.TransactionResponse
 import ua.com.wl.dlp.data.api.responses.models.auth.City
 import ua.com.wl.dlp.data.api.responses.models.consumer.profile.Gender
 
@@ -67,5 +68,5 @@ data class ProfileResponse(
     val notificationToken: String,
 
     @Json(name = "balance_changes")
-    val transactions: List<ProfileOperation>? = emptyList()
+    val transactions: List<TransactionResponse>? = emptyList()
 )

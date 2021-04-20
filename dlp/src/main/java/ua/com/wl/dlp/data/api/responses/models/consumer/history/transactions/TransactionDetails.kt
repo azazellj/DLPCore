@@ -23,14 +23,14 @@ data class TransactionDetails(
     val comment: String?,
 
     @Json(name = "shop")
-    val shopDetails: ShopTransactionsDetails?,
+    val shopDetails: ShopTransactionsDetails? = null,
 
     @Json(name = "offer")
-    val offerDetails: OfferTransactionDetails?,
+    val offerDetails: OfferTransactionDetails? = null,
 
     @Json(name = "order")
-    val orderDetails: OrderTransactionDetails?,
+    val orderDetails: OrderTransactionDetails? = null,
 
     @Json(name = "news_item")
-    val articleDetails: ArticleTransactionDetails?
+    val articleDetails: ArticleTransactionDetails? = null
 )
