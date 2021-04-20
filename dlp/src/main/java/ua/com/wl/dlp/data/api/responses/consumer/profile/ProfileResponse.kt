@@ -19,16 +19,16 @@ data class ProfileResponse(
     val lastName: String,
 
     @Json(name = "gender")
-    val gender: Gender?,
+    val gender: Gender? = null,
 
     @Json(name = "birth_date")
-    val birthDate: String?,
+    val birthDate: String? = null,
 
     @Json(name = "is_married")
-    val isMarried: Boolean?,
+    val isMarried: Boolean? = null,
 
     @Json(name = "city")
-    val city: City?,
+    val city: City? = null,
 
     @Json(name = "address")
     val address: String,
