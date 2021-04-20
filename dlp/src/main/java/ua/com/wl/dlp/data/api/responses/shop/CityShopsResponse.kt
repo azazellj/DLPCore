@@ -15,5 +15,5 @@ data class CityShopsResponse(
     val isNativeCity: Boolean,
 
     @Json(name = "shops")
-    val shops: List<BaseShopResponse>
+    val shops: List<ShopResponse>
 )
