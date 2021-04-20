@@ -67,5 +67,5 @@ data class ProfileResponse(
     val notificationToken: String,
 
     @Json(name = "balance_changes")
-    val transactions: List<ProfileOperation>
+    val transactions: List<ProfileOperation>? = emptyList()
 )
