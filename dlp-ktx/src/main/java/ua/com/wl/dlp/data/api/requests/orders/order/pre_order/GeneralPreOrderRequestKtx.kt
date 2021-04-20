@@ -1,10 +1,10 @@
 package ua.com.wl.dlp.data.api.requests.orders.order.pre_order
 
-import ua.com.wl.dlp.data.api.models.orders.order.pre_order.BasePreOrderInfo
+import ua.com.wl.dlp.data.api.responses.models.orders.order.pre_order.PreOrderInfo
 import ua.com.wl.dlp.data.api.requests.models.orders.order.pre_order.BasePreOrderInfoBuilder
 
 class GeneralPreOrderRequestBuilder {
-    private var info: BasePreOrderInfo? = null
+    private var info: PreOrderInfo? = null
     private val preOrders: MutableList<SinglePreOrderRequest> = mutableListOf()
 
     fun info(init: BasePreOrderInfoBuilder.() -> Unit) {

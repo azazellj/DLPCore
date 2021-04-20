@@ -2,9 +2,8 @@ package ua.com.wl.dlp.data.api.requests.orders.order.pre_order
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-
-import ua.com.wl.dlp.data.api.models.orders.order.pre_order.BasePreOrderInfo
 import ua.com.wl.dlp.data.api.requests.models.orders.order.pre_order.PreOrderItem
+import ua.com.wl.dlp.data.api.responses.models.orders.order.pre_order.PreOrderInfo
 
 @JsonClass(generateAdapter = true)
 class SinglePreOrderRequest(
@@ -33,5 +32,5 @@ class SinglePreOrderRequest(
 
     // SinglePreOrderRequest fields
     @Json(name = "info")
-    val info: BasePreOrderInfo? = null
+    val info: PreOrderInfo? = null
 )

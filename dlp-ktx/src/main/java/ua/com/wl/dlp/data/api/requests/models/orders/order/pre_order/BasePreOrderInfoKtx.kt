@@ -1,9 +1,9 @@
 package ua.com.wl.dlp.data.api.requests.models.orders.order.pre_order
 
-import ua.com.wl.dlp.data.api.models.orders.order.pre_order.BasePreOrderInfo
 import ua.com.wl.dlp.data.api.models.orders.order.pre_order.DeliveryType
 import ua.com.wl.dlp.data.api.models.orders.order.pre_order.OperatorCall
 import ua.com.wl.dlp.data.api.models.orders.order.pre_order.PaymentMethod
+import ua.com.wl.dlp.data.api.responses.models.orders.order.pre_order.PreOrderInfo
 
 class BasePreOrderInfoBuilder {
     private var deliveryType: DeliveryType = DeliveryType.TAKEAWAY
@@ -62,16 +62,24 @@ class BasePreOrderInfoBuilder {
         operatorCall = init()
     }
 
-    fun build(init: BasePreOrderInfoBuilder.() -> Unit): BasePreOrderInfo {
+    fun build(init: BasePreOrderInfoBuilder.() -> Unit): PreOrderInfo {
         init()
-        return BasePreOrderInfo(
-            deliveryType, streetName, houseNumber, houseEntrance,
-            intercomCode, floorNumber, officeNumber, personsQuantity,
-            paymentMethod, paymentBanknote, operatorCall
+        return PreOrderInfo(
+            deliveryType = deliveryType,
+            streetName = streetName,
+            houseNumber = houseNumber,
+            houseEntrance = houseEntrance,
+            intercomCode = intercomCode,
+            floorNumber = floorNumber,
+            officeNumber = officeNumber,
+            personsQuantity = personsQuantity,
+            paymentMethod = paymentMethod,
+            paymentBanknote = paymentBanknote,
+            operatorCall = operatorCall
         )
     }
 }
 
-fun basePreOrderInfo(init: BasePreOrderInfoBuilder.() -> Unit): BasePreOrderInfo {
+fun basePreOrderInfo(init: BasePreOrderInfoBuilder.() -> Unit): PreOrderInfo {
     return BasePreOrderInfoBuilder().build(init)
 }
