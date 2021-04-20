@@ -40,11 +40,16 @@ open class MultiPreOrderRequestBuilder {
         receipt.add(PreOrderItemBuilder().build(init))
     }
 
-    fun build(init: MultiPreOrderRequestBuilder.() -> Unit): MultiPreOrderRequest {
+    fun build(init: MultiPreOrderRequestBuilder.() -> Unit): SinglePreOrderRequest {
         init()
-        return MultiPreOrderRequest(
-            shopId, readinessDate, readinessTime,
-            useBonuses, bonusesCount, comment, receipt
+        return SinglePreOrderRequest(
+            shopId = shopId,
+            readinessDate = readinessDate,
+            readinessTime = readinessTime,
+            useBonuses = useBonuses,
+            bonusesCount = bonusesCount,
+            comment = comment,
+            receipt = receipt
         )
     }
 }

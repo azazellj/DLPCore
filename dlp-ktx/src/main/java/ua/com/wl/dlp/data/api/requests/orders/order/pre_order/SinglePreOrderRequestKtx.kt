@@ -10,16 +10,16 @@ class SinglePreOrderRequestBuilder : MultiPreOrderRequestBuilder() {
         info = BasePreOrderInfoBuilder().build(init)
     }
 
-    fun build(init: SinglePreOrderRequestBuilder.() -> Unit): SinglePreOrderRequest {
+    fun buildSingle(init: SinglePreOrderRequestBuilder.() -> Unit): SinglePreOrderRequest {
         init()
         return SinglePreOrderRequest(
-            info, shopId, readinessDate,
-            readinessTime, useBonuses,
-            bonusesCount, comment, receipt
+            info = info, shopId = shopId, readinessDate = readinessDate,
+            readinessTime = readinessTime, useBonuses = useBonuses,
+            bonusesCount = bonusesCount, comment = comment, receipt = receipt
         )
     }
 }
 
 fun preOrderRequest(init: SinglePreOrderRequestBuilder.() -> Unit): SinglePreOrderRequest {
-    return SinglePreOrderRequestBuilder().build(init)
+    return SinglePreOrderRequestBuilder().buildSingle(init)
 }

@@ -11,5 +11,5 @@ data class GeneralPreOrderRequest(
     val info: BasePreOrderInfo?,
 
     @Json(name = "pre_orders")
-    val preOrders: List<MultiPreOrderRequest>
+    val preOrders: List<SinglePreOrderRequest>
 )

@@ -11,7 +11,6 @@ import ua.com.wl.dlp.data.api.requests.orders.order.rate.RateOrderRequest
 import ua.com.wl.dlp.data.api.requests.orders.table.TableReservationRequest
 import ua.com.wl.dlp.data.api.responses.PagedResponse
 import ua.com.wl.dlp.data.api.responses.orders.order.OrderResponse
-import ua.com.wl.dlp.data.api.responses.orders.order.pre_order.BasePreOrderResponse
 import ua.com.wl.dlp.data.api.responses.orders.order.pre_order.GeneralPreOrderResponse
 import ua.com.wl.dlp.data.api.responses.orders.order.pre_order.PreOrderResponse
 import ua.com.wl.dlp.data.api.responses.orders.order.rate.BaseOrderRateResponse
@@ -92,7 +91,7 @@ class OrdersInteractorImpl(
     override suspend fun getPreOrders(
         page: Int?,
         count: Int?
-    ): Result<PagedResponse<BasePreOrderResponse>> {
+    ): Result<PagedResponse<PreOrderResponse>> {
         return callApi(call = { apiV2.getPreOrders(page, count) })
             .fromDataResponse()
     }

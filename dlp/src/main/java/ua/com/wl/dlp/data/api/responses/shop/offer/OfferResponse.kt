@@ -12,7 +12,7 @@ import ua.com.wl.dlp.data.api.responses.models.social.SocialNetwork
 @JsonClass(generateAdapter = true)
 @Parcelize
 data class OfferResponse(
-    // OfferResponse fields
+    // BaseOfferResponse fields
     @Json(name = "id")
     var id: Int = 0,
 

@@ -8,21 +8,30 @@ import ua.com.wl.dlp.data.api.requests.models.orders.order.pre_order.PreOrderIte
 
 @JsonClass(generateAdapter = true)
 class SinglePreOrderRequest(
+    // MultiPreOrderRequest fields
+
+    @Json(name = "shop")
+    val shopId: Int,
+
+    @Json(name = "readiness_date")
+    val readinessDate: String,
+
+    @Json(name = "readiness_time")
+    val readinessTime: String,
+
+    @Json(name = "pay_with_bonuses")
+    val useBonuses: Boolean?,
+
+    @Json(name = "count_of_bonuses")
+    val bonusesCount: Long?,
+
+    @Json(name = "comment")
+    val comment: String?,
+
+    @Json(name = "receipt")
+    val receipt: List<PreOrderItem>,
+
+    // SinglePreOrderRequest fields
     @Json(name = "info")
-    val info: BasePreOrderInfo?,
-    shopId: Int,
-    readinessDate: String,
-    readinessTime: String,
-    useBonuses: Boolean?,
-    bonusesCount: Long?,
-    comment: String?,
-    receipt: List<PreOrderItem>
-) : MultiPreOrderRequest(
-    shopId,
-    readinessDate,
-    readinessTime,
-    useBonuses,
-    bonusesCount,
-    comment,
-    receipt
+    val info: BasePreOrderInfo? = null
 )
