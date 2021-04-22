@@ -1,20 +1,17 @@
 package ua.com.wl.dlp.domain.interactors
 
-import java.util.*
-
 import ua.com.wl.archetype.utils.Optional
-
-import ua.com.wl.dlp.data.api.responses.PagedResponse
 import ua.com.wl.dlp.data.api.responses.CollectionResponse
-import ua.com.wl.dlp.data.api.responses.DataResponse
-import ua.com.wl.dlp.data.api.responses.shop.ShopResponse
+import ua.com.wl.dlp.data.api.responses.PagedResponse
 import ua.com.wl.dlp.data.api.responses.shop.CityShopsResponse
-import ua.com.wl.dlp.data.api.responses.shop.rubric.RubricResponse
+import ua.com.wl.dlp.data.api.responses.shop.ShopResponse
 import ua.com.wl.dlp.data.api.responses.shop.chain.ShopChainResponse
 import ua.com.wl.dlp.data.api.responses.shop.offer.OfferResponse
-import ua.com.wl.dlp.data.db.entities.shops.ShopEntity
+import ua.com.wl.dlp.data.api.responses.shop.rubric.RubricResponse
 import ua.com.wl.dlp.data.db.entities.shops.OfferEntity
+import ua.com.wl.dlp.data.db.entities.shops.ShopEntity
 import ua.com.wl.dlp.domain.Result
+import java.util.*
 
 /**
  * @author Denis Makovskyi
@@ -37,7 +34,11 @@ interface ShopInteractor : OffersInteractor {
 
     suspend fun getShopV2(shopId: Int): Result<ShopResponse>
 
-    suspend fun getShopsV2(shopId: Int): Result<PagedResponse<ShopResponse>>
+    suspend fun getShopsV2(
+        page: Int?,
+        count: Int?,
+        language: String = Locale.getDefault().language
+    ): Result<PagedResponse<ShopResponse>>
 
     suspend fun getShopChain(
         page: Int?,

@@ -4,9 +4,8 @@ import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
-
-import ua.com.wl.dlp.data.api.responses.DataResponse
 import ua.com.wl.dlp.data.api.responses.CollectionResponse
+import ua.com.wl.dlp.data.api.responses.DataResponse
 import ua.com.wl.dlp.data.api.responses.PagedResponse
 import ua.com.wl.dlp.data.api.responses.shop.CityShopsResponse
 import ua.com.wl.dlp.data.api.responses.shop.ShopResponse
@@ -32,7 +31,9 @@ interface ShopApiV2 {
 
     @GET("api/mobile/v2/shop/")
     suspend fun getShopsV2(
-        @Path("shop_id") shopId: Int
+        @Query("page") page: Int? = null,
+        @Query("page_size") count: Int? = null,
+        @Query("language") language: String
     ): Response<DataResponse<PagedResponse<ShopResponse>>>
 
     @GET("/api/mobile/v2/store-chain/")
