@@ -28,10 +28,10 @@ data class ShopConfiguration(
     var cashBackPercentage: Int,
 
     @Json(name = "delivery_payment")
-    val deliveryPaymentOptions: PaymentOptions,
+    val deliveryPaymentOptions: PaymentOptions? = null,
 
     @Json(name = "delivery_minimal_sum")
-    val deliveryMinimalSum: Double,
+    val deliveryMinimalSum: Double? = null,
 
     @Json(name = "payment_online_available")
     var isPaymentOnlineAvailable: Boolean = false
