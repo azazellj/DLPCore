@@ -67,7 +67,7 @@ data class ShopResponse(
     @Json(name = "configuration")
     var configuration: ShopConfiguration? = null,
 
-    @Json(name = "City")
+    @Json(name = "city")
     var city: City? = null,
 
     @Json(name = "services")
