@@ -66,6 +66,11 @@ class ShopInteractorImpl(
             .fromDataResponse()
     }
 
+    override suspend fun getShopsV2(shopId: Int): Result<PagedResponse<ShopResponse>> {
+        return callApi(call = { apiV2.getShopsV2(shopId) })
+            .fromDataResponse()
+    }
+
     override suspend fun getShopChain(
         page: Int?,
         count: Int?,

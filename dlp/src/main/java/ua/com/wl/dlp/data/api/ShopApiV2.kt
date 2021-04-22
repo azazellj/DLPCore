@@ -30,6 +30,11 @@ interface ShopApiV2 {
         @Path("shop_id") shopId: Int
     ): Response<DataResponse<ShopResponse>>
 
+    @GET("api/mobile/v2/shop/")
+    suspend fun getShopsV2(
+        @Path("shop_id") shopId: Int
+    ): Response<DataResponse<PagedResponse<ShopResponse>>>
+
     @GET("/api/mobile/v2/store-chain/")
     suspend fun getShopChain(
         @Query("page") page: Int? = null,
