@@ -6,6 +6,7 @@ import com.squareup.moshi.JsonClass
 import kotlinx.parcelize.Parcelize
 import ua.com.wl.dlp.data.api.responses.models.another.NoveltyDatesRange
 import ua.com.wl.dlp.data.api.responses.models.shop.offer.item.OfferItem
+import ua.com.wl.dlp.data.api.responses.models.shop.offer.promo.Permissions
 import ua.com.wl.dlp.data.api.responses.models.shop.offer.promo.PromoSettings
 import ua.com.wl.dlp.data.api.responses.models.social.SocialNetwork
 
@@ -96,6 +97,9 @@ data class OfferResponse(
     @Deprecated(message = "This field will be removed in further revisions. Changes are caused by offer promo structure refactoring.")
     @Json(name = "promo_settings")
     var promoSettings: PromoSettings? = null,
+
+    @Json(name = "permissions")
+    var permissions: Permissions? = null,
 
     @Json(name = "novelty_date_range")
     var noveltyDatesRange: NoveltyDatesRange? = null,

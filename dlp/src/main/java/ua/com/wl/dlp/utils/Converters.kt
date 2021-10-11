@@ -8,6 +8,7 @@ import ua.com.wl.dlp.data.db.entities.shops.embedded.offer.OfferEntityPromoSetti
 import ua.com.wl.dlp.data.api.responses.shop.offer.OfferResponse
 import ua.com.wl.dlp.data.api.responses.consumer.info.BusinessResponse
 import ua.com.wl.dlp.data.api.responses.consumer.profile.ProfileResponse
+import ua.com.wl.dlp.data.db.entities.shops.embedded.offer.OfferEntityPermissions
 
 /**
  * @author Denis Makovskyi
@@ -47,11 +48,16 @@ fun OfferResponse.toOfferEntity(shopId: Int, count: Int = 0): OfferEntity {
         promoSettings?.activeFrom,
         promoSettings?.activeTo,
         entityPromoParams)
+    val permissions = OfferEntityPermissions(
+        isAvailableForPreOrder = permissions?.isAvailableForPreOrder,
+        isAvailableForDelivery = permissions?.isAvailableForDelivery,
+    )
     return OfferEntity(
         id, tradeItem,
         name, thumbImage, shortDescription,
         outcome, priceInBonuses, priceInCurrency,
-        cashBackPercentage, isPromo ?: false, isFavourite, entityPromoSettings
+        cashBackPercentage, isPromo ?: false, isFavourite, entityPromoSettings,
+        permissions
     ).apply {
         this.shopId = shopId
         this.preOrdersCount = count

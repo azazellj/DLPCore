@@ -1,6 +1,7 @@
 package ua.com.wl.dlp.data.db.entities.shops
 
 import androidx.room.*
+import ua.com.wl.dlp.data.db.entities.shops.embedded.offer.OfferEntityPermissions
 
 import ua.com.wl.dlp.data.db.entities.shops.embedded.offer.OfferEntityPromoSettings
 
@@ -45,7 +46,10 @@ data class OfferEntity(
     val isFavouriteOffer: Boolean = false,
 
     @Embedded(prefix = "settings_")
-    var promoSettings: OfferEntityPromoSettings? = null
+    var promoSettings: OfferEntityPromoSettings? = null,
+
+    @Embedded(prefix = "permissions_")
+    var permissions: OfferEntityPermissions? = null
 ) {
     companion object {
 
