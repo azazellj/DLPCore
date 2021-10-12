@@ -137,5 +137,11 @@ data class OfferResponse(
     val sharingSocialNetwork: List<SocialNetwork>? = emptyList(),
 
     @Json(name = "payed_for_sharing_social_networks")
-    val sharedSocialNetwork: List<SocialNetwork>? = emptyList()
+    val sharedSocialNetwork: List<SocialNetwork>? = emptyList(),
+
+    @Json(name = "pre_order_available")
+    val isAvailableForPreOrder: Boolean?,
+
+    @Json(name = "delivery_available")
+    val isAvailableForDelivery: Boolean?
 ) : Parcelable

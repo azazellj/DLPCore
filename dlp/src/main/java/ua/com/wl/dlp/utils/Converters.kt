@@ -57,7 +57,7 @@ fun OfferResponse.toOfferEntity(shopId: Int, count: Int = 0): OfferEntity {
         name, thumbImage, shortDescription,
         outcome, priceInBonuses, priceInCurrency,
         cashBackPercentage, isPromo ?: false, isFavourite, entityPromoSettings,
-        permissions
+        permissions, permissions.isAvailableForPreOrder, permissions.isAvailableForDelivery
     ).apply {
         this.shopId = shopId
         this.preOrdersCount = count

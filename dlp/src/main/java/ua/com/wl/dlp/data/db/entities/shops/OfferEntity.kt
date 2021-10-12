@@ -49,7 +49,13 @@ data class OfferEntity(
     var promoSettings: OfferEntityPromoSettings? = null,
 
     @Embedded(prefix = "permissions_")
-    var permissions: OfferEntityPermissions? = null
+    var permissions: OfferEntityPermissions? = null,
+
+    @ColumnInfo(name = "pre_order_available")
+    val isAvailableForPreOrder: Boolean? = false,
+
+    @ColumnInfo(name = "delivery_available")
+    val isAvailableForDelivery: Boolean? = false
 ) {
     companion object {
 
