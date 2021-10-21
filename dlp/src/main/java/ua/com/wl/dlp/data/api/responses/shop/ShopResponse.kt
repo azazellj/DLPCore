@@ -97,7 +97,4 @@ data class ShopResponse(
 
     @Json(name = "delivery_prices")
     val deliveryProbablyPrices: List<DeliveryPrice>? = emptyList(),
-
-    @Json(name = "pre_order_work_schedule")
-    val preOrderingWorkSchedule: List<WorkSchedule>? = emptyList()
 )
