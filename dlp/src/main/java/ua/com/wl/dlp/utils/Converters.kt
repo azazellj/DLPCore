@@ -53,11 +53,21 @@ fun OfferResponse.toOfferEntity(shopId: Int, count: Int = 0): OfferEntity {
         isAvailableForDelivery = permissions?.isAvailableForDelivery,
     )
     return OfferEntity(
-        id, tradeItem,
-        name, thumbImage, shortDescription,
-        outcome, priceInBonuses, priceInCurrency,
-        cashBackPercentage, isPromo ?: false, isFavourite, entityPromoSettings,
-        permissions, permissions.isAvailableForPreOrder, permissions.isAvailableForDelivery
+        id = id,
+        tradeItem = tradeItem,
+        name = name,
+        thumbImage = thumbImage,
+        shortDescription = shortDescription,
+        outcome = outcome,
+        priceInBonuses = priceInBonuses,
+        priceInCurrency = priceInCurrency,
+        cashbackPercentage = cashBackPercentage,
+        isPromoOffer = isPromo ?: false,
+        isFavouriteOffer = isFavourite,
+        promoSettings = entityPromoSettings,
+        permissions = permissions,
+        isAvailableForPreOrder = isAvailableForPreOrder,
+        isAvailableForDelivery = isAvailableForDelivery
     ).apply {
         this.shopId = shopId
         this.preOrdersCount = count
