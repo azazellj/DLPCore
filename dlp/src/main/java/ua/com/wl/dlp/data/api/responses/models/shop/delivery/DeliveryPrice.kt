@@ -5,9 +5,6 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 data class DeliveryPrice(
-    @Json(name = "id")
-    val id: Int,
-
     @Json(name = "price")
     val price: Long,
 
