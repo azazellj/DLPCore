@@ -94,7 +94,4 @@ data class ShopResponse(
 
     @Json(name = "delivery_payment")
     val deliveryPaymentOptions: PaymentOptions? = null,
-
-    @Json(name = "delivery_prices")
-    val deliveryProbablyPrices: List<DeliveryPrice>? = emptyList(),
 )

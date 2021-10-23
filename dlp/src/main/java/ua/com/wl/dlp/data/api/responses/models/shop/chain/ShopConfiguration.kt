@@ -3,6 +3,7 @@ package ua.com.wl.dlp.data.api.responses.models.shop.chain
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import ua.com.wl.dlp.data.api.responses.models.shop.WorkSchedule
+import ua.com.wl.dlp.data.api.responses.models.shop.delivery.DeliveryPrice
 import ua.com.wl.dlp.data.api.responses.models.shop.delivery.PaymentOptions
 
 /**
@@ -38,5 +39,8 @@ data class ShopConfiguration(
     var isPaymentOnlineAvailable: Boolean = false,
 
     @Json(name = "pre_order_work_schedule")
-    val preOrderingWorkSchedule: List<WorkSchedule>? = emptyList()
+    val preOrderingWorkSchedule: List<WorkSchedule>? = emptyList(),
+
+    @Json(name = "delivery_prices")
+    val deliveryProbablyPrices: List<DeliveryPrice>? = emptyList(),
 )
