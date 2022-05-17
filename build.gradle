@@ -18,6 +18,12 @@ allprojects {
         jcenter()
         maven { url 'https://jitpack.io' }
     }
+    // ADD THE FOLLOWING
+    configurations.all {
+        resolutionStrategy {
+            force 'org.xerial:sqlite-jdbc:3.34.0'
+        }
+    }
 }
 
 task clean(type: Delete) {
