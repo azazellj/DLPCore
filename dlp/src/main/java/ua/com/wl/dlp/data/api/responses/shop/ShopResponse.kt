@@ -36,5 +36,9 @@ data class ShopResponse(
     val deliveryProbablyPrices: List<DeliveryPrice>,
 
     @SerializedName("pre_order_work_schedule")
-    val preOrderingWorkSchedule: List<WorkSchedule>?
+    val preOrderingWorkSchedule: List<WorkSchedule>?,
+    
+    @SerializedName("payment_online_available")
+    var isPaymentOnlineAvailable: Boolean = false
+    
 ) : BaseShopResponse()
